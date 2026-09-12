@@ -1,0 +1,47 @@
+id_evaluacion: "querylibrary_DEX03"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "person, concept"
+pregunta_lenguaje_natural: >-
+  Calcular los estadísticos de distribución de edad de los pacientes que recibieron formulaciones de rosuvastatina (comprimidos de 20 mg y 40 mg).
+sql_base_gold_standard: |
+  WITH first_exposure AS
+    ( SELECT person_id, drug_concept_id, min(drug_exposure_start_date) as drug_exposure_start_date
+      FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+      WHERE drug_concept_id
+         IN  /*crestor 20 and 40 mg tablets */
+                      (40165254, 40165258)
+      GROUP BY person_id, drug_concept_id                
+    )
+  SELECT
+    concept_name                                                           AS drug_name,
+    ordered_data.drug_concept_id                                           AS drug_concept_id,
+    COUNT(*)                                                               AS patient_count,
+    MIN(age)                                                               AS min,
+    MIN(CASE WHEN order_nr < .25 * population_size THEN 9999 ELSE age END) AS percentile_25,
+    round(avg(age), 2)                                                     AS mean,
+    MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE age END) AS median,
+    MIN(CASE WHEN order_nr < .75 * population_size THEN 9999 ELSE age END) AS percentile_75,
+    max(age)                                                               AS max,
+    round(STDEV(age), 1)                                                   AS STDEV
+  FROM
+   ( SELECT
+      drug_concept_id,
+      YEAR(drug_exposure_start_date) - year_of_birth                                                                  AS age,
+      ROW_NUMBER() OVER (PARTITION BY drug_concept_id ORDER BY (YEAR(drug_exposure_start_date) - year_of_birth)) AS order_nr
+     FROM first_exposure
+     INNER JOIN `bio-med-480108.OMOP_54_A.person`
+       ON first_exposure.person_id = person.person_id
+   ) AS ordered_data
+  INNER JOIN
+   ( SELECT
+      drug_concept_id,
+      COUNT(*) AS population_size
+    FROM first_exposure
+    GROUP BY drug_concept_id
+   ) AS population_sizes
+  ON ordered_data.drug_concept_id = population_sizes.drug_concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` ON concept_id = population_sizes.drug_concept_id
+  GROUP BY concept_name, ordered_data.drug_concept_id
+  ORDER BY ordered_data.drug_concept_id DESC;
+concept_ids_gold_standard: "40165254, 40165258"

@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_DER03"
+nivel_complejidad: "intermedia"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular el número promedio y la distribución de principios activos o ingredientes farmacológicos distintos recibidos por cada paciente.
+sql_base_gold_standard: |
+  SELECT
+          avg(cnt)
+  from
+          (
+                  select
+                          count(distinct r.drug_concept_id) cnt,
+                          r.person_id
+                  FROM
+                          `bio-med-480108.OMOP_54_A.drug_era` r
+                  GROUP BY
+                          r.person_id
+          ) a
+concept_ids_gold_standard: ""

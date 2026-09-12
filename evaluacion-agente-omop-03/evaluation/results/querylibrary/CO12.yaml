@@ -1,0 +1,31 @@
+id_evaluacion: querylibrary_CO12
+session_id: 04c5ccea-21b3-40e3-91c0-1f8dbd679655
+session_file: results/querylibrary/sessions/CO12.json
+turnos_ejecutados: 1
+sql_generada_agente: |-
+  SELECT avg(unix_date(t.condition_end_date)) AS avg_condition_end_date_days_since_epoch,
+         stddev(unix_date(t.condition_end_date)) AS stddev_condition_end_date_days_since_epoch,
+         approx_quantiles(unix_date(t.condition_end_date), 100)[offset(25)] AS percentile_25_condition_end_date_days_since_epoch,
+         approx_quantiles(unix_date(t.condition_end_date), 100)[offset(50)] AS median_condition_end_date_days_since_epoch,
+         approx_quantiles(unix_date(t.condition_end_date), 100)[offset(75)] AS percentile_75_condition_end_date_days_since_epoch
+  FROM `condition_occurrence` AS t
+  WHERE t.condition_end_date IS NOT NULL
+concept_ids_identificados_agente: []
+metricas_evaluacion:
+  validez_sintactica_y_estructural: 0.9
+  precision_terminologica_vocabulario: 1.0
+  detalle_validez_sintactica:
+    criterio_1_1_ejecucion: 0.1
+    criterio_1_2_similitud_sql_gemini: 0.8
+    justificacion_gemini: |-
+      La consulta del agente identifica correctamente la tabla `condition_occurrence` y la columna `condition_end_date`. Calcula el promedio, la desviación estándar y los percentiles 25, 50 y 75 como se solicita, utilizando funciones idiomáticas de BigQuery como `UNIX_DATE` y `APPROX_QUANTILES`, que son más concisas y eficientes para grandes volúmenes de datos que el enfoque del Gold Standard. Sin embargo, la consulta del agente omite otras estadísticas descriptivas comunes como el recuento total de registros, el recuento de nulos, el mínimo y el máximo de `condition_end_date` que sí incluye la consulta de referencia. Además, `APPROX_QUANTILES` proporciona percentiles aproximados, no exactos, aunque la pregunta clínica no especificaba la necesidad de exactitud.
+  metricas_por_turno:
+    turno_1:
+      validez_sintactica_y_estructural: 0.9
+      precision_terminologica_vocabulario: 1.0
+      question_improvement: ''
+evaluacion_cualitativa: |-
+  Consulta SQL ejecutable (0.10 pts) sobre tabla(s) condition_occurrence generada directamente en un único turno con validación exitosa en BigQuery.
+  Similitud SQL evaluada por Gemini (0.80/0.90 pts): La consulta del agente identifica correctamente la tabla `condition_occurrence` y la columna `condition_end_date`. Calcula el promedio, la desviación estándar y los percentiles 25, 50 y 75 como se solicita, utilizando funciones idiomáticas de BigQuery como `UNIX_DATE` y `APPROX_QUANTILES`, que son más concisas y eficientes para grandes volúmenes de datos que el enfoque del Gold Standard. Sin embargo, la consulta del agente omite otras estadísticas descriptivas comunes como el recuento total de registros, el recuento de nulos, el mínimo y el máximo de `condition_end_date` que sí incluye la consulta de referencia. Además, `APPROX_QUANTILES` proporciona percentiles aproximados, no exactos, aunque la pregunta clínica no especificaba la necesidad de exactitud.
+  Consulta exploratoria sin conceptos fijos requeridos en el estándar; el agente identificó 0 concepto(s) candidatos pertinentes en el vocabulario.
+check_conexion: true

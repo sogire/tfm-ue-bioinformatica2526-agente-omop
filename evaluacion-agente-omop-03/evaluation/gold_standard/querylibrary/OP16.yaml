@@ -1,0 +1,56 @@
+id_evaluacion: "querylibrary_OP16"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: "person, concept"
+pregunta_lenguaje_natural: >-
+  Contar los pacientes clasificados por género, año de observación y rangos de edad decenales al inicio de su seguimiento.
+sql_base_gold_standard: |
+  SELECT
+    observation_year,
+    age_group,
+    gender,
+    COUNT(*) AS num_people
+  FROM
+    (SELECT
+      DISTINCT person_id ,
+      YEAR(observation_period_start_date ) AS observation_year
+     FROM `bio-med-480108.OMOP_54_A.observation_period`
+    ) AS z
+  INNER JOIN
+    (SELECT
+      person_id,
+      gender ,
+      CONCAT(CAST(FLOOR( age / 10 ) * 10 AS VARCHAR),' to ',CAST(( FLOOR( age / 10 ) * 10 ) + 9 AS VARCHAR)) AS age_group
+     FROM
+      (SELECT
+        person_id                                        AS person_id,
+        ISNULL( concept_name, 'MISSING' )                AS gender,
+        year_of_birth                                    AS year_of_birth,
+        YEAR(first_observation_date ) - year_of_birth    AS age
+      FROM
+        ( SELECT
+            person.person_id,
+            gender_concept_id,
+            year_of_birth,
+            MIN( observation_period_start_date ) AS first_observation_date
+          FROM `bio-med-480108.OMOP_54_A.observation_period`
+          INNER JOIN `bio-med-480108.OMOP_54_A.person`
+          ON observation_period.person_id = person.person_id
+          GROUP BY person.person_id, gender_concept_id, year_of_birth
+        ) AS y
+      LEFT OUTER JOIN `bio-med-480108.OMOP_54_A.concept`
+      ON concept_id = gender_concept_id
+      WHERE year_of_birth IS NOT NULL
+      ) AS w
+    WHERE age >= 0
+    ) AS m
+    ON z.person_id = m.person_id
+  GROUP BY
+    observation_year,
+    age_group,
+    gender
+  ORDER BY
+    observation_year,
+    age_group,
+    gender;
+concept_ids_gold_standard: ""

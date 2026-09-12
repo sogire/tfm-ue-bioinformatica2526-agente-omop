@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_PE06"
+nivel_complejidad: "intermedia"
+domain_main: "person"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la cantidad total de pacientes registrados en la base de datos agrupados por su año de nacimiento.
+sql_base_gold_standard: |
+  SELECT
+    year_of_birth,
+    COUNT(person_id) AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.person`
+  GROUP BY year_of_birth
+  ORDER BY year_of_birth
+  ;
+concept_ids_gold_standard: ""

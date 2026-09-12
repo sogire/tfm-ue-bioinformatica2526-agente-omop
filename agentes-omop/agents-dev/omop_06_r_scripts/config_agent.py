@@ -1,0 +1,12 @@
+MODEL_NAME="gemini-2.5-flash"
+
+BQ_LOG_PROJECT="bio-med-480108"
+BQ_LOG_DATASET="OMOP_AGENTS"
+BQ_LOG_TABLE="LOGS_V00"
+BQ_LOG_LOCATION="EU"
+
+DATASET_TABLE_CONCEPTS="bio-med-480108.SYN_OMOP.concept"
+DATASET_FOR_VALIDATIONS="bio-med-480108.OMOP_54_A"
+
+DISCOVERY_ENGINE_URL = "https://discoveryengine.googleapis.com/v1alpha/projects/995233896922/locations/global/collections/default_collection/engines/app-omop-hades-darwin-v01_1773572806089/servingConfigs/default_search:search"
+

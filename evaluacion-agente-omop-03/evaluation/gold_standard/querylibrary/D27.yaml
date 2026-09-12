@@ -1,0 +1,56 @@
+id_evaluacion: "querylibrary_D27"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_relationship"
+pregunta_lenguaje_natural: >-
+  Listar todas las presentaciones y concentraciones farmacéuticas comercializadas bajo la marca comercial Fosamax.
+sql_base_gold_standard: |
+  SELECT  A.Concept_Id               drug_concept_id,
+          A.Concept_Name             drug_name,
+          A.Concept_Code             drug_concept_code,
+          A.Concept_Class_id            drug_concept_class,
+          D.Concept_Id               brand_concept_id,
+          D.Concept_Name             brand_name,
+          D.Concept_Code             brand_concept_code,
+          D.Concept_Class_id            brand_concept_class
+  FROM   `bio-med-480108.OMOP_54_A.concept_relationship`  CR003,
+         `bio-med-480108.OMOP_54_A.concept`               A,
+         `bio-med-480108.OMOP_54_A.concept_relationship`  CR007,
+         `bio-med-480108.OMOP_54_A.concept_relationship`  CR006,
+         `bio-med-480108.OMOP_54_A.concept`               D
+  WHERE  CR003.relationship_ID   = 'Constitutes'
+  AND    CR003.concept_id_1      = A.concept_id
+  AND     lower(A.concept_class_id) = 'clinical drug'
+  AND    CR007.concept_id_2      = CR003.concept_id_2
+  AND    CR007.relationship_id   = 'Has tradename'
+  AND    CR007.concept_id_1      = CR006.concept_id_1
+  AND    CR006.relationship_id   = 'RxNorm has ing'
+  AND    CR006.concept_id_2      = D.concept_id
+  AND    lower(D.concept_class_id)  = 'brand name'
+  AND    D.concept_id            = 19011505
+  AND    (getdate() >= CR006.valid_start_date) AND (getdate() <= CR006.valid_end_date)
+  AND    (getdate() >= CR007.valid_start_date) AND (getdate() <= CR007.valid_end_date)
+  UNION ALL
+  SELECT  A.Concept_Id               drug_concept_id,
+          A.Concept_Name             drug_name,
+          A.Concept_Code             drug_concept_code,
+          A.Concept_Class_id            drug_concept_class,
+          D.Concept_Id               brand_concept_id,
+          D.Concept_Name             brand_name,
+          D.Concept_Code             brand_concept_code,
+          D.Concept_Class_id            brand_concept_class
+  FROM   `bio-med-480108.OMOP_54_A.concept`              A,
+         `bio-med-480108.OMOP_54_A.concept_relationship`  CR007,
+         `bio-med-480108.OMOP_54_A.concept_relationship`  CR006,
+         `bio-med-480108.OMOP_54_A.concept`               D
+  WHERE  lower(A.concept_class_id) = 'branded drug'
+  AND    CR007.concept_id_2     = A.concept_id
+  AND    CR007.relationship_ID  = 'Has tradename'
+  AND    CR007.concept_id_1     = CR006.concept_id_1
+  AND    CR006.relationship_ID  = 'RxNorm has ing'
+  AND    CR006.concept_id_2     = D.concept_id
+  AND    lower(D.concept_class_id) = 'brand name'
+  AND    D.concept_id           = 19011505
+  AND    (getdate() >= CR006.valid_start_date) AND (getdate() <= CR006.valid_end_date)
+  AND    (getdate() >= CR007.valid_start_date) AND (getdate() <= CR007.valid_end_date)
+concept_ids_gold_standard: "19011505"

@@ -1,0 +1,62 @@
+id_evaluacion: "querylibrary_CO12"
+nivel_complejidad: "compleja"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular estadísticas descriptivas (promedio, desviación típica, percentiles 25, mediana y 75) de las fechas de resolución o finalización de las condiciones clínicas registradas.
+sql_base_gold_standard: |
+  WITH end_rank AS 
+    (SELECT
+      condition_end_date,
+      SUM(1) over (partition BY 1 ORDER BY condition_end_date ASC ROWS BETWEEN unbounded preceding AND CURRENT row) AS rownumASc
+    FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+    ),
+      other_stat AS 
+    (SELECT
+      COUNT(condition_end_date)                                                                                   AS condition_end_date_count,
+      MIN(condition_end_date)                                                                                     AS condition_end_date_min,
+      MAX(condition_end_date)                                                                                     AS condition_end_date_max,
+      DATEADD(day, AVG(CAST(DATEDIFF(DAY,CONVERT(date,'00010101'), condition_end_date) AS BIGINT)), CONVERT(date,'00010101')) AS condition_end_date_average,
+      STDEV(DATEDIFF(d,CONVERT(date,'00010101'), condition_end_date))                                           AS condition_end_date_stddev
+     FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+     WHERE condition_end_date IS NOT NULL
+    )
+  SELECT
+    (SELECT 
+      COUNT(condition_end_date) 
+     FROM `bio-med-480108.OMOP_54_A.condition_occurrence` 
+     WHERE condition_end_date IS NULL
+    ) AS condition_end_date_null_count,
+    condition_end_date_count,condition_end_date_min,condition_end_date_max,condition_end_date_average,condition_end_date_stddev,
+    condition_end_date_25pctile,condition_end_date_median,condition_end_date_75pctile
+
+  FROM other_stat,
+      (SELECT DATEADD(day,AVG(CAST(DATEDIFF(DAY, CONVERT(date, '00010101'), condition_end_date) AS BIGINT)),CONVERT(date, '00010101'))  AS condition_end_date_25pctile
+        FROM (
+         SELECT condition_end_date, rownumAsc,(SELECT COUNT(*) FROM end_rank ) AS rowno 
+           FROM end_rank 
+             ) a_1
+         WHERE ( rownumASc = CAST(rowno*0.25 AS int)   AND floor(rowno*25/100)  = rowno*25/100 ) 
+            OR ( rownumASc = CAST(rowno*0.25 AS int)   AND floor(rowno*25/100) != rowno*25/100 )
+            OR ( rownumASc = CAST(rowno*0.25 AS int)+1 AND floor(rowno*25/100) != rowno*25/100 )
+       ) condition_end_date_25pctile,
+      (SELECT DATEADD(day,AVG(CAST(DATEDIFF(DAY, CONVERT(date, '00010101'), condition_end_date) AS BIGINT)),CONVERT(date, '00010101'))  AS condition_end_date_median
+        FROM (
+         SELECT condition_end_date, rownumAsc,(SELECT COUNT(*) FROM end_rank ) AS rowno 
+           FROM end_rank 
+            ) a_1
+         WHERE ( rownumASc = CAST(rowno*0.5 AS int)   AND floor(rowno*50/100)  = rowno*50/100 ) 
+            OR ( rownumASc = CAST(rowno*0.5 AS int)   AND floor(rowno*50/100) != rowno*50/100 )
+            OR ( rownumASc = CAST(rowno*0.5 AS int)+1 AND floor(rowno*50/100) != rowno*50/100 )
+       ) condition_end_date_median,
+      (SELECT DATEADD(day,AVG(CAST(DATEDIFF(DAY, CONVERT(date, '00010101'), condition_end_date) AS BIGINT)),CONVERT(date, '00010101'))AS condition_end_date_75pctile
+        FROM (
+         SELECT condition_end_date, rownumAsc,(SELECT COUNT(*) FROM end_rank ) AS rowno 
+           FROM end_rank 
+           ) a_1
+         WHERE ( rownumASc = CAST(rowno*0.75 AS int)   AND floor(rowno*75/100)  = rowno*75/100 ) 
+            OR ( rownumASc = CAST(rowno*0.75 AS int)   AND floor(rowno*75/100) != rowno*75/100 )
+            OR ( rownumASc = CAST(rowno*0.75 AS int)+1 AND floor(rowno*75/100) != rowno*75/100 )
+       ) condition_end_date_75pctile
+  ;
+concept_ids_gold_standard: ""

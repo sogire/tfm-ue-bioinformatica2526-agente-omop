@@ -1,0 +1,58 @@
+id_evaluacion: "querylibrary_PE12"
+nivel_complejidad: "compleja"
+domain_main: "person"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular los parámetros estadísticos de distribución del año de nacimiento de los pacientes (media, desviación estándar, mínimo, percentil 25, mediana, percentil 75 y máximo).
+sql_base_gold_standard: |
+  SELECT
+    percentile_25,
+    median,
+    percentile_75,
+    MIN(year_of_birth)                  AS minimum,
+    MAX(year_of_birth)                  AS maximum,
+    CAST(AVG(year_of_birth) AS INTEGER) AS mean,
+    STDEV(year_of_birth)                AS stddev
+  FROM
+    (SELECT
+       MAX(CASE WHEN (percentile = 1) THEN year_of_birth END) AS percentile_25,
+       MAX(CASE WHEN (percentile = 2) THEN year_of_birth END) AS median,
+       MAX(CASE WHEN (percentile = 3) THEN year_of_birth END) AS percentile_75
+     FROM
+       (SELECT
+          year_of_birth,
+          births,
+          /* The first sum is the sum of all the values from the first year of birth
+          to the current year.  The second sum is the total of all the years of birth.
+          The result is a cumulative percent of the total for each year.  You want to
+          capture when the percentage goes from 24 to 25 as percentile_25, from 49 to 50
+          as the median and from 74 to 75 as the percentile_75.  Multiplying by 4 then SA
+          adding 1 just makes so that instead of looking at percentage, you get the whole
+          number 1 if the percentage is less than 25, 2 when the percentage is between 25
+          and 50, and so on.
+          */
+          FLOOR(CAST(SUM(births)
+                     OVER (
+                       ORDER BY year_of_birth
+                       ROWS UNBOUNDED PRECEDING ) AS DECIMAL)
+                / CAST(SUM(births)
+                       OVER (
+                         ORDER BY year_of_birth
+                         ROWS BETWEEN UNBOUNDED PRECEDING
+                         AND UNBOUNDED FOLLOWING ) AS DECIMAL)
+                * 4
+          ) + 1 AS percentile
+        FROM -- Year with number of birthsQ
+          (SELECT
+             year_of_birth,
+             COUNT(*) AS births
+           FROM `bio-med-480108.OMOP_54_A.person`
+           GROUP BY year_of_birth
+          ) t
+       ) tt
+     WHERE percentile <= 3
+    ) percentile_table
+  CROSS JOIN `bio-med-480108.OMOP_54_A.person`
+  GROUP BY percentile_25, median, percentile_75
+  ;
+concept_ids_gold_standard: ""

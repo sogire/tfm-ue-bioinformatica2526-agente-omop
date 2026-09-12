@@ -1,0 +1,11 @@
+id_evaluacion: "querylibrary_DER09"
+nivel_complejidad: "baja"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar el número de pacientes que presentan al menos un episodio de tratamiento continuo (drug_era) con el principio activo seleccionado (darbepoetina alfa).
+sql_base_gold_standard: |
+  select count(distinct r.person_id) as persons_count
+  from `bio-med-480108.OMOP_54_A.drug_era` r
+  where r.drug_concept_id in (1304643);
+concept_ids_gold_standard: "1304643"

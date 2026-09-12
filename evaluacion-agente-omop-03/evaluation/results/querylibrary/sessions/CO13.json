@@ -1,0 +1,248 @@
+{
+  "id": "057f266f-2796-40fb-a3f9-2986b49b9e79",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Calcular estadísticas descriptivas (fecha media, desviación estándar y percentiles) de las fechas de inicio de diagnóstico de condiciones en la población. Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-d6ff5c3e-365e-4e41-846f-a796afa3568d",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "c971b9dd-2e4b-46e4-84c5-7db5463a6724",
+      "timestamp": 1788683265.427533
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-9c4ee5fd-37de-45b1-8f6d-b8da3bf796bb",
+              "args": {
+                "sql_query": "\nSELECT\n    DATE_FROM_UNIX_DATE(CAST(AVG(UNIX_DATE(condition_start_date)) AS BIGNUMERIC)) AS mean_start_date,\n    STDDEV(UNIX_DATE(condition_start_date)) AS stddev_days_from_epoch, -- Standard deviation is in days relative to epoch\n    DATE_FROM_UNIX_DATE(CAST(PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY UNIX_DATE(condition_start_date)) AS BIGNUMERIC)) AS p25_start_date,\n    DATE_FROM_UNIX_DATE(CAST(PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY UNIX_DATE(condition_start_date)) AS BIGNUMERIC)) AS p50_median_start_date,\n    DATE_FROM_UNIX_DATE(CAST(PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY UNIX_DATE(condition_start_date)) AS BIGNUMERIC)) AS p75_start_date\nFROM\n    `condition_occurrence`\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "Cv4iAY89a18xL-wNHJp2WVQsBpwwPgL0usdC8vIR9T75o7QW2-vkjoUBIwBF4rWcNHwxSic1fHHC1FEFlbRzXM47QhbkKV18s3XnmvH88e0evrQ9GBtqNl__9GWsp7KLrRmTNuxmXbpkSnR9_s0ZKohiGgAMIgia4M5d6dhZ4C2URl3hY075G899djCRERACo8-wAgwdFzEJDlNvjXS5v5E1_Zik7xXJ4yOKHWsIMsaV9lqzPKjtG7FpG9aGj6zn0dxbvbYexT03az2G2FrHMttaJSYyKECHKXmImNOrsEeDOD0YSH-308byFVOh35puQedT_hB_HcYINkROneWPR0tLvsG7yh3ux9_NggYMMr_gdtNtMS3KIlJxHOAsCzPER2_LXN1qG5_66o1ysfESlioIcD-UvzznqOOaKtkU3M1S7oBzoE8Ew8ZSsdkRBz9h4SSQ2grvZ_yWFisMvIISKKLCw8qQaaL2SnNz-k8pasayWyqd2HtJyQqbo6Lt71UdWVVGubzyUp6vWWwzkB8KVrnT0FFj7vL2icJeaVwfJn-RCTm4UVQSdmIe4xB1H_3jtHUpPiofGSwAdarVfMuvRDkym45Mt0PobKgQll-xRrC0ChmuTsZgtu-UuyO4IuYTEO1IcU1Tz4kQB6PyZVZLW1xnpZRH2B3sTWEXJezKyYIcc8R62mM7wpP0r0hNKewJ0pirlUL0FoadAj00ok-zlglnnCZCk_BMOwhPDKv2f3-UzcpjKF-fkSNRqGnEBPVKvWg5r7Am9-bAkA0XXwa6Y7f1qvlayUueGaBDWjeJ91Jrozves75Eqo8A3cNYk3anvDEtI2Hnqt9OycryGJECWTQasNQbLUHbqqPkDe_1XPAk3E-mDAGKPanispN5ZdBVm57V_X6NIsp0T8X_-q-Ug9k7q2lpKiZ55jpTMjFrnaMNzqDSaLCGjWQXWXf88izteZMPNq7GGSahhbyRlA49CE8cKJssK0z7imTNvCyMdAlqWkBeuiaVeSq6Qg4AOGQx-q7oH9ZweqmYrj5a9cpORvyBVBnO11L3ZRp8jtYwAYgxRqNsfdrIhguZL_vv4NBnFfD44-RpROq93Lw79rbl1EbUjAq2yJc9R2ANEmya3zrj_wZ2GnwnEaR8TS5_C9FlkBkYKNc2rmBC7RJp9n9QO8-47l8QfQRlHSvq5x3KRy6oWkPQrT2Ljatao_nxMyoiRTZolexx92tU42HY5-_DTWcEdxTaF2mHM_8Ji05ZWnc-fYoVl2BiaHVhQNJgChHDfzkH-3mIchyDCNE3L3xhfGWCcqtPUVnxOBivaXWuuMuRXbJ4ciGAOyf-Wou-PiSKDvflEVwuW_RRSRm8cjGznkCX1605Ikg2Gt8PwMevFwVU-Xsps7g8tYy0KbPjKK5W11QPYiObVwxKFJPHhEN5gXpeS6MTqwmvFkjD3Kfkl3Zipb_mMzhs6LCf64XgRBWI2cwX9A0Q_7yc-nnx9fgwRBhnipeCg0wTBtK7wS2OYVupoQK3QGuPMS_0DpAixIH9jyXIqj7X6mcpTJTzWM40gD_k7TerfakBd8w0pi1xOBd-7GHo58oD68H6ypMtg-t49cJtYiMuxShoNmLGPfUB1B2k9DdQROUjUnXOZLkkMDg13MJyPuiP8IZZC5_uyjuyxe6nv1znExAF8cMjb35DiqO_VK8FYSz5lPl3LBXGQrJgN0kysMbkp5WBClYDafzRtbBcD7-nBe_M81YN5scwi0fA_2enYLj2IiXbXnjNI2xwatJ34FxDlzzBkpQxK8D3vS8vFCQIW5uwGqVwsIGlZLq-k4gKWdR5V-fXmGVGkUrGTmVzYEQ9GWx1bjGbPet9a9DkEupzWZTKFTPWOVfyHYhId90MGOtZul9m51Wo4soYwAVImlu_yO_YQQwjs80ZyaEdPeIT29qo2niUvfTNKioBB04I9AnVnRRK-Iq4VTWgD3fuuDjbSgKcgaUUBGI-KNfyo1ED_fZFOqNTGY-mly-kKsiTWCsMK2Phh4ohMURIyg0JQVYGVwe_655pSmxNRzPpTFXqW_0I6nzqv3TiHd_qQhQklPqLXy3HMovmI551BA8AXK1fk6jwlDhQw_YEjdGiTEk_Vh1148mxyZfLPDYUDxFV_OUly6JV79DU3L_vp4H8QdPjrVwXsjzcTkv5re27oSsvUhZ_OC5EojO6l5mlnWbevLKaZNwp-SApUgqn0OdNzHa7kp9ZevIyetynPgvpK7jXv5XMAI6xfhqazin1EVzuFMUcFe4miYc0zN6VY3xAp-6h8KoK0jYkvHOOHKbD45TEenB5nnm0HHQxopObCdsZOi1rGN8sejCQdyNj2t5F2kJ-zKunPWgOK5ACtPFGA3WBZwydSM0bBczgxn2oDX5Y2cRjGHm2OKhNJCexH8EXkZGmkMcU28ays5jit61Ul-bsESoHPa2E-x1cgqj_upEqjFON8fLcPc8knxx42ng4TD74TGXlA6tA3ZS0OVpUXvzP8ziYd-yVo_5cWNsYZR_C5QmW4ZwIFVeY2foodCe3X8xRTCusWsa-lP8QoOrepiQJCFfVY2R_Ei4njK-eUk1X_KxY8mm291VhRT7T9iEKXaC3qWrfmTsnzyCxmtlb3J0yEYT7YAHMaFHV2mOLuGTQo9VSB8sQd908NE-D0vpZ_2R6uf2w5TtcAzsA-lyzSnO9TBV9Nrbi96YXEi9rSVr1Fr2b0dNb5Rqvp1vBY1rbRpYZWrVIPG5__i3JYLpT1jZKNW6Ncl6mqY0d14HoXEXemlEyF22e-AdAob0GLcEqtKuOyVk-lAE8bDYqEOyu5K86Rhk6XJYfvs27Lyi11OMyTUNuppeYWGqmMDLRmeL5XPOkMHQS-bdG2wnhLOHKswz3ieHNmntpdA-GC9S6SP9OzjAKkTCWlnb02GuBA-HLGmfavQRkWDaK2MlIBg51HLXTJ6OZcG7STcZpLQqd2i_ERmMxWZ7XFRZmgejmCMNeWaDMCQ5UkqCo-lYLXOnP_XE0TCBBO_QWD5gLS49Ee8NIcoy82pxbbOcAEUzipTZWTloOrYWcmBZOQ3tYY5hms-nqVhyfMXhR-wvRQEg7CRunVNkInpUGL-5Vox2iwZFU-94nyCW_A41aNXX_pxap7oejluOdvwS2Ed32evc0a4zY4FmE4pmgJimZsIV5WX-7gFa7eskpwtbB4wRbjGcVkY5EKR2Bq98fIaGD5gV4S5j81ClSo9dkUeZFsHrug2BJkK1JNl7IBcT1kRKoxpRdbGbCUUPcp68Ib-4JL9zk6r0u5PxHRueLnHtHGNoKqt6actr0ceJIAa8OWI4mZvYfzOmJbUgbunscxYxcP9mREVfWtXufJSCBJ7wltW04no3Dcar8wL9UeAngytU7WPWnNG6Bx8lORLyi-dcoUdVlNF2oe2HgKSQPVi1ypwRcXg9oOP58_iwt5M1maPDGOccg5t5L_MZW1c9YJWc4v4dJsVfRWuMO3fwRndoWnE_hR2U83TyxWPwrnQcbXLj3-EiBOEN21LVJLIsaja4R9T5G33mk3CrbPtcTj3WMVPzP0KpVh57tDfi8OPMlWFDxaGyAjiv12u6PQ5zfgs903i1nusNPLJF88N9IIx-uljdZH-Oq7-9HjU7kdrFCIZekCOIiv3hb3uddjL55YjxC7rcLUmAgw0dBtYyC0b6kYOj1tn-O6UmauD-UN0Nt6PAoWW390so7ciQsYAai4pDNz425X5OOlyDy0z4WyrmIQPnt96oSSpBoFlSGrZipxo2FSJc_dOEVGUod9RB6FsuihZJs-S9BfH_tlBE6GA4FD6fHA0dDIhkZotT7DK3LMkXHLpGDG0Ff7oYldXcNKsNIQcKe_5hJHJ6QPazEL1waw81p3Gcn5HgeHE_wrBc_BSrap-_7xR4N9r07EFSUIsUXCJq6DC_oHTmiD_t_-jmGrcutKosYXKM0dQMcDHFLrPJTIF40X3cevULz3LDiJyeNN04n9pUmxe0VZ6JMvcNNzcK_6EjD-znlWvP3WEdb4zcoPTti6-ekIYBNt9KxODKATwvatuVsP65_5gADbbh2AJpgQbGAmlEoCFp0-rN3wJuRJOh_no7Vw-LElxktFT5H0Z6IMziycIFjCtXnJ2VNMKn5uUiIFJQX1qsKwVUd8HNjPqpmLsnHG9yvi24XUJRL9aJLmfO08yqqpkSmThwsjSPWfi5jSnoC-CfjNGEaSAW-LTl68Bn9IF-HhytZm70j2-EtPVTACrDoE9jSoCdivcD5Z7VktzR0fqiHuGlgP-cWUH6ENQScdZaBGKjznWlHs-zUH86MF_C0ZSiKYNKS11Jw6boG3B6Xeh6TnpyAX6vFm8_upXxPTCiXtuZqjI3Zg56slJHS3aObB_wGKBlbZZEu5BwIBnf8T5NxGzD3UU47hpFfXUClGQuYXSaLo4P8kUR1fuhlaTbW0Y07yBlF80VZlwtKeJEZQoE4oZ9c_KQGXCRFrpBC3v2q48sMOe7z6eJK7ulwSYsKdxZaCC8yuxsz2xlCp0JW5UhkZSACwmuXlBxRWLoEmjMwSw1FJlLbVUaemB9YHHlVU7mJyDKkpL8o64FGGtiuXd4ti5wbyfYnFqTEzLLRrdimkpQH62gwwGQZRgd8MS-PrQ-v9_KeuPN0H0cCdkJgZsMEIOGjp_nJ1-ntgtM0Htd969BLD-cyktoutLs7cE8BZWBVtmBT1wGirHE5MawPcB051MefFQUJKbHmKcNfQTZpr_nFu7J5jRvH2Obeh-QHdbCLrz_BJAf1oEePcD07FRj3F6cdBOM6yN7xDXBsnLQRl0INNzm0siqqzx4V-1NZMbq0H5N3JU8VfwJAabUlJCwnY-aPRfEcCia1gtFHywJBcruZeUtbQ366P0GKMiPxSNtx_Knu3CzkfgZiINfkX8mMnxiRJ6Hc-BEiRn2YR55sTM6j3BZB3o2vlf5RflXPEEeBrtrUnZzaQxduXs7cHq8tmuvcj5qn7KM3tiKma2Bj5NA7aS7DSNG-4lVRDTg9i-cGVn_AQOuXr4iGzHOU5CRyDIAOadU-S9gDyCtW69ZYYbtpXKBtj7OBLFAoKxDuYk6n4miJawKkvHb3Y8vWLXluJp8A29dFYZaUG9QI4rV-Jp7WK7djc3OTVKG6Zjj5kHwHMX28WYdzFL5G_U8d12j8UB9VHnN5JOIwyxxdDFiZhuzAT6g1ClJzQ92WAiNVb3ktoq9YJoh7IX54c2o10agpQJq_mYlNRLnCMW_GOZfcltjJ3OVEUYg_7bmBuJYfWLEL66dBTQXIQoDEikB__7yKeeROK1OWHVPDpfptSu6Wkxtv4ayptWFFBSIpUElpHL4jubjfxRkmIlL14f27-o4fKtFGFZll_mdX-B7XHEEPoHNVnXBCRQfMsF-FShLEiymHuKx9RXK3UloNLW8SYR-1pZnpmn_N4QUqQQT6aOCaPBWkiEpNxmyPDXKdX0DUIF8eD_nHaz-L3UkyMVrYuSLF7oXX37_0uPPcpqcGmPNPNTIKZQKtYfTkKD-tv5M5g_-ulSpuz3F7fknyG_fuNuxd-m1xrhn4Mng_z0E1tbZcRa-zmgRes2PT2Xf8B_LgZxnVV8hSakUScpCV2G5hnj1yfWuGdEXioQgS32P3u6AZbGvcVCXBuzRGcG5drTEH36WJ87-ndemi4lLb4q6Ec9kRPdQn0xW1PxhPOqxbNTKi3mUzb_FbjcUxiQU3DSiHI8FpPI7kxLwJgHIrXRDW-XrGztALUrV6kDe0b0XFgCExguPnfULblrozbogjnWqNWCxshaTCH5TkApFjkGOOLv1iwGyTCLsF0TpgpNlQ7McqwwxFWJCBP-Vaj3rN_dSGvv2tvRpIP9cQ5eB0HWVlg03FQd_EFcfcwFNH2_6cMX73yCrsLMTsr-cl8Dqolp5BNrDVE9XbEDy5HNPXmjR3uVp0JRG2C2CLw04pU4tnqBwDmwrZNoM2uzo="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 734
+          }
+        ],
+        "cachedContentTokenCount": 734,
+        "candidatesTokenCount": 255,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 255
+          }
+        ],
+        "promptTokenCount": 1258,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1258
+          }
+        ],
+        "thoughtsTokenCount": 1176,
+        "totalTokenCount": 2689,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.2164316214767157,
+      "invocationId": "e-d6ff5c3e-365e-4e41-846f-a796afa3568d",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "6f58ac64-7a06-4e40-aa54-19369baea5e8",
+      "timestamp": 1788683265.428993
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-9c4ee5fd-37de-45b1-8f6d-b8da3bf796bb",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "error",
+                "is_valid": false,
+                "error_message": "400 POST https://bigquery.googleapis.com/bigquery/v2/projects/bio-med-480108/jobs?prettyPrint=false: Syntax error: Expected \"(\" but got keyword GROUP at [5:59]\n\nLocation: None\nJob ID: ffee73fa-d15b-40cc-bc74-52150b9e0f9e\n",
+                "note": "Ensure tables belong to bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-d6ff5c3e-365e-4e41-846f-a796afa3568d",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "9b3a21d8-ba6a-42ae-a226-ab151be25aaf",
+      "timestamp": 1788683271.4878576
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-8f68b5d5-3ad3-4f4a-b2e4-12a87e045be8",
+              "args": {
+                "sql_query": "\nSELECT\n    DATE_FROM_UNIX_DATE(CAST(AVG(UNIX_DATE(condition_start_date)) AS INT64)) AS mean_start_date,\n    STDDEV(UNIX_DATE(condition_start_date)) AS stddev_days_from_epoch, -- Standard deviation is in days relative to epoch\n    DATE_FROM_UNIX_DATE(CAST(APPROX_QUANTILES(UNIX_DATE(condition_start_date), 100)[OFFSET(25)] AS INT64)) AS p25_start_date,\n    DATE_FROM_UNIX_DATE(CAST(APPROX_QUANTILES(UNIX_DATE(condition_start_date), 100)[OFFSET(50)] AS INT64)) AS p50_median_start_date,\n    DATE_FROM_UNIX_DATE(CAST(APPROX_QUANTILES(UNIX_DATE(condition_start_date), 100)[OFFSET(75)] AS INT64)) AS p75_start_date\nFROM\n    `condition_occurrence`\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "Cp8pAY89a1-JAOPsWKJBs48MeXvKQi1fUuR4eXOKmjUWyr3PUj5SdtgZxGSSkwO5RehTj2EvvHjM2046swXn_GAYHPSym1AZOZmxK2d1-UOn3ngF-LKVZtGM9zZ9e4ENisNqKRrSGCIhlpSeYeCIemS384F7gkFGVNGgLhoncDQGs8_zUjsumuC66DEPvm1ZaozpiYgdWHp9PhhSL5BIUglkZeotYZ5hJwrnEz0-_RDVxdk9KM0zZe4kaur_aFQQLrYsgUOBhFAn1U_3ZBCR50KzUB29BhyZl8g5Yxr5qhUexJ8bVfw8_70PHwhh32hSGhhxGsYQ3JkctYGsay1fhoORwkLoXPTpnkEnU-_U_gzMMhuc0c-FdnxsKuLxN3fPTeB_mzKmHvtRrtYHPQDUyWjsJ5oqXQZojul9xdMpRRSz_zN9ud61mgcTPZ-aI_AdQen0eKy4PYW0MfnlaZDoV8h5usukkLxtOUWOIem1a9YAx95rPq4OgXcc8v8BgPD0TYSnz71Q0Jkx71fkubeVMkse3pllo5FqX4KlMKcwdI3Q8CDkcEjAF_DOsXSBshczhV6m66IUboEzhMlyopUEvFxA1LKFPqxiEz0yjItC1VNwwuhSBkoCUvZawt8sDxS7VXvuoirXH_XX3ptITqFENUaDtrXPgpM5eJh0XtkOBAEADa0RI1DGoC_1ePA-wmn7so4dnJORS7cIWwoc03cEYFXr5BKbS8U7dvAnsWBokM8raSGZgPgI3kDIXEenXhaHwnrqJQ9ofr1Ht75dG1CqXiEG_1rcRyajCDZI-U6X3Uz4sNOWqB9A3_Mb6vK6OpwXGZZjNsd65wtQ7LQuxbf8gdagfUfA5UVYOEdPAtmzX7lb5gJj5DvO3q_hP5KnvWFsfHzoRbuG5jiSi7VufY4k9BapHVpI7M0qaKD2REZDJzx_SakXTMUfVYXQFQpBoyZti0wJg2WZn50U7Fxpf0KQvURPZ-m36dkORGh2fnnYs3iM0NGI8yCSIA7OollARxMQXNoD9WSqM9ge4w5cOkZNNt0NW4lIwkGZbBx7l9FGl_fKzxCMQgrSD7v_XrP-4utkIZdol9Z1HFjLWpGqs8gF_QlEP6LJqxXNw9UBjtvs88MVcYUKUSl23wcG_zgPYukRs4nEEK0pkJGPCvPtdwaaMUgcdFz2sateoFt-2rkwGYl0wjD4Ees3aCZetlJftYgO9Jwl6A-ziRTdeyIodq_gcvq-iNv-n21CcCAqL1u4Y7ulHZD4LFX1wrbXwNfaq8vNX_IW8Nc3-A2v3GwuDWaytYsWrnjIsploD-WApLQd02wpxD295kXpfZPd_btqUHVY-nj_FCx1fqtoSkwEzZgZ3q4m33yafPHBtVpFT3d0JtjernIZUGVKmGBEk2UBRQGrsV6G7IT53dC2O78VQA3bCa9vOlaBLQ2xB82GDL4C5VG3ICvKt8qtOQS_vYMK33XqG3ewRLGZ1obeW9nbiZwjb4AbvBPYSeN5IES9BE8Y53XMXoSBABPaB2kWqEXCgtthoVKOp77rYy62qktl5TrndiRLSTi6mR9LbGjgyUdMOCyKcUDes-BG51crWio2qbvIo7Wrx0jdHiADNznMHI_7fP1kudDv6sWiKlLPeuYcE9IqXw9lIdO3PcBDQME0nSQyjp7YUwqKv22WVXolhieqJ4XZtvh504QHSP98fWdiT75BQZ_GA5gz7Zwv5L-cuoppbaOJ2EiEOgxyeoqzJyW6kBzqJXbOMSh7dNobXPnLM4kk-1cOvTykn2VX9g_N6rHD451nOFwHw9TEfhS2M8be_-6ObF96aYY556LuAlvBXRd1O0lrNrVGrIG0ftGXtjxHRHeNUX5S9Cm4mTwdooN8MYtjhUh3KfwU5ve5AlztQcwOAp0kAju8-WUWS8JR6p1RjOGwJUSb7HMTaSTV49j9VBTJFNd0ZP_oizOahUmrRAZ3tNtoJiNreib5RxbyaH45evSfPloBgYbSXwW9-aAojMRvP59caWsf-VPAMlNz8cwdbMbcFNJrbFQ7rc9Z8Tqgyeox-e15oi7--8Fu9pbXRavbFXHSRI4eeW-VuHQYm3D9I6ODk8OL6pfCq7C6FVPru6q6Kv19oWk2SvEwaYiUYHg0mgpKtch51w2TaS2-eznhNtO-O1Z5mYSaIqJTJyjtLF_X0iO0tDTbX1a0dzU5wrnkaQZfbAfA9X-AE6W6Ysa9GQ1Gt68ljR40vndbMehr1Pf6lZf-SowwrYoXEdcQPchZ5wy1Gc0KFrSnqFVdz4QiXfNSPwbbBtFL6GYVJzCylVoYFitFFx1T3GAUEgD6WegYy5drdlpGndivoZE-RlELq0vgtDxZTW3Cp-WNxw9FOWfEqPlrgDDhcv5Zu4rnxMbVXZFa2hwLVmuyrEdpCClcma1rV5Afm-o8m5bjqoYmCEy4JjqBHVn6ZVHZuXtq2eQfKcHjwuovWHKUHBM5zQ2RcWj1qpY5DKZekvutknK2X1cIkMd-XuVMP2GxFsNfEUTiDNlJ2LEDJxrXQk9OauZmDCSyzim_iKHM3gViA3ItSDdJArtL3QtfwHs2OCOWq2Diaiy6YOaJ4VfpuXJMSXYG51toGmCpP-K-xUdAO4TU0fV-QeeWi7etojDV5l9ome3L9uLqkZpfvHWQsTPSGj3r7KrJSZc52F1OX7hnWiOxuMGhBTic5lf7e7jozsqhlvmZcjcYQfgW_oQJtkB9xbtdPTEylJjLM1xF47sfGZEM3U34F-2Z9jj6R1z2AXyi6XU3xZLNBj1e7ch2Zhe0Qsgri4tZWAE_hN8jqOGznFhOjRfA_6VerOH9Rmbl5bnUo-Mnci-LaOz1CBxjOUGMWefwJr_TGyXUuxZWTTNneHlIZ-2kpinMQKe1tlPLvv3hgEvxvIdplhpFISdReaNvHo594Q_pv0_B42YbPB6CW76o9R1EWokIpYQ0ifAi4v1Jnk5oQUL-Sfg6C6xuFN5hdbbRG0nCXodCEu9m73cpAAuioWshAxGWJA_-tnNJAtzZ_3bp0rISr5vZ-D_3a-8l24-qJPtkThJByOsmO_lcFix_3tJt5-oay3ppF6BTCn7t-7kjgQ66OATE9E3-yOAvC--W0pfxDniGa-NHb7YmURRi7OujkPTGnj2grPVUl98RsI92PWJT2G_ehdD_btPz4EGvNYBDcBeulV_M5u6q2MLNzPJkn15CQ7qwePs8oUgLMP8okQJGQke82tZ1WnvorqzlrIYl_x2eMkZ-T0eB6T56LJTGaWvN6czThicui83ZySOgNgR5z65_4aU5Vbi6xI75DwcJCeVaBl7kJ-31OvSctXZRkG5eePBaFn8ieBuqM8Vi0IVDGfoXhS4vs8FJlLGTkdy1CKy4J9-MnOumwHgQGyk2sNIgshXcc4pf3KV4OvIeo7kQpQJ-n2fjsgc820suCONbWiAjm1cHwW35Bf_1U__oGSR9XqvI1s7YJscQVzdn20HOPJWXM3DyD_e0_31fVSGhwXxhhoiVO0-VaBmO-_d7FTgHaq34sEtyfkvnMHFDv27Q_4KPZlOGNnQQI6OaW7y4UpFbWPGGERLCoUV-MRHA_sXIZ2oQu1JzXO3LTf_t4iXDW8DAb3MkLZHzcFH2l4nyGcSpN85xU734K2P7HI35E_HziDh4a6zFUB9iApkMYYXFYWIOlmGeMEBD2_mMz5zErJkn6gbg1fEBu2-O4qSUSJXSu88Jc_-rAZ7snT-ndMuANMBQe_GIDO2jKhrKiAAB-uBtjWmFkQe9eMaZV6Obf7XxWnUy89Wo5gljCnD3ZDKLHIZHHBGmsggZ478t3YBbTatNmcLa2AhLW3JE8rEtSeA-wnYVJc-oI_bejRSAjYBX8OUzlqMzVjifqQa58lHhDlxQTaUS0j6UP_3yRqP81rfkokQG49z2yPDC31Kl9jMU04aVVriQf_s76rOhuAVhz3WwZJL6xvujLXf7GfUKoZmtthaJsRj8ol4ehEvg6Xm_B4InQdgfSBGw0zDHIXLW9iiw7U_PcPmZ31o5hu1ousBJ08I4-c8blVttJa__Q3DRLuLympRa6Ve9O0Nn3AvSKwPlwLpNvQm1HJCcA_LgnuYRx3NpUBXL1B97kwxf1N23alb6pzlgZAW7T8_1zI2Xnybi3S0iqVUtTthQMnZBf_n-o5qNOj9yu2bhV-QhW4pOpe6wZNtL0JD3rg2tAk4xZMtiSWGCHEgLOMFcr09e0Ntc-RUjVJcwgqgrakfDdF-7UY-KM-7puKCnLzaTfRMT9OD9V8uYlGYyivzbHDqlL8Qirq8JC66lJcrs4VZ0YlGpGUUHvZfWFQZNJVLLHXO6egd492LS6wUTt_MyDOOyTjFnGqJ9soS-9z72ccCkGluCrWQKzUFQWg8DpOGQmEIaYml2mS2qZYt37hhrbx-ZM54gT7fXAXVyAqMVgX9mI6N4m7qMNixsHQqi7u-RQEwjnSX9xDSnBi4q4qgd83ifzaZaykwsjyHdN6XNcDLHQ15zCdWJKDSK2fmcogBg4xuT_QUHXZaeDujjvLDHP5eqY_8WEMmx0quX0NQhciNABCeoGqVfNvZeRT1xMdGSty3UzbiyMw-bMKJrIiR8jLvZVTcm2qA7cyb7FajuM1dt7EYhqQBq48gfJjfSYino2gGYruSUNWtySge2IpftX0PB0dDktC-7P8wfXC9mS4UA0xm2Ymj1vXtqvj29ppga7qveF0dKwUSBC_uHjJvyeGyWTsUWFgZnbat8PPS_ELVogsiWy31Xd6U9CBMv-U_t03zaKu-goN8ugrjRGjQPCZsZPBxFPBzc56Ed1Q-7YS6rvNKzkLqTikkP-vLVDz_DTQ9AhjreX5CGdzU-7_WxsxdnS-9ZcUJD5kN5r00c7BBcBXJ8z-vzMPojBVheK0EwiBV8X6-XKaAkUMIfXwVIewreWYsFhjHggpdjKPCNc9dNX1iUoNIZK-MV3aFm6sjQyXt28IO-4mUum9ny7voIF_qiN_7asFkqfSG8syebUsq4fKkkTJShPQm-cqCtY2Vst81cN5w3fmzokL3-gqkINYWR4RRG77wShe6GgV18O5Id4nKB6fGJJctnsgVKQ0N1SNHnfF3TZ0vQYb6grGW55rf7Yj-aApwbWS16aZEQ_JfikK-_gpBmyYtJ-yQsrI5J1ECStpkOW3Fulhck0Le6k82rcTgMrS-o4Ah5NjgRX39k8QkNFDXW5AnNLdrYkqD63vOJWkTV4GZbO6sKv5X3qEjAMoQS9qwmL5YnkEjWN0nKHjkgRXsoEWue01KCh1dVypZQo2iQta52O3fQePxuoy0N9a-tLu_4nZzpQ9rFokMqEqGlJifAZ6fYDQMF6HCdTAWFENo3aKBHV9DO7LUICWr9GqMsvQA6xUcxlgl-GtNV5aqms2muJPlOtdNAb1A_XFyGOq0mi-NBafXPj8T3Vc7hxvVHVvfuiEgOVdmbCs-zgdWKkx-QuQOdzX4BO8eVnLGWEhPQ2QEjlYqShwxGySBe-XUxyQ4fec7DUuO_7MVvNznJyg6-qRD7-W0xTCJGPTxHx2XKnE0wxZaEMeMnkulC3QqdK5qPObSEoMygFrMUbfCX5TLBsZpspFbi74Q1fWcVGDwWZB_cYnrG_XLGeGXOrTGAsi3dpZbCgGu-_DvMkbPbnwwlX0kP-rKMhEQgvEdTvbQQ8r0ckQXz3IVv6Cs4yIqWe35z9SbziO0hPAE-DmHrEYaE9LediZUEEf7Ao7vhsU8l9VATx4g8DonvyaKXaIQBUHE3EXLBUD5tV7GOoilnzi9n69Z4qZtFTbelayCocoUpu7Qz89ism6NrFGtZMGPHu2iD4cNUIY_-ImIKT7LHSBgfqaool8I5ax6jbTtQFQyq89_AQmbPe-nOUHazFzO-tAWKvNDQHNhECGs27bBUrgPi77fqd2GN40yu2Ga9h7UcJUaahNrd7HoQ2h3IIebRpGe36U2xJdOqs8-74Mu7HXm1gDhRQI_abNJegptX9tHxL9Dr-GdXbKEqvPLcQ_kRlE-u2phYIcoUZScmokcg9telrwDhSz5u8w3oxm3l9rQAIZrRshUQPpt3XJB6TtqiYCRQCNn3v-06QJ8awAlm1bkDg_AKiBJQinjgzd9teYSf2VpHSf5QzgA5p3Z6yjl38E_AsDqACvIAqn9zfNLeMlwXeEEIJlD7L1MaiM6_dvWGw6c0_XDBMER4N1HW6Y_dNbs5NdWbuemWjmcWxHKNVRdKgyAffBX6ca-Jk5D0loHqluK13M4QNPjXecYYcfx7TalDkZoVmPD8qQzz_l6127_QOXYhjCortx5fz_EBrKodWe3vkPFXb8phqUeBxLlYyWFphFFwN3P6DTOMJE4B-qW_Jh7D2t6qXBnMiVFQfXWXNlIgO33TqT8b2AzYGxOkkgaj7qEtG9gISPEzftWOFkfn4TscuAWlDdz-9BoQQnNt9L55QQ4kTcP4S_mJB2HFqNH7nlgGK5nBxuVprl7HoEZCyNxSz7_vVj2SfhnczlQkBwd5a2YFuj9qaF1Z-pL6X-zToL3FD_oI4HJUPb-20Ff3XCpuBzyk0UiazVKYUia57-18AEOTpv7Hd-8CEfvDQxTf8xgrgrxVNZC1A6ychA4IH6xRXmWHLevx5VeWRfBucasNNPWmm-gyW3wZhocJwOcGUyrmnVYKmrvouXuUP0QHyyTSRrH8usGgyusLAKUb8OoACHExICG1Xt1I8tlT2O2pizyJ6NKI8u9D8o8CxYZHV_EuZLExVTPwWi5guKEdalbj8gxeaK5ACxXShqiZcUIaIAa07HGceRVc4x1ts2SB_cmHkb7mOPHS-SyPoEscQhbtbwzc9RT8VD9NTS-qcSaQKQIIC3IOiRJ3kLCzAmqn7eKkZzNFPMKc7XGoCC9FhF_rqmkr2Yk1-2celZXKqsPmGT1GuF2LQC6xON0m4xlMxZDVjvVUJdmhko2HFP4EzrFFG2s_o8F37I6oR1sTmUAI5H0A0TM_0RfPrSFUwXcIwcZRgC13fFOrbx5VZO1mM9D8F2fEcCJ6XbY="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 260,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 260
+          }
+        ],
+        "promptTokenCount": 2822,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2822
+          }
+        ],
+        "thoughtsTokenCount": 1543,
+        "totalTokenCount": 4625,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.169329599233774,
+      "invocationId": "e-d6ff5c3e-365e-4e41-846f-a796afa3568d",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "dac6098c-8452-4a33-9eaf-07137c93ae4f",
+      "timestamp": 1788683271.490846
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-8f68b5d5-3ad3-4f4a-b2e4-12a87e045be8",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.condition_occurrence"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-d6ff5c3e-365e-4e41-846f-a796afa3568d",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "b98a2046-062f-4690-8122-3e73907b5648",
+      "timestamp": 1788683280.1058583
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Aquí tienes la consulta SQL SELECT para BigQuery que calcula las estadísticas descriptivas solicitadas para las fechas de inicio de diagnóstico de condiciones:\n\n```sql\nSELECT\n    DATE_FROM_UNIX_DATE(CAST(AVG(UNIX_DATE(condition_start_date)) AS INT64)) AS mean_start_date,\n    STDDEV(UNIX_DATE(condition_start_date)) AS stddev_days_from_epoch, -- La desviación estándar se expresa en días desde el epoch\n    DATE_FROM_UNIX_DATE(CAST(APPROX_QUANTILES(UNIX_DATE(condition_start_date), 100)[OFFSET(25)] AS INT64)) AS p25_start_date,\n    DATE_FROM_UNIX_DATE(CAST(APPROX_QUANTILES(UNIX_DATE(condition_start_date), 100)[OFFSET(50)] AS INT64)) AS p50_median_start_date,\n    DATE_FROM_UNIX_DATE(CAST(APPROX_QUANTILES(UNIX_DATE(condition_start_date), 100)[OFFSET(75)] AS INT64)) AS p75_start_date\nFROM\n    `condition_occurrence`;\n```",
+            "thoughtSignature": "CnwBjz1rX0Wx8Rq-kNLs6rPaq4UP_z0VoOoFqwy93JPRd3z9kegJpKMVnPKUc7cfsVRNpZR5_MLFMe144n1XJbfkK4tgaHc5mCMEoGr0Ljwifehbn8YLtIzjoT_oAQjC4xPTv_2-irQIaMaTWkCy95I_KoE2hMYWb7YiFTEk"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2716
+          }
+        ],
+        "cachedContentTokenCount": 2716,
+        "candidatesTokenCount": 284,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 284
+          }
+        ],
+        "promptTokenCount": 4693,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4693
+          }
+        ],
+        "thoughtsTokenCount": 20,
+        "totalTokenCount": 4997,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.04187763240975394,
+      "invocationId": "e-d6ff5c3e-365e-4e41-846f-a796afa3568d",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "d58e355e-7154-49f4-8c89-2d1870e84da7",
+      "timestamp": 1788683280.1086953
+    }
+  ],
+  "lastUpdateTime": 1788683280.1086953
+}

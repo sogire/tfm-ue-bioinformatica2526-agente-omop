@@ -1,0 +1,14 @@
+id_evaluacion: "querylibrary_DEX18"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Analizar la distribución de los tipos de procedencia de exposición farmacológica (receta, dispensación de farmacia, administración hospitalaria) para medicamentos indicados en tuberculosis pulmonar.
+sql_base_gold_standard: |
+  SELECT c.concept_name AS drug_type, COUNT(*) AS drug_type_count
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure` de
+    JOIN `bio-med-480108.OMOP_54_A.concept` c
+      ON c.concept_id = de.drug_type_concept_id
+   GROUP BY c.concept_name
+   ORDER BY drug_type_count DESC;
+concept_ids_gold_standard: ""

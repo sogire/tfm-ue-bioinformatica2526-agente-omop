@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_CE06"
+nivel_complejidad: "compleja"
+domain_main: "condition_era"
+domain_others: "death, concept"
+pregunta_lenguaje_natural: >-
+  Identificar las condiciones clínicas con mayor prevalencia en pacientes dentro de los 30 días previos a su fallecimiento.
+sql_base_gold_standard: |
+  SELECT concept_name, COUNT(*) as conditions_count
+  FROM  (
+  SELECT d.person_id, c.concept_name
+    FROM `bio-med-480108.OMOP_54_A.death` d
+    JOIN `bio-med-480108.OMOP_54_A.condition_era` ce
+      ON ce.person_id = d.person_id
+     AND DATEDIFF(d,ce.condition_era_end_date,d.death_date) <= 30
+    JOIN `bio-med-480108.OMOP_54_A.concept` c
+      ON c.concept_id = ce.condition_concept_id
+       ) TMP
+  GROUP BY concept_name
+  ORDER BY conditions_count DESC;
+concept_ids_gold_standard: ""

@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_D10"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Listar todos los principios activos o ingredientes farmacéuticos agrupados bajo la clase farmacológica de inhibidores de la ECA y combinaciones.
+sql_base_gold_standard: |
+  SELECT  c.concept_id    ingredient_concept_id,
+          c.concept_name  ingredient_concept_name,
+          c.concept_class_id ingredient_concept_class,
+          c.concept_code  ingredient_concept_code
+   FROM   `bio-med-480108.OMOP_54_A.concept`          c,
+          `bio-med-480108.OMOP_54_A.concept_ancestor` ca
+   WHERE  ca.ancestor_concept_id = 21506108
+     AND  c.concept_id           = ca.descendant_concept_id
+     AND  c.vocabulary_id        = 'RxNorm'
+     AND  c.concept_class_id     = 'Ingredient'
+     AND  (getdate() >= c.valid_start_date)
+     AND  (getdate() <= c.valid_end_date);
+concept_ids_gold_standard: "21506108"

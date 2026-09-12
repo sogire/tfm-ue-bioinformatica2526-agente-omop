@@ -1,0 +1,28 @@
+id_evaluacion: "querylibrary_OP12"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución y percentiles de la duración total (en días) de los períodos de observación registrados.
+sql_base_gold_standard: |
+  WITH w AS 
+    (SELECT
+      DATEDIFF(day, DATEADD(DAY,1,observation_period_start_date), observation_period_end_date)    AS period_length
+    FROM `bio-med-480108.OMOP_54_A.observation_period`
+    ) 
+  SELECT 
+    MIN( period_length )                                                              AS min_periods,
+    MAX( period_length )                                                              AS max_periods,
+    round( avg( period_length ) , 2 )                                                 AS avg_period,
+    round( STDEV( period_length ) , 1 )                                               AS STDEV_period,
+    MIN(CASE WHEN order_nr < .25 * population_size THEN 9999 ELSE period_length END)  AS percentile_25,
+    MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE period_length END)  AS median,
+    MIN(CASE WHEN order_nr < .75 * population_size THEN 9999 ELSE period_length END)  AS percentile_75
+  FROM 
+   ( SELECT 
+       period_length                                                     AS period_length,
+       ROW_NUMBER() OVER (ORDER BY period_length)                        AS order_nr,
+       (SELECT COUNT(*) FROM w )                                    AS population_size
+     FROM w
+   ) ordered_data;
+concept_ids_gold_standard: ""

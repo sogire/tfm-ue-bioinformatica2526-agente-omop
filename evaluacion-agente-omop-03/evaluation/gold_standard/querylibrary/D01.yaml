@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_D01"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener los datos maestros y detalles completos del concepto de medicamento asociado a atorvastatina (comprimido oral de 20 mg [Lipitor]).
+sql_base_gold_standard: |
+  SELECT 
+      c.concept_id AS drug_concept_id,
+      c.concept_name AS drug_concept_name,
+      c.concept_code AS drug_concept_code,
+      c.concept_class_id AS drug_concept_class,
+      c.standard_concept AS drug_standard_concept,
+      c.vocabulary_id AS drug_concept_vocab_id,
+      (CASE c.domain_id WHEN 'Drug' THEN 'Yes' ELSE 'No' END) AS is_drug_concept_flag
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+  WHERE getdate() >= c.valid_start_date AND getdate() <= c.valid_end_date 
+    AND c.concept_id = 1545999
+  ;
+concept_ids_gold_standard: "1545999"

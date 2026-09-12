@@ -1,0 +1,39 @@
+id_evaluacion: "querylibrary_CE05"
+nivel_complejidad: "compleja"
+domain_main: "condition_era"
+domain_others: "concept, concept_relationship, concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Evaluar la estacionalidad de condiciones clínicas como el asma (código 493.0%) contabilizando los episodios iniciados en cada mes del año a lo largo de un período de dos años.
+sql_base_gold_standard: |
+  WITH asthma AS (
+  SELECT DISTINCT c2.concept_id AS snomed_asthma
+    FROM `bio-med-480108.OMOP_54_A.concept` c1
+    JOIN `bio-med-480108.OMOP_54_A.concept_relationship` cr
+      ON c1.concept_id = cr.concept_id_1
+     AND cr.relationship_id = 'Maps to'
+    JOIN `bio-med-480108.OMOP_54_A.concept` c2
+      ON cr.concept_id_2 = c2.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` ca
+      ON ca.ancestor_concept_id = c2.concept_id   
+   WHERE c1.concept_code LIKE '493.0%'
+  )
+  SELECT season, COUNT(*) AS cases
+    FROM (
+  SELECT CASE WHEN MONTH(ce.condition_era_start_date) IN (12,1,2)
+              THEN 'Winter'
+
+            WHEN MONTH(ce.condition_era_start_date) IN (3,4,5)
+              THEN 'Spring'
+
+            WHEN MONTH(ce.condition_era_start_date) IN (6,7,8)
+              THEN 'Summer'
+
+            WHEN MONTH(ce.condition_era_start_date) IN (9,10,11)
+              THEN 'Fall'
+         END AS season
+    FROM `bio-med-480108.OMOP_54_A.condition_era` ce
+    JOIN asthma a
+      ON a.snomed_asthma = ce.condition_concept_id
+         ) TMP
+   GROUP BY season;
+concept_ids_gold_standard: ""

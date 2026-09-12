@@ -1,0 +1,42 @@
+id_evaluacion: "querylibrary_DER23"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución y percentiles de las fechas de inicio de episodios farmacológicos estratificadas para cada principio activo evaluado.
+sql_base_gold_standard: |
+  WITH drugs AS (
+           SELECT DISTINCT drug_concept_id
+           FROM   `bio-med-480108.OMOP_54_A.drug_era`
+           WHERE drug_concept_id IN (1300978, 1304643, 1549080)
+       ),
+       start_date AS (
+           SELECT t1.drug_concept_id
+           ,      drug_era_start_date start_date
+           ,      MIN(t1.drug_era_start_date) OVER(partition by t1.drug_concept_id) min_start_date
+           ,      DATEDIFF(day, MIN(t1.drug_era_start_date) OVER(PARTITION BY t1.drug_concept_id), t1.drug_era_start_date) AS start_date_num
+           FROM `bio-med-480108.OMOP_54_A.drug_era` t1
+           WHERE t1.drug_concept_id IN (SELECT drug_concept_id FROM drugs)
+       ),
+       tt AS (
+           SELECT start_date.drug_concept_id
+                , start_date.start_date
+                , start_date.min_start_date AS min_date
+                , start_date.start_date_num
+                , COUNT(*) OVER ( PARTITION BY start_date.drug_concept_id) AS population_size
+                , ROW_NUMBER() OVER (PARTITION BY start_date.drug_concept_id ORDER BY start_date.drug_concept_id, start_date.start_date_num) order_nr
+           FROM start_date
+       )
+  SELECT tt.drug_concept_id
+  ,      MIN(tt.start_date_num) AS min_value
+  ,      MAX(tt.start_date_num) AS max_value
+  ,      DATEADD(day, AVG(CAST(tt.start_date_num AS BIGINT)), tt.min_date) AS avg_value
+  ,      ROUND(STDEV(tt.start_date_num), 0) AS STDEV_value
+  ,      DATEADD(day, MIN(CASE WHEN tt.order_nr < .25 * tt.population_size THEN 99999999 ELSE tt.start_date_num END), tt.min_date) AS percentile_25
+  ,      DATEADD(day, MIN(CASE WHEN tt.order_nr < .50 * tt.population_size THEN 99999999 ELSE tt.start_date_num END), tt.min_date) AS median_value
+  ,      DATEADD(day, MIN(CASE WHEN tt.order_nr < .75 * tt.population_size THEN 99999999 ELSE tt.start_date_num END), tt.min_date) AS percentile_75
+  FROM tt
+  GROUP BY tt.drug_concept_id
+  ,        tt.min_date
+  ORDER BY drug_concept_id;
+concept_ids_gold_standard: "1300978, 1304643, 1549080"

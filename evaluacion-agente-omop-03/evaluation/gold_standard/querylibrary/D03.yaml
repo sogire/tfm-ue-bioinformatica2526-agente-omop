@@ -1,0 +1,30 @@
+id_evaluacion: "querylibrary_D03"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Identificar los principios activos o ingredientes farmacológicos que componen los medicamentos clínicos y comerciales seleccionados.
+sql_base_gold_standard: |
+  SELECT
+          D.Concept_Id drug_concept_id,
+          D.Concept_Name drug_name,
+          D.Concept_Code drug_concept_code,
+          D.Concept_Class_id drug_concept_class,
+          A.Concept_Id ingredient_concept_id,
+          A.Concept_Name ingredient_name,
+          A.Concept_Code ingredient_concept_code,
+          A.Concept_Class_id ingredient_concept_class
+  FROM
+          `bio-med-480108.OMOP_54_A.concept_ancestor` CA,
+          `bio-med-480108.OMOP_54_A.concept` A,
+          `bio-med-480108.OMOP_54_A.concept` D
+  WHERE
+          CA.descendant_concept_id = D.concept_id
+          AND CA.ancestor_concept_id = A.concept_id
+          AND LOWER(A.concept_class_id) = 'ingredient'
+          AND getdate() >= A.VALID_START_DATE
+          AND getdate() <= A.VALID_END_DATE
+          AND getdate() >= D.VALID_START_DATE
+          AND getdate() <= D.VALID_END_DATE
+          AND CA.descendant_concept_id IN (939355, 19102189, 19033566)
+concept_ids_gold_standard: "939355, 19102189, 19033566"

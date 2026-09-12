@@ -1,0 +1,37 @@
+id_evaluacion: "querylibrary_D02"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_relationship, concept_synonym"
+pregunta_lenguaje_natural: >-
+  Buscar en el vocabulario conceptos de medicamentos o clases terapéuticas cuyos nombres contengan la palabra clave 'Lipitor'.
+sql_base_gold_standard: |
+  SELECT c.concept_id Entity_Concept_Id, c.concept_name Entity_Name, c.concept_code Entity_Code, 'Concept' Entity_Type, c.concept_class_id Entity_concept_class_id, c.vocabulary_id Entity_vocabulary_id
+  FROM `bio-med-480108.OMOP_54_A.concept` c
+  WHERE c.concept_class_id IS NOT NULL
+  AND c.vocabulary_id in ('NDFRT','RxNorm','Indication','ETC','ATC','VA Class','GCN_SEQNO')
+  AND LOWER(REPLACE(REPLACE(c.concept_name, ' ', ''), '-', '')) LIKE 'lipitor'
+  AND getdate() >= c.valid_start_date
+  AND getdate() <= c.valid_end_date
+
+  UNION ALL
+
+  SELECT c.concept_id Entity_Concept_Id, c.concept_name Entity_Name, c.concept_code Entity_Code, 'Mapped Code' Entity_Type,
+  c.concept_class_id Entity_concept_class_id, c.vocabulary_id Entity_vocabulary_id
+  FROM `bio-med-480108.OMOP_54_A.concept_relationship` cr JOIN `bio-med-480108.OMOP_54_A.concept` c ON c.concept_id = cr.concept_id_1
+  AND cr.relationship_id = 'Maps to'
+  AND c.vocabulary_id IN ('NDC', 'GPI', 'Multum', 'Multilex', 'VA Product', 'MeSH', 'SPL')
+  AND LOWER(REPLACE(REPLACE(c.concept_name, ' ', ''), '-', '')) LIKE 'lipitor'
+  AND getdate() >= c.valid_start_date
+  AND getdate() <= c.valid_end_date
+
+  UNION ALL
+
+  SELECT c.concept_id Entity_Concept_Id, s.concept_synonym_name Entity_Name, c.concept_code Entity_Code, 'Concept Synonym' Entity_Type, c.concept_class_id Entity_concept_class_id, c.vocabulary_id Entity_vocabulary_id
+  FROM `bio-med-480108.OMOP_54_A.concept` c, `bio-med-480108.OMOP_54_A.concept_synonym` s
+  WHERE S.concept_id = c.concept_id
+  AND c.vocabulary_id in ('NDFRT','RxNorm','Indication','ETC','ATC','VA Class','GCN_SEQNO')
+  AND c.concept_class_id IS NOT NULL
+  AND LOWER(REPLACE(REPLACE(s.concept_synonym_name, ' ', ''), '-', '')) LIKE 'lipitor'
+  AND getdate() >= c.valid_start_date
+  AND getdate() <= c.valid_end_date;
+concept_ids_gold_standard: ""

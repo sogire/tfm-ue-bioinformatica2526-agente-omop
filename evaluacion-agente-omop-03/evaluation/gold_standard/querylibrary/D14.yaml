@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_D14"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Identificar todos los medicamentos aprobados o indicados para el tratamiento de una condición clínica específica (a partir del concepto de indicación para cicloserina).
+sql_base_gold_standard: |
+  SELECT drug.concept_id   AS drug_concept_id,
+         drug.concept_name AS drug_concept_name,
+         drug.concept_code AS drug_concept_code
+  FROM `bio-med-480108.OMOP_54_A.concept` AS drug
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` AS a
+        ON a.descendant_concept_id = drug.concept_id
+  WHERE a.ancestor_concept_id = 1710446
+    AND drug.standard_concept = 'S'
+    AND drug.domain_id = 'Drug'
+    AND getdate() >= drug.valid_start_date 
+    AND getdate() <= drug.valid_end_date
+  ;
+concept_ids_gold_standard: "1710446"

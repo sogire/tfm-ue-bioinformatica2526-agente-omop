@@ -1,0 +1,13 @@
+id_evaluacion: "querylibrary_CO20"
+nivel_complejidad: "intermedia"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener la frecuencia y distribución de las causas de finalización (stop_reason) registradas en los episodios diagnósticos de condiciones.
+sql_base_gold_standard: |
+  SELECT 
+    COUNT(stop_reason) AS stop_reason_count,
+    stop_reason
+  FROM `bio-med-480108.OMOP_54_A.condition_occurrence` 
+  GROUP BY stop_reason;
+concept_ids_gold_standard: ""

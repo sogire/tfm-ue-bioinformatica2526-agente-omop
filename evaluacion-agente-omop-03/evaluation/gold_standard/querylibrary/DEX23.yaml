@@ -1,0 +1,31 @@
+id_evaluacion: "querylibrary_DEX23"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular estadísticas descriptivas (media, desviación estándar, percentiles) del número de días de suministro dispensados en las prescripciones de medicamentos.
+sql_base_gold_standard: |
+  WITH days_supply_freq AS (
+  SELECT days_supply, COUNT(*) AS num_occurrences
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+   WHERE days_supply > 0
+     AND YEAR(drug_exposure_start_date)  = 2008
+     AND MONTH(drug_exposure_start_date) = 1
+   GROUP BY days_supply
+  ), ordered_data AS (
+  SELECT days_supply, num_occurrences,
+         ROW_NUMBER()OVER(ORDER BY num_occurrences) order_nr,
+         COUNT(*)OVER() population_size,
+         MIN(days_supply)OVER() AS min_value,
+         MAX(days_supply)OVER() AS max_value,
+         ROUND(AVG(1.0*days_supply)OVER(),0) AS avg_value,    
+         ROUND(STDEV(days_supply)OVER(),0)   AS stdev_value
+    FROM days_supply_freq
+  )
+  SELECT min_value,max_value,avg_value,stdev_value,
+         MAX(CASE WHEN order_nr = CEILING(population_size *.25) THEN days_supply END) AS pct_25,
+         MAX(CASE WHEN order_nr = CEILING(population_size *.50) THEN days_supply END) AS median,
+         MAX(CASE WHEN order_nr = CEILING(population_size *.75) THEN days_supply END) AS pct_75
+    FROM ordered_data
+   GROUP BY min_value,max_value,avg_value,stdev_value;
+concept_ids_gold_standard: ""

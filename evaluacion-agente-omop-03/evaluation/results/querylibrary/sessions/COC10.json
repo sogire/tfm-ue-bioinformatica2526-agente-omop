@@ -1,0 +1,941 @@
+{
+  "id": "fe1517ab-fa68-4e28-bb1b-810f7ffabbdd",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Analizar cómo varía la duración de un episodio de enfermedad en función del tratamiento farmacológico o régimen terapéutico recibido por el paciente. Genera directamente la consulta SQL para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-80c3420e-b9ea-4234-ad6c-171d6a3db08b",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "d9abe7a3-73ab-4ca7-a7ec-945c96ea7f9c",
+      "timestamp": 1788691830.089566
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Para generar una consulta SQL que analice la duración de episodios de enfermedad en función del tratamiento farmacológico, necesito que me especifiques:\n\n1.  **¿Qué enfermedad(es) te interesan?** (e.g., \"Diabetes Tipo 2\", \"Hipertensión\", \"Cáncer de mama\")\n2.  **¿Qué tratamientos farmacológicos o clases de fármacos quieres analizar?** (e.g., \"Metformina\", \"Inhibidores de la ECA\", \"Quimioterapia\")\n\nUna vez que me proporciones esta información, buscaré los conceptos OMOP correspondientes y te los presentaré para tu aprobación antes de construir la consulta SQL.",
+            "thoughtSignature": "CugcAY89a18kK9WYTqfgog-351a8g42xvGGxbUcTQpK6oFtOLp1u81lW6H6dl7Ig4mkexPPt5w8e5wQLTj3ZeahcSQGkTXGFp34NZwbg581MxCnwZ5oNeFEoYevjIHXQf9CrtqEduSkB4VsCibrx1bTUj5gsIrKO_kSVGsyBqUmTZ8zaJClUymZ8ItW3SXodpnphmpWbtUmzQyu49PC7v9LbPVNRbHP5Y21Pq1Ca5G2NczfTYjUpd7BL129Ez6xG082CPiEJ2iG91mgStJgAQRMQERxJ4pHDkOXr9ujiAN8R233rkVap_5J5leIZBFy51GAk7inXByeOI2JYBT5L3QEDFnKQ7i2uGSuFy22lHAU97-pqfiUveqC0nThVeYdL2_bgLg5Mjkz8UAum6HnZzyiwpRQNzGCYRAdfWuJEL5P0rsVGUaJ1l9eUdfS1GFs_HtsBLUBVPKXuscM-FEGI74NoJ-N9wz7QP6AO-ijV3PQ1rID5oG0NLs47r1DYjwURcS3PZQWMG5AMJp4E0nXlRdCvzf6f2i4le1eegPAKr_5dttvA_-DcsbrJn24uZSjR07nHGrwD4NmqtdklQZb3NDW-aEyt1xd9iAQ5X1IXqx5ATrc8PfLq0m4viAp760l8hI-3KqM7IPw98D2FO2dyxjUIqZlNum7lXQIWAOaOgTLoUQLpZGxWCbVCSOXm0P69wcoDo4S-vBWm7xq5N6laxObrTBzQjGj5J9CT0Odfj8eRUpU2w2LGc_8tq5QC8aj7Zz2kTpC00GxKsAFKqzJNTeXexV7avNF1Z0DnM2peVllvkEAGvc97k-2V9o_FN8p1aFezWepEWhjU9Nwl-94FPyTAQm3VbSxIhd5DSYvtpRDhrC7IyWTLUMyiT8HBoLHwvK4xojuCcVLUhM3MGeR7MJOKHCO2wiA_QfeKLZSa9YwFeUDFCZldCErMi2W3N2IBd-mhOFZjz130di65f4M4qzwDyIagj4y1HJFg6ZbL8dltHW2G6Powt3pGBGoWpLBGvWEXJWCyJxlXy9FAl1q6EQj8Jw2FeaD_hbr6i_11jhUqmAJQbXhYvQ_bridV1gA2xugUPDo5yboiDdQToGej62GNl1z1F7E8dSQpVjiIPHB9a72MjT9ezgMRs4lFWYjld3SoGiGmTm63irp94RwI8ipQbweQUuyf4jhcyUrktvhu6TAgOKPiDoyWG3hkvqTDNVEkllnj6BNtDt8L8Si8mjrtsYYUxipduKMjTz5eCZB8-fdQWeq0KdtS8KecN8YOlw4aXxnni9piGd1aajakxcIqIT3q6lTW-yu6kpfunlI5NBJpYU8T1EtcMUgaRJlZ8f_kvlZveFqfZK_Dowauguc0_V-oegair3J-HifueBq4qWs72cE2RbnXgtgOsMUemUYuYj5EgzwbSlBo-VYobrElxHlRn64a0yPU23XSfORoxDo_NC_MpNhNRBTzBmXG_fE-WzEr3LyyfE2LkZRCEWtvnp0G9bIA67-fsXHlQYnG2vzEeFRcPbqP8IGx9584XVNJOUK3hADx9iGSKwYSecO6n3FBwCDVb9bZZkekcbQckpabATJAoeDzeXOBLks3ef5e0CTTK796m0zkrneymurvOQvUVZqfpE5Fa-22iZ73JeAaIlmEIMWffM4RxdQx_Rf2pK2WYle20bPiNy928O5U7Jw8JJpEjCSik-7Hn5d1-F8jCSdyJ1bX0w2W4NcyBDLx_iG-wEhz918N4TUxa5BXw1j3rpmbW6THI2FBjN3dZ7CyJdTmezof-3jB0d1VkP2zh8Fivy9u9VM8fLhesuq4DGXhHVNKyEprs1Uj_8eiVFn88uAH7zjCiAxOqSlPO4kui4yqcflwH5N1OFCORLA4aWRAoNpLJoPNB8AiJ7LBgT_O7wEZChZ_2jHeLGzTMzR3hOVNYJJZafBwrQxNG8vAjxurKmYShU8Mw_06210gDmBitJp8FCZjupiNCjWaqGNYa2-AeBVnVeSZ2xE6gw2gkH7MQUc1QChXZHeOABOI1wK_nO1vEz_i3wt-RmoWKquBtQVR1iFduPkne1xALgIul7OIYv4_PCn5jCvjy7l9IFvjvrDSlSeOTPFhnI0fs9-lO_mCahJ6GrJQwgydEond5YZ2DjCdF47J3bioip8RqSypUZLahcKLshKCs1BB6acLDE67rDWz4LzoKOutCxoTJFMHyAgOI59DZYk770Epj82V8bMDfCcltkTDEyCyn-K3hIkz2x5zrKf68FjzUg9H1NeYwlS_SCY48xnPyrgv5APylnnPXGjVy3KU8x_jQ9Q74rjFAJ41H_ZeTa_B5_jHUoU3FxLc4nB1-riBdi2J3Bto-MRa1hbgYfg545iPetuODIFoNZuOwxYRERBi7_GnS5brYVSmpvHb3zz4Csf-ZMYEzD3EjkN4aeEkaxbxNQY1ziYr_iTAda9rXO5z4hvM-E3_Hir0hwTVDcxy_eOqb35Zajq4I9P1BFu5FRwOSqsNTMGF6wu1u48jxl8Dsgrw15NZynEhF0TcTN3CEq1b4HIYLJyoxsabTrVP9OGPCO5Fa6gFWynMLfJBLRRVLEFuH-5ppBgrum8P6jncPgXKqiWijU1zu_OxfvqsxlnZtrTC3Lr-gtXqwzslC5Ln2PPHiGioql7S5kw9WUFeSKlcQuABvfLSBCUjSQLLgwZZNi2YHJd_adfG8DjOyYixaFbW6JVkTMzdEOQS2QuGwrIeYKnyZ-1KI8PyW_c2nftUN-bk1_eGzzQPVOliyuLJgauV_FotWoi8D4d9zAMe_YNYPGqGAeYNNGMLLEBj8vd8AeidbTp-m7rjQiqqVqLZzFnLcugQIRVWZOyVvS7ogEL9A6zOydWTDNTNd5sHgjM0F2VdeEYtXQa9G_m1UFkqQNIwbUZoJapTh-AWqBpfpk4CTZKyLFAJoAKGGEA9aCk7v-8BAu8T638NRFy1UKs5TQtlqP_hlZUOjtIbZMTQfMCbJNiSm3oRszOv61bnHNEOMhKiZeNWCoV1H34Op0zprZ6vCL3rBiipKxcWo-dNNRgQLUyaK6n58RzYVlWDjUSCdsnX8deKln2Iy317C4OhZJGFhup_ajkyfDQPz285WNjMCgRePe7IhtJI6l9B43O2LNzAt-make5RwSDPn263ZzsyF1ITGmbXBQgByYIGNBk1yGhXQDcIp0gbR0ijG10Cp6l9a9jI-q6se6Foe2uIURQuNQGbbRZlEa57hY-_r86mvEJ4UH6BqqfQV3D9Kfhlo9BYtiqjioZBLYzLHvp84-kBqjpOmvgcBF_a7Jza5sOVim68TKsrPtJXZo4MY02-j_8DdiS1GxWc9xbJu9C8GNWWHvkTpQnHWE-b2MkECY3Yik4BKZg84FXOa5uCALdwBmF_VQDmLxzmoFdjIFdrfkPWO_JpCgIlGNbxCHrDA9799hLCD2ar3MmYjEYrUOgAVQhRI1i9mGAprED-YxI5uBgdZoVHl65EUoqez_C9tC8GuB9T6tV5iPnok9lJxQG-3iUWXqCVa0Js_Yggo2cghOO5Fkevfv3xwV_2WWg4xqpSx01C_UqHL_bZJDWALjKDF6vfQJ2t4b0whfOR6Km7AE90vdVLT4yvMXiI4m3Nl4c0ZdcrGxkmFKr4w0Qu_N70NCC9tvNsZVXwt4yXwTB7HgmzjhUpOUsB0UEso6jfxdFBU0S54wXmYv7wCA3Azg2KBz9UT25ELq5WpceuozHFGerZQeQOQ4Bjhb2D0qe-dsN9n4PHYsvL7dp2_xjof56FKFzI8MtTemQDJQHkVtPv5QnC3NlFqz-62CYYhCQHWDj-YERhqsdNZcyVwsEXGG2wc83AmzwP64nmhASX68dwjpeDVMNsOEn7QPCuT64du-6yMfWoM58XXVyJoq4ZJxfUlsi2ji03bJyTnJbn_6R5HxHyfT6evbEq2oteed1o57ggNSwYhSV6Gm32-QT-wUgFUkXqlnP_VLfbTzfWMYJ4dRY4ZPVyB1spPXwd2jfdAGiImafW3yYySAQN23wO5iBrd1MrB0Bz5-lw9kYofvUirS_TvTxMtMSH0dlENicmru1uK5HxOda7gWaRmqJ8Os2x-UfaybJB2h60nt7MaiqsqCMMzBURfd4kTSk5ojmNOekZR-lRpadDx8LiEXXzswLOvIe2riQpiH14qDdn8G_OMFP8IxBQE-vua__nNhn0dH2o8fXPeaW4iRNdnWo8MHU-Ve7Wak8ELy-EM9793H6As3szAS6d9j4AZ9FdISnuDjdToj-yeWNlHTwQEb90ukcwkeHwzgXBQ2823964u1IXTSwfp2IrOvC_rNFOmb-U4hXzVsy_ZAirleMiT7Reoef8mudKViLXngERHI4WpW0SzgWJYrh7oUEKOYcsz1UR6ClCHbX3GTTgo-nswSw_dBWqThSCwWNjHaXUjmPJ2J9-zPfnh1madWiwwF-jkBtaF6liMD_HH1pw7EnsxFBTR9odfkQqLQoBH74mfW-mStrMD-8IKfmMnhSPPANQU0TwE80MBNcrYwdCck8rjCZ1ScQtEsLysME01CnFbWRSuqvMhTQWg4U6ISNUsYbvw2HdcuCP_dDazYPHHe8MVNRtVIGcbW4ekfIPmKGAIrnezAnKGfHORGBuotKxknvQssiqFoXxL08O1Il3jwyAr2xGGZCETq3iMBoQknesuVjROHDCsMioKG39y-rwTzBVBv53DZOukYz0FAYMwzzK5TqQSORIvvKOTJW0iLayLQGWuQ0dtIPINHVcrKOEUBvQdNyYqoL2luWklWFOrNv584GJEum56zsGJu270i9PtBsNLpljdpQSXZrbzwSVK8JJguK5mwjRekQO7tbAa-wJqRB6I7ynZMNeQ8O80PV4S0aW_oPibQInjw_kczMCCB1lrPHGzKHIg1S7d8G2e62OQw=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 141,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 141
+          }
+        ],
+        "promptTokenCount": 1255,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1255
+          }
+        ],
+        "thoughtsTokenCount": 819,
+        "totalTokenCount": 2215,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.329632265347961,
+      "invocationId": "e-80c3420e-b9ea-4234-ad6c-171d6a3db08b",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "c7a6b9e3-43d2-4ead-8df1-d6644ede76b5",
+      "timestamp": 1788691830.0908601
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 778711, 1112807, 1115008, 1125315, 1177480, 1506270. Por favor genera la consulta SQL para BigQuery consultando las tablas del vocabulario y modelo OMOP (condition_era, concept_ancestor, concept_relationship, concept, procedure_occurrence, drug_era) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-ddf4c08e-7779-40ff-9643-8f8888dce49c",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "eb5dab1f-8c45-4043-aef4-e7643a8feeb7",
+      "timestamp": 1788691835.4903834
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Entendido. Has confirmado los conceptos `778711`, `1112807`, `1115008`, `1125315`, `1177480`, `1506270`.\n\nDado que me has proporcionado una lista de IDs de conceptos sin especificar explícitamente cuáles son para condiciones y cuáles para fármacos, la siguiente consulta SQL asumirá que cualquiera de estos IDs puede aparecer tanto como `condition_concept_id` en `condition_era` como `drug_concept_id` en `drug_era`.\n\nEsta consulta identificará episodios de enfermedad (`condition_era`) y tratamientos farmacológicos (`drug_era`) para los conceptos que has especificado, y los unirá cuando se superpongan temporalmente para la misma persona. Esto te permitirá analizar la duración de los episodios de enfermedad en relación con los tratamientos.\n\n",
+            "thoughtSignature": "CpxSAY89a1-JbaBkujms2Bf8LlEgK3qK_I03IkmRIsw0HXF0ELrEoZOPsWgVv4FycD-e-P7yectL0-QumQCBB2oYT45aMT0T1vpu-tYi7QxVzak7B-hrdRO3iwrKSLVCb_T4c-JTKkOL8NZslTgM4D-H08niPe1VUcTnMUYIsQ2W9IT8g_0mosxNnyL-4ji3te22lagslho9TFEU9-ABYVLk1_tsiI09lV2DBltUZ6SJoEcPV3jNRk2XyYe_4-oh1H_ah6ejv8ZFgxc9JWs7CAvQoKUBuGX_dluAsKKZMaICUo04Bon9Ftjfh2ZxAvbt9yyLKm4yeKrLl1iWiOaaKpcOsonmVDhBL0VXrvnXTpVFMbEn9ib55jRgsSs8i0ffUMP5WwjLw07vG8KvY4S7sGDl8MQrGl96pBNuDZ_RdvGN55_Abv6WgeTkP_l3uaZygGEfuCSstqFoY2BcOg5kT2m408PxTXNzZZquoIJG0P9HcTfd9dJTX_FYrC7SsN2E4Ds0MgWpK5qIKbYTWrxw7ixtV1QmGv1-LkodsWTdUYbeJTSOKagtlOBj0OZy3MXlhJvpNzj_XjHrMYv2WIRCKvkgV2WK5LrgEzh5O88L3ekr_tP7oq7wPI9MiXSuPQmK02VpqCdS4cQMQnA3wNAJWzUeCxg3raVkNbCr1naxvGygb_L7COBzxxvqiXCEkuVeWkEFO0UA3COZRFjLepKgI3nnfAZJSSbDTP7o1SRXp_jDUcYsv90BU_wg4Vzhha_fWaLf-_iEtomU7CJrAf8VTYrv5Pk26SgmTkgmEPNZT53Z21L3AMbai75Sll9GvX1UuyWlmbK9gviEE4vBCOnVbw5lGzoqid-AjWqp5FesxSMkhI2LgFmqh1D-XYlnboo-kRVDeO_Rmjpm4HX46i-z5d2GYkSMU79BXtjpyPLzLUYxm0tgbtSg_zSWwxf-JW6WVOyyZdvfPhCaDkZg-hqMECRdarMInEEU9I9458yDEGXiz72HRo64caf7zATbtdypI55GppPuqctg0j4j-XVQUaqtH72mXeZKLgItabg_VWViuIZMT0_2Q4vjgwTzPAG9Qb423MNftgnG4lRSRmUCQrRoSy2xplrm5alk4AgLa4UDZ3ZxR9sLbNPn9e_pa_DKAxIu_IZoomCIpX5lolVTxOciJs3kk7kyLiONEVPqsRuR90g1jAjA5aLDvfcJq0xb6vp0LSJusNB66cAhINvY46W-QEffk0Is0-qQx5seZUexFUl_6bokPqa-yGWdNhuCGl0HI1LBlfCutEmONBOvlxEdz1PRGOhY1zQvCleW2_kh2BkW95ISmtoRgo7ZMK0NAbXs2WyWsX25BVXJ3ys3EiTvJDxaj3ayJjHteoK9hzqmZ-rolwKnhH4IXIz47vGJkm-Vi2CTeAbn0I0aVemSJdg_eNQntPkx0FJh7p3cu4d56Bi04rbhdtQv8CASoZ_iYCkH1L0NOPLRejoKS1MzQwIvwl83Htm6lhTEbl1OfE0PJ-VT-jzLSLamOwBP_LuMyZ5-KOXrI5SOJT_c5asHu3t_Tt6SmtOSE_46FuowCcqqpFprBHr_-seESbIZoAttR-IDNYrgn4ppL3tDQE653d9lYt8tzzKvmx03o-XVa1_fv4Uf4QeF_Dxvnjln18J-4A017zOpK0Pvg2j-2BcRysGjLM6Zb_ywPxd72Hq7I86IveChSz5nAsdS7DgUDN5mbxtHHQYkc2YLoVpEa43RKQ1pQk4lduuxfzFb2ri-8PcOyFtYqqHgastzOWdPv2FMIwMXtu8ecKX38KX7ldC4VOIipt-AzvPayjsaW4t_g2LzvLt38Q3Ci13uQLlCuJz_qB04KIKmrWgO5g1Oxc32cmr4uyBKdatYQof3Lchw5C_bTS1dDu9Yg83cuQ8LE-DEV0rFCy5jClkmR69Yme6726GrwNU99aOthbeRRCqjsj7KUt0F9kvMS_C5rQeBpHHylW68kpeUSkSygWr0b1djuLive0tw6nl5ioDyfJtfN99t0wxDEG0Tn3M3ZfjDG9ifwqpP9hrtESizDORa4k_KAiSDxGQYSXjeavfxrL7KTfIF9vdes-PBOiNL74uhPMk8tNiLQjsSr2-FFESJp7m5AOTh1psg3NQ5y-FBbtW9pkKrR_u3OG22rOKrnYg77JROfA9fuJ-RCzP423jWq0iIOEPMgEyxXuEw9PO2KbmdHCQdpphYDasqNyJRalgL91TqYeeTivaXbpoAHueW05pGzZkQDPff2Q6fP1LoDcFMXSyC0l1P0VhGKH55padM2jl2OEz3pFC6tK6GxsuNVrKlNclv-kDTq43qP1Yn_sduZr_IAn0R1OwtR9gSrc6xCQWdnium2ABwnpcmRVHa0QfMgNzrVmjguZYMK0-Kt9AiDJT7sRnOP8qz-6IpfP86CudGLuf4fec-pekQQj-xC7041ZNSuQfeIEeMQg5CaoCUp-WizdLs7TtnpQZ2ilsJajfvkOZW5dPfpS6oJY9fwWoOSnMlud8URgFiN3FVV91JnOXQmb0Oc36QXS8PQZQFVoI3gsbHZb6Wy9lQlak6evf7Qo5XdMdON8szqBi2THNintrUnhY0iwR30YFp8xpxuyciD3WDu7DtUdrLzpRbKpgPE-jfxFI24geNw55jVV4cmUThGR61tiq9T_7G5vSe2HEzxShQqPP2fe91iC39nBeG_9AB-_jQRPhc9OY6dqKSyLF4TXmf5tGxHcyt7CYaR-yFyD4GNK8H0TKRQ8EbUCPplNsTyES9NowJgs8LLFukwpzMcCpVlnFicOa9n_AsjiYp75xPYGU-SCdk1_iD2NfWh8qO64y34f0xcfcn-WiczvSn9yi_NdeS4DXR1vEVuKYtBylTrKhT93vvvgchpzwvynjJ8NmA2cQFEXsH7mrEu8WWK5vCz5eUfw73Id0GrHMwkjO4RnW-XFD2yPWsqm-uZHwUsgSr7c0rFWAOGdRwNQvfg7TwaONdhsj_gY4tdBYjWS5SqMdZHA1Z9m99R2SPb8cCF5si05P93dv8DQdkz2KQHcJEFXcFoWmKFpjSwn8IYQlt63sjcaZ9sajTYIdT9ZDyxrzl0sikAeqMw1Dl--4vRsfyVyTE7AuFUl4QziXpHBmyI_K4pkyNfXLZPv72DMb2uy4rdpTL4yKmnQ_YyxoWPOgS9PNqy3ls6BqexOVuXuhQvYKgniaHe-HgO2xotKu68XfslsX7b-tTgvpC4CnD0Mmz4GMF1lzEwOquxqjEOaA6tlH-iIbSOTrLgWYWibpO9gVSZgHYn2rVkc-aSxtLbUGIF-tjAxJ9H2ai3NiR74bkmoQM3gB57iJKRajST2Mp_3e6BnWg6R9zfx_TEcUFT9eYaXFTJ8nI33x1DCil6u-V5NLtuDSqxVYtbmm5C4GO6Jx3K0abM51O3PNhw3ycIsFYx39hKjtS2meuNiUGGqkBhsWTPbF0bZVwXw-YC5fWLJn2b1RMPDSYcj6Tex0rGEdbuGA8BVeB19y4MEUpLoCwcknVQr3dPfxB4E6OaBMponBPjg09Wq-vdvsPuKoqgemx-geNXpezMbVUtKVeiZ1zZnKkFSVzq-GuTkQdhVWaHEKFk_8SppNwm9wzBeisd9toYn98D65ny90j1qGCuTkl_8JPt_gmc_q0_zu6x5PVjDgmjKdosETNwyaIywew_DUJ2C1FCAIgvrq596IVg6YS0_TLmcBbXsIXSHb9xQIt3LehPhxHiznW6CDk4v4ZFaEDfMm9UUF1ylmtHZfYCNGR7gE3PR5D_irgOQF8f3kQMZuG4y9QD015UegJLQtiW22wPlUjjAEhPJ5gHy4E00ijkZEKP5auX506ulbrXEk1pwyFFMkjkjDOBUIS4yIYihqdfkAOrrfiVxoQuY8AunJygW5C6kucA4aUT5yP2sa-amrfGfPaSX_dnMDLRH6p1T0q-RW-nwrkpDJf3C58YiJy73YdNhalLV2QOgUIRbrlTmCevLTSI8vlggL7R6LoP_rTfN1Pc-hoM4vKUw-9ciBL65Y4zv5p5vzMsPdnfru2lLFqmaeAbAdUfMepT7e051-buOkHAmrIwqNP-CAQqadnH3SZk2-AdT16-A_pqAB-jH8K5ecmRLqSu4zbaK3e6TjY2MIn1KWXqE9pH4cXWLvTEIrxeZ47b7VR3aViRCqxnB_lXe5jUkSXr8M09HV4Nz3EekSyyCpSU7TjJ76k3GGWB6X69-pba5oOh_wQkPcwPqkazGPCX9MjBpF4QHQ52MCj8pwfVGRGMcMfxTeKM4aOdBsJLRU2f1kV_l7l8xFxjb5lYZeIWpkCk_o76Y4ckz-loebt4_Zix4JRvCuEzgdOKgmMmG7cXU6AlwBw2SQ87_ddwphEomuVOvLwIRfIbOI0uL3WoBY-8I_rqWe9bza32ITQcCq4fMzdXgQHJlVADfnMBqBroX4WtR_JQdKYqZut1BvToPHXtfKnVbSAo7tDamJ7UG_K5D3yyHt-mqbwUb0FrKkfLNN0In7JlOiFgORGb4MvZAHyO91Vu_-lXqK0Qd2E69p8awAkgnxDv1bMrzXJ0NH4FdneODgzldCRzxf8GQsBWehwm3oHQGvxwDPDiIlBfaswbRQaEMvRMz21wTsHUmjG4SQArl0_jqjcLSk1argcsB-Vs7S_iO0lzZE9yyjV3uu0LduDT1ClWwqKIDMLkWwC42I5fUqB9KBT342sSgjxUevHe8kYCtk1DmFiu2eUeVtdqwnOIQ1tFCT-VJ43jqlk1qLWj5d5IdDfCfS4twZ_QaRDQO0mTQKmUyGRMclxjIWbEOJ5d21RGQliRYxABm1ZNdL8lS-QM3SOBvZbIsp6DS81cYzvdCEb7ZYxv6Ig4WIsTDKBFjM2o06e-a_rlWnxMiN4eKNeZg3RXaN9E3d9h_E3AJQeq8gKHLE6tK4E2uoDSq4BXPGjdZAIlLYGDtLBfh_AzCgcjTkRHpCDUyTcpogYxkv95PfhKO5X0CBLfeejT35jtjNoE-eKJwjdOpKmyH5_xRrK8i9Z4YI1HuvVqPoVzuTqOc03BpEzvIy6lbeBDO0S6lERSvlKSMalMOvXRY75_VGkdsV9_gd4UwBuqPCVCytgShFuWhh0945erfgn7avNgN8tcoQn7YMj1PaD6UqrImfZa1Z6esYx57xX2p432jQKk8zTmngDLh3TRWuYXP0ftnw1qzETcdraFuEUyMOZdqdkoDFnZ9bk5uA6Gc8fzvZSbCTBEVZG56Sr7YVMLMHoZA6GTJOAadCkMruEu_vFkhPZw1eS4zp2-8b2BzyYaJgtTlw9-XpLemWFWcJoo5YI3jz4kJtsvlW9suPq186EI_Ku8XtwrUxVVjAWazy-NUl6KZnB9iDp0fcKGG2_2U9dPXO7rr1unHhw546G3Uvdwspt1li7hqfkhe8s8lvqYTyhQlYZqC6NOGB95eYO3jBxRS3BaSOAy-btazqmc97IDo0XWPZCdvdqeO-A2Nnch1cUUUCtgmvG8WXBwNpd0ApdJy0e1-n21Zjb-MZn3VwOBOc6LoFe5NFSfnlFUWOAPetzGs_xxXvZeQ5AGLqxsmABDcLNLK0y6CxMvgv3me-7MNRpz4Cl_c5YVCrTO_T3P6Xtq3s-xeSIZE0DzRJ4CAEATHcWzG6PTlVG9t3OyGNiRGPkVazslMufr6ufvzoea7lnqMJZB0dMh1ku2bqbB6Z3see5SimqdGfz0jqDhS1JvVzTL2HLUaavum99XSOIoMQh5z-0L3IwqKUomKNmbXApkWTWkGZrGzA1xojlSDyubUgPldACV_ID470QtWMyPmNZld1OsPdHAoNZ2KNsWPeql8H7zZIvAWhd2b3xa8uarJjm6sMVGKAsX7iWm4mbsNfAdOuFuvyZCA57_mIBtvpG-o0nEODh42yVjnIoMy6r_FzPMuedE8GJ5PR1c25LNkqmazHVkaqwUclnoStB7Emzjt0Hc9Ob1PmE6-zxU3udRK498mad_r6Ep9ti45bRvb-SEEDSDy504cT4-maM3g6PzgmAtf2ZdGEjHyn3WUd9vaLoKx5mS2YG-ItZsOEdwT_z7rcPtPXc9u2xQKJLCaeg4pbA6EN9epqmqPzpFUqOhLMRyvPT6cTmWwC8ervbS1DNhmhtC8OvVR0_MivSc-qAYqgavsEVUMcr8BFoZ8H2eI4AST3KXexslDAum845wQ2ipeGmld-4jivgWA3qfTb2hA2WBxYn2MYYCT4gLKmnM82nZTvXXIrVBTt1cknsD-B_EhNaWoy1awX8IEWz2GQcHrOxr5YxG31Mp0b6qdllSirjRLOLOUrdPWgFBlFdgZk1ylnL27KT_OdotHBQSouGxmwzlEvubfJup-BTcS3Q2yktOhbDqAJo5gj_UoRiej0NCKNXzdpC-5DrFCHSF-Ywo2QLxAD-u1K-LD17p2c8Rr33wIJNcBErV38JUETJNdiTN4SRhz9RSMtr7nHe1CX2GNblmUfbwToctOPYfBr9T7lXTFUeneI-ShMTcBBaT5Yq646sQNGbiAMNYR2MOerlpxklBMsiN1u0dxIpfMbUmmx5k7NXx5t0NlzR8-advTkzh2_NgN6esW15Wi0lrCjrDdwDUOTobw00SVRLzB81nYJ_C3Lnf1pzFROOKa18AqcDHrFFDmgZrst9tYI8ikurelHJqF5cKIHmqT87XX5C1PwBNCN7CXWsImPZ3jVUnU2U3DZ4RaOdtpyr5fofaxVr2N_Uw6ylVUc3izWptZa7Eyh9tBxRlB1MxyiZMjFcBnIY78dZgQKuJIngahBJNX3oLeO5CjZP1wtqsQUnJApxHWibPyZL6Top27E9k5pByrZxi5AFlo5quuAI2bQJjYwmMY_npI7rYwnvBv9-LEAoUDSUNcWZLGh5CApFdiS_vuhmwLb0kQK68_iy67_GPwQ8zy0mAxkJqvFhcerEDU5rYHlIGJQJ4LMe6DTc9P6XguLLXRBkOj5tJx3sql57OntplfAcVBO0zsdhy6mpIKnk57v8AWk3qonkUZ1kTc0juITbTRc-yBfGeCEqbYPsmUwTKNPc1jE7fTx6_AiR4oE4e6vGqvuThao7az5h4hv9reJDO8oNEBcXZsSMiARNp31FwFeMQC7iTjuZCEXkX-4UtS9tWnwFwd1MTYptn9orwBYnS7U3uJvlfhkrFnqO6B5bw0sHgbmEMydMBKFK3OAb4noowutMBJFhX-bebx2mE-91rCwl77fn_DI2MKbOMqDHk0ChhfeaYBTQ52pdEGJIE0V6pe8yoe_vwzNAPExHJBVDEsp0JEMIwkBCdMil-EQlC93YsXYXH4viwmCQsHgiQ0QIEsd83Zc6hZ2NgO2XuIXAWxqQbus69EMgMX78zigqv0yBe5O0ZJjPU1sV181joyp05M_2fvYYpLARZRSELcgTSh1axxOcImh29N2uZPne9MhiwhvFLIDM-aknyDeV9OWI_WPgaHYETBgIm48Njru0P3aYNUzRPFc3cmMaiDa7jY4lfAoAmdVr9OjKMROjmHXWyHgkBvhh-dk0sIT2YF85r43opvu0KROi24mJlz5QLK5Y5FVJPsNbkXEZK3MX5lw_YeQ4oz76HRN1apB3mRcZDalOkoomhr4HJ-c4ejmn9OGDHsciXyyN9XvF1hCNTMFOtB--i1k8LaTBjuF2UVvUIx2aNSV47r5y29CeFM9RndVMXMX-cS7BULq95WCyQAalJzyohKZgzxssvbUBSCZQUXseSo1hZJofaWKFX8OEqGC6jCIhzNxr_GsYqigCgZys72JwUR5jcqB15b61ZKXo2yI540DnZ8ETVZAe5et4qRzhiCzKptY-c5Ah9dtkx06QwKDuwMzI8-85S7VoqN7nT4utbYHNTUHP9FPW727yQmaOjpwbVlA_YhHzYaXCcCAWJQWTK_VroJ2kc00Vlt1IQPPpnzwuXHLFPNqS4MqPBO_LrKW5s6sV4kGYO9FB3CM9x8UXf-LE-Sun-TiOdjG1sZy_EodyYXNUFnW0TsTsRWx3luQA8W57-haRPzrUHYUdfTkRAp44fGy-5Phbl8kjuJB7w3tqKRbGcdsvwIzlrWAZ43gzP5-g_eZ1_ev9-6k3JZxiOXs4FCalCV9On065dB2J-93FooxUDkFKGCbXoQVRPCCXwgARB1j2CE4rIxo49c68InAoOquDCgml1XIN-32QxP9ozB2BFMpcLnmz0KUkkqeYr0nkmB2RehX5-9KR2aNU4KCfX-L2Q3Jybn0kVNYm6AQswTaItTZSbSJNlwY5yzHhFxo_nfZBW9QzkZrp39VyBgGSzH-qUvmFMNz6EbFk3AYNx4LZm17xrkCdJaN7_YJ-rRaABzHyPbdSf-BBGJq_9rPGH4VrTOGF9idAsIyj3n29Kk6g0rJgGytPxSJYHwXF-YzrlESHRhokAYiHMlFsuz5DqCH4IlejVK2R7thDegAR8GCSE5TKrPiO1p0JZ2qRLmi9qPuu8rcADzzNuTGU9mQn4YOiBJGZNbm87iB1KQkHsNHNjnPreQEKVTZaC4AERIg3spnDedVPHNJYWe5APn5G4pcibt6fgqVAJ-59v5HQ2xcj_CUMvG4c3wh7IrJasiHB2FlJGUqkPtzQrgWqFZq5kruTWk30fex0xhN30UFrp3WVV9bsESqVBSVLCDRmE8RiITnkq_tEpFR7k0sVFghXhsZ1fceNFHsQjRHEulZ9ZAT7CfZwpnUjw9DfQYJlqDcUclKPgzc4GpyxCQ21Quer_FwGSga1lMi097vVWl15hUpRiKNz2o5cEUrAk7m1QHLYty1SwqFXu9P_mCt2__tnupJOgtNP3D6AEzG-kNT-6y_RkPUbMxsl6OiOwZ0g_ZyixM634iPunlNI9ABnL33JRHStlk4KAfrFhEEmnY9ZsIlv0jZkHBynbG7dk14okS3I9iqMLCbmFrclyHIfwqLFSV8ptuCo65cpiK_Vki07VetcaWs6NdKOXiW3f8yTeuYcSk0Cd0J3nuAEhKUvZ9IfHhdw9nt4r6z_f3R8wkINq_DOe3zZFsqCDy7faFmc--sv3XOmUTbfl3j7VJh5p8p_nmpvZYLcGMGKXPQOsdSMFySFM2YkbZHMnkF21jyz6raBmcYvax3hHMnpEGO8pUdnLTeaCRT9M-bpvMJpQnqyxGvuhTddDQy-OCSI9kx5MTp_vTyx1GIBgIp6rsYiu33lY6wzdecxLD0m3gcTQQ6mvR5pAHVwQ7U5ClDBcRMYXp5ylsFCUglama2tA0a4rLkp-JEOmcwlVhykwvwQVTxhO3DztctDaXQ7csFvnXu405pMCK0N79wVicct_0irWOa0Iis3an1KYMd6eDnrkce17SYOqWJ0SKA8Jxa2YiZo9Df8rK8vaq7S8t-5oqqalk-Ngjc2VUbOC0W3tBvU2_Q2lIc2xgkpJy8Ez6USAAYkqc8KeBZNyjgIlbZ-yPILMONJVNfnhsGwiionjGt0BGbe3YUlZsrb-JmeligiBYDXjatswqKH9fzUWxRVtfh79Pbyo32L-Ajp4LyOSXslAjHCLj89izilbOor5s5YWo1mlMHepuaoS9ofzlJzwckZ4L-8P1ozIc0hbnGiaDxyCQU_LfOiEcBXZ_3DnJ_QElbkmqdEQa9ogB_UNhoRlPRrJQoeSpGVn8Xk3u46VH2L_W5EgSN27xYzjmDKK2Kho65BBXG_rExgUc8s0KzybAWg8BP9Dn8MUcL5d51Kvr6aLD3sWu7fAeyM9s6019RNS8oLX6KLWYQbUgJpj1VIbEd-dFI6Xjy5A32CkBBKelMJCZhL4LndeJnH9A3TW6LmyrVvZH0a8gS9BUxJOAG_KyuBKTvC1OMPnbsoHSX9t73uWcAJdvznGWWlioP7ELs7C_y2P-bYZSwDiqe72ODoVgTPOyMI5dW8AGRdmP2GbDHxin7f-80JhB-s1bBl8kJUmIldDb7KHSjflgPPR3NbFmswJdP1z1cSQ1qCrPOp7TcUNh1u_h-LAfThNXPaYQP3Xr8pxklmoHvL932yUYTXWp4MfmgzqQfp-zxlox_j2cg5I7_hLNhTMhWCzRuGe1c1a1ifZJ0PF6Hb6X89poa05H5ED7gDekfXtusmtJbbLsD9Q8ex78vyQExzO5S1kwy5OaADNcecaB0Ngfui924hYik_50GUBHyyr6R53l8oLD1Py5ElqKPyegjuCXD9F8zzdWpVOB5ybg_NhTLlCjJR_aBwvqquDHwjKICjWdlo89vcTwuLvu8MkCkVncy9LlnWqYKUHHfU50tUPV0DiG1ya601Ti-CrEPhXX0HVO3Ty0KMd9YT4oQzJCjbhtENodfuXmoK4mujEp82R-dHL9QDKvv6ZJdYmbQowWVFjPaCvDsleaLtQNHLtBGLe44SaQ-kjGwiXJfePwYXFJpOlhtxsNhG7L882C8G3qm6_lZ4PmsOckK0SYJqjQY0VRBBnxReQUzu9Z-Er-zoFTbZioEPwwrJ86oYTjLWX8v0YZweEKG4pWvJNGpQYysCUGdE78xcx2uEUE6dS40Wh-sBIxLWr9wRcXlQEvJmPSeWnCygGBfSxqK1w1amaleLxa403glYqhhIOCQ_d3kY_4PIs-1GUAZdNn6DvjnX_3uqvBiI84pBXZRv8iKVw90nRm24u_iPwn2HKRNgdNn9PzOa6ZqcyaPDiLOP9W0hn9zuPDGMhO36TjP00Nss8_IZ40lalzB57HXUn_A5zj97H29yuRY5eMZxu727D1G_vbYFADMxPc7lLzE3d-Y45m0b0kQZVwJ91NRoxd--NsqbbRtT_az7cxgIs5CWRFDFX8EY8Ums0O-o575Zjnn8UpBJmf8rbhhdtY78DRMyaj9sfUNnHv9CkF0OXcQ55BHTGnBRQK66a7lq_NiXSC_zjctloYv0gtjsSFOXZ4LJP9l8Zfqho3-ysvL7PsYNX0LU0JLZpyEJHnJnhGddBRU53JECixp5Pyj_ulJJbriWr5GtqeE64isdMwhvVYx9_uPs2uKs_F0XlOmic_-NEcc_IvYldRuSBnpMty9ll0zDZe7dYNv6XdcJNjVkslnj-gmsT3fDCCQ10s3LJHzT_d9PGxCGH8Q7iVTgFaDtGl0S78dVpBiK6L99dl4uyhtRYYyQq-655yruTXQYHPDQNERqdD32Ovmr_yGxpf8fuzvYdmXA4g1rCxzK4MD9MknL69he9ogjPNJXAee-EVyUn9XyDp_xsiQX5JEmZohyR08HaZOt7tSV-9pM4dgBioXEZZZ1IZJ2XslS1g_L-UrhvFZ8rLdWaacIHYkNgoqW8Q1DnqKM45aAo1Hxl508M-4gNmkMeaR5V0rbKozDwmzhoSuRpvbNlnTpWKlc2cZk704KJe1SMFHD0K1XrwgFdlgMPAsMr1nbdXs5NUBeyaKCbhszxJwN3lBiPNgzVfCiOmKM2l_9Rx9CGSQQGzXinRR7pj9qlWqNmTZ7Ti5fUSERHrCHZttV3ZP5geG0sVyQwsXrE8xxhJYSYE9NpCfCKeUeBYYL0TJodrybOU_jogWmLqWaOJEBeMviyAuQmokkfOqA09cEX2CJBUk8jB12MUX6kMRyf9-9M4sOt5IhhHkw27aQMWVIhe3RHUtC937cdOV4jNsprS2PVuhJ8wLk1Dfuh2V0dzcAaoKIg44OyMZFmeBI8rjbdgeN9AvZ9sXxHuj_eJi3NGFbtR5M4ipMi8PQH-ECj-9K2aM62sSEP0C2yR_2UgLS91X4duaNa7PABlc8FNlyhvCYqoTOtZoXQyboMLYIHpSBLHXqZIQ_MMP_jbA9p7eGMbZbiiRpiIpEuUGU-FJYoR7Visu-q3UaF3vhC-a-jFj546_BzW9_DmQ7_hYkDBX8SjmKWWEq4kKijMi7WB4ysPjW95RMvb6ecXwb3RwEoLHvPFKmG8WNO8-0O4AtZhKMu8rpgunM8_S0TpJD1QEnXVqZQZoOAIp8RTtLJOM8YCtYqrxF-ClPjJvkI6KjfksUQ8bwBSPpD_9DP4HYTb2m4T2wDluneJAgzHXDpGoM6YqbF2VrSQ6pWMYdjrfCzo92iNHtu8iQpezPkzHYJ8DNbeAbRXjgHUTzBXDNkUm4eI1powF6ZTghl1nhLYUsAywOCnvD3OZD3P6Km_M9t2LHn-5BBaTJL7dGjzCIbHq_eiGu6ZUjf9kWyA92xO3DY3mCr0Sm0oXQHg6MQ8CjYVmqsjGp9H2zXsXI2HsuRQEAMFDvkBMhfQf6Ps8atVAVkp-HZBqtxoALjtwSjQ8I9-LBtzsoNiEYqEwOiTZlKBvmet7U4SCIA3-C6M9tEHvKhvdm75dNzTkWsfcGpBM2ACeRgFaM_fxmGDf4OraeTYfbR1fnyj0Ed8DVJ4IlsGH6LGuNzOn4HeDGvzPsSz6PTLxMoSTu8tpDTcn75AquE1DaxMfnU14Zs39tiYnVhah0KU7DX7Nj28iECvi-OugObGvP9hGwxmI6AA-6AO2MgyQ6x626scyN7OWJLXlf7-_MzNYGIGlPo_yJAhtUWO6TUkzAw9fA1uyL24eV3zQEEHghK5KrzsN8PUzRTVCmbJOoNGhfMHB9-R8i6lVpFLvAlAjgBmv1AIxa-DOil_cyJUbqgGMGt88w1DpIb1I9aGefPVR1GXqfbm-iUuDMnyMtsb5Gg3F4B3h2TfGhN7jQq7t_6plSIsPGkwt8XLiDVD3o97ZQ5OSkBJ6IjsvH62HUX4voLfEhMjZh36ycdXfaM1M-CSnAc-07R4CBN81973Uu8hNyvCAXOiZ0FxlwkJgBugeQmUQnqPvNIZoP1M0xMngRwUO-BBMC5N9HOSzZwG52-v_8-waTEYAowaDLA7VPQDQcNqFKQevGEpnWxcEppgXHO2qE8fMR2xBDKrdQb9FRm820aUF8PCESUbGTRRRDJ2uay9iSquQO4PZc3WxtzLm5BBGps1UGTNty1FDemuxsSJwlvjAh5Qm9VsfJ9SHWMhibz63Mho0DN5lfvqMeoDRRpGUem399CLuFkJAYfQFC9gXurZGsCXRoowleF-ncaGc5iVN4W64nlrSBzmfAYH2Jbcj2VDawCEsa0Xsr_0PW3DLUFuuGEPFFA7AXPH4b6t0ckc5OakVUVpPqsGvqdl_22vYOadVX2MnFK8uHnicgZnPuN_2OaHQiqCmTI4_oCt19KwPJlhQAx28_Rr7iMq8uI0-VWC0bcOv9UER7tpXi2cR_55zU3rj2r-Zs-FFDY95sxnwSffGw5F2uxQYeCCoITNWdtwGMXcG43_2tU8GABM7BrAr4oDMzFEftUVs5DJQCPQAga_P_dcDW1GkACA6y9iRmvIVxHi97N3NVw2-C70RES8EDlXzUD_smtz5mAP2kmtxQIrRTrTzGSLjYWcQzZQjiQEohqKDHSnshLMF6j7l_7EQuIhGIysJz9lbCV8kOmi1lXxFhrEwQCs7_xqpTtNoFSPdmujLvdVWKvPXvxnykQiiGkyGY-lOT2_j3YXZQL_sR8k1wrFLTEHSnIeB4OPPaW_LtcrD6aBsr_1SMGesctOYS06iNyvkQDF_Mu8fTd-G9OR_9kbs_1YbLIuc751HASTT9BcLAPZYsLGLBXzge9qJc5RMLn_pHdgXlqgQjgswNut1AqrUmiatCoSYp2_xUycckxRZ8VLzPjBJ0gj6f3_8iG3gbaJBwApK1AyYwI-B9_pf5rfAoPq-FFcXNuaADBtZfVtCq4dzsdQsI7jWmlnujeDb4QY1yGfBVUDWUumMKCmlsafvISCutPJofmwAfYK_TQiP5Qte2x44SShj5hOqODjKfTfq5V1O0-y_5Ji3lGwooohOzBOVYDDuLDs4AS8Z5XZgCD-fuQXL_0Iw0BtQ6_IYsM6Xb-bpuTF2jFiBuEJZwTryk_mPIvKqaZjyfvpP9XLUyn8RSa088YGQFiYXoisCLob34NmKZBSjeyNER56SZPpDx1xqXcdW9CFrsfcOc3q5-6S7WNnmQtPPipc85WqX5dqAjb5nWUgr8_J16vYqrqUt0h2QztP3DSW2-DBAieGdPvMOTIn8u-q4TcjbU_IM9"
+          },
+          {
+            "functionCall": {
+              "id": "adk-3a77e2bd-ad0a-470b-9686-5bd405ae915c",
+              "args": {
+                "sql_query": "\nSELECT\n    ce.person_id,\n    ce.condition_concept_id,\n    c_cond.concept_name AS condition_name,\n    ce.condition_era_start_date,\n    ce.condition_era_end_date,\n    DATE_DIFF(ce.condition_era_end_date, ce.condition_era_start_date, DAY) AS condition_duration_days,\n    de.drug_concept_id,\n    c_drug.concept_name AS drug_name,\n    de.drug_era_start_date,\n    de.drug_era_end_date,\n    -- Calculate the overlap duration between the condition era and the drug era\n    DATE_DIFF(\n        LEAST(ce.condition_era_end_date, de.drug_era_end_date),\n        GREATEST(ce.condition_era_start_date, de.drug_era_start_date),\n        DAY\n    ) AS overlap_duration_days\nFROM\n    `condition_era` AS ce\nINNER JOIN\n    `concept` AS c_cond\n    ON ce.condition_concept_id = c_cond.concept_id\nINNER JOIN\n    `drug_era` AS de\n    ON ce.person_id = de.person_id\n    AND ce.condition_era_start_date <= de.drug_era_end_date\n    AND ce.condition_era_end_date >= de.drug_era_start_date\nINNER JOIN\n    `concept` AS c_drug\n    ON de.drug_concept_id = c_drug.concept_id\nWHERE\n    ce.condition_concept_id IN (778711, 1112807, 1115008, 1125315, 1177480, 1506270)\n    AND de.drug_concept_id IN (778711, 1112807, 1115008, 1125315, 1177480, 1506270)\n;\n"
+              },
+              "name": "validate_omop_sql"
+            }
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 701,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 701
+          }
+        ],
+        "promptTokenCount": 2325,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2325
+          }
+        ],
+        "thoughtsTokenCount": 2968,
+        "totalTokenCount": 5994,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.34531000983528,
+      "invocationId": "e-ddf4c08e-7779-40ff-9643-8f8888dce49c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "50c4ff5c-a51a-4140-b450-84219c19ee3f",
+      "timestamp": 1788691835.4916716
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-3a77e2bd-ad0a-470b-9686-5bd405ae915c",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.condition_era",
+                  "bio-med-480108.OMOP_54_A.drug_era"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-ddf4c08e-7779-40ff-9643-8f8888dce49c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "9bc61246-8f3f-4ee2-906d-f6e4ad45a820",
+      "timestamp": 1788691854.723841
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "La consulta SQL ha sido validada exitosamente.\n\nAquí tienes la consulta BigQuery:\n\n```sql\nSELECT\n    ce.person_id,\n    ce.condition_concept_id,\n    c_cond.concept_name AS condition_name,\n    ce.condition_era_start_date,\n    ce.condition_era_end_date,\n    DATE_DIFF(ce.condition_era_end_date, ce.condition_era_start_date, DAY) AS condition_duration_days,\n    de.drug_concept_id,\n    c_drug.concept_name AS drug_name,\n    de.drug_era_start_date,\n    de.drug_era_end_date,\n    -- Calcula la duración de la superposición entre el era de la condición y el era del fármaco\n    DATE_DIFF(\n        LEAST(ce.condition_era_end_date, de.drug_era_end_date),\n        GREATEST(ce.condition_era_start_date, de.drug_era_start_date),\n        DAY\n    ) AS overlap_duration_days\nFROM\n    `condition_era` AS ce\nINNER JOIN\n    `concept` AS c_cond\n    ON ce.condition_concept_id = c_cond.concept_id\nINNER JOIN\n    `drug_era` AS de\n    ON ce.person_id = de.person_id\n    AND ce.condition_era_start_date <= de.drug_era_end_date\n    AND ce.condition_era_end_date >= de.drug_era_start_date\nINNER JOIN\n    `concept` AS c_drug\n    ON de.drug_concept_id = c_drug.concept_id\nWHERE\n    ce.condition_concept_id IN (778711, 1112807, 1115008, 1125315, 1177480, 1506270)\n    AND de.drug_concept_id IN (778711, 1112807, 1115008, 1125315, 1177480, 1506270)\n;\n```\n\n**Nota importante:** Esta consulta asume que los `concept_id` que proporcionaste pueden ser tanto condiciones como fármacos. Si sabes qué `concept_id` corresponden específicamente a condiciones y cuáles a fármacos, puedes ajustar las cláusulas `WHERE` para filtrarlos de manera más precisa. Por ejemplo, podrías tener una lista de `condition_concept_id` y otra de `drug_concept_id`."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1868
+          }
+        ],
+        "cachedContentTokenCount": 1868,
+        "candidatesTokenCount": 613,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 613
+          }
+        ],
+        "promptTokenCount": 6104,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6104
+          }
+        ],
+        "totalTokenCount": 6717,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.052896036020499845,
+      "invocationId": "e-ddf4c08e-7779-40ff-9643-8f8888dce49c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "a5f3bcca-05e4-487a-90fb-148a1f6f2239",
+      "timestamp": 1788691854.7269652
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y mejora la consulta SQL para BigQuery OMOP CDM 5.4 teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nLa consulta generada por el agente presenta discrepancias clínicas y lógicas fundamentales. Primero, el agente utiliza Concept IDs de fármacos (778711, 1112807, etc.) para filtrar `condition_concept_id`, lo cual es incorrecto; estos IDs representan medicamentos, no condiciones. Segundo, omite completamente los tratamientos de cirugía y terapia física ('PT'), que son parte esencial del 'régimen terapéutico' considerado en la pregunta clínica y la consulta Gold Standard. Tercero, no realiza la categorización de tratamientos (ej. 'surgery', 'Rx Only', 'No Treatment') ni la agregación (min, max, avg de duración) requerida para analizar 'cómo varía la duración... en función del tratamiento'. En su lugar, devuelve registros individuales con duración y superposición de eventos. La falta de identificación correcta de la condición, la cobertura incompleta de tratamientos y la ausencia de la lógica de negocio para la agrupación y agregación impactan severamente su validez clínica.\n\nGenera directamente la consulta SQL SELECT corregida y ejecutable."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "2028e705-3925-4b34-ad33-e057b21fcfce",
+      "timestamp": 1788691874.610266
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Entiendo perfectamente el feedback del evaluador y las discrepancias identificadas. Pido disculpas por la interpretación incorrecta de los Concept IDs como fármacos y por la falta de exhaustividad en el enfoque terapéutico.\n\nPara corregir la consulta y abordar todas las observaciones, necesito asegurarme de utilizar los conceptos correctos para condiciones, fármacos y procedimientos.\n\nSegún el feedback, los Concept IDs `778711, 1112807, 1115008, 1125315, 1177480, 1506270` son **fármacos**.\n\nPara poder generar la consulta SQL corregida que cumpla con los requisitos, procederé de la siguiente manera:\n\n1.  **Identificación de Concepto de Condición:** Necesito que me proporciones el Concept ID de la **condición específica** que deseas analizar, ya que la consulta anterior no pudo identificarla correctamente. Por ahora, usaré un marcador de posición `[TU_CONCEPT_ID_DE_CONDICION_AQUI]` en la consulta.\n2.  **Identificación de Conceptos de Procedimientos (Cirugía y Terapia Física):** Buscaré conceptos de cirugía y terapia física en el dominio 'Procedure' y los incluiré como ejemplos en la consulta. **Es crucial que los revises y apruebes.**\n\nA continuación, buscaré conceptos de Cirugía y Terapia Física para incluirlos como ejemplos en la consulta.\n\n",
+            "thoughtSignature": "CtlxAY89a1-MckUykElHJLOcufJ17vkCYn6T4ghmXhHS6x7kMOfvhreTYhhvH8TkjPVt6KAT8U6te_zWxak8fjWloFoJTPGi8P5rQGODD9h-Jvy5qaBHrm-nU5mvsamAN77KSHETHtJ9lOOU-x2BpnF2j86axY5PEFG2SXDTeDGdZnOQ7mFbqJT7n7fzgRyomiG4fRElPFV2_DzTcEukOXgFn3tVuEECEGEfZ9UsO8I2hkuWHMKbg-bLZO1cQSd4Y5uhS9C6r7jVMs-TDJZsoMMak2i-pfmPTBnNoQ7T-vZQHZMy8am42R0mMX_sMGafQIZt8sUtjLBYV1Aj2Bgy_KQRqOwzBHUARMvkZR_vRDhXHknqyqzYEtmgs1cUKlyCT9L7d5R9iVSN_hnwU2k-8Gfv8dd9dU3hAt7tQSPNQ3O0NslE7ZDHa6aYmJThj12jaAV_oip_DTJuppMg6hjR1amjOVl8ZQAwJzknseRJv_qdZIU2eGqsgkncfpfVJx-VK0wYeOG9H7RxqXAfAB6GUGqTwRA896HH03SeRbD9WS6jM_pp-323v1fB3frfaIR78hYUL7nZS76kTb3edyVkIV9KZa0rzBa4Ci-1A6aXG1klf19Mji0zNozdh_k4HIV3NX6JAhz4sLFhwV6tne6gX-dXHTruMovq9STUMs_fB22VRu9X2ShIR1H0vMaw8qlJLoYOoHmCD_dLQdqk3dsv4MOwBW2PzVwLl1wHLADlURXXh1VVY5kvy93-_e-RsAY3rR1EUNe0Usj8kaebwtLSTmX3wu9Ujr2CPLL6vz-_IwdppEB3tW-mfo6S9vwaly-lotUvZT_8eHAEYhNqoLDKHGVzcttVOCdB8DW6sCl62xJ0_VEea7ybiWMB67gykAEtQQA59eMel2m2yfCy5RLL5S4ggK09W6OWdj7gCskxsNoS-VRAQP2-Fcy3TgX4Lx-c1rzqs8q9_qQxTvqUxTJ63QxqukH8LbIKzO4P1g5VKfHoUzSN3YD38OXL_wPE91LgYnJH_qfV-9vSp1IMRDfB0CyAikXIONBiFnlB25-gfSE0hSZn3YGL9ettni6P6d1MFB_smLYhqfW6n1SUPIE1k9wZbEtOySRBm5ny_q5SBKMQUBUFapny2RyxidGXHcOd5wLOs4guAhqfWzZe-ycMjE29rp5A9pzAdHijDDehNDsUEuBk2ecbZsPQdVQLirNpAKuRQyVorGH_f2dOxXEqSjUAN9KibH02hZhhm0eCdGmC3d837xEIi1TL1o80StnrDRWr1CV1mXfjUiKtRHU4MOAhCRJCYfmdz60O4cONA3x9Nu0SVqh6lP48jJ-YXw9te_U8AO_sXSEK6nvyTrh2bopWlPXET6hp_rEKgfEH21zaRuh7o9mynRwL0Qvrc487YIf62PW9ovRH-vFu9q9HDHSnIC0pf-Bxs9kJ33sQ1JAMbn-3pWXaBizkmwiPBI2RbaPrfAlrFMUajGsTYTxL2EWHzqZNxTSO_8rfGihlryQ-qCtEOtCc5Vn0TF8T1Kh7egLeImRFWjN8_TZj24oPW9Fuv5LHl8WbebM5-Azp4VH57S0eokTZj9GOELSrPdFv5UIlgEjgk6mkZxwMLVSCm-HYi_tvYxytZtubz4irMANR_GXr5aDMzjRvWdzWOF116Xt1MeSG-PIXfHK2iUpUdDRzD07oC5syG1YOQ6W-yPSNAcbYNgNqP4yugUFTc_kELqnpBc8BA-0-sfGf-HdF-qu-HkKpHngAt68oFJAKA0MYj_ofwt_iIe0D5ZuaM3ypYhT9hxfYNyZ9NQ1TZpYROjIDztsCEeRptzSapX_B5Bgi7VrEqBHvLJcQY9yXQHRKhDHRJNYJk47Uzys1BeUXs7SJVax-LHvNserf8_MhJtNfblQWlSI9M6JJ8E8Lndb7xNcR1RAepACuGJLIkWnNbO5EAKj6MjbfQwIOL89ZNvxsOL8egriFGgVYiaEFUTrTG9t54jCO7ypvWVwxf61dg43OTIoS401D09_mhkrw7qy_p-Rh_Oyi2hYwqEQTUVcMt0KzggWedXOC-A6kY-0ucrdmJXclTDVez18RQe5I5NjERIBmyPmSrHoUcFRvvLFSxhRqyHTq9B2t2ZftMEbtvd-uDkzGRRxqa_A9JKJ4miWIF4Ya4BwjQ6iRrPdXsa9GsJRHFY4Vy92NFxoT-nsrKGQtk2UKcroRsgv1zUGf7bt0OIbrRCXF7LYEz5VN8_V34pYHviAzqO2IReuLOpcPuBabLu5Xdx0fwvWitWXoX6Ycq5WhXIdxClB1Rk9nMM1S1HOd5k9idTRRwrk5isn18OgvyN91URoQvmTGQTvc6-7Iu3NmaaJM32TUf1o9Bc47lPoj8kKiMG4VgwZSj3ECZxwzq4vC_WmAyl2VuII0DZrcfQlivC3jF5sMJ6GxNt4HItcxi7XQUNlEpojFkIwT6D_4H75rh1UT5uwQacLX7ciK3wW3fBc2nVWglYD1YEmPlQLvZID2tzaadNGRpOll-dxP5g8l_5R4oEim1Y73iFHakEn4_VB4fEJ3RY-_LaR7CYFnx21K4t_nbKWLVZf4BQyJBXQUL_TxM85EcP0C_fCC1wLdJUTucZss1H7w62emMN7T12cIwt7ao6eYib9-JSugoZj14sodJW7Qsqaxdhb5AiBGqAfRHtNhduApl9OpoccjNRr5FvRZz8_YYVzHZuq1omVok0HpdDasD7ITr8Turs0wNoWr8Y818A0IPjLV9rjLVx0tLTeeTl2Hpktia3v4TlDiI_Ok6Uiv2whUbOHGhjfIIo8BEiavt3420g-7ZD9gGw1zSoj0W0RBerhB0TduWfPY7TaYx7KeJFskhfCdhkyaA9oAK-qOvp4XfGWSnYY2WWAXhDtloh6_qxxVk5oOHSAHazY3ZhNuoY5PJowNsOm9p5FCUTuN9LdMVv2xCp17-BNTXZrlCFzNUh-KRAHQYGdquCGtgBhJS2ZZZHzckUlk5za_-OS7r3-SaFuZe2rlOV1MH3Mii2tUpw3urBdbhxF4giiPqQ21jtVD4KCP4mw1XimwypO9Nt_S6EMOFGOrq0GepwaQg8k2dWwneGIIYKh2muBli4VNKufkpnHuHkInaOeaMjQ2Zo3r9evh808uFdq9AAyjJwhPTqqJkVHo78uirDMKuNF62EWjXlO1JTuF9PxcU54pNap1S2usYvY8mrefyHsMZxJhtu-H6K4RLSw-c--QY66dt99_QD7fCUqQof3zoxIaZVNLCPu_tKjLtBBN2FBrrTBcvgFo8RUcy4bSBHEpknvX1t2QclpmbHvp7vpoo-pinahmfFZ7u9q6M6RRjD2un_0mcwtvXSHHOCL80ZI481bFQJRS43yIaglvEcjDab24NKBy990lMaLEyeKJe-HybSBvU-u4BSmNIyaL7lNMshqqwlUGTBjn-jUp1JankyNRGYKLy29jVitVQs6XOVbw_U3vSAyR5TsnfP6xPAjZRM5wUz3WaZU9tE7rrdGCuwi_VgHMzjs7-wx0nPcL7yHGmq3_n24P0POH_4nbsXAjIeYaeMyHRlL1wvsc1GIpkiM_2ekwCQpIN9tZ2Q0vpdHqr8dD0wkSQptnWyp9ztXVBdbBYKcj2ihXeKJtsj7LsEh3ezjLKMtxR3bf4g-SLHlsgkjzZNzX1-MB3uQQdRz2n0rZokRzf5L75qQA66vtTve3qdutgkKT4uDlY1YREoma_8xSCEQkcoFPnfnTlEDUQl7gdNvlmielgCYIB1ZTf0ZOxZGDQgqUV3BD7HjMMFTJ4Ls8hN1ZVL_fSmwT4A7xJThPO7ThZIi1vLylI3jcjBAhiA2RxWpLblackqKaZZk_beKpB-geU_zaNp2rDLBuFeagcaoeeiljdAlqUqx5f8WkVTTsqCvIL690mYKqJwDu1U3VOH1Yz0lg3kmp4lv_Kv9i4z7yHRgbXU9mC-FG4xgftUYT_KNR7u7dxCO9CZFmmB15o-CIthFQZLRhYqltDMM6j0UEB1gdXa5aeru-lxfgE1f7LcBx5tSMvVrI1t-8lUzz2InyuY5pQPFcnbp1NmorEODp7WQrpaYBUOwUBYOs9aGMQDPtdbranWmJqFN6r79gkTGdcg_-BxRoEPkVeXbb837fB6VCSpYTVnvaOMkyotcBoS2Y8Hcg8VfvEpMjD0yPzbqFGU3zOWAoG_BOvis190mgfYSnlPnK5DeOdRlbPTidChXhRLMgGu3iR61-XVfULwpfztIQ9BQqAyptN4vlDWQkM2ZJWG8pzXUK1f4ynb4NV8o0MRpD5hQ0UhTx7XSy5DmT4NvyR2iDP1VIyiHPVYkyYOb_UZ7ZaoRYmtnmAzfFRfrlpxUkLJt-KSEvpBcfgJ0WPGI0uTDUt_H3ACAEC-NzkXcIyasAZosjGVy-waLySXu7oxq5c6VCwKWu9WyfUC-prnAVo84pwo8VvgKWgVJRd0JFZuhvPihoiuqRFm9JUJf03fJeJjk7mbVmFbhFEIXBH0qi7N0netaeQmAls-A_4FyqEroQ8BT7b3yXjP8OT_Gy9Wz_fSKfb1de9xYZkfrPFhvFsYy6ak9KAbKzn8oZC8oO8F1dI1FZFyq9V30LADncwRn580ILYJBamYL8eQ2MLv8kdH-38K8W1ygnbESTSI8PWAjAg_uUmBjUhIu8A367os2vLoiR1OVEVgZMehp0VB8JDLHRdef0V3ymc0XPEhnDn9Lbo1Lg5AXtMUQwM657N2WcvZnJAkVRyCuCqLIAO--fb7sl0z4DmmRGUD2LautODw6flpyWsYao5XR_of5TTmyUc4laD3A1BkLeLM94NswBsla8nnkegr6DmduI8i3dCENs-PYlSrArFIxA5KgZMaxxQ3ng8-Y4GTtVCneCHVDSxCod8RRFPGSasi48mzifTxdsRtD63l9Kf3_4jO2_6NyqwJuFgSvR9WuWxfjQZTD4V9hbj6VRcLXfhlzeIKzWYKkDCBYXp1KSRFIQxphzFkezkQs01jmyEX-pOZ2JiZrdonvWh77BPYH1R1n9R50CN5YkQEdgoYtL_hQaeJypfbwTge5UMYOt9decZN25OTHKfsajEjvdCxuIa-0IipqYAhh7z4FBeXzt6JX1pWUHC--pXjMrpknT6_TnYOyN2A8QErnLJnNWBKoB8zaswV6kAV3otBKzk051uzjwziD5y8mga9woE2UsFHcCIUrFmNCDHX5XyKVqSLL-w3KJ7fLMpLNiv9DPx7--7p4xUOXO_TzlDYtep3CbUEJAzZdxFKkQf07wXC1w6OKXye0mBZx-17OQVSXA6pnVcQ8YLJMaepoJPeVBNSH9wmyI_GmnfL033DBVPMSteOVqO6CQvsA_9WL9mX5hx7fxtNm2cV7aBSCBXuko6hMbCFN2uXEusDiz923CI_BwWa3K4qaXzQh00Z1XZ8hPwqf5BVCWxDR1KCDYN98v_g7V73Ypnhi23WAKJn0A0cmjS_WoTfe3lvF-03k9AibeE0hOmhIiSmct6yqIBZTYzAQ51IszWH8G7PpRRM5Brq2UL5PnPkqCwJZJUAT1cu1GyWdhR_LLgO_oSKdzzUO0VAyV3uNT4_7CMgtY6wISQKD-dBQthxIB0nxmS0_upGPfmtpt2OuYmOYWHjLBQxqkkP9NeJf-kqQjuXCG3sLjoWshG9XcFS1ebC2QS1C3fKbDvTvldXd4UKMYORCB6gxU8MABvs79Rkw1aszD5V9pC09dS_OA0L0msSeYEF-Pv9wR6aRJwtGQmUKwfizFfWv0R-vcDKJk02VGQy8-Drf18CdT4GSytteg7BfI_wWrGdP0OHdRlriBg2NfmDUgLkXk0s8CgjZoxExcQ7nMj5vHRTYO8BC4-VY0Fnj8oOcrkIm2MKvyaXOqEVeV7I9oPUyjYGImed71apV2-dfBX_4GL4pOTQQB8TrWVaxrfwKiAG3T1PjjmWi0mRF-hCxusMyw_WgotrFazHCYa0eaUW_SIbTjMelljTUkr5i-GoUFLdWP424wvKKmbCi3nFVVi1Hqwo3-wRqDIxzSMA2K8P3h0kwoyR354VTroKwN0NxDo85NkZ--NaT2PH7NNLss88MJwF9Ao4tOzj2Pf6F4ffx-y32_BduVZoACBPSF0eMKkGyo_i28Oj17vPg-MO8DSFyid0E-rXI_OzpR62y3voNRKkC3Fja1iLru4UKZrrqk-YtzBcPLgaJ4Wkg46-Dark9Aeq9EimUbjacPGzfCfv7OeMfukPWOhVRQ-Q_YPyNaJY43QSNirWQuDZtoYOSCSeG8UzVMfYiEbdHU9cJL6YP2IyjJCdPCdg3OXJWKCH2__dFggCZWABqbVZFdUt8g7-_X9mQGJRzCRkU6g6Vc90dIBBpEc7lZmEyvSe53GMEdG3H6-OeFJyEDtNdeQ5hroFJ_IUKHnnLP9lrFrKhvIX0CrIFCMDT6aoaGJjy1vSKlYFhlQpMZfVRK0hyejgeHrCNE4NfdF7Qu14hzetRNFUPVPn4oYLW0ecRpsSYlyzk294GYXHTgVK8DZcD6JALIwz1-KRKZtwHP28_1rHYvdUdhosBSke0RXezH4RSNI0UQeI6JkqDmGe5rQ3jr90I1wfkYrDZcQHb4TN37zytbzYc8KTp3C4YhH3iea0sUuCpccv3s0zSi-Rbwdy-XICGyguK4hha1BL29kix_7POvS6uXIp_tKCXtkjW57_JlJbbV3IzyQ-1dVkr1_weH8xGCe2VFXlTNuOzbHME38yJmeGUdbrUf1AS6d9joW7_uFPS1V_OVmpB2VmS5Uwuq6k8qwNI81Kxh4ZAX71Mx61GzTplRbZVPvty38T4KaRISkdV7wiRaqs4rlmVD6d-iOahrwFIP3Ur8O6QET1Jq-X-JLCky-ARe_9bVpwmS0SOck7eASjb8uQmJSvIwGs167qN79PuhJcJOku3lh8VD3mVwpeNZE0RLNzeyfzbbxMrpuMpu97dxAcSJ9L1zI4o5oWieakIMCrzXJ8lYq06_fObFHCWTWkDU98Z9MZMr9-Drf3pOikDWQbnNfnOEqinxEzEFKALUjR21wr-pLwWziVdyXuePV1oU9q1pp3Wq-1j43pzRNw0wR7to1vDObdaS3JQHr3CfhPWpUnXJChOmCYrqQThTqSQ1oWfydhCU78Ryh5Mv4ipa5w3KiLva4t5-0WJdEp0QFdjunvZGKMMC6Wp8q0kgWEgKSOsJgXiS4Be2NsYKD9bDWBmwPVAA-rS0_efObZJ-lzVdzfUkB75lmuWytsKh64aw7PTK1eKNsJODjJAHFdCRgt-upOuDfzZlgtvUG2eHsv4dddjaz2y6NbBzGYfivC2uieZPWTrR4Lz2js4zXP2zHc52D4Buixdtm_Zn1h3y-f3Y4HYswrFSFR30WVITw_PUoQNjd8XPnmRmkWBRlC45Fvk4pOqusFTThklyQmcMTMbE2zUASAe04fP_WZ9L05DbKltXkAgekvpEQ23gIY8OFLMhtc-fMu2x8ev6yJjM_247x57VhzdgNAz23MG0IjWBNgjx-PeQZGTGa4gknKo3yP7N3ZXIAwwODBrvnf8nZEreX1sDOMLZHZ7OnzHqRKPNi65DEqi77_4dhxh_EPMHeYx9fp-QiYaeGMUms9u__Io2CyltrBIQ5gJ6q3N1Vi9ez3PHqcPFl0qH97EOjB5OsLLh7L1-d3hyABTgoLniW7cCOoa33Qwhq74Y6PKrDo3S3R2_C77jq0mtx83y8G0a_h16b3WoK5TomJJ59eQ7HVJNIX2Ib1yevl5zmBghl7Hl59-77ew8ESLyEwl5y5FSaoq_6Jrg3rMmbdnkD5pY-6VUOweFs8BkJ8FLy0Kw5KZ6Zz0CEN5Md_5JVuedbDLhu2WEnXB7z5fncHPrNvByDFX_h-gb5RCqQbJHju97VHRyMCoItEFc1O3kzVllMssNEEnXmwBM4-JR7GxZRkD4pIcHYkr8a7Zp3nGq3N1YrE69dWCc5vaMsY-M0A8suwBE8NFVTO3tpCqUXPZ38pNenRlEnUXqClsZ-S8G-e9Yo8aNmbAIpqy5uAWBkGevuFLlUKOsOqG9WwjNqxd9NHMgPMKXiFEsv_8AbWM1wtSvLmqmcsQD-1HExpdt_dxFEUReYvhJJ5LER3F4yvbDm6s2G8-gdl0v34f5QzlkHKI2YV16hEXsFfN_edyOq70nzzom6OyQeufLWfqpWtCSFHbdUQ7b0PHglfbheqwkaxEx5r43ZzBzEdy-7fXssiUeRKjg3Hl1SZTIvO2xLBymntK3kmhtYogO1U1Qilh6bSXxA_5rMiAGuBvMQUQUxfie85FrTS1SGjpp62UCCDmpgai5Ck-URX5cNoCnif2gEd39Z2VrsE5C9DKUgELEoVgUrvIKTq_LZgiVkFBoSI4S7uqWRJi2KcYXEDmcyoRXnYRDb6AQGhSVRyfSjvvbCFjcckm0fFIlMlGzxFhpVX9cYwp0gkRgTJTs0msAX6m_w7s_PqP-cbr1Gwa5HEfR6_kfcgczyQxz4Vn2is3DUhhPE3DrHswXA_BeUXQ96gZzDhLtGJv7GGQoq630JC5nMinQFaF7XqpCXndRtfcm8f1fUCWh6tx_yafpU75uFsIHrlBZET2OWSuhnUWmA9I3pbLkJ4B9rJJlrgpzq2x81AvtiZFeYoqTqV5Kw0Bxzx_E3IlohODUlS8xdRTMnWjkUWO3-UkHK6nd5sktGpas4eUvZgrNd-v4KBJNF1VW4u6iy910IpLwGtgc6TDHQ1O6R2_Ca4e3DbUrC_fgsw8Lo8MCRZBJTe3wt57jAiyQT92MC59tDHK7BivipDiOWO20TD_KHSJN1JUQ_tGihPhYkK65DTpPqZxE5IMSuRF83xW2umfBpzRTDcNf0iow5fqSoRsW6rgiVprYpr0DN91GpS5SSPXdXYbOJMJvnI1xL0zJRnmWAUahW8TiI-z7J6oFA3aXhNLMU9fFyt9tHTmnFdJPEwqUo7vFSNh5c6jNAwa2MXYaVOHrvm4BfIX1X5kBx6LvMTsjK1i09Vwzww1VWAVbETsYHgK74Sv2XPaeMyjtFeHqKlE1aKA0eVNoaEiKHEzo5n0KK5eGME2Knv6Tqly6DCl4w9BK7EkBD_M6k1bs0WItlTYygKWJBYSxQJYvNkFwicOt3C3XrXlG5XrTJBoIgX-2V_KEBukLhjWeeE1WswjaTP08Lp_U_Hu6liqQPELOU0X_oOeXAxhIX0Wf0-qDzKv909EIp2D91X3iwYBip9pBs3-Y7LJMomxO16x8RUfpcaBxwOg5gNfSPwqKTBWsQ7G9QP8TLXB5iFqPqw3Lsl1CMLphFl_XLFxf1vQwiidVx8MUlvyJbLFEYcvMN3j_qPfyQ1OezcZxR_WF1yjeD_9BBhx1dQBDAmN6OfkM1kN-QrjMA4GbjIzadu0ArinEH6aO7UgvRl2vc3fDYIpCrq7YSow7DxHWtZvlHU9lFaIiTUe9gRrremdcAfx9xN8qWf2ATVFKN8RY9GwSiAWjjy52nA8bT6QjtVetFKhGIH3PLOKTVERc4n6uUE2SAnJdC8h8x6syLHBUqDzYp76SDsDplsx0slOjXnSPy5psxDYIYRnRDDoNe0S7wGXyZlZNvUDtYC81Uijat35nkT3aNW3Fav7zXfl5t9ODwbZdsm7qL2jAw5xk2tRfzW43GY9JLL2fqewnAx4TP_HrH-9wFF9OSUdP0tpe0vn5HjB7sWVqoPVBoWkmJTf41-JsR734kkhAl3-0gjjA7hhiqYCIX6Jbx5jSnEsnT4Gt0Qy9bGEtY6IMRH4ixsBM47em_1ceN3eEEkh2DxfLI-BfrQutpCjP1OBCKLTK_YloI4zIOovrbYqcYpMUk-qr3yRsHAjZR7_cAjiUraI0nWVx2TRnek_wwQy22kQt0B9Lff5c5VKo2Yrj4LTnNqNuBevX_cIfTkC8Mi53Qb06t-ZL84Cx6fKwyhpBZIsCw_UudFwaPIBE_yvMSluOZWJ2GX-y1dLmgbLyq--cwFw1B-g8f-Shvg8OBIQ_e57RCyKpTRY7yY4IlTcYHLc0zS_sHVBSiy9DYIqohRoIqDukVBnANBA5JHojw5FAQO7Ns2ieqs6wh3G4osGQXwfunxgiTDT2Nps2doC3XCrrRQm0htM-6grLnZwgVmlvxrc2V23SZESbwKUJ7uO0BwZZTvRpUzpL-hhhoeEFc5kQJrtScSVN3R6n0FJ58tG6HJ_HthbEoedtLg72UBiMiXFj1YCz5EGlFVZXp9PCq2O8bWjmN9EG4DuxcB9rz2YPpjgod8Yo2YeoYqWGbkDrJLfrYGSvM2Y0CY2g94WLoxGHE1tj1l1ccoAgNbnqMu7Z0tT_kj24u6W1UhK53EV-rGf2faieoqXVgNFM6ImeH-5Nj7GqtqaqBc0d219mfDzvUogH70DpMgMjhzPisoc1uE_v4-R6OjjnoM30BVubC-DaEj9mnriuDodo1B736llfL8XvVe4PftxRv0mNETSWmQBiE9wWqH9VZuTP-atCk2iGqTINAUd6kFRPWsrI7Oglztk5DGJ_cRXgP7OXAuPHqK06l4fdPUEZCxi0mT5uAQylQrpgGAEwMWz0CzdOkR9gJ20k_nMNtSo-ckv_jwTBRSWWhH8MSiVLqwwoUES25GhHIrXc13sb4ADUC4yBJxUf-rBqh433-iIdJdIFarXqG6SO9mWS5rzTB42lGP7QcuBWLxJXTCJtIewudDb1T-SFgxALB6ZYD2EIj1i4EJK5RSDkBTh8bTeowCDKK8iODnJMRERZm_0efR8gDYEH4JwTnGTFhD0zqc661gMSTRun0xy0Zegmb1QVpjlnZl_uAvkPzDZMiQHvc2A-9npkNzxKhjfK1rpvFgqPewvZpmnU23RtnDJaOM-5khcAdxBrAXu5CpRU0955cWpYdqGJ_apXOi27I3q2AnORzZpDiLPXlgidygG1JZkjSNhb2ye413REwO6fmlCrmubMOqTfzxxyBiH0A3Gx0Xw2dm-po0PR8PmQTq4fpS4pDfhJbcYdCzY2ZJLCB5lzbcxvnasV0iilNVyfiyqhv7tT9Yo-SUx10bqTMu1jGgmCxe8QiOodneBMBvu8iKjbVXMcHhRfc8e7A78M2Vk_kWTpqJAyqP_jnwNHT5m0FkFFNMy7Q1IGUl4uZsxLZueORKi9GW1tSv4wDF8XA7vieW4IwokvDmgTDK7gmKbVpR0RBt7VcPnO0vNsd9-NjIW2Lbyoz-hwMlZ4aROwxiJ86781z2i91AHGd6XAxc0fVvQ7XLvPMxB5B4VMZm0_xjapiTp9YsckOoYPFQ7EH0X-i-kxH8T_mnR_ZZkyg_K6ZX-jTvwzIq8rCD8HEdmxLic0JQasbjHuk6kDoQZQbtg-9_ZRNpQReJ6_6EcA9vZX8512FWoxhIU1sfAW2JEQgdfOA0DVD86JYO8qV1OZiQQYdniANNeZOW7i3CxZHYszZQ6hdl544iC5y4i1WsFIUQ6CAHTeD9ZaHqBEzQeft_FMbVuf5C8wd0KJ7s2nCDoVhsrjgGr6sRLRIk_zlKNFeKaTV1HurxaHirZvGZHP_qlT_ddRXbfU36yGCnbOJ5o4qWMjHLgXqncCahdwcxLPxuU5g_8iUCHdUV9qwEn4-OnDxIje9tHRhl8WBkYN1e3NF2QUIzRswU9VEzM2iIY3iGZNOWANj65STJ-1jR1X0RVdnZTVCH7i-dhN1hbDjczpoSNVq04YqT5j3a0M58D8pOIHHVrBGQ_C1342TbmNDWQP5sbbTC9fDF5in22Ru2lYJh7SVcO0IEeKxIJfI2ok3eT9NNCW65fgGYe5mPKm5Q8q4MFS4Y7gi2H7thNxnWbQO6viC0J62Wmm2_knoT3ojQ6eeHySxjkv5VCtJ6y9MpLCI4m9HSc6ivKF8FqevBBlsfqDLSMKf9e3RNbRGj1neXgLZirIQ0kf9WXQfcsfj1817F3qDH9lYRlAYyx3PVdwTtHbjmOvaYIvy8VtfO9qFY0kLfAOCcIqCyRtGHKrvjaTMFzbgSvM4FLzyMputzfdEOPfJCL90JtK9RI9h0LNWIe_0FIlR7IdBZNqrYGIc0lZIpxyqAgotUXqQI5G-xBdJjwp2NHCxL0IVwtjCHqFoWJYJWYLWxRhcTPuGwwhRWjZFpHTbIiqZtUQY4-0s3aOI5rSA2J_4FKgCxTEzA3R036cLzFgvSf99BYcpJ_SAtOoj3L1mG4G5gwYGjhTsJp5QT39VhHUuoI8bgAf9TPDhURwHXxsqRFH-6TXJ9pw9YY7JqbpMIcW5PxxZSbBp6d65_GF4sA45Ec7uKTwmg66M0YQ9get5wFRava4JEucK-vLno6iXo1QR2uY_irZRW9Te0v-lP2iBH_qHe9zthVLo0SdYr8_fYF7y1RzptmQM8F8CwqPkiInQ9_SEJR5LFhylC-tmHcQQ2hOedhC9uKd89SJrACmCj9_WyI59Mk1qIk02_ku3yGWTVl-2iImChxkq-qaETFQv7BnxRz2Y0jugIpP3v0OqOIRNSfhpxs7L4NpMufPWE7pHPtBgacLro0LGUJy60QHA6wQltBo3jN8kyYlQJrfsIhG6YGax3P0PwHiBy6O1cADIneSBZZzmMbkVsdgORKKIAaZKjIUX2E2Jgusxcbg9sEEJU2GmExUSOlSU_btYWZ-fPf5Rr-We1TCIprMazd6ub7zhWtNtNlqW2Soubd6GyNkHy2w4pOrzRTbq1P2zoD7hXTza-4xLJTC0fjR8NNoRTbfk8mjpNcB3r-Phee8TyOOP_D_m5aEuxj7mPQhp7aWeoxqWCElYJbck_mDBHc9BQsfmRgI4t7qSvYwcpTYnxUkWQQYNATzY3HAYj8zUujpemgUqUD0AL0phoYXfIgmw5js8vHmmSOZjnHVAbO6zyXwthSPU1cBX_6AqrfOxdVNo3CxOEXKNiYgMLB9T1n3QA2TNPFVxIqNKsGq9mA0t8gtTyPMHc8qjiN6mhLs43k5gtJ0RYtc5MSg_LNp6EZgfp_mxxi3Rh3x0aR1pbAcBuZ1bCf2KU5zwFxIw3XBRoKvQ9tasDeCXrgaWbT0oVTRDVe789fckGVhrg4eQr7GZcBLgV7rdlaVA0LIvJ4emk-YaH2GaKKspvZpPp6gtT6bG5BJ33E9TfNNcFgfquE2LILdKz6W8TbOYqjDbWMilEKbpaIuJq_LCKanSwPXhNthA3H0zGfIyiHwqKN6DVy7Ng9epFedur2AzE_usU9kOGzgRKokNaTmT4jz1wm22sGJxuPLogRmo7Y86P5nX1jijfKDOcxG9wS39Yp1E8Bn6KGAvfCYmVm3_603j5RH6StjwBb_FtqOGFULJko8vaRixYSSudinva1oh8BzcKZu1bx3FUPUCYQPQiQFqLTeUV8Tk9PSF5jtD-pmmE38jKMdSZFuGH3hJAqtQ-ttKYVDj5O5PouPkrWnC74xNGa61CahiCJwmctUTpFqUef6hgM8jJPqVNwQoq9VcHWwextiVb05Qh687EXGWSWywYG-YpS6GzEu0vkBeFHO6ApOiM3HQw_bUWGKWiDGThxRpZQCJalbrM1j2l1SR1mDIkMf0gHNT8gVVcs1_mXCBZ77ZPv1s3YGfKvj643-xSGHUjaSO5LjGYYRme3fTElLCN3SEab-lr1h0enQMyIkPdwcWrxfQx1aa_RzWPuqpI_TKOKNPQRRsduCOX3SyGhmDT3aYiDPux2Upa1xw-RZL1qc9gyE8GOeRuC8aAhfnRP6oRHxyZY1lPOY6JnuPbdLyWaRqVEZeQE7z5xwJYISd0FGN7gKXeACmsq8di3OOj0YkxajFqu81L-rIEM-ZNwVkgzKXi0xpTlaQmA9axJireuTGL_RK9ISFBCXUvuJHZoeqlPge7mEwArtHCCagKZoajUTpF-NzjuygjPVMowDhcZFjMbdQq_JnecA9BS7K5gH_5QVH2n5HfD1eK-PqT-rLIx8xc2YlTpl9JMSxRMhYQYHN4G8RqWhZEeJLCQQRGQxYMM1fGic4Yatb2JQ_VpZzfZNeRMQQpKosslIbhkm3SimEjlhGdjbs8wfAK19iUteFwoG8rwrdInIwm9sLf8SvAgkdFAV3BriLfYIGO5Zh24XqnkncAvQhezpkbalX-i5k75T8OSElVZywGyKhOMDCvzfZttE2xsriTUyI-mvX-UtnDt-yWClOl2Z5SLUeCpVMzC7pqjnkCQPNc9koAvuXRGxswjNqZmxYEw7r3rPvxXhEDC_KYv197mGQRAR0RZ-tSAGIvcf-F-A9QDnXLau9KrbSkoeqs_DBO_pCeJlUZ01gWUuZqeSWRa8iNTJMYCHAiUGvqNcBnU6ze2Vl1TNkJ_JklZTnrdeBEUVI3upiMwfHee61Bvl_j2FXUg5AtWKa4X52a1oyKTZ-KEMEkHpHfZ3uEHNKB-TJ-JW4UMMU4BKm7jl7vO0Skgc9u5jJE9dhHxAOaoI0YseJ69C9t1x3IFQR4iNXXsd6AJmvT1aZYHb7IFFqm29W140YHttyfOB-na7sRYM8m6E8ccc1nDZkXVCUSlBRIEFTE21MEC-v4l9ltNlkrZq5UhQC1sl5JLNOAEoAvOJLJjhS1lSXqvdGoupVp0pGpNDJ6q5oZWxHm23UXNOHHb8BhpKfz2TV6E5ycyqnsBixejfo-MsGlY2Hmpi7ZSxYWqgfqP69DAgFK8-SUlzgJLpq9_DnblaomHpNih_jcrWYSM2mXyXNK4pG4Cjp8pnNaC61FJVchhKVSPuJ2HVmqEvmShpO0VWk2eYu6Zj5a4sFP2-9FVvlv4c2aHSSOdXgRLiiksP3EJO0W3k9AFj8sEshv7fIS-odU2u7YWvCXFYRhwbssY4qj6u4nhzSaPt5ZhLYjRufy78uw_-DQaIy3YNa-B3soeDjkwPMUgcl1byQsnYPKECiwQc98SMTFHLPFJrWJRwRBioGI8cPKb6WHt-FnvuoE8AcnpBm_vnppBT_HLl_D4Yvd-ZlwdBez1qyDcwBlR3lT9sN9J_ogsMPrDVce2f71Q9FUyeuII3sshY4a8BY2qtcAYp7FIKSxiyi2E5Q0dOKhncIxqSXfsseSxOsIOIf-d3WbarxAM3wqjes6SHA9GFYxmVpkDlBVt_VMsY6waHqUGJGS7Ku_D08NorFxW4_prda982oQk1Py-2EsQvsATwazZ8Rc0dPFaBEHZ65KIhclcm4FU4rT_U_0iKIv3iMCGGiLbHssf39COTho9nsateoj3UYSKnlkWsAHp0JkYnlkRFrj5I_9S3eR9y8Po-AnNCzATRzP7vCx6Fma2r2WggenSHPHbTekbzLOrXP3NoNTZqZizgJ1mKpfYXDUug7uBPqYkpMrl_CqxftBK2cmnr-S-LM_mh8FyZrEemfZC24ttvZGsWInbxFPPymLx3O_8Pdphd1PDWPrxjo-xx1J00Q2knXZ5p7U-lDSgbSYqVD4fYKuFUP4NidY05ETwo7wrLar9iqqbqJiZ8dJkNNzwmB_VcZksQmpxuOxLblAmDom5RrAnfVRIaynSjqrsw4h93rkrIlbF6YkMMA-j6QbScfauplU9yw0Sinn_WF_igGYcsxffuGIx5Xfdebc762rUetsY0QdjIMztG9WvOZNJGA9jsTOWVoDI3X56lmVCtdU557dZ-Fra4D8q0NO6iDZkfz-thGJy6xlOd0h3B_18Fpyw-nUQQ5OQuZCa6dVGNWlWcKLoWXO-PbCDPoTL07Fs_kPnhHZDdz_GRBGwP3gBATKBv6lTvflMD2FOpAecbFrHbmF3hH7MLjjy8ecQWdlCWCzqBt2Br-0Y1i4udAo2y_qyJ9XzaW1w5Z0ROGi_URwiKeqDCZitsdwRA1tBniM1K_Vj0sHPAn51XpU_WLasz2TUIY4K31v-cIQzW_H4QibddIQSqAoLRXp3mFWy-Cm3-wWTE_-LW_X2awbwfHTZ3apB3Fftzwao7s1zvvslefBY4jwf35PSLXY9jH6dyHb7wXVOWL8gA5ejiLyRN8bpFH5J1tYZ86Zb9GbQpBZtN7KUd4LRy5CrgMmMh5tbDmB63cnL6CzljDKS7PjYQrCbLCEP3fe9qRXltgbn9EOUBGmQmjbJ5u-9aEqzUhf4Ug_-TMhjB5I7O07Qv_BJ3PiIB81a5e2pSZ96pMfPcSUW5R47HNBq54V6nFIF-BlX_PGqab_R2gkowGAX6PymyTLOexZfyuNS6lxXocjnTwESQk2gILd5N2uH58G8CzASFKwR3RFO7rzj4Pft6TG-1qN5VHaDUWaiYlMPcvdoUdUEqT6uvPNruiY0JXbVWdqXWWiTKItLmHqv9sdrkOzTeJmT8ZoaEm1yfxMufRD-vQ2rLmj_Tath47pa7Wt_3fTz-bzxp-uK1BeIVlRgPUdHE4AexFxLVbtIEOt9uZsNvFKQ66aPL3OfZdskbwyoNmdEjO1E2_yoa7nae_KX9v6NcY5nHh4SnZisORgCmdFVemjQ-EdaTafk11bcm7istxaSh6KJKrJDNV_lCt6UftIxsePo2Ihy_jdHtxyuA9MMcEHuhCT7zmNrYaxxIPm4sANaCLP5uHo_QliHqobG0JaQ0w7hfk4pFXTZoevVQsT0Q4NwxgKdxhWwrqeisBjOZDs3Gz_3GO6kEezEJUlCiLKIMP1C7dwL8m-QQTOYm3o5tkpDW_3gjrADYsyFbOHaDGRAaer0C-YcHuK5uH7nIzIpk4hIAdG_1iT0YNmw70xNktmdii57gBLH9B1Sh9etiDhtr2mhEnJf1TU2xpzvGKnCAmXkQlwQljoEdUdonV8-t5LLdqYkhMH7_fC24hvwwcIsc-OZFLtUxwXq7z3uoS6q-J7W1Cx_jcqZvJd5A168SWJQKY7yia8TFdnwBsAEDD0b7f8FC0adTZFnOlPAURCclvFmxR4z9Ep_FP1cFsd9-ND2FpORPIEHnv_GwWWSJrh8G21Qa7PbMlKkV0MM69NWMCibizBX13PjZ0GG3SXJe-YfDHI1jlDQ6rI_NjkVIiIXp-4Edz-vMqAnPh_D1m65SQWb0oJcMASxNccOOE2ImRvoOXm59ULTeORB4gR2B_lNPG5WQQKLdqnHXG551eJi6-hqCnCpYigWeGwYZUtEYPRLB0tsUJYB976782EjznyZbNqeaqjdqfiXa3MrRDnQP_A2zkSHslKAOvzTuBO5C0-GomwWekBoefS_curvTka1Q2k3sBRFWmKrWnmdJQqI5TbhaFVYBWgGekkFVIRh083290UcHyAm6lFFBcwepgI0wFkpxT26yH9ZqQ9v50ZDX4-5OBFeVjwhj2WAw8SDKrv5oRkAA9uW2nU76a3eDtXxHdS0DthviWvmHeSkF8BN_0i7Nv9SX8taK486VU4eVN3bdRmPLS5JwRouzN5iG7EF47iN-PK7LVuGYdJdik32nrqcqhL-BBEM4314UmtVQoFyhDfi70Qj4lgLGQg8wNu6o1mhoFcq4eyK0Mgy0rA-dW_ZkQig8n9JJctaxYYb0uyJqid6HZZQG7nJWwDZWpZBPpKfJfyEbf54PVVFdD--nYAGCx96C494N6UhroIkmy5_Q_shgtwBfLq_ot6oRCPXQZQaEingBYYp3bLpMgeH_LKYw0wv2HOH8Ky2wlPaeKy7ynXy05BvmwE31jQYDKP9qDKJa_LfZW98J1gg9kgH27J_BlggMTqnVOsbBYBl6-5vMMPZpalw-UJzfQKgi13TfU9HhkQ4p-B11nRe8J4eOHrII_ykcYlkD0Z9fTF-CiaWJDYgCduA1i6VvJ-WTgIosz6XskuWht8HrIZnqWBpgQrYoIKqguJqhb2HyUeMGZeLfyI7SkPklvG-6bUI9rkESTqbh2rkIRuy5H8waZhwpr7DgBuomln6Tl5vgZiFDz6hz51dbbV3T_3H65oh_4B79l8r2Pbr6ZJVC6Nu_Yo3u-SPQyQzMESD_rwRRJwmEiG2_67p3aiSX5yc3BOQPen_xhtQBFvrQClAsMtfplHlg-d4jgewe_Bpeg6nhkSsHUxOieOlo2UyD5uy2jGMKDIDMFVBDo1RbiWZiwLGcnR_Xww1fRnucVoe0F-Qjy9YEf9HAW3lswDudaN71jwpvOoEe0F0vSiu42OIqZUi7DnXQz-m1JoXZk4yJXa1nwtKDR8ZGAVSNGr9zryWOmKANOMHmsM2rvToTJCkTjjewpsaR7lA13qFcTxFHsea-zGIGabtOgDlxcR_iGhmhXsqpfhsoakwgwos5F6aTbG803yawNl5fmKhBi8byFXuhAFQCW4c08BkNxnUb7Ri98XWmrjaFDbtX0Ef1tW1t6s645tht55XhoHse-YeVMFoVZuX62jYLNqMgpDOT-3FBnU9DaDCt6A8RrI5syeYmv0Wj1qotqHjXAll9ntrneBffAGC8aJrKay9SGCnUBxnuSPX1Ee5owmg-iaUK-8l7N4BHNqzVArehyjBFI729aWYy3yN--I9Qk1WmITrhO00UpJuOhY8YyQurKuWn3MahjtFIv8jZ_YbJILnygCw6IZC4Wq-W377oO4xtOVxBJYyvm5YYsYHw_r9gm9Pv-paLTIquV1ElvKofE1KMmN9pNLZ_EM2x2OzOrGGoi5Bff7qDKGswWdRuSn7gqwOF5xiposyOVHvy6sjH82bULgI8o3jDHJljQY1O4uV1z8x3KMt4TaaJCgLKLJKEzNH20d0GRE1LHFCW7WdXk7heOeSciMWlOCp1Loq_K8sFQgMonq1ooLumG8XY-PhBBPynVfkz8HcfEXL9piT9vgEtMcvE9phyhQplx1itByq6utUIaG4xkE6bqmkTjIRc8IQX8nbCI9w9FU4H9EB3kMu-BWLZLnQF6p-nwSfKsBaMxa5ObqqPu4484wqv55NDAuPdFlb1q6NVWu-oaLqNNMbfVTo6McQNOwiQ07Z0yBGS2bTqxVZq2YP51WbfRjiKIxOrznZuRR2WYiItApEI7BW0S2f8t4UtwIaFTEXBZmsOb8gVSXdxsfJrBolR5gudJEigJRI4oiUq_HAQnXA7FEL-zLYjychS6oTsjwIzy8H7LnxbQvYsSkmnhosNH_FSfDrkxBE4ma5rLJxu0s9NGkRWuhj5QWN4YuaPLjSpnynD5AVmtl6A_2cR2ec89iM_P5KrkAwBE2b6o4CIqerx2vrrEE2MjJCM6Zhg3nuV0xF3i1rDrPuCN7c4kZTGIwG6EdOgjjvAtu3X3keY0SnebLXRaSxyaWEPCzNzaO0y_eUyk72lwV_Vkq8cDoDZ8bgmZz9EVt19dnASNrEV-DXyBsUNuz5pqjIqDxB09uEZvyW20f1CaeXncK5L7Tmx-FGXQcuBHvM0YqQZajuyVJqmTkdQD15JDBvF2Tb-XlQRHMgrLDQ2BU2CSABA2vpief_0cDJxoyJWQ0GVDT91tcY3yS3aPfd0WWbADAyCu310bnkQ"
+          },
+          {
+            "functionCall": {
+              "id": "adk-268408aa-4040-4971-9a30-ad7212034320",
+              "args": {
+                "domain_id": "Procedure",
+                "query": "Surgery"
+              },
+              "name": "search_omop_official_concepts"
+            }
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5659
+          }
+        ],
+        "cachedContentTokenCount": 5659,
+        "candidatesTokenCount": 335,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 335
+          }
+        ],
+        "promptTokenCount": 6976,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6976
+          }
+        ],
+        "thoughtsTokenCount": 3770,
+        "totalTokenCount": 11081,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -4.498554468866605,
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "09040e47-9641-4383-bd45-38965f609edf",
+      "timestamp": 1788691874.6117177
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-268408aa-4040-4971-9a30-ad7212034320",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 40,
+                "concepts": [
+                  {
+                    "concept_id": 4146273,
+                    "concept_name": "Cryosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 618822,
+                    "concept_name": "Phonosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4100042,
+                    "concept_name": "Chemosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4167550,
+                    "concept_name": "Mohs surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4144834,
+                    "concept_name": "Acne surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4025904,
+                    "concept_name": "Microsurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4261829,
+                    "concept_name": "Laser surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 46274029,
+                    "concept_name": "Thumb surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4166767,
+                    "concept_name": "Optional surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4207050,
+                    "concept_name": "Cosmetic surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4089389,
+                    "concept_name": "Intersex surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4004519,
+                    "concept_name": "Cataract surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4335310,
+                    "concept_name": "Nystagmus surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4125908,
+                    "concept_name": "Skin chemosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4263229,
+                    "concept_name": "Mohs' chemosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4214521,
+                    "concept_name": "Strabismus surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4189290,
+                    "concept_name": "Refractive surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4004517,
+                    "concept_name": "Ambulatory surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4094240,
+                    "concept_name": "Open heart surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4005821,
+                    "concept_name": "Pre-surgery testing",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4300534,
+                    "concept_name": "Cosmetic chemosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4145883,
+                    "concept_name": "Laser surgery of mouth",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4004516,
+                    "concept_name": "Pre-surgery evaluation",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 36713302,
+                    "concept_name": "Microsurgery of larynx",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 44807434,
+                    "concept_name": "Surgery care management",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 46273093,
+                    "concept_name": "Minor ambulatory surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 46272913,
+                    "concept_name": "Robotic assisted surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37111538,
+                    "concept_name": "Radioimmunoguided surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4219634,
+                    "concept_name": "Cryosurgery of turbinates",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4021989,
+                    "concept_name": "Stereotactic radiosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37151475,
+                    "concept_name": "Bilateral cataract surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4108860,
+                    "concept_name": "Anesthetic without surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4067813,
+                    "concept_name": "Preprosthetic oral surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4148948,
+                    "concept_name": "Vascular surgery procedure",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4142228,
+                    "concept_name": "Periapical surgery of tooth",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 765359,
+                    "concept_name": "Post-bariatric surgery diet",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4287640,
+                    "concept_name": "Complicated cataract surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4237055,
+                    "concept_name": "Monitoring of ECG at surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 46272928,
+                    "concept_name": "Assessment for minor surgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4220071,
+                    "concept_name": "Partial cosmetic chemosurgery",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  }
+                ],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Procedure"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "d58af345-8c1b-485c-976f-71ca4f0a1cf5",
+      "timestamp": 1788691897.3353066
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-c887192a-35b0-4d5a-bb73-23a466b7a37e",
+              "args": {
+                "domain_id": "Procedure",
+                "query": "Physical Therapy"
+              },
+              "name": "search_omop_official_concepts"
+            }
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6351
+          }
+        ],
+        "cachedContentTokenCount": 6351,
+        "candidatesTokenCount": 15,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "promptTokenCount": 12048,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12048
+          }
+        ],
+        "totalTokenCount": 12063,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.004931899905204773,
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "25375d86-727d-4f5d-97ee-fde467a0fed6",
+      "timestamp": 1788691897.3391435
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-c887192a-35b0-4d5a-bb73-23a466b7a37e",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 12,
+                "concepts": [
+                  {
+                    "concept_id": 4039580,
+                    "concept_name": "Physical agent therapy",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4079490,
+                    "concept_name": "Combined physical therapy",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4238738,
+                    "concept_name": "Physical therapy procedure",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4261995,
+                    "concept_name": "Physical therapy assessment",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4261996,
+                    "concept_name": "Physical therapy management",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4032376,
+                    "concept_name": "Physical rehabilitation therapy procedure",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37157535,
+                    "concept_name": "Preparation of physical therapy equipment",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4251589,
+                    "concept_name": "Physical rehabilitation therapy management",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4257834,
+                    "concept_name": "Physical rehabilitation therapy assessment",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 46271376,
+                    "concept_name": "Assessment of knowledge of physical therapy",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 46273938,
+                    "concept_name": "Reinforcement of adherence to physical therapy regimen",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4311665,
+                    "concept_name": "Physical medicine, initial examination, review and planning of physiotherapy program or procedure",
+                    "domain_id": "Procedure",
+                    "vocabulary_id": "SNOMED"
+                  }
+                ],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Procedure"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "3c66eaf0-cd81-4e3b-8e02-7de87e3d5f22",
+      "timestamp": 1788691899.0531573
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Gracias por el feedback detallado. He realizado las búsquedas de conceptos para \"Surgery\" y \"Physical Therapy\".\n\nAquí tienes los principales conceptos encontrados, que usaré como **ejemplos** en la consulta SQL. **Por favor, revísalos y confírmame si son adecuados para tu estudio. Es fundamental que apruebes estos conceptos para la validez clínica.**\n\n**Para Cirugía:**\n\n| Concept ID | Concept Name          | Domain    |\n| :--------- | :-------------------- | :-------- |\n| 4146273    | Cryosurgery           | Procedure |\n| 618822     | Phonosurgery          | Procedure |\n| 4100042    | Chemosurgery          | Procedure |\n| 4167550    | Mohs surgery          | Procedure |\n| 4144834    | Acne surgery          | Procedure |\n\n**Para Terapia Física:**\n\n| Concept ID | Concept Name                          | Domain    |\n| :--------- | :------------------------------------ | :-------- |\n| 4039580    | Physical agent therapy                | Procedure |\n| 4079490    | Combined physical therapy             | Procedure |\n| 4238738    | Physical therapy procedure            | Procedure |\n| 4261995    | Physical therapy assessment           | Procedure |\n| 4261996    | Physical therapy management           | Procedure |\n\n**Conceptos de Fármacos (confirmados por el evaluador):**\n`778711, 1112807, 1115008, 1125315, 1177480, 1506270`\n\nAhora, generaré la consulta SQL corregida que aborda los puntos del evaluador:\n\n1.  **Separación correcta de Concept IDs:** Los IDs proporcionados se usarán solo para fármacos. Los de procedimiento se usarán para procedimientos.\n2.  **Inclusión de tratamientos de Cirugía y Terapia Física:** Se usarán los Concept IDs de ejemplo obtenidos de las búsquedas.\n3.  **Categorización de tratamientos:** Se agruparán por categorías como 'Rx Only', 'Surgery Only', 'Physical Therapy Only', 'Surgery + Rx', 'Physical Therapy + Rx' y 'No Treatment'.\n4.  **Agregación de duración:** Se calculará el mínimo, máximo y promedio de la duración de los episodios de enfermedad por cada categoría de tratamiento.\n\n**Antes de la consulta, POR FAVOR ESPECIFICA EL/LOS CONCEPT ID DE LA CONDICIÓN QUE QUIERES ANALIZAR.** Utilizaré `[TU_CONCEPT_ID_DE_CONDICION_AQUI]` como marcador de posición en la consulta hasta que me lo proporciones. Si son múltiples IDs, sepáralos por comas.\n\nAquí está la consulta SQL corregida, incorporando los Concept IDs de ejemplo para cirugía y terapia física, y los de fármacos que me indicaste:\n\n"
+          },
+          {
+            "functionCall": {
+              "id": "adk-513b7647-177f-4186-8506-b9edab079c9f",
+              "args": {
+                "sql_query": "\nWITH ConditionEras AS (\n    SELECT\n        ce.person_id,\n        ce.condition_era_start_date,\n        ce.condition_era_end_date,\n        ce.condition_concept_id,\n        DATE_DIFF(ce.condition_era_end_date, ce.condition_era_start_date, DAY) AS condition_duration_days\n    FROM\n        `condition_era` ce\n    WHERE\n        -- REEMPLAZA ESTO CON LOS CONCEPT ID DE LA CONDICIÓN ESPECÍFICA QUE QUIERES ANALIZAR.\n        -- EJEMPLO: ce.condition_concept_id IN (12345, 67890)\n        -- Por ahora, se usa un placeholder genérico:\n        ce.condition_concept_id IN (SELECT concept_id FROM `concept` WHERE domain_id = 'Condition' AND standard_concept = 'S' LIMIT 10) -- <<= ¡IMPORTANTE! REEMPLAZA ESTA LÍNEA\n),\nDrugExposures AS (\n    SELECT\n        de.person_id,\n        de.drug_era_start_date AS treatment_start_date,\n        de.drug_era_end_date AS treatment_end_date\n    FROM\n        `drug_era` de\n    WHERE\n        de.drug_concept_id IN (778711, 1112807, 1115008, 1125315, 1177480, 1506270) -- Concept IDs de fármacos confirmados por el evaluador\n),\nProcedureExposures_Surgery AS (\n    SELECT\n        po.person_id,\n        po.procedure_date AS treatment_start_date,\n        po.procedure_date AS treatment_end_date -- Asumimos que la cirugía es de un día, o usar procedure_end_date si está disponible\n    FROM\n        `procedure_occurrence` po\n    WHERE\n        po.procedure_concept_id IN (4146273, 618822, 4100042, 4167550, 4144834) -- EJEMPLOS de Concept IDs de cirugía\n),\nProcedureExposures_PhysicalTherapy AS (\n    SELECT\n        po.person_id,\n        po.procedure_date AS treatment_start_date,\n        po.procedure_date AS treatment_end_date -- Asumimos terapia física es un evento, o usar procedure_end_date si está disponible\n    FROM\n        `procedure_occurrence` po\n    WHERE\n        po.procedure_concept_id IN (4039580, 4079490, 4238738, 4261995, 4261996) -- EJEMPLOS de Concept IDs de terapia física\n)\nSELECT\n    TreatmentCategory,\n    COUNT(DISTINCT person_id) AS num_patients,\n    COUNT(*) AS num_condition_eras,\n    MIN(condition_duration_days) AS min_duration_days,\n    MAX(condition_duration_days) AS max_duration_days,\n    CAST(AVG(condition_duration_days) AS FLOAT64) AS avg_duration_days\nFROM (\n    SELECT\n        ce.person_id,\n        ce.condition_duration_days,\n        CASE\n            WHEN EXISTS (\n                SELECT 1 FROM DrugExposures de\n                WHERE ce.person_id = de.person_id\n                AND de.treatment_start_date <= ce.condition_era_end_date\n                AND de.treatment_end_date >= ce.condition_era_start_date\n            ) AND EXISTS (\n                SELECT 1 FROM ProcedureExposures_Surgery pse\n                WHERE ce.person_id = pse.person_id\n                AND pse.treatment_start_date <= ce.condition_era_end_date\n                AND pse.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Surgery + Rx'\n            WHEN EXISTS (\n                SELECT 1 FROM DrugExposures de\n                WHERE ce.person_id = de.person_id\n                AND de.treatment_start_date <= ce.condition_era_end_date\n                AND de.treatment_end_date >= ce.condition_era_start_date\n            ) AND EXISTS (\n                SELECT 1 FROM ProcedureExposures_PhysicalTherapy pt\n                WHERE ce.person_id = pt.person_id\n                AND pt.treatment_start_date <= ce.condition_era_end_date\n                AND pt.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Physical Therapy + Rx'\n            WHEN EXISTS (\n                SELECT 1 FROM ProcedureExposures_Surgery pse\n                WHERE ce.person_id = pse.person_id\n                AND pse.treatment_start_date <= ce.condition_era_end_date\n                AND pse.treatment_end_date >= ce.condition_era_start_date\n            ) AND EXISTS (\n                SELECT 1 FROM ProcedureExposures_PhysicalTherapy pt\n                WHERE ce.person_id = pt.person_id\n                AND pt.treatment_start_date <= ce.condition_era_end_date\n                AND pt.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Surgery + Physical Therapy' -- Adding this combination\n            WHEN EXISTS (\n                SELECT 1 FROM DrugExposures de\n                WHERE ce.person_id = de.person_id\n                AND de.treatment_start_date <= ce.condition_era_end_date\n                AND de.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Rx Only'\n            WHEN EXISTS (\n                SELECT 1 FROM ProcedureExposures_Surgery pse\n                WHERE ce.person_id = pse.person_id\n                AND pse.treatment_start_date <= ce.condition_era_end_date\n                AND pse.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Surgery Only'\n            WHEN EXISTS (\n                SELECT 1 FROM ProcedureExposures_PhysicalTherapy pt\n                WHERE ce.person_id = pt.person_id\n                AND pt.treatment_start_date <= ce.condition_era_end_date\n                AND pt.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Physical Therapy Only'\n            ELSE 'No Treatment'\n        END AS TreatmentCategory\n    FROM\n        ConditionEras ce\n) AS categorized_data\nGROUP BY TreatmentCategory\nORDER BY TreatmentCategory;\n"
+              },
+              "name": "validate_omop_sql"
+            }
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 11569
+          }
+        ],
+        "cachedContentTokenCount": 11569,
+        "candidatesTokenCount": 2238,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2238
+          }
+        ],
+        "promptTokenCount": 12454,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12454
+          }
+        ],
+        "totalTokenCount": 14692,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.12428630048191047,
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "277edbc7-ccd5-4837-b7a2-b8f93ee159fc",
+      "timestamp": 1788691899.0563724
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-513b7647-177f-4186-8506-b9edab079c9f",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.drug_era",
+                  "bio-med-480108.OMOP_54_A.procedure_occurrence",
+                  "bio-med-480108.OMOP_54_A.condition_era",
+                  "bio-med-480108.OMOP_54_A.concept"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "1f73bbd3-8ac3-4525-9938-18b905c938bf",
+      "timestamp": 1788691910.0207906
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "La consulta SQL corregida ha sido validada exitosamente.\n\nAquí tienes la consulta SQL para BigQuery, que aborda las observaciones del evaluador clínico/técnico:\n\n```sql\nWITH ConditionEras AS (\n    SELECT\n        ce.person_id,\n        ce.condition_era_start_date,\n        ce.condition_era_end_date,\n        ce.condition_concept_id,\n        DATE_DIFF(ce.condition_era_end_date, ce.condition_era_start_date, DAY) AS condition_duration_days\n    FROM\n        `condition_era` ce\n    WHERE\n        -- REEMPLAZA ESTO CON LOS CONCEPT ID DE LA CONDICIÓN ESPECÍFICA QUE QUIERES ANALIZAR.\n        -- EJEMPLO: ce.condition_concept_id IN (12345, 67890)\n        -- Por ahora, se usa un placeholder genérico, que DEBE SER REEMPLAZADO:\n        ce.condition_concept_id IN (SELECT concept_id FROM `concept` WHERE domain_id = 'Condition' AND standard_concept = 'S' LIMIT 10) -- <<= ¡IMPORTANTE! REEMPLAZA ESTA LÍNEA\n),\nDrugExposures AS (\n    SELECT\n        de.person_id,\n        de.drug_era_start_date AS treatment_start_date,\n        de.drug_era_end_date AS treatment_end_date\n    FROM\n        `drug_era` de\n    WHERE\n        de.drug_concept_id IN (778711, 1112807, 1115008, 1125315, 1177480, 1506270) -- Concept IDs de fármacos confirmados por el evaluador\n),\nProcedureExposures_Surgery AS (\n    SELECT\n        po.person_id,\n        po.procedure_date AS treatment_start_date,\n        po.procedure_date AS treatment_end_date -- Asumimos que la cirugía es de un día, o usar procedure_end_date si está disponible\n    FROM\n        `procedure_occurrence` po\n    WHERE\n        po.procedure_concept_id IN (4146273, 618822, 4100042, 4167550, 4144834) -- EJEMPLOS de Concept IDs de cirugía\n),\nProcedureExposures_PhysicalTherapy AS (\n    SELECT\n        po.person_id,\n        po.procedure_date AS treatment_start_date,\n        po.procedure_date AS treatment_end_date -- Asumimos terapia física es un evento, o usar procedure_end_date si está disponible\n    FROM\n        `procedure_occurrence` po\n    WHERE\n        po.procedure_concept_id IN (4039580, 4079490, 4238738, 4261995, 4261996) -- EJEMPLOS de Concept IDs de terapia física\n)\nSELECT\n    TreatmentCategory,\n    COUNT(DISTINCT person_id) AS num_patients,\n    COUNT(*) AS num_condition_eras,\n    MIN(condition_duration_days) AS min_duration_days,\n    MAX(condition_duration_days) AS max_duration_days,\n    CAST(AVG(condition_duration_days) AS FLOAT64) AS avg_duration_days\nFROM (\n    SELECT\n        ce.person_id,\n        ce.condition_duration_days,\n        CASE\n            WHEN EXISTS (\n                SELECT 1 FROM DrugExposures de\n                WHERE ce.person_id = de.person_id\n                AND de.treatment_start_date <= ce.condition_era_end_date\n                AND de.treatment_end_date >= ce.condition_era_start_date\n            ) AND EXISTS (\n                SELECT 1 FROM ProcedureExposures_Surgery pse\n                WHERE ce.person_id = pse.person_id\n                AND pse.treatment_start_date <= ce.condition_era_end_date\n                AND pse.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Surgery + Rx'\n            WHEN EXISTS (\n                SELECT 1 FROM DrugExposures de\n                WHERE ce.person_id = de.person_id\n                AND de.treatment_start_date <= ce.condition_era_end_date\n                AND de.treatment_end_date >= ce.condition_era_start_date\n            ) AND EXISTS (\n                SELECT 1 FROM ProcedureExposures_PhysicalTherapy pt\n                WHERE ce.person_id = pt.person_id\n                AND pt.treatment_start_date <= ce.condition_era_end_date\n                AND pt.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Physical Therapy + Rx'\n            WHEN EXISTS (\n                SELECT 1 FROM ProcedureExposures_Surgery pse\n                WHERE ce.person_id = pse.person_id\n                AND pse.treatment_start_date <= ce.condition_era_end_date\n                AND pse.treatment_end_date >= ce.condition_era_start_date\n            ) AND EXISTS (\n                SELECT 1 FROM ProcedureExposures_PhysicalTherapy pt\n                WHERE ce.person_id = pt.person_id\n                AND pt.treatment_start_date <= ce.condition_era_end_date\n                AND pt.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Surgery + Physical Therapy' -- Se añade esta combinación\n            WHEN EXISTS (\n                SELECT 1 FROM DrugExposures de\n                WHERE ce.person_id = de.person_id\n                AND de.treatment_start_date <= ce.condition_era_end_date\n                AND de.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Rx Only'\n            WHEN EXISTS (\n                SELECT 1 FROM ProcedureExposures_Surgery pse\n                WHERE ce.person_id = pse.person_id\n                AND pse.treatment_start_date <= ce.condition_era_end_date\n                AND pse.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Surgery Only'\n            WHEN EXISTS (\n                SELECT 1 FROM ProcedureExposures_PhysicalTherapy pt\n                WHERE ce.person_id = pt.person_id\n                AND pt.treatment_start_date <= ce.condition_era_end_date\n                AND pt.treatment_end_date >= ce.condition_era_start_date\n            )\n            THEN 'Physical Therapy Only'\n            ELSE 'No Treatment'\n        END AS TreatmentCategory\n    FROM\n        ConditionEras ce\n) AS categorized_data\nGROUP BY TreatmentCategory\nORDER BY TreatmentCategory;\n```\n\n**Pasos Siguientes y Consideraciones Importantes:**\n\n1.  **Reemplaza `[TU_CONCEPT_ID_DE_CONDICION_AQUI]`:** Es **crítico** que reemplaces la subconsulta en `ConditionEras` con los Concept IDs de la condición específica que deseas estudiar. Sin esto, la consulta utilizará un conjunto genérico de 10 condiciones, lo cual no es clínicamente válido para tu estudio.\n2.  **Revisión de Conceptos de Procedimientos:** Los `Concept ID`s para cirugía y terapia física son ejemplos. Por favor, revísalos en la tabla anterior y confírmame si son los adecuados para tu análisis. Si necesitas otros conceptos, puedo buscarlos.\n3.  **Definición de Duración de Procedimientos:** En las CTEs `ProcedureExposures_Surgery` y `ProcedureExposures_PhysicalTherapy`, se asume que la `procedure_date` es el inicio y fin del tratamiento para simplificar. Si tu CDM tiene `procedure_end_date` y es relevante, se podría incorporar.\n4.  **Combinaciones de Tratamiento:** La cláusula `CASE` categoriza los tratamientos. He incluido la categoría `'Surgery + Physical Therapy'`. Si hay otras combinaciones específicas que te interesan, podemos ajustarlas.\n5.  **Exhaustividad de Tratamientos:** Si existen otros tipos de tratamientos (ej. radioterapia, psicoterapia) que son relevantes para el \"régimen terapéutico\", también tendríamos que buscar sus conceptos e incluirlos."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 11723
+          }
+        ],
+        "cachedContentTokenCount": 11723,
+        "candidatesTokenCount": 1935,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1935
+          }
+        ],
+        "promptTokenCount": 14824,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 14824
+          }
+        ],
+        "totalTokenCount": 16759,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.08342454698350694,
+      "invocationId": "e-192e2cbc-6be6-4517-b631-8c62b03263fc",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "5263391a-a24e-41d3-af3a-b8544d2a591f",
+      "timestamp": 1788691910.0241764
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y optimiza la consulta SQL para BigQuery OMOP CDM 5.4 resolviendo las siguientes observaciones técnicas y clínicas del evaluador:\n\nLa consulta generada presenta una estructura lógica adecuada (uso de CTEs, agregaciones), pero tiene deficiencias clínicas importantes comparadas con la Gold Standard:\n1.  **Definición de la Condición:** Utiliza un `placeholder` genérico para los `concept_id` de la condición (con `LIMIT 10`), a diferencia de la Gold Standard que define la condición ('dolor de espalda') de forma robusta usando `concept_ancestor` y `concept_relationship`, lo cual es fundamental para una cohorte clínica precisa.\n2.  **Identificación de Tratamientos:** La consulta generada usa `concept_id` de ejemplo para cirugías y terapia física, y su identificación de fármacos se limita a `drug_era`, sin considerar `procedure_occurrence` para administración de medicamentos como hace la Gold Standard. Los `concept_id` de fármacos son similares pero no idénticos.\n3.  **Relación Temporal Tratamiento-Condición:** La Gold Standard vincula los tratamientos a un periodo específico (60 días post-inicio de la condición) para inferir tratamientos para ese episodio. La consulta generada busca cualquier solapamiento entre el tratamiento y la era de la condición, lo que es una definición temporal más amplia y menos específica para la relación causal del episodio.\n4.  **Filtros Clínicos:** La consulta generada carece de un filtro por fecha de inicio de diagnóstico (`diag_date > '2011-01-01'`) presente en la Gold Standard.\n\nEmite directamente la sentencia SQL ejecutable final, sin explicaciones adicionales ni pasos intermedios."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-53b3ac10-69b3-4d91-a1d8-9eb2597c90d6",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "4758aecf-709c-4174-a0ff-16757f0dd01c",
+      "timestamp": 1788691946.4167864
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": ""
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "promptTokenCount": 17140,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 17140
+          }
+        ],
+        "thoughtsTokenCount": 1459,
+        "totalTokenCount": 18599,
+        "trafficType": "ON_DEMAND"
+      },
+      "invocationId": "e-53b3ac10-69b3-4d91-a1d8-9eb2597c90d6",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "6305b01e-693f-4553-9b58-d5f79d39ba8a",
+      "timestamp": 1788691946.422187
+    }
+  ],
+  "lastUpdateTime": 1788691946.422187
+}

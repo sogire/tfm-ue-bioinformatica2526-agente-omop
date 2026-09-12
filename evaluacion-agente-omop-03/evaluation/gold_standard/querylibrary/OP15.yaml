@@ -1,0 +1,32 @@
+id_evaluacion: "querylibrary_OP15"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: "person, concept"
+pregunta_lenguaje_natural: >-
+  Contar la cantidad de pacientes por cada edad al inicio de la observación, estratificado según el género del paciente.
+sql_base_gold_standard: |
+  SELECT
+    age,
+    gender,
+    COUNT(*) AS num_people
+  FROM
+    ( SELECT
+        w.person_id,
+        ISNULL( concept_name, 'MISSING' )                     AS gender,
+        YEAR(first_observation_date ) - year_of_birth         AS age
+      FROM
+        ( SELECT
+            person_id,
+            MIN( observation_period_start_date ) AS first_observation_date
+          FROM `bio-med-480108.OMOP_54_A.observation_period`
+          GROUP BY person_id
+        ) AS w
+       INNER JOIN `bio-med-480108.OMOP_54_A.person`
+       ON w.person_id = person.person_id
+       LEFT OUTER JOIN `bio-med-480108.OMOP_54_A.concept`
+       ON person.gender_concept_id = concept.concept_id
+       WHERE YEAR(first_observation_date) - year_of_birth >= 0
+    ) AS z
+  GROUP BY age, gender
+  ORDER BY age, gender;
+concept_ids_gold_standard: ""

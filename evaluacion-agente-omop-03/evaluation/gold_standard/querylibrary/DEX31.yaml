@@ -1,0 +1,25 @@
+id_evaluacion: "querylibrary_DEX31"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución y percentiles del número de registros de dispensación farmacológica por persona.
+sql_base_gold_standard: |
+  SELECT
+      MIN(stat_value)                                                                    AS min_value,
+      MAX(stat_value)                                                                    AS max_value,
+      ROUND(AVG(stat_value), 1)                                                          AS avg_value,
+      ROUND(STDEV(stat_value), 1)                                                        AS STDEV_value,
+      MIN(CASE WHEN order_nr < .25 * population_size THEN 9999 ELSE stat_value END)      AS percentile_25,
+      MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE stat_value END)      AS median_value,
+      MIN(CASE WHEN order_nr < .75 * population_size THEN 9999 ELSE stat_value END)      AS percentile_75
+
+  FROM (
+    SELECT
+      COUNT(*)                                                        AS stat_value,
+      ROW_NUMBER() OVER (ORDER BY count(*) )                          AS order_nr,
+      (SELECT COUNT(DISTINCT person_id) FROM `bio-med-480108.OMOP_54_A.drug_exposure` )     AS population_size
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+    GROUP BY person_id
+  ) ordered_data;
+concept_ids_gold_standard: ""

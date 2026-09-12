@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_DER26"
+nivel_complejidad: "intermedia"
+domain_main: "drug_era"
+domain_others: "person"
+pregunta_lenguaje_natural: >-
+  Contar la distribución por género (masculino y femenino) de los pacientes que iniciaron episodios de tratamiento con los medicamentos evaluados (megestrol, darbepoetina alfa y estrógenos conjugados).
+sql_base_gold_standard: |
+  SELECT p.gender_concept_id, t.drug_concept_id, count(1) AS count 
+  FROM `bio-med-480108.OMOP_54_A.drug_era` t 
+  JOIN `bio-med-480108.OMOP_54_A.person` p
+      ON p.person_id = t.person_id
+  WHERE t.drug_concept_id IN (1300978, 1304643, 1549080)
+      AND p.gender_concept_id IN (8507, 8532)
+  GROUP BY t.drug_concept_id, p.gender_concept_id
+  ORDER BY t.drug_concept_id, p.gender_concept_id;
+concept_ids_gold_standard: "1300978, 1304643, 1549080, 8507, 8532"

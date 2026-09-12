@@ -1,0 +1,18 @@
+id_evaluacion: "querylibrary_PE09"
+nivel_complejidad: "intermedia"
+domain_main: "person"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Determinar el recuento de pacientes clasificados por género y estratificados por año de nacimiento.
+sql_base_gold_standard: |
+  SELECT
+    gender_concept_id,
+    concept_name     AS gender_name,
+    year_of_birth    AS year_of_birth,
+    COUNT(*)         AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.person`
+    JOIN `bio-med-480108.OMOP_54_A.concept`
+    ON person.gender_concept_id = concept.concept_id
+  GROUP BY person.gender_concept_id, concept.concept_name, person.year_of_birth
+  ORDER BY concept.concept_name, person.year_of_birth;
+concept_ids_gold_standard: ""

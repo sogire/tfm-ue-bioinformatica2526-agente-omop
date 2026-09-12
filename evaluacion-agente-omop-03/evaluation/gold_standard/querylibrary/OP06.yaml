@@ -1,0 +1,11 @@
+id_evaluacion: "querylibrary_OP06"
+nivel_complejidad: "baja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la duración promedio en días de los períodos de observación clínica registrados para la población.
+sql_base_gold_standard: |
+  SELECT 
+    AVG(DATEDIFF(day,observation_period_start_date,observation_period_end_date)) AS num_days
+  FROM `bio-med-480108.OMOP_54_A.observation_period`;
+concept_ids_gold_standard: ""

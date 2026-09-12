@@ -1,0 +1,30 @@
+id_evaluacion: "querylibrary_DEX12"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_ancestor, concept_relationship"
+pregunta_lenguaje_natural: >-
+  Determinar la distribución de las diferentes formas farmacéuticas dispensadas para el principio activo paracetamol.
+sql_base_gold_standard: |
+  SELECT form_name,
+         100.00 * cn / SUM(cn) OVER() AS percent_forms
+    FROM (
+  SELECT drugform.concept_name AS form_name,
+         COUNT(*)              AS cn
+    FROM `bio-med-480108.OMOP_54_A.concept` ingredient
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` a
+      ON ingredient.concept_id = a.ancestor_concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` drug
+      ON a.descendant_concept_id = drug.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept_relationship` r
+      ON drug.concept_id = r.concept_id_1
+    JOIN `bio-med-480108.OMOP_54_A.concept` drugform
+      ON r.concept_id_2 = drugform.concept_id
+   WHERE ingredient.concept_id        = 1125315 --Acetaminophen
+     AND ingredient.concept_class_id  = 'Ingredient'
+     AND drug.standard_concept        = 'S'
+     AND drugform.concept_class_id    = 'Dose Form'
+   GROUP BY drugform.concept_name
+  HAVING COUNT(*) > 0
+         ) TMP
+   ORDER BY percent_forms desc;
+concept_ids_gold_standard: "1125315"

@@ -1,0 +1,18 @@
+id_evaluacion: "querylibrary_DEX39"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar las dispensaciones de los fármacos especificados (metoclopramida, desmopresina y ciclosporina), estratificadas según el tipo de registro de dispensación.
+sql_base_gold_standard: |
+  SELECT
+    drug_concept_id,
+    drug_type_concept_id,
+    COUNT(1) AS drugs_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+        -- Filter by input list of drug_concept_id
+  WHERE drug_concept_id IN (906805, 1517070, 19010522)
+        -- Filter by input list of drug_type_concept_id
+        AND drug_type_concept_id IN (38000175,38000179)
+  GROUP BY drug_type_concept_id, drug_concept_id;
+concept_ids_gold_standard: "906805, 1517070, 19010522, 38000175, 38000179"

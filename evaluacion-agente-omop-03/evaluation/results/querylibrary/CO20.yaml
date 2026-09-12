@@ -1,0 +1,31 @@
+id_evaluacion: querylibrary_CO20
+session_id: 80fe9253-684f-40ee-b5f2-71ebcc272866
+session_file: results/querylibrary/sessions/CO20.json
+turnos_ejecutados: 1
+sql_generada_agente: |-
+  SELECT stop_reason,
+         count(*) AS frequency,
+         cast(count(*) * 100.0 AS float64) / sum(count(*)) OVER () AS percentage
+  FROM condition_occurrence
+  WHERE stop_reason IS NOT NULL
+  GROUP BY stop_reason
+  ORDER BY frequency DESC;
+concept_ids_identificados_agente: []
+metricas_evaluacion:
+  validez_sintactica_y_estructural: 0.95
+  precision_terminologica_vocabulario: 1.0
+  detalle_validez_sintactica:
+    criterio_1_1_ejecucion: 0.1
+    criterio_1_2_similitud_sql_gemini: 0.85
+    justificacion_gemini: |-
+      La consulta generada coincide en la tabla principal (`condition_occurrence`) y la variable de agrupación (`stop_reason`) para calcular la frecuencia. Aunque añade una cláusula `WHERE stop_reason IS NOT NULL` y una cláusula `ORDER BY`, estas son adiciones válidas que mejoran la claridad y presentación, respectivamente. La principal diferencia es la inclusión de la distribución porcentual, que, si bien no está en el Gold Standard, responde explícitamente a la solicitud de la pregunta clínica original ('frecuencia y distribución'), haciendo que la consulta generada sea más completa en este aspecto.
+  metricas_por_turno:
+    turno_1:
+      validez_sintactica_y_estructural: 0.95
+      precision_terminologica_vocabulario: 1.0
+      question_improvement: ''
+evaluacion_cualitativa: |-
+  Consulta SQL ejecutable (0.10 pts) sobre tabla(s) condition_occurrence generada directamente en un único turno con validación exitosa en BigQuery.
+  Similitud SQL evaluada por Gemini (0.85/0.90 pts): La consulta generada coincide en la tabla principal (`condition_occurrence`) y la variable de agrupación (`stop_reason`) para calcular la frecuencia. Aunque añade una cláusula `WHERE stop_reason IS NOT NULL` y una cláusula `ORDER BY`, estas son adiciones válidas que mejoran la claridad y presentación, respectivamente. La principal diferencia es la inclusión de la distribución porcentual, que, si bien no está en el Gold Standard, responde explícitamente a la solicitud de la pregunta clínica original ('frecuencia y distribución'), haciendo que la consulta generada sea más completa en este aspecto.
+  Consulta exploratoria sin conceptos fijos requeridos en el estándar; el agente identificó 0 concepto(s) candidatos pertinentes en el vocabulario.
+check_conexion: true

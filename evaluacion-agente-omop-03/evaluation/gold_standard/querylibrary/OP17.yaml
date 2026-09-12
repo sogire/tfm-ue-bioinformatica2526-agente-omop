@@ -1,0 +1,19 @@
+id_evaluacion: "querylibrary_OP17"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar los períodos de observación médica estratificados por el mes en que finalizó la observación y la condición de cierre del paciente.
+sql_base_gold_standard: |
+  WITH observation_period_month AS
+    ( SELECT
+        MONTH(observation_period_end_date) AS observation_month
+        FROM `bio-med-480108.OMOP_54_A.observation_period`
+    )
+  SELECT
+    observation_month,
+    count(*) AS num_observations
+  FROM observation_period_month
+  GROUP BY observation_month
+  ORDER BY 1;
+concept_ids_gold_standard: ""

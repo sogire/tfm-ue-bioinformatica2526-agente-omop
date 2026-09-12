@@ -1,0 +1,368 @@
+{
+  "id": "e23c0fd7-b875-4140-af54-770cc5c6fcb7",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Calcular la distribución de edad (media, desviación estándar, percentiles) de los pacientes al momento del diagnóstico para un conjunto amplio de condiciones clínicas. Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-9fe43c40-0807-45fc-9d73-201342f56bc2",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "30881449-3446-48d7-a8ea-d8835dc4bc97",
+      "timestamp": 1788683615.8900394
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": ""
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "promptTokenCount": 1260,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1260
+          }
+        ],
+        "thoughtsTokenCount": 1606,
+        "totalTokenCount": 2866,
+        "trafficType": "ON_DEMAND"
+      },
+      "invocationId": "e-9fe43c40-0807-45fc-9d73-201342f56bc2",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "be62eacb-4536-4cf7-a73e-499d7b08c88a",
+      "timestamp": 1788683615.8914459
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 192691, 193323, 194700, 195771, 200687, 201254, 201530, 201531, 201820, 201826, 318712, 373999, 377821, 435216, 439770, 443012, 443412, 443592, 4008576, 4009780, 4024659, 4030061, 4034960, 4034962, 4047906, 4048202, 4058243, 4062685, 4062686, 4062687, 4063042, 4063043, 4079850, 4096041, 4096042, 4096668, 4096670, 4096671, 4099214, 4099215, 4099217, 4099334, 4099651, 4099652, 4099653, 4099741, 4102018, 4129378, 4129516, 4129519, 4130162, 4130164, 4130166, 4136889, 4137214, 4140808, 4143529, 4143689, 4143857, 4144583, 4145827, 4151281, 4151282, 4152858, 4155634, 4166381, 4178452, 4178790, 4192852, 4193704, 4196141, 4198296, 4200873, 4200875, 4202383, 4212631, 4221344, 4222222, 4222410, 4222547, 4222553, 4222687, 4222834, 4223303, 4223444, 4224254, 4224709, 4224723, 4225013, 4225055, 4225656, 4226245, 4227210, 4228102, 4228112, 4230254, 4231917, 4235410, 4237068, 4240589, 4245270, 4252384, 4263902, 4295011, 4304377, 4312138, 4321756, 4322638, 4325113, 4326434, 4327944, 40480000, 40482883, 40488810. Por favor genera la consulta SQL SELECT para BigQuery consultando las tablas del vocabulario y modelo OMOP (condition_occurrence, person, concept) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-50ec362e-5a81-4052-9627-828ed754d44c",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "8e537f28-ee42-4dac-9c66-95dfc6da1779",
+      "timestamp": 1788683624.5847075
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-14c5954c-feab-49da-a2e2-e448a9382efc",
+              "args": {
+                "sql_query": "\nSELECT\n    CAST(AVG(age_at_diagnosis) AS FLOAT64) AS mean_age_at_diagnosis,\n    CAST(STDDEV(age_at_diagnosis) AS FLOAT64) AS stddev_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(age_at_diagnosis, 100)[OFFSET(25)] AS FLOAT64) AS p25_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(age_at_diagnosis, 100)[OFFSET(50)] AS FLOAT64) AS p50_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(age_at_diagnosis, 100)[OFFSET(75)] AS FLOAT64) AS p75_age_at_diagnosis\nFROM (\n    SELECT\n        EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth AS age_at_diagnosis\n    FROM\n        `condition_occurrence` AS co\n    JOIN\n        `person` AS p\n    ON\n        co.person_id = p.person_id\n    WHERE\n        co.condition_concept_id IN (\n            192691, 193323, 194700, 195771, 200687, 201254, 201530, 201531, 201820, 201826, 318712, 373999, 377821, 435216, 439770, 443012, 443412, 443592, 4008576, 4009780, 4024659, 4030061, 4034960, 4034962, 4047906, 4048202, 4058243, 4062685, 4062686, 4062687, 4063042, 4063043, 4079850, 4096041, 4096042, 4096668, 4096670, 4096671, 4099214, 4099215, 4099217, 4099334, 4099651, 4099652, 4099653, 4099741, 4102018, 4129378, 4129516, 4129519, 4130162, 4130164, 4130166, 4136889, 4137214, 4140808, 4143529, 4143689, 4143857, 4144583, 4145827, 4151281, 4151282, 4152858, 4155634, 4166381, 4178452, 4178790, 4192852, 4193704, 4196141, 4198296, 4200873, 4200875, 4202383, 4212631, 4221344, 4222222, 4222410, 4222547, 4222553, 4222687, 4222834, 4223303, 4223444, 4224254, 4224709, 4224723, 4225013, 4225055, 4225656, 4226245, 4227210, 4228102, 4228112, 4230254, 4231917, 4235410, 4237068, 4240589, 4245270, 4252384, 4263902, 4295011, 4304377, 4312138, 4321756, 4322638, 4325113, 4326434, 4327944, 40480000, 40482883, 40488810\n        )\n)\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CoMtAY89a18C5NlySle6mC_2tg6vuoVct20XZi0URwC0gwKAx3BMyRcwQ4ditw-FikigsSt7Kpqfote7ldZ0a-WWbRtSG6JtEjjwtUj1NcZpHarLY2Kw6azAF88Mf7aGZcnwQREpK4M53r6kNQJ13Jez3Oc4FistAPq9ajVVt1wa7JFnJmWiiXlEnCAg6n6gNInLBfRnW2XLhKA9FDUTTxCEMdSZ2gVaURoUK0HSu0WNrUcNmfs5yWxhMcKl33rYhu15UXf7ZeCs2NuaiRgX8MN49eC-smJ0_e3y93MKWA-YXiUIlcRG4FaQ4gHwJxc9mpLvyLJ6OXV_k-e44AzncohK6uT1pZTVECt8-eASFgQ6lQfgFFuc9_6rjqVxqXdlBERyG_jCaXbpVFfyfG4rmxKfssjLOv-KVdS8vAYTeNfR9NaNcK8fSXzEuumC6UGYsit_oPl9oi9328GlJNgNzBIExb2RxDECR0ajJKCmxKLJJ9Tq0QSjmuk2z5nYbxV2iqV2PeflMCdE1lnSxOPJtLeOZQTY_nqx2v003g-YhHwsdpEfsySd-DwxotMGyzWWmk-TtTVnxe1X29YCOLHui7ddNoCGwnMgfuLa6tZEN-fBMsmbHEF7gl27aK79JNH1TKc5g97MwDCX8CcCfza-dZUqEuvvmrHWP5hwHIXM5GWTj0rdX0bpWflqcMMN3ColSCz-HHl2OSzbySGYrA8_7O2WtbtwfDne1D-lWdznovXx5Y5i6ypnhecPiLd0TT-FToldlGaTdX_sb7iTk_-YjcYyb1dWwqOxzdpPPPoSwUrvFTKHP4jgxcRz8kYmaTlRuiPVXhda3K6giM9u7p5kbYtmP0OnH802x5h6mfbkGFLn4sWQ9239bfbVrDMwKdoiCuwmVJOQh0lcSLJnaqGKDif1aCcF6eSUk3MBZyknHuJWnG8e21A4rVXZHXwyteD658hGUO4zRPajiVziK6iIw_C2_SR7wRcn2HVFdkUbiWDA2jnWKl68Y9ghHwC4szLUVJLqLHZSLUeSd69dBsbEh9HIcoKzWd15xucl-eddu8sFS0n-Ga85jTAYrtzE61iJl1CKOAxgK9lUl_5wwMIwtysOwYxksVCpyT8mo4ZBp8cBSL5Txqdf2aZ0eJMahQMkMJCoUVpLwJaf3L1j7WOEXuvvBd8-Syh0w1X_epSjDAHR4ieQX8rXfNWpdp17gwFG7c55v12KsURE3USGx8omY7wxxQZMvGAgXcrRVU5tga_fWFOPfX4TerRbHp96cBnOzwqB6D4ZcQogyLNX0CgHimGgOgs6d2FIL_hW2GT5X0FSXZELae6ebH8w37mH8iSWoOTZd33ZgsnhYAfH9aKEzULIz8-2zd40Ph4lDDPZLOGCAXBt9ygbRhAVfrYO9GfGTwXCn2YntCCV9Roz5o0A9VvIXcuJ4OxkAWZhkFaRAHHBRAWPaZcDt02zqzB8LO8kikczMBFjRBwBbqfoW_qpRFUhl77nCfVEFA_kmD36s4A0dkHfvk-9SHEG8ctB7Oas_Rqr5E7a60Z9XZzKUGftJxWl04PLxkgQqu_o5MXGJaZJlOoM4iCLXMij8p7Ld2D01HVs8eULbYH7jSmsLBbpi_r36eh_Yb2G82gazXI0OjIjDYfiS2yGIfX0_DUaIHI97AepdqKtqeeAniKc0OMOq9vStvuY_6MzQfng-hraASyG258Q9jQUwr38LVTvCD5VTnopqbRPdUmlzswL8RGQoQ3f3LHzUwCpbncVMVRG3f8zhocjE2UTv37zdHkfkohXEYLhouEJbVIkdZR2-cp9KeY84rWE-3F8xIEZECb2p2Nxin57fRwCc9hp_t4QWkUBp39oNRdnIN6TfcdVExj-fGDQ8HCHH2plruLOtrvQb2NHkBmhbWgzMBwOCHhm22irxcSl-Qp_N4GAwtAtfk-siC44o794hc4UXK2C9ZBRsu9gQZ8yXAF8CyAebXMWkx3e8_ssyddLu30amsKSXR7wvRvRFBgtdv2LVNoohWjgu_ihm77cTLQCE5lPq56jBor1_GMt_QmKRaMZw49K85IYjuMSIU3vuJCCSkRVrNoQmmERf0VuQPpBBK4tzARatKhJeFFLP_2lQJ5rsfSf_6ZSo_-toHFg8jhGLOWAmmnz3Lx_YJKnXaAVCwrQGjjZDhJnXuztIWPJEusxrj2tTdTIPBcot9SZdCWoVYKsbnAq-LroLLnX2UegHt3ByqxGHuWhKbFAPL6J1joGL_sHw7RvOoTtG2kMry6jiGxMJSjaLY8CrQ6HVhVyet764x2i2YOYjo8KcmqsMc5_H6i47mgkQLNlBOYgVvSgNYVxCeBVFTECki31JBzwWBj5W1wa8vM62U9pKqOVosovXr85Z14l3tmLukn4YTXIsXg-bsEC8t-UnBa2irB4KLk7WzB8-lhiCd3lJXIafyGWfWJWzfP7-ChqdJb3LcCWMC0byaFsBV--R-HOv-7QjCOSytp43Sa0a5P3HhSaZuO6Ih_0ro-IHB7lOfqET7sNsVjKxIk_aZFiw4nLKOluV3o7Z68uVsR3LohJ-7QQYU_WF_FXRj7tXrA2VYcwIAkSkJkRU2-Chcp9INgeXr3m1gikwE-gQgknwf-zZt-oZYpba1uLNQ_O6WAM7g8kQdQldXlCLmi2zLccDo11cH6lkSziPcIRZ4i488irK9dQ-270tC-vdy-iGM86sp7NELg9eJSXwvtkNAn2UnKSCcWMLYM41AJwkNEALgEgewxRLdMbqIo93-LDmc4M08xetxC5dAPnnYyHvLYHNBW0ZpxwGkVH6bLToJ5b_Bh-m8Hg5cvOVb3gQPyOZcdMq1U3vTm8kZLu6n1dsUy3VvD0TVmyUZA7-GKZaxZpG3JLz8dBiriPSwTV1qJcQndth_N39vjvYJDPbvDPIsoTAyx5WgZ2oHMNTtqsnK7IV6AvcZO7OdWRj_Mf2Rf2_PxJIR7m1e-D7W7byp5uZGaNz4pUI4gw8GFuT7u3vkIB9fU-PKKu7XRwK6OT_aAKiUGp9z9HEisfDMtl6qqXyTB6phlIWYNcrFTX0WHzbHjcQcmoEfY25oQvFYx30SlJTlm1ytQF_5x_918L9YfsIheqDcUgcVfGRI72UA59w6QwwobOh7k6oR2r8suMhBKo21q-G4ntPRWynnm2JPcnu0tR5zOLp1bscBLgBzsBxc4TNcsLoVvEO0a48nod_hBKuUZU8QanoW0A6O8K8jwGn7tB4dw5o5eoE-ceSkbs80L60BRE4pFrmv-FUsyAEUVCT-DTubu7vOX36VOR4mKckTs0b2zFVE6M2nl0J071I35sc2Mep49NklLgZP793w0VGCX-iPfXvUb-tYiQL0gDOqBguVjNl-NenDbAHKgZef84RgbzZzTs8n01ANhPlSmLs-EkhmtVOH8NVdiRJbq-LmT8Z-FXVQ0BhmksDj45-VLIWUOgSXjFUamyNLlTWTKX0v-M8ntwNL_S-Hj33vHAFRUL-excxYoIrxgEFBxtsEMwktu6mrLYTh9JHJaMxRwDT7alqTv_Az9Xus9s_t981gqvJC5bKcWLM6ERH3SOIypoAsQqtlCLP-bg4k63SZyvxXmDeGHYA818bCU4AOEA-tNuBXqzUYh7a5s1D8XZ2hqZqc_7u_R-8ZXZqEsqhIpo4Hl-eP3bNybmZPVwK6ev3-XBGn9df6eEFGLOczblQEZyQV2ZkHlVL_OQFcjkPQ4DnnbfiBWLuo4hqZVrAq-S4lKkHwNtqxXT2kmdmkguylYyzDkPt6O0nNU8BearAp1EjxEbuiQJYlENxAPiub9Us5iokP3KVFKTZIvz6KWcOwkSBGxMWm57DG2iQp51u_dnkQ0MSfajuRIUMBq2vFTnNgzKTvimkCJNbf3-parSYZEF5PVmbKrvWV7ksL3Qr1tTJluZBo5xJCTF_LJjgkLpuR5hGo6nH8XpAWjlCnRmbrgsXyZcav3OeCU4sVhVvyZp609q2MYcPYWcvlXwTA9zvMGk21sE04fZigZTAf1T9cXe8ksltYyaSemR6hs8TxAh3Bb2FdrY8gwEOv8IyOnStRbydA3BgXYVzRni9z6TSBXdE0eVAbfNsSCBaqJ5PUT4zwDFDDnw2k5Mn9BMZSVxoJb0L5TLqsRKDgovTrNsHhtiCwdsRYTM4uGY8xP2EfZ1Bat-Y7C1ipP16mgba6BbyGLTxAntLe_ZhTV6m4oIag6ytDK3cMdsCUKHqhcQa_SS_kg_jqDg4jJyR_UyzqZE_VKYJ5HqajaatZDat2K7uRH-6UJT6jPxovSRcsyurEWmVT6WNaFUiBRA5sc61H8E-jtKLh7vgVtS9lAL9agWL8ju05Jbn2vtYYqOiSCdZy_aioQY6li7eqMI2AfCaUkpZjvIvebmxAhNAlAQqiDArBePVdbmiH1108bOC8Gmn7plX8Yqr7G6GXOQ271yOAjdlzsBjuqmXXNQ1GnDlMQ9rk7LbpIel8uFZoFSfaBD-C559ZKIsEyjbc9mC3-aNa7kAwThfJjh3hsCVt1c0LWN5N3JkokdInSbS-VUZur397fvWY4iRJF2bmjyPY7gLqQRZYUOe1Tag-GHdgsOqhm6lauBFg0KlS-FS0BL_EOm7bgaa9GwNZFlnbEaLkUbioLticmnDCGDISeLZ4_7osRDKoM4kLVwHgTkDHjVAF2Sw2UooEPHkrHnAz4UlB6txiMKxNxWFmkrXjsT0CpDUn7fV-jXx9KfaN6NSVTZXSWloL7xoFO7y54-3wIjLv9CmbdnahpLQtu_g8ifgl38WrpQcoOtIyfn_xn_FFFIVugmk_GU3I8YgGELT5D3pTubp81a7tycL5fSyMDWRv6QdGxAarUp5E7Bu7PsnXfEORNXLbIFdIPX2aRVcxM7WRH_UtnHaPXE5nB8ETlLZC48OR_b7L1AZlBHo0q_AzD8u5g8C10oLcwEOeEPtjLbVWEIt3qvTeJ_1l1sfTlO-czHSIZigOUDCIDG9yiaEuiYCgWm4MNuW0B8x65SU0pr5-6laSHmWjYAsUrTlWMF6_V_7SrK8BmCm-9AFr6AjtbbBFlQC9IccA9aRd3WwIeIXD9VDpVG3WVQVSLpd8fW3wu_xfETNlvsPxIV2979gPC8tJ4-_iFOZ6gSmlJlz_JlwcouU8SJSVPmd0y6rCO28cnzZRcHiDonNQunrexvSAZx2Lm_6JtsyKobwuznJgHnQIhu8ThZbgwHSiIMOGrkW1SbzdmEnPoh-KYVsgn_jcHS5kJavCLn-lyDyPVFijG0v0TQl6skg-lQqAcdDdvTrqoMXJnhxXVG88h4VSaoT5vuO226PbiqJxnmQm6FdPqpcCEMTRro-BBeynOb6wOfQdB3GPf8AFZfl60gYQQ3Nz0BjNnhdew4EJJNQ-PgIIF5WBgIs7wCz_mtlbtLG8nBdkoy6KB--PWPY1nX_6y1ZXbc25sBJq9nGAnMum7404uvFOe6yxIFjEj_UoSUxu7j_LuuYCz8tGT4fHdP-s5UIrNt47qcjIf8yw4yJKRmqmNOb0_wT8hUiJvssSOeMCvZTolv1xClMyK_4cTWuI1zupdSPJX253F37sDsn65RgqlYCcRk3YKsczoWt5d7pz8-v8jn6wq0yO5QA_DAQ38Zz27rqLgx3HyMjtJAP8VG7a5EsAx4omCqkp2xHWec2K5klHQLZLoSJoBjOds-UgUUzoBlvTzOrd0DR3rXHG0rvt_K004iWzwzPOQlhLQGcxvQ0-cBzNBHnhOWOGHWV87EmVfMHPnCHQBXoas8f35mFL08Lm8omcbndco44b-zsNFUBx-LRX8OdqCdQ8FfG01W_JEusrwtb_ddJm83dIox6OU2ymeZC1CTaxBlDBJeHd4H0UuLgjCpoehVml33jkPC2jmaY8aoQ5Q0Y1CtzDg5wC38Zr9c33Rcf7Fpe7mCrNmRm3v9QuJFdPjE5XMoweMW7zt1pWYFK5yP81-oCxwmhSfvzbEeqR_yEq95rrQzWoh8QxyZfx7Dxi883gx3DcEdeqwR35XddEf8Hp45hjDmbAX0PR-kwRePa8mAwkQKSyW-MfiiDdpM_e3tx55b7XzSXxRWtNFrlNYp02b0dq6qDS05CTlk-yNMCcsrCk0WX0YbMwlv4YoG6XANmAoKKjrrW7ge1-JTfwdsZA-xrOOT1Bw7wpwyThLP8Mgh2DzC1RuWg3cYLjyM-l-gEMq3QkreFm2nGrJ0wcvfgUYhCrK4hiBxTFS9UkFX-7WbQuGWwv7gNGcmuLQFCN_1wcaLjv1uf99SYPk41e9Zb-9s4PueRCGKWFScslqhxH9QSegvW1EbOcwL0isjzWndNpQgXubq_nXbmLV3dzaGJo4mvDGB74IOAlXGU2Pv2bkLLCKl0mJ5sGN8Cxd8F4ZudCm5OnaXT11mfsDevsAam2ziiaMzdX7yKtEAwMSa_dmoFlT3KyLYAtjv7caas1uJCd_RM09BmvBZAiA-VOCG01rqnjBYizj3SUAWolDgjuRqa0B3EPiSgfI3LUQQBd4ya6Mm1SVmCFq4uNr1HU31wTSQklEtxxAEP7TxkSGAX-qwOucoaZ36mQAw6RO6MF4jxgepOnOGZ7Jm_6GbWAxinCl95Uie8T4wn5STCiVAufCMQL7JDP_sEQsUICqXPh6brK4DsCYewN716LYrjcV7cdKxZW88VoYf6Q7NYE95hD4xkmWOEaJUEp-ZzJWNBUuzWbubVFFZhH46iNkXIJN_sBOBIzBj5UpoLj3osEvOK_1tUxrr_nJqClPo_ugnc7ITisbDhb9jefkGpVrJySLsOb8NUFR5jEoRebF7C0bAJ19c_f9fwGsPR4GmsUBB0FfVtxHBZzUZM83zbD4ls3tOyvQc55HNmcJkS33dIe7onodIdYR-oUvQzjqqJNhBjsQMbm64of4GFNb-bPvIbJN3MTEG-0-93K7HDqZiiEnoZxJEU4Oz8Bpydl5d0GdwlHViKQ0TbAuvCXYmKGJlkgdOYM40IpmVyD8PGVs7chzpDdTfM95Ev9xTDRv1w-7Rn3w9OfIhbe8xlYysUuD63pCsNRqeEkKlrC0-5HKqKlzLAR9FlpficXzr3PUAtf-kWv5fYAgBUyxIr5w-Wa4TPqMVgR3Y3a0-HrdNtQ73r6xNAiBO--96dobPyyXMubwr8Sm9Beq4MmTmxKzSeMLBHIUOHNVr7DlZuUUqUMbLsuOEKMGkGe-u_BMCcAlnLZNwoEgmAW-6iilclnY3wnf-LVhCmMNPk0IJBocY9viPilWlQHt4AIFECReZYUWZNLrtbI_-5yZIh7Cx2d0azjW0CBpfL--SheA7Xp3O0zzfxMdlvrrSbo5JCTy7eVq7Vt5sKinHySIMWzNPuKxNA49tw1bChOvo2anJ8u64UIMc6Xqc7-t4FQDpXoyiIrY3_2sjxaW5MtI6tICAsyPXKzo30YvWdrcA5gM5bTO_lWFfjgF2SvMaFLmCDDWx5wU5d1eqnglms9F6D77jp8mBl7IO0bBsahSfzrkgL0GO8OqF-C8fqGhPGSOj5sioDElBBPn08Lvg2rw--76BjjxxjaNSs48ojIjCFXxYdW8jSxlO0Uk1JjmxuDBz8g8ZFQjeW5eBkFKN3yIo6JkqRk5F9HIK6HPkDLZh3Fi-3avI9ZIbtSU_jQmlSJ7rv0Ms7xMlJ8ZxCJO9f0PKrhA2"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 1297,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1297
+          }
+        ],
+        "promptTokenCount": 2314,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2314
+          }
+        ],
+        "thoughtsTokenCount": 3081,
+        "totalTokenCount": 6692,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.29074280208684705,
+      "invocationId": "e-50ec362e-5a81-4052-9627-828ed754d44c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "dfb89732-9cb1-4d40-bb89-11900873f06b",
+      "timestamp": 1788683624.5860398
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-14c5954c-feab-49da-a2e2-e448a9382efc",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.person",
+                  "bio-med-480108.OMOP_54_A.condition_occurrence"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-50ec362e-5a81-4052-9627-828ed754d44c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "dcdf00f8-b98c-431d-a4a2-137c5fe94ec2",
+      "timestamp": 1788683643.11715
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Aquí tienes la consulta SQL para BigQuery que calcula la media, la desviación estándar y los percentiles 25, 50 y 75 de la edad de los pacientes al momento del diagnóstico para el conjunto de condiciones clínicas que has proporcionado.\n\n```sql\nSELECT\n    CAST(AVG(age_at_diagnosis) AS FLOAT64) AS mean_age_at_diagnosis,\n    CAST(STDDEV(age_at_diagnosis) AS FLOAT64) AS stddev_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(age_at_diagnosis, 100)[OFFSET(25)] AS FLOAT64) AS p25_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(age_at_diagnosis, 100)[OFFSET(50)] AS FLOAT64) AS p50_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(age_at_diagnosis, 100)[OFFSET(75)] AS FLOAT64) AS p75_age_at_diagnosis\nFROM (\n    SELECT\n        EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth AS age_at_diagnosis\n    FROM\n        `condition_occurrence` AS co\n    JOIN\n        `person` AS p\n    ON\n        co.person_id = p.person_id\n    WHERE\n        co.condition_concept_id IN (\n            192691, 193323, 194700, 195771, 200687, 201254, 201530, 201531, 201820, 201826, 318712, 373999, 377821, 435216, 439770, 443012, 443412, 443592, 4008576, 4009780, 4024659, 4030061, 4034960, 4034962, 4047906, 4048202, 4058243, 4062685, 4062686, 4062687, 4063042, 4063043, 4079850, 4096041, 4096042, 4096668, 4096670, 4096671, 4099214, 4099215, 4099217, 4099334, 4099651, 4099652, 4099653, 4099741, 4102018, 4129378, 4129516, 4129519, 4130162, 4130164, 4130166, 4136889, 4137214, 4140808, 4143529, 4143689, 4143857, 4144583, 4145827, 4151281, 4151282, 4152858, 4155634, 4166381, 4178452, 4178790, 4192852, 4193704, 4196141, 4198296, 4200873, 4200875, 4202383, 4212631, 4221344, 4222222, 4222410, 4222547, 4222553, 4222687, 4222834, 4223303, 4223444, 4224254, 4224709, 4224723, 4225013, 4225055, 4225656, 4226245, 4227210, 4228102, 4228112, 4230254, 4231917, 4235410, 4237068, 4240589, 4245270, 4252384, 4263902, 4295011, 4304377, 4312138, 4321756, 4322638, 4325113, 4326434, 4327944, 40480000, 40482883, 40488810\n        )\n)\n```"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1890
+          }
+        ],
+        "cachedContentTokenCount": 1890,
+        "candidatesTokenCount": 1344,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1344
+          }
+        ],
+        "promptTokenCount": 6780,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6780
+          }
+        ],
+        "totalTokenCount": 8124,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.008647004053706215,
+      "invocationId": "e-50ec362e-5a81-4052-9627-828ed754d44c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "e65c75d0-9399-4497-80bb-66f34ce58510",
+      "timestamp": 1788683643.1201413
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y mejora la consulta SQL para BigQuery OMOP CDM 5.4 teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nLa consulta generada por el agente identifica correctamente las tablas principales (`condition_occurrence`, `person`) y la lógica para calcular la edad al diagnóstico. También emplea la función `APPROX_QUANTILES` de BigQuery, que es una forma eficiente de calcular percentiles. Sin embargo, la falla crítica es que la consulta del agente no agrupa los resultados por `condition_concept_id`. Esto significa que calcula la media, desviación estándar y percentiles para *todas las condiciones clínicas en conjunto*, en lugar de hacerlo *para cada condición clínica individualmente*, como lo hace la consulta Gold Standard y como se infiere de la pregunta clínica original ('distribución de edad... para un conjunto amplio de condiciones clínicas'). Además, omite la selección del nombre de la condición (`concept_name`), el `min_age` y `max_age`, que son elementos clave de la distribución solicitada y presentes en el Gold Standard.\n\nGenera directamente la consulta SQL SELECT corregida y ejecutable."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-de66e3bd-23ba-415f-b4ed-d35ff8636343",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "699b58ba-32ea-4b1c-810f-6adb202a8a82",
+      "timestamp": 1788683658.019567
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-510000d9-39fa-4306-af92-ffca87bfcfa1",
+              "args": {
+                "sql_query": "\nSELECT\n    co.condition_concept_id,\n    c.concept_name,\n    CAST(AVG(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS mean_age_at_diagnosis,\n    CAST(STDDEV(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS stddev_age_at_diagnosis,\n    CAST(MIN(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS min_age_at_diagnosis,\n    CAST(MAX(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS max_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth, 100)[OFFSET(25)] AS FLOAT64) AS p25_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth, 100)[OFFSET(50)] AS FLOAT64) AS p50_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth, 100)[OFFSET(75)] AS FLOAT64) AS p75_age_at_diagnosis\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS c\nON\n    co.condition_concept_id = c.concept_id\nWHERE\n    co.condition_concept_id IN (\n        192691, 193323, 194700, 195771, 200687, 201254, 201530, 201531, 201820, 201826, 318712, 373999, 377821, 435216, 439770, 443012, 443412, 443592, 4008576, 4009780, 4024659, 4030061, 4034960, 4034962, 4047906, 4048202, 4058243, 4062685, 4062686, 4062687, 4063042, 4063043, 4079850, 4096041, 4096042, 4096668, 4096670, 4096671, 4099214, 4099215, 4099217, 4099334, 4099651, 4099652, 4099653, 4099741, 4102018, 4129378, 4129516, 4129519, 4130162, 4130164, 4130166, 4136889, 4137214, 4140808, 4143529, 4143689, 4143857, 4144583, 4145827, 4151281, 4151282, 4152858, 4155634, 4166381, 4178452, 4178790, 4192852, 4193704, 4196141, 4198296, 4200873, 4200875, 4202383, 4212631, 4221344, 4222222, 4222410, 4222547, 4222553, 4222687, 4222834, 4223303, 4223444, 4224254, 4224709, 4224723, 4225013, 4225055, 4225656, 4226245, 4227210, 4228102, 4228112, 4230254, 4231917, 4235410, 4237068, 4240589, 4245270, 4252384, 4263902, 4295011, 4304377, 4312138, 4321756, 4322638, 4325113, 4326434, 4327944, 40480000, 40482883, 40488810\n    )\nGROUP BY\n    co.condition_concept_id,\n    c.concept_name\nORDER BY\n    co.condition_concept_id\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CqYaAY89a18YxSF9jxVQnXDvHTYWxrOaRZ6E3dlaFohKWp8EwZLVFvH_rW23fBFb_OZyxDxejXEcpoEBGiC-W_QH-2rUOeqep_YvpossJmbzGwWXOrFAlb7lGOt0qiPcU0wIvBjP8eArJGNYMI70rDodylTiE7_eiUDdqr_aJCNkQFnQrHJouUnkXVRKXqebU5O-jAA_16RDUVNX69fUBfRh8EpWtqBVxGwify9NyTre7tsTXlZQhu_OeF8Lw840Wwzju8mLdJKkPZtrl2TOLCooH0bxmhQMMCDwb2cSr_CJENFbkiQWrphDChKdjvsT7hlm1x6JzUT57ibrenFJwlQsFA3_pdfendOXphzlwL8EmesA28yH1E-lMv4aRKbB9jnwq60ovfSKhG5E9V_7HnFlxeOwVuGgHRfDrjaAYhPLF9fFRXEGvd-uHJH4OCUXAtiG8X9kanu5MuRHWLzvIZ2OpCo15OZn6U8zA44paRnh8_tFwPIkcKFXeWWIgJNqY8fX3cnxClaz7scwWsLniGkymT-Z1Z-Om5kVoKQK79ZYa_s5J-WYGXdGloWKL1mH0j9zLZrtcROSW1l461nxUTMOP2wuRxDrUxq7lxZe9JY-7hIQiZANsQZcTKBEpyDORU1TiUu8Zz4LbcSWXg9qNb-ixP5ffWCOsMean8ANjCk2dGxb6WYYfbETorw-fvCj9NMLT5k0hWcttmhtIcJxhA-x0y_sCf_pf3PRWs_NifzSQwz2JVxXdcaP_L702eJecyyiR1gdNdDtmxl5V8a5vCYkfTz9aKuo6f8jIaDzCyiotZDDD4lXIB9Hu0MCDGQtqC-aydTUFzxDEESnxLrkcklas-rv1xaW-eSEtxbxSQpXpFvsQA0v7YFzyuvSDwtq8rjqeg7JwcNvACvyL_gMJzXzyyVS6vMPqbEj8dgpfyZ5hsU1k-t5YCXasr9j9FjKG8GMRFzE_C6fjZjo4da6nNPrXMhwghf1XTDT6oeCt4zsI0rpVCThZXkGlGBIaz-qXVHsB-hftQ2RG5gf6P7gQojOhrw9hW0zNJ7CWgGvBxMJLIsFgzOb8mQI14osdTyJhOV-L6j2nTkqq4-jdSh5_PAnOT8y6LPtLDuxlRy3l2FbOAc4HHsy2KQFegP4gzF9BjpeLbaO1BBXuzr01pEOgcG-6Yve9kYD93y88Ug1fdiYvUhhJsbei5IuUcGSm6es2eivQ-7IMTG12l674eTnp3WuQsuw3MX7Rq2cL181N6AqW2A6YI0HBjLKbBLeopo5ngEd590TXEdTxYC58hupmb6U9xkVj5ZEx6tYk7n-8oqCpgu1jFXq3JvPX7t0DyIKO3U6_iFRWuZ_9Pgx6C9K53pcOhpIpIY8ZI2ao3gjpKshDGE2e5S8hvybDdOnBNjR2p9Sc8buKjasBixenwehX5ngMOXdujZ082ZFX8kEGO52j5dRWzvO8dQH1kob2zfUtPxhNY_FDuf6x5PLZZxeykxq8SoRNIT6TwwNSd0TmAGBgOVyjcC8LZr1fwlpc-fAfJc5pU5hIqo9zNU1sOalv9PpJF2Xn9gYl89UVg-ddgmQITTK79P3_udCD_rNWDRi5jvfrrjal9zy2gOwFXf6OR3_3_NhSk464kfMTdeu8Q05hVZWFeMp8N1tNuNif_8r3_LiCLIrv3HogpuUokIHlsnlc4keAPYsv73CF6TVkxZtfJN6kmBfsj-ZmzWR58wBuIP0zYfGJcPFmVz__TNw5abm5idCzf48SJ8ccO5BswlPEV-gEbJs9_NewQiGhNz2UGjCj7cqpsh9hXy_G66n3CB3vQZniubryGbI2IqwFVbfGO5uNTyGRgEf62Sp6rw1tTzNB3HVvTHObjR6RPD8jKlQjkXSXIqz-qUOanXn7YF5MICLKQPsNSAkYVvP83v8P3wr8tiV0tylDXK3bso_hyhm4VUgnm5fPuPWUnejvFszZMeTpr7rf99vKYLmvPEflvQpnJjVD5wHcXCHUE8Gml5QZ_fACCyXHFScIfxjAtNmcNkcdFoLcMphjYQMk7xWZYieKAAUzIRxOcWKNSKvVZKCTlZcgLcpuOXHH9Q_9uFGXbQL8hcpJc2jecviNPdxxZD3bR3zNTt4Eqs2Z5qnIiF7WDNvdEB7koadwXnV1OPHPVileDEffcYV7oNfp7R4zD0QxcN8Rvi28uc2HmmGRvzaXlw1PKsqsw8o3U1HSm-gxkFrUGFOnYLgWkr6v3oM_xYwa0_YiHSYYtKWXGoRqWCQZp-nNnHc1-S8utC10qJBmRjkT6GXmgiWhw024uItTfDXqmTqm24-4cKzLX00V_8vSf_LtH1lqYpDkjM0tdLrSSSfqMNFRE7RwT2CGPoaYrr7Edlth0T7H8t0iFoYEYZ_gyoj6L80ZvzgtSD1tUWbhpS4GqtNJIr5DrHzO1EG1upodkxqK90z7IWvjgVgcPYlZZ1M0It1UuJs3fcG7eE2-EaKf1XXrAfupYL5CEFuAKNvtI1O2UCD8ePkwVkr2JsPHB-XdqkNAOEwysHeflY1D7x2Y55K3nwSmaunMsj2YVbzsOYMyfLRVN6j_-0i_ZmOonfkifGL97HwxRu9W6vhlLy69FXGdNjt4cW6CZ7Q4M12pSB-ro82XOWT4dOnCc1_Xn3toRNLGymqCN3DmIWUFrTzB0wCfY9Y0pfBrxDEef0SlF6M9tpxO0xmjN1WjhJoup2IYltgQEp1NqxdXtX_2hFQ6K6qvA8wts_oEcVsPpHzEtvHaL_dJRcP72M3BKDRoMobOL0gwKnPhMAnZBbvtjTbar9863dgKG9Wb3nubSp-gUtNtupEogwSgdflvMMOCkW2g1DpgNztfNrP2ERJHVWnEaicDt5nHYwyMCLK3jmr8KXnu0TzaesANsql1v5x6d9j427kBR72wMNCodsHscKbN80emtpfCerrbgqXK-JsPN0w7zASDNwL4by8e-weXBzSU7-VYXWapXfL4-PHn1iVHdntDpi7_LGMVwY0Hk4PMzTCb7fNPwatHHQ27B_gU8CpA6hYx4EtR_RmdWX1PZ0DdSyezsMe0tzblqLBc2Njoc31D9o0ral0vFTn-b-6lnR9aDZic9ICUHDfRrSW4BbU2EXgdzfT422R0LCP3dn_hItgM8eSHP_vQ1K9hWHcenzBJOy5tXk7Xb4fa_Feg4Cdc1r7tltzwg6xaGMAgjep3qvqZvcH9US4d5R-s4KarsfTrwFdcv6_ZXU7lS6OBs22GFoJPkv41QQNcYIiepDCPIUSEeJEo7Fv4LKjJImHOUF-7HUaiqRE0H8PFqVmpHa1y7oIw-9jyb-w8O8LeU5S4KbWQNTfYjm08yQFJTSC3AcBxtytmsNJ6rPrIcRCEvVCqvAll8N_IyGUWEJZNfok_hMRtjgoearN8QrBUrTTCYyeawcc3_VzoaQZ5qKK4r1tu-VQsmCpeeTzi6H9MlStpnVEwgVc3cjAhebXP5ZuMbkhnflU3C_DUnbl5EPe2fCp4crdcwN4XIH4HMPHjLzsnylzve9JFM9-NUJ0zYSKjAawZVrn2sXiLsJ_WbSPUSPVAcH6kFIFwSgrCha1r6gq5qENVbd7Jjcx8OJ9sDuVbq7qdeExCXzRzhIGe63ZQsSSIjGyVv5YZXMo51KVQEBxfN__tpmWjkNgvCGNTgWl_FcpgzlXTiQ9vu2cXpfGfNw5xErxpfLg4RJoRMEp5EDEBKuMFlQVWsV7W8CBfzYJ9Nd1R4afRIDxxpAGxGu4UTf8-2OaM5HTuJLuXEr1gc2VlJKRZBa5QzbPNU5kdZ94gICx-yoRWrM1p6u9sBNLI4EjYqWtE5weLOwzMYWxfSyCUeNfX5WyFBDnGk_EWEWLJyqtQbarNrHB-1BJ0G3s249Dd7Li-UBE7yk71841sN32MTB7RUjbUV3bPcmYPqyWuGI6IoDHhUWM5MBxx4R9fsZ0vD7mNCbVgtjM399hABCbgSVklbxZhEmqOUM2SiM9BqGTKNFSd1CHZRfjlclvr1NXBcujMBiIVfN6uelj5J7qncbKFehL79Z3I5sFPBz3ZRVzCEWUF6A9D4JWLqyHLNZ1MST_vUXA4xd_Jnw_v9GP_ED9WqgM8QmpejpYfXFfbLGFB1BqHNu6LyAoh-9JeQM0gswYvXK_MSJriSI56dBqhAv9hVvSwCXAm_RiJcby2xPVe579tTUPzVq4wOlzaiuE-U0REr9uEGWOH19W2ZmV5b7AMUa938K5xqWT2J9ocMlfKjm2YnyrQwj7z-U6BOUXSr8GL2p14mdBZlxMrtFd3YWJGax-F28HnF31WJ4wTiOfI62PTd3lDNIn82CnW_FRyNP_40zJcpXsGQowDLN3mzDVAXrdO14LTCsKd1-8moLC7NlnF6PfdU6zPc9XPkeHwIOEjJBFlarpBr1eVuygJgOwHENkmu1tsfVXxkVU9Sn2hAPkxxwLJxA07MvX-YknmCoR1GTGByGOFH2fePZ0NKuA0G8Y"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 1496,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1496
+          }
+        ],
+        "promptTokenCount": 8364,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8364
+          }
+        ],
+        "thoughtsTokenCount": 1769,
+        "totalTokenCount": 11629,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.07408532739323091,
+      "invocationId": "e-de66e3bd-23ba-415f-b4ed-d35ff8636343",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "90a2a10e-ea99-404e-966c-335ca787e0ad",
+      "timestamp": 1788683658.0222948
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-510000d9-39fa-4306-af92-ffca87bfcfa1",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.condition_occurrence",
+                  "bio-med-480108.OMOP_54_A.person",
+                  "bio-med-480108.OMOP_54_A.concept"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-de66e3bd-23ba-415f-b4ed-d35ff8636343",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "f17115a3-f795-44a4-9016-3b4ac5aff4d6",
+      "timestamp": 1788683671.332475
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Gracias por la retroalimentación. Entiendo los puntos de mejora y he corregido la consulta SQL para BigQuery, agrupando los resultados por `condition_concept_id` y `concept_name`, e incluyendo el nombre de la condición, la edad mínima y máxima al diagnóstico, además de la media, desviación estándar y percentiles.\n\nAquí tienes la consulta SQL SELECT corregida y validada:\n\n```sql\nSELECT\n    co.condition_concept_id,\n    c.concept_name,\n    CAST(AVG(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS mean_age_at_diagnosis,\n    CAST(STDDEV(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS stddev_age_at_diagnosis,\n    CAST(MIN(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS min_age_at_diagnosis,\n    CAST(MAX(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) AS FLOAT64) AS max_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth, 100)[OFFSET(25)] AS FLOAT64) AS p25_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth, 100)[OFFSET(50)] AS FLOAT64) AS p50_age_at_diagnosis,\n    CAST(APPROX_QUANTILES(EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth, 100)[OFFSET(75)] AS FLOAT64) AS p75_age_at_diagnosis\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS c\nON\n    co.condition_concept_id = c.concept_id\nWHERE\n    co.condition_concept_id IN (\n        192691, 193323, 194700, 195771, 200687, 201254, 201530, 201531, 201820, 201826, 318712, 373999, 377821, 435216, 439770, 443012, 443412, 443592, 4008576, 4009780, 4024659, 4030061, 4034960, 4034962, 4047906, 4048202, 4058243, 4062685, 4062686, 4062687, 4063042, 4063043, 4079850, 4096041, 4096042, 4096668, 4096670, 4096671, 4099214, 4099215, 4099217, 4099334, 4099651, 4099652, 4099653, 4099741, 4102018, 4129378, 4129516, 4129519, 4130162, 4130164, 4130166, 4136889, 4137214, 4140808, 4143529, 4143689, 4143857, 4144583, 4145827, 4151281, 4151282, 4152858, 4155634, 4166381, 4178452, 4178790, 4192852, 4193704, 4196141, 4198296, 4200873, 4200875, 4202383, 4212631, 4221344, 4222222, 4222410, 4222547, 4222553, 4222687, 4222834, 4223303, 4223444, 4224254, 4224709, 4224723, 4225013, 4225055, 4225656, 4226245, 4227210, 4228102, 4228112, 4230254, 4231917, 4235410, 4237068, 4240589, 4245270, 4252384, 4263902, 4295011, 4304377, 4312138, 4321756, 4322638, 4325113, 4326434, 4327944, 40480000, 40482883, 40488810\n    )\nGROUP BY\n    co.condition_concept_id,\n    c.concept_name\nORDER BY\n    co.condition_concept_id\n```"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7760
+          }
+        ],
+        "cachedContentTokenCount": 7760,
+        "candidatesTokenCount": 1573,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1573
+          }
+        ],
+        "promptTokenCount": 11737,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 11737
+          }
+        ],
+        "totalTokenCount": 13310,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.01476602863522752,
+      "invocationId": "e-de66e3bd-23ba-415f-b4ed-d35ff8636343",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "55771073-49cf-4cfb-ac4e-e61da401a286",
+      "timestamp": 1788683671.3358443
+    }
+  ],
+  "lastUpdateTime": 1788683671.3358443
+}

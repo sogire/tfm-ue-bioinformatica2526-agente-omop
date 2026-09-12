@@ -1,0 +1,28 @@
+id_evaluacion: "querylibrary_G14"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_relationship"
+pregunta_lenguaje_natural: >-
+  Generar estadísticas de frecuencia sobre todos los tipos de relaciones ontológicas existentes entre conceptos en el vocabulario.
+sql_base_gold_standard: |
+  SELECT
+    cr.relationship_id  AS relationship_id,
+    c1.vocabulary_id    AS from_vocabulary_id,
+    c1.concept_class_id AS from_concept_class_id,
+    c2.vocabulary_id    AS to_vocabulary_id,
+    c2.concept_class_id AS to_concept_class_id,
+    COUNT(*)            AS num_records
+  FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS cr
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS c1 ON cr.concept_id_1 = c1.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS c2 ON cr.concept_id_2 = c2.concept_id
+  GROUP BY
+    cr.relationship_id,
+    c1.vocabulary_id,
+    c1.concept_class_id,
+    c2.vocabulary_id,
+    c2.concept_class_id
+  ORDER BY
+    cr.relationship_id,
+    c1.concept_class_id
+  ;
+concept_ids_gold_standard: ""

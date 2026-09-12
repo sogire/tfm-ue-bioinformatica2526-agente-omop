@@ -1,0 +1,32 @@
+id_evaluacion: "querylibrary_C02"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: "concept_synonym"
+pregunta_lenguaje_natural: >-
+  Buscar en el vocabulario conceptos estándar pertenecientes al dominio de condición clínica que contengan en su nombre la palabra clave 'pulmonary embolism'.
+sql_base_gold_standard: |
+  SELECT
+    t.entity_concept_id,
+    t.entity_name,
+    t.entity_code,
+    t.entity_concept_class,
+    t.entity_vocabulary_id
+  FROM (
+         SELECT
+           c.concept_id       AS entity_concept_id,
+           c.concept_name     AS entity_name,
+           c.concept_code     AS entity_code,
+           c.concept_class_id AS entity_concept_class,
+           c.vocabulary_id    AS entity_vocabulary_id
+         FROM `bio-med-480108.OMOP_54_A.concept` AS c
+           LEFT JOIN `bio-med-480108.OMOP_54_A.concept_synonym` AS s ON c.concept_id = s.concept_id
+         WHERE
+            c.invalid_reason IS NULL AND
+           (c.vocabulary_id IN ('SNOMED', 'MedDRA') OR lower(c.concept_class_id) = 'clinical finding') AND
+           c.concept_class_id IS NOT NULL AND
+           (lower(c.concept_name) LIKE '%myocardial infarction%' OR
+            lower(s.concept_synonym_name) LIKE '%myocardial infarction%')
+       ) t
+  ORDER BY t.entity_vocabulary_id, t.entity_name
+  ;
+concept_ids_gold_standard: ""

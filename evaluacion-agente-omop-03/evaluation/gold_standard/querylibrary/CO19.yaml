@@ -1,0 +1,14 @@
+id_evaluacion: "querylibrary_CO19"
+nivel_complejidad: "intermedia"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar las ocurrencias de condiciones clínicas registradas agrupadas cronológicamente por mes de observación.
+sql_base_gold_standard: |
+  SELECT 
+    MONTH(condition_start_date) month_number, 
+    COUNT(*) AS number_of_conditions_in_month
+  FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+  GROUP BY MONTH(condition_start_date)
+  ORDER BY 1;
+concept_ids_gold_standard: ""

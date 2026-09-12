@@ -1,0 +1,24 @@
+id_evaluacion: "querylibrary_G09"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Listar todos los conceptos descendientes jerárquicos del concepto de hemorragia gastrointestinal en las taxonomías del vocabulario.
+sql_base_gold_standard: |
+  SELECT
+    c.concept_id               AS descendant_concept_id,
+    c.concept_name             AS descendant_concept_name,
+    c.concept_code             AS descendant_concept_code,
+    c.concept_class_id         AS descendant_concept_class_id,
+    c.vocabulary_id            AS vocabulary_id,
+    a.min_levels_of_separation AS min_separation,
+    a.max_levels_of_separation AS max_separation
+  FROM `bio-med-480108.OMOP_54_A.concept_ancestor` AS a
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS c ON a.descendant_concept_id = c.concept_id
+  WHERE 
+    a.ancestor_concept_id != a.descendant_concept_id AND 
+    a.ancestor_concept_id = 192671 AND 
+    c.invalid_reason IS NULL
+  ORDER BY vocabulary_id, min_separation
+  ;
+concept_ids_gold_standard: "192671"

@@ -1,0 +1,863 @@
+{
+  "id": "94c7b023-f14d-4718-ae41-c3eeb8f15988",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Identificar todos los medicamentos aprobados o indicados para el tratamiento de una condición clínica específica (a partir del concepto de indicación para cicloserina). Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "bd179ee4-fc9d-4402-8f2b-c632ad6514e6",
+      "timestamp": 1788684797.4605463
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-ee904a7f-9f29-4ffc-9dd6-96230a5d123d",
+              "args": {
+                "domain_id": "Condition",
+                "query": "Cycloserine indication"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CvAhAY89a18Z6jsPtOcET5j582JI3mAyS2p7yEJ2J_pT44p9wg9Rp2_7cy1ZX6Q7TbPIO8DVfPk7dw1jmc6h1gEasdXzAQSFN0PdNHABZS6jfmrRueJcMggFce_INAIwvrG4Y6Fdz2Hiei2kx189k6raITds4bFBZ2vmpkaOoH6D5kwwF3LcM9DW_-HOL9iohVvRwcuxaaTqJCoyp589IBqmP8Ce9jPl9E-gZsaYOB03r4S8EnSups52wamm7OQCf1YCibIcjvpHWKq26xK1uDEDlWHA8581OuzW6tJTzx_ew6iPxzFyXbB87PehBs06nDIe0xPGq3_tVhtu5U8ndHegdHqCf2r7YLg8zJO3LnsZ7G8WP6JmwI-C_EsPULUEEXCFHH5p3tFLlq8C36LCVXpKqSbIlvCQlGgGXoxsgiFUXPWjY8QZF5H-bKjQcGtLaMXOHXm09kF7gRochwJKbqijYRSI0OHcYopLkNikN95dimAW8OtmvjmsjdApTb3Q3lpbxjA1WNr29iSvjylcW-fyhBB-d9nXrNuCDzZv-b3iygIdqyUy_gALBX9RkyYExuFCQ6XfBXRgzGodx958ocvBMnBEUSY8LBh81Oi2xZccqAuiv0RABrdb2kIMhv1UeE8kIz0OiyJg-y2ydlmuo57uZG7ue1o9A4Yg1rt61INs1wLcRyhMxZq0jh1icTyXCrdIe6GILFSO2o9HyZLa9dmRtWhBHmDR7REPxjgaNDB1gIf1GxPnQ_tCznUyV1G1zfKWEZJC7vwyT1f7RgtsCc734p7Gl460kSK1rchWbtQpbGHkMzMMWXxM-lmc4DjkdBeC6y9L1oJL391udGH1mU_wOdeewvwJW5diWQVoNpzr1l-Gk5t2os0yvBVD_iSeKU6N15uK1QeoeUkBAGxIfFgCtwxjIPoZlCDOJQVeP2YlZWI6CUxYMFD2OPkexaYj_iEUvFYUjz6itl5eDamHvT6SCH_H4KRsNfJMBb8nRypIsNymcT4fz-5inHJ_Q1ep_tIxlBeuXGLEQgo4Itsho76j4KyUjWyjBvxPr7xlI-5uO8_zgUh1-M7RH5Pp7WW1jHTWrSMO3qoLdJZDxozxerETgpiIuTHm4nKyzRVYV5bvCBz0VhZ5SmrkmHrvXHW7rIsxi_453GoUVoernFyZviFPSOBxOzJR_COMi-m0qEXtEbaIh533j4L9PJ8FWSpBICuUkcXoivl8k4aSkycEGM7552fZhXdbQlGxi4VkHVScisa1--oqBcECA3q0Hw9tgrKc0dtifLvPzfb-7tI4M8HaKdrjKdzaTVzYzumIJC0j4FD3WFXBGMniGVlNfSxbhS7AP5F1PKdYkG62yQDzg7SfV7F7o9gj3mtjKEUgxTbsOagO54rC8xLWDmahtftGjoOUDUAxzJgRTiw9i6gaIv_e0tP0pvMOA4nr_5xabYq-5VZjvoP9gP-zeXpWFcAvoPp6sWt8a7pQXUGQ4JfNiTLJDcd34XDcXgRyl-nwms3VsOL7V0MAoGl9VhNGZ8ByyjSjHg1G6xLCRzE0mbjKtP4OlS0vBkBfbqF9jG3Afur5eOr02KrHd6OhtcCMtzZ0aOmJS1YJ1DUO6LxjCsJC5uJFirGLAGRsTC5_H55cyFJklz6CAVlkxZKCzXmc138Dtjl-ZN87YeWeindaZG9z3ho9ff0xtiuv0oaXMyigYNS7RIzZxKn-WFMdcr8l0uqA2bvjc1m_GcNfFR_7EZEWQiLqugg0WvAKlqap_oqO2RRVu5z3y6tY-uzktlRDQuK9RItSqUfkZRhq3CGB57md9SqZ6Mc7kU7j8XaxbNv0m6RL5HbwkBadvCjKy6DX_BEEcmLpSTwp1mYHMYaBY-xLJdrfB2LZHJQteNcbdYgoZWnQHc7K66CTiN3_n79JL04JcAjVAjLEzJXnNqKRO7wlda0RnsyGJ-b2Zaq5ifbGwKguyMkk6Nh4cYVqdfkTXVCl47BNXXkcO4DmcKiOG0k5zVelsSLSKVxlF4HkSJdArQjLWJeiOpsUJ1b7eGSkPFzVTbzvla4Xu083ZQmpAvYYjYgYNVNA1HkHCirXJ0Y80YaRwyCvNeXbbPJoprbNKQp0VTXrbN_h9ZfujznDBR-td7Bls4vWW4dwGqdXr6gRpdnkM2HcLrWCIOB5qprDag4seawWZGYEjGTyf4626bdO_tnVOqmGrecKOB2PrcO74ZtaD70oo7UhbFOlIxeLmzUamV-Lr_Qt0MCW-WrhFHE-dizxhIrq0KIxO0npFZTi7HEKVdl86GcLdzoMtcwHUvWqNE-6aGG1oz6qf-60kyCJkU9ZO9sKKyyqkzIclcBd7tx5Vfm8zHmGJZlmnxFqQ5ENvrCTh8FH7LqDxCYsCjtMdiFUs_44KWhtlXIHOxrAWj51f5JdRtBB4YYU3K9HsqGx60k-esBFyhM8a9c826YARZobJjAEAIHAp_7vmSPs1ipvYYyiFV_bpBZhN74WcZGSwPuzT1209AbqUHPbvo_XJ_df0r_ZtWi_gxzRcFl3-qJp97mVgor-jS9msVVboKnLVV2Dho-FyUfwbgCGbQdfr1eInVU5lhwtGtRl60Y6ezhUtK-MPCTrKG4mFzHpnNH49I8wYzeCdNuwaCEL6yexzf12pIsz6YlRDOkV0RULu5DAacRdjNYeUWLs9IbQJfG0UsOSuhxMbwPyE0tf8Y2P42KVn42GabvUUpt5RcQzz0N3vAYoFFrHMF1MKEl0rs6FGGKnjwwFuUCj_velo7wBRCGwR_1fpwiQ_9W7mMTacjIXgxLPaa29sB2ZuwZf1QEgQF83JQXpT7e31s7DPz9Ldnx5xzqmGBW5Kak2b8nXtrwu9Tt1eB14k0Zyh3kCJeSHyeDPFBh2H5I5R0wEH3KKlGRwWVoINh54kOVvTzZeLvei5EOW-wLJoYQuar8uAwNQM67EwwRUqIL7GNyTxoY3OxvRk3OYmW_KGbaH_6hePEL0rQ4zbqmRvrHqyHpuGCHCdqQFumkSqvP1FKxOuMGrwtuu_gRJXdPD3PrCmlAMoojwRZ9mxy0SkL3E4rDfZnd2QvE4oZ5ia09BDP7DDFNLbkwA8HciMp7vXFxk34nJoDxs__w7dL3BOWfdFgs44hDnR-ZpEzQ7VHq7t1dx15lVDZH_T0KuVC02Nc3VrACu1cPtjEwjq_gPibR5JytFMuN2ijnLqVPnfgk9IRMbkdnY_IJr9sETvCtVI_aiKf4bZrur7LfYhhNrlpkXCBQhLTH9S-g_xfxUiYjLOhh48e7wpeFzunxaX_PKKkdF61T_jnK-qImR3l8R5EU_rdKfG-fNNsTU7EFFpcKGDrhotPyVgH69k5eBhKa15lp6Q-3VqrweEBU1SU4Ox1GoqHOUflKJJ1OMzdTu9qnpo7DlAms4onvAS0_N0M17lR7wdI_22U3OxSefaXHfYD8EdsyzJD8i55XqNfGe3P3bCZp90JbrKrqC1USoWUI2HLr9T_qbDesIe3nWkPXU0kRicIB1V7ky2wTNgYLoVZ4fIkSju4jRN67eifSd6Z_75Zp6jkPoyakAK0vqYC0n1oRA9Yi9tmGQAdhEa3gR-k-xGdZbsrFy25Ny_bllLOmMr-7kpUzXlQn28Dc4WYsMBKQu7pONAXny-Hfrx7GFGVMeThB9TlqvWAmdiLKgAvxX3cSB41u9g5cMwO0JQodk3nH5xjhzfkgsu7DR9rcCFkp1UAM4xKb4x7kSqbdeBlqagBoVV2bgS82uV_Izjppq4pdc-1ZCHKjH07U9vdfC2o9i3ScPAQW3BEIDHcw6oP_DlhARxZrRQ9p9UQvkCquVsl-4cLxvIPJI3-sV8Q05xmEnnzYdg4ZJvjL5Dz89vOcbtHTNCyQp86wbOyxyPg__q7YD46fDczvCIC8mvBYRkGglvzdF5FXfTB04oF76FaY-wLqPvqwGKfJ6ElqheZNQTFLcIVw_QzHOgTLwrZWY1Fy6VVtRl_x1u5n2t01Gj1aP2ew_3LZAhnrygptzlerQf30AfNI5ecfqlhwmrhQAXGfF3WQ8yaLFYKaN8l9pQbp97CTQE9hKo9ZQuDyKvoom7E3fXKeu8ToCiXnHMf1ee4OcKam1MOTLD7mslRPlspD3pYHAalTxEUGE7mMAs5moVoVtLo9qrmYZoGsXs5pW9TEWE-CMcG53eSo33nB5LKhB4QzZZIR00bnB8roAamzkRzFWf27v14tX8R5nP3C0cxq_UQFMLWzO7bpHik45PXRXibO97AKS6VkGRnFbswZUSrmw1nHn7PooDmlsT4pOYHfKuK0iPLNBVEiYi8bH0k2EnCjx-ADvsEGRdaljDz3pD2D_1nEOq4KhXTtvUAT1HogZkiUYpYavREghRL3GOGqvSVgyUTnB-0QZEi8wcWL9Dp7cIduNMlNsOK9s1bsteTYQKjbXBfe4KLQvo0m4GFPZgh6I9-5qfCLyNx3NWmxAL8xwFXcndoCuBO3V2ZWoql0wZ9mvEOlLUXuMnkxYDlKkvDyGNsjpyqlXlBAO11ZWcQgRhAmoNPeyFKKhnS102q3fUPgs8RaAWt7IVQrxDYY0jg4mClppBw45fy92164UiIVjNm9aTp9X59uwLimejeQR27PrQcc48uo3dFOEH2EiZlBjVOi5I7U4QrvfsatfVYsbNQT7RVgZvZKmfT2DymYXN66ilhAajSRoqGXWf6QE6KlE2jSzwAt2UDE_WctNLrqubNcH5DWQ5ozH7rEeJokxETKJLqCfAfKp6rQEWfb8R-cDV2KTe9rdE01G41tAV9DfgUkLrK1dMpZE9z-R_iPVa1ylJU4G6Ep4m9o00IQLtG6xQHIaKfKP-rltyvdO7z80hnMqo-tTTABKAftm0zhYu1YPG6NxTGN_lcCKKNwdM89N9VlbuzoJR5MV3m4GCa6mEh5slZrcifhvsK66NHS0FbvEfeF7bFga5RfnJGo4hrgYmgLwOyimjCnzVBw7jTB864wzYz4wZGG9YqJmVbFAXX_zKSRta8wGITNUQKrutk7kqaneoYtOWrSuGqj89UhT-sat9iB5Qren0iPl-D1i_buFEMkGlFVYROtYzDzgxKDWBxQMLhDr6vHQpPNDorTWR6YYI9hhIzWM37iy5Oawn0dinyTKpLo5_aWHHVXWMEnKNuzIQpyUSkXxnBPPvdXUtVzQ_U2daa0h-rr6tez417a8T4R-E-hEuHYAgd9SYAxlbBY3dwhf1cWLtEPemyF7ISKudkFXe0qKlOIZ5bS4NbfNqkT9cm-4OC_UAdNweAOVZGKHsJmTKmPXU1NTN3i4mDYr_ivgmcxmCjLAtjcvsodZkI6rzwaKT-ORUEzNMvH2-QNz7vRzpxzEshaYMgbiYJTdyS85BTSaWWn88KMrqtBsYJiRE1MMy6pcQpHeLXAeJi29GJs4Y0Ap3M0No0lN61Be5aBSU0k83aGqQQNpqEZ09CaGXJW9AKVSBvUDNjVDQYUu_lC5UlbN_cIbge_hjVdH3dX31Aio-rpyIYadJBjQvB9K7NioapXhV7TqpMzSAoUqp5u_DfW-QYfWBQzHmepaqsayGqNMzVJi9Wy5jyzdUgJV-_JZVuJMuDcliy_l0M3i4HxebKS1NM1iZj4zJ9XmzTZU6K0_yQW4s4WAOKqgFwV4aL47y1b5YBjBwSrzVnPotnsj3IFusjw9fDjHjn14mR7zSIaAkrFepTEeDPj3X23EtvB7adSvgvTWAr5UqAHqHkksi8RaTx4qqzyveDvNaqafiqxL1TSQy7H1GCWOoy0wDJyf2g=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 734
+          }
+        ],
+        "cachedContentTokenCount": 734,
+        "candidatesTokenCount": 17,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 17
+          }
+        ],
+        "promptTokenCount": 1260,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1260
+          }
+        ],
+        "thoughtsTokenCount": 965,
+        "totalTokenCount": 2242,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -25.22294526941636,
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "4ae76757-9315-4d58-9c1c-6bb3a3967699",
+      "timestamp": 1788684797.4618375
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-ee904a7f-9f29-4ffc-9dd6-96230a5d123d",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "662c92b6-b0b8-4be0-990e-17e6e10a314e",
+      "timestamp": 1788684804.9042213
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-015c7091-8eb2-448c-9f5c-fb463d2a32e1",
+              "args": {
+                "domain_id": "Drug",
+                "vocabulary_id": "RxNorm",
+                "query": "Cycloserine"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "Cv4JAY89a1_V2wRTPbw7JfYP5G4R4_tJAFuQzNOZHiCI0McQcqFAV_WnxLpqbAOuQDnQUqPT3-dCzAJzzgDsgcYsNB39RYHY8GnSQwuyvBa7vRqSF0URCnt3ZZ0qn2WpbSmAATFrJQJKAqvI1Qrp74afIujLaSdlH6Qg2GmwychW-1tSUPqk3UbIBvwXSjO_Nb3AWgxzdmSjVfdakmMn4h5RPWSi2Kf0JaLmDhbZdFZawEPZf9g46nwxVESPYUSRTC7_hSkVNRMOBi9So_yzMVRMd9LqgOiF8yQbi__QANox6mlMnWzDZcMNc77li6JEZzPEMHa_m5seeGXu7OJ3ldMiDOMb4NgfmFQeKYC3SJ7URL27tgGzIha4oYu1NCrwwNBRC-ijmzniyJ3CQaJlJ0ocSoqT0c1cChjNZohEysTH0qq6yioHItAWLQOxQY4-QHU2EPcFVAcGeAbdBjUfVc6vrT7W6fvnsT0uUKaxVnP_0UWyEZFQM_wVCpAOD6zgDnfwuX_xHLtgW7bv83N7F3iRomo8FmgzMn3EKpnc2lMZBfN-6kErlMZLnxD8a4plNnj-UdO8-5r7RZlldqGAZnVHF_vt-Hp0WNtGFdUbklZeQLYFOY-RX8EkZDhKuSwSoe_rjLQLyUl1F5GkzDHToD8tQlPUm_yA81lAzc6Iy3aI2QYdq7seSsa9Ejc8eS1NLukTZJ00BpsYIpF_baI3osM3LZ_rL_Wib3H6zExNVecowh7i4PB6QsLfHBQ4oeoBmfGTGs8oSalJ0Xe5QmBVB1pAqYoBnX332478QUN88aizOY0Ptsdy7q8crRgReCSG61ohTJy6iZHSQpW48SLQarCqB1SGKXF_TVyfLPdF5RhoeYaOx6aD5Pz6wJgspc8rCx4dXQmE2RW03aztmjav4RSW5W3pVgKdu_LfB4wZ8tc-F-4IbeRZbHxXpGoutfFaxuZActdWnxvsSO-wPKFtTGFbN8oEmt39atEirV11GVyK-sfvKZfuHUYZhZ6FH_DpuCG3ULOa5Bu9zjylFGq-BGNVmRfRCzEZiPAV2rHSdS2wHe3-JLGhsjAMhoaBqRplrx41-Hrj8556HxByUy5u0-g6nqf9jnuIFuPRocSx26Q9gQt68qtFxxN0lt17iEjUeApt-BCxTr5FLEsfcrwXE0_UuExmJtj2c7LAbtzBupJ_wDtuFWRl-T0vqzeyTwDuH2BldUj8TBDy9189prLNQ-G0kMAU2wE0o1M629o8b09Y_M431YwgDbOzVLeCBQfCGHj5PyXWLeO0JlaF7UsGtuKmMQJaufK9xDet5dYkhy_J8xg6x_Eki9XAFHNyLUFm_QARRTMnp3v8z2JzlXJew8xl6mWrMW1fCbJaKXTBIKTPk_e85BHk9Iz9zR-hTv9JomGDmy7QYIIfFtrefcCdO-eQw9WI_ATZXKMLcU9bmiUmnhOOe2N4UQxVYuoDQLihYwXRrSZ7CwMuECQhtZrfxUiC4LGP2GGM4P8vIAhUxKVDb2tey0ePXpyYx04M7NHQD4p6zcw0u7dp64sSBcI_6CDn5hvypU9lTkn0lSskeIj7wOIkx8gEmnSO6Fq7lGCjKj23FHVg9X4AF4ltsREkE9c133yPVHS3qeuCYIdnJynD8gWmiOPzziBkCHBGNhvOuJPZxdiopnq6tj7v0Y1N8E4baf7SiAi_EbbfRudNUGGJ"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 21,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 21
+          }
+        ],
+        "promptTokenCount": 2369,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2369
+          }
+        ],
+        "thoughtsTokenCount": 279,
+        "totalTokenCount": 2669,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -5.495067051478794,
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "5de4c3d5-0662-4583-b38d-a909c3ded19b",
+      "timestamp": 1788684804.9079943
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-015c7091-8eb2-448c-9f5c-fb463d2a32e1",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 9,
+                "concepts": [
+                  {
+                    "concept_id": 1710446,
+                    "concept_name": "cycloserine",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19098936,
+                    "concept_name": "cycloserine 125 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1710449,
+                    "concept_name": "cycloserine 250 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40028490,
+                    "concept_name": "cycloserine Oral Capsule",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19048575,
+                    "concept_name": "cycloserine 250 MG [Seromycin]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19001373,
+                    "concept_name": "cycloserine 125 MG Oral Capsule",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1710447,
+                    "concept_name": "cycloserine 250 MG Oral Capsule",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40028491,
+                    "concept_name": "cycloserine Oral Capsule [Seromycin]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1710448,
+                    "concept_name": "cycloserine 250 MG Oral Capsule [Seromycin]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  }
+                ],
+                "filters": {
+                  "vocab": "RxNorm",
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "b7f0cf9a-3aff-43bb-bbba-9f45296dee47",
+      "timestamp": 1788684807.8161583
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-b42520eb-3ccb-4641-aeca-8070968804b2",
+              "args": {
+                "query": "Tuberculosis",
+                "vocabulary_id": "SNOMED",
+                "domain_id": "Condition"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CqIEAY89a19k--Kr5m5GvGV7UdW-OhNR9G0g-VrYCcFVoefChEiO3UEkJZ7t4DC-9X3-zNB60qmRDPlM-GFpJFa6nfw9LQ7TYm84rUsSIWgzQlcNNVd7Ux2SmM6QNM-myoPhgJm48HsKoTxKVOJ_iGQpTFHImlF931rxytXxy2z2S-_wyB2t-IVwMW_aYXyeZ708FCE7ZJN-ORy-Gre9Fw0ox8x1V4aokruJDPqMtrXhFeJEE47eQhGoTM6OlOhu1mQ0njJwrr6ta7GPa5_0lQzs5SsbbQH4uz72QFNxNCzLi85EDnfneuJiKSkCpzNevHoK4-74hRWkHnTCe6zJj2hlz4qNIbzq55tBAOAgCDeKs01ffzfAwEcG7WfA07pH00kcLUIlYuu-XryIeXjIUS_q-m3Q2pw5r01KwIuB07NJUr8Sp4GEmfXuKlEc2nJKLc5_Po7Vu6uX1K7r7oRC6yAZ8tIwVsQSOHF4B1D29ewxtYJVc9oyib_wCgKcg3qPRaFOA8GeBXQoPNukg_zoA2i_gsFF4wxDpJiTpjQxqMTyhnP0bemXFqRhW-JEX24gyoLLh9w440SU9VHX-Vmt896CduhmuJ5cIbMp_bpTWoI5uD5dBQ6saNkR0Xyh-UhSsH6PxWU7Lf9EfXQnmAaGKp_BjBV-hYiD32ZO6Ue1Tj5_2pYY_Ouz-fM2yuURqwNvFtbv9Qu8UoPjdsBBGsfbryqKLeSQ"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1607
+          }
+        ],
+        "cachedContentTokenCount": 1607,
+        "candidatesTokenCount": 21,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 21
+          }
+        ],
+        "promptTokenCount": 3018,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3018
+          }
+        ],
+        "thoughtsTokenCount": 107,
+        "totalTokenCount": 3146,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.3160340445382253,
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "7d64f9db-c851-40e4-8c76-fed447b132d4",
+      "timestamp": 1788684807.8190923
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-b42520eb-3ccb-4641-aeca-8070968804b2",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 40,
+                "concepts": [
+                  {
+                    "concept_id": 434557,
+                    "concept_name": "Tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4123592,
+                    "concept_name": "Oral tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4103588,
+                    "concept_name": "Acute tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4119932,
+                    "concept_name": "Silicotuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4279550,
+                    "concept_name": "Pseudotuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4141802,
+                    "concept_name": "Active tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 374270,
+                    "concept_name": "Tuberculosis of eye",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 378953,
+                    "concept_name": "Tuberculosis of ear",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 78672,
+                    "concept_name": "Tuberculosis of hip",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4214988,
+                    "concept_name": "Tuberculosis of anus",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4105875,
+                    "concept_name": "Genital tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 432541,
+                    "concept_name": "Primary tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4044594,
+                    "concept_name": "Chronic tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 73122,
+                    "concept_name": "Tuberculosis of knee",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 80626,
+                    "concept_name": "Tuberculosis of bone",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4171577,
+                    "concept_name": "Tuberculosis of nose",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 137205,
+                    "concept_name": "Tuberculosis of skin",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 434559,
+                    "concept_name": "Miliary tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4200662,
+                    "concept_name": "Tuberculosis of heart",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4091181,
+                    "concept_name": "Tuberculosis of liver",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37161111,
+                    "concept_name": "Tuberculosis of penis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4130374,
+                    "concept_name": "Tuberculosis of brain",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37164700,
+                    "concept_name": "Tuberculosis of orbit",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37169539,
+                    "concept_name": "Neonatal tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37162648,
+                    "concept_name": "Gingival tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4003404,
+                    "concept_name": "Inactive tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4200644,
+                    "concept_name": "Tuberculosis of colon",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4224748,
+                    "concept_name": "Tuberculosis of testis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4251787,
+                    "concept_name": "Tuberculosis of rectum",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4034179,
+                    "concept_name": "Tuberculosis of breast",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 193955,
+                    "concept_name": "Tuberculosis of kidney",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 195176,
+                    "concept_name": "Tuberculosis of spleen",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 261495,
+                    "concept_name": "Tuberculosis of pleura",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 198957,
+                    "concept_name": "Tuberculosis of ureter",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 253954,
+                    "concept_name": "Pulmonary tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 40480487,
+                    "concept_name": "Orificial tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4207953,
+                    "concept_name": "Tuberculosis of glottis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4091180,
+                    "concept_name": "Tuberculosis of stomach",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 40492320,
+                    "concept_name": "Tuberculosis of abdomen",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4290195,
+                    "concept_name": "Congenital tuberculosis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  }
+                ],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "100a758a-cc83-4b44-ae8e-18c75af6c032",
+      "timestamp": 1788684809.7262824
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Which of these concepts best represents your study variable?\n\n| Concept ID | Concept Name | Domain |\n|:-----------|:-------------|:-------|\n| 434557     | Tuberculosis | Condition |\n| 4123592    | Oral tuberculosis | Condition |\n| 4103588    | Acute tuberculosis | Condition |\n| 4119932    | Silicotuberculosis | Condition |\n| 4279550    | Pseudotuberculosis | Condition |",
+            "thoughtSignature": "CpQJAY89a1-mBlp9y2C4Pzf74DUx9EDFONSwVX0dT8fms47P1pPMl1kCwSs-qNSZxc52MF7FvANvgnNY453yDuTvCZLXWqUH2JcvefZ_lJg77jvTeDd02qUP6ZPSOpDRuZspbshYC7qKDPd7bnTsFOcuOJC9zt8QZJf0ZEUI3khElctfK6OqwlzBdrWFwdHWfSSIibx5eQDss8uMxhXRfxFiG6KVN4eILEUaPYVlJF48kqDRt7xMV5Rg0Q8OX1htVsmx73sq2lvxDM3A7WnNnx0aOZ0yEfRSkXYaEm5Y-izIbo6vjjoOtJSDdyGXDmA7Nbq3IyvdLfMhE4MJcWQfGhp1ksFyqiRl5LFiaj8EiSvQr16YwWK0GdLmyI_DsTYh3E7nh1FxhPBuusr-72ijFcmLZ_UukuFPBcLWfxzUiak6Qht6MjJhAQ0HntTdmsm87rHsPB8EsZRQTjpKBZh91UVNJq_29NnK6ui_zVHvk1Ryx3_hsepPi3BYdQ2tMRsY0CMMcJCmzXL2ObE9VBBoskl3BgjUHKTmEuhkqFfEs5cXNWZmh-6ohs_rvC4dTOW9UEVGIsxv7WEo9aJ10CAT_kk-xCvJYwxAnBtpKhFGnRyjGQ1j_c_Ue_zNK5jSqJfs6KfvuiODG9WleM85TRYiTuoUXVABiAHt3mtTFsNpE7pKKlEVvKaplSgHUp3R05uIi8H8wYc9ZE5HiVS-55FVv_oz9Ju1MLr2vESdJC2Ya0y_excMgbF7Uh2PKFFtJ7Xfop26WoIOb_1zfHBb2X_e_X--WqPS7yiJLrv7NWtc-KuTrOqbmWxylQqddtHNuuBs-MNpHm_FwGm4wdoFw2oHR9Tw89npxcm02yR2vRyfcjL1orcE9n0tCZT2tUcL9K5fEqPaxJ1BUBTbGIxT3cToXXANq66XG_NJzuyjULgz0asuM-Repo8hGI0wHYTKLNNHjueyiY2SgO7bjB0FQBcuB_UiwWPCZFE-6LcD-S2PzxJWqbmwvjVquN_lZYQSiNQOTJweJWtS_fHQX7KyXgF2QtJdpPk-B7Zhu2bxY8ztYrf6q2CdsbRIAT-XFIWGXTerxoo7Z3dOZrhDLMA6ieEWL1DMbduzFQQtmeBpl969bWjHoj6AzGsiafyw3uST9y72n_SP8NruLIh71QwYblNg9M_gBHUIWxT_ieL-j9AKzSM9Pms48bGy4tEBPHTn3HsBrVd9V2GeHlzKeTa9hhK5L52LGLM54sRuDxPjUc9E821iknOIFtmZpEpGXToefyF--ksjSW7-hAHelRngRT9gZ7qr3atrvBfdVAGGukx5TJZ5RLYNZ5Az7lC6XhjEuPfmfJLPEhsJk-d1gHUdsT622IqhdTJItEd-1oSkFEk6l62ViBGUjVVzVCZvB4JHNLZrGpE6SAKmXIPChrimxT5SUJELIaiPq-OC2JFTkckccAD2PnM88vGZvFKJqRnRMtaosA9A5S8uj5xKOX7wB5Ivh8z4UodvCfZcGZEHMoID1VgcQyUdkBxmdP8a7b4Jwj6bCJWixhG96QnSKuP6tdiETGb00I6zcoU="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2147
+          }
+        ],
+        "cachedContentTokenCount": 2147,
+        "candidatesTokenCount": 116,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 116
+          }
+        ],
+        "promptTokenCount": 4096,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4096
+          }
+        ],
+        "thoughtsTokenCount": 237,
+        "totalTokenCount": 4449,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.0826626481681034,
+      "invocationId": "e-208dd078-a4e9-4696-8c6a-1a8fbf9bf0c3",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "4a598ef2-d638-420e-a579-a2e2c5ec9c75",
+      "timestamp": 1788684809.7292526
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 1710446. Por favor genera la consulta SQL SELECT para BigQuery consultando las tablas del vocabulario y modelo OMOP (concept, concept_ancestor) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-4dafd082-aceb-49b4-9cae-75ac2c9bc9d7",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "dcb3d046-2328-4008-a5b8-ed1db2c6cebe",
+      "timestamp": 1788684812.5993266
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "You confirmed the concept ID `1710446` which corresponds to 'cycloserine' in the Drug domain.\n\nTo fulfill your request for identifying \"all approved or indicated medications for a *specific clinical condition* (starting from the concept of indication for cycloserine)\", I need to explicitly confirm what that *specific clinical condition* is.\n\nMy previous interpretation was that the \"indication for cycloserine\" refers to a condition like 'Tuberculosis'. I presented some 'Tuberculosis' concepts for your approval earlier.\n\nCould you please confirm which clinical condition (from the previously presented list or a new one) you would like to use as the basis for finding approved or indicated medications?\n\nFor example, do you mean:\n*   Find all medications indicated for **Tuberculosis** (Concept ID 434557)?\n*   Or do you have a different condition in mind that Cycloserine treats?\n\nOnce we confirm the specific condition, I can proceed with constructing a SQL query using the `concept` and `concept_ancestor` tables to find related concepts and, if possible, other medications for that condition.",
+            "thoughtSignature": "Cs1DAY89a19X8cL6g3Ym46DdLlfKRX6ytQmzdvqRGu6FVyOb9Eg59LL3NwGY5E3MeyAHWKNcW0_UcFro8lIKuWxK3c9RWu_Pm6uimlTUZLGIQy4GW1facg4JiWBdfRcCEgS0wN6nHwy4_x7NDAGmRqhfDQ48bp_uv8Fff4mq5kNz3CrTwuUEE2gYHdXcZyzhMyITS0FZOr8dXh5U9t2Vb5KojzbSC_4MmRDgdHJ1C4zYfMw42WlwUdmjFH4Ua_sEuuOWSPRyyKg9x1pr8Jq0pems6MZ6-ybgalcgXKw4zgTrIgwxPzhe650ry1V0n7OvODFCG8yZTDTfQ05J4BaWvGIeslFQKuDWLaHbuwzIbkfHNNsB8_afLgu17HCbgAZtrci9sFE0GVo-g5JlO5KXKZz5fO7I3NzMw_Yk4wdFFhNCbu1MJl6hK9la_qZ82VAJTFPIbYT_Q85uxiO_DuNxpzf6v02AForUzenKNGmJSx3mpWPMx8xMotc_CvPah4i9cTjpESLvTm6MW48XND-0JnmZAuwYbc3tBMO6oNa0o8usZdgxBM78Xp49r2QA-bgU1MfD2u_dQ8KND4jDL1VdO1gH3xuNfGyJ_hAbnziTSQ4oSyLdW8eNmcNBokiLJQIvGiLKc2xSg1mwPKKVwiiYTIBzcC_CiieCtZ-hQJK8uN91uP2V6gucPSu2u1t16lsObwgGpADY0p3JUV3Wi9P7i4DCxOmUSd-4Yr0VJj75MMH5C8HylxmAkMHu6QJgoX0yutGpDxAQkJZ7BcCaD6i687_3nhVlQcclieJ3u4ZtXBK12YT8_od-RzWjGcJhW782eGlYfImSN-hgbFVNCoqsrL1Hty1sozZoJlH09D37XR-whCJvjfahudMhzlHKII5XTmgni2NGBQK2wChooW04BxpWDYvepWFpYitVws7ZK1zUDlUTbatp661OjQgrpDAB4mwuzN7CaF1iH1DSo8hcel-2M2tPQN4JyiCR6KIMx0qztQbD-2EXXoEeQDPYZj-jVQe2uIf2OXyR5NzGcwtlWTpBjv6vPb8i8A-S4drhIDY0jnqYmrfXNApb3j4-rh6j9MEnoPV4lj2rquU_dWmTNl6RMeJJ8b_4-sihJzFFOBISTQPADsbPjiWDD-ogtw_tbwwGgV0TmtmGCYWSE81QYa6NaTWzIZySarZujZzCVJF06zn-Vg4EXzzmfc086ykA6yBdzIiP8dgT_Bu3nDG5Ly4PnRjsxPV6XeVJXcN5Kn_sTD0edeJVR79LZOD-rnRVOzyFDAk331NZW79Uu97EweRw8VFrMgbw26pwy8cQC3-CFCb04DdzfZdSr2zsq1satw_fZHqQWpCWYah6JhW-BQI4TEbdixUpJNObxVuL2IR5q1gV0LXhH8R7jwdV821c6Ujq5mf6yx7lr_VPz09O2vh0Q0h0LRA0C1cK7xaiSlx5bSDut_gP9yxHTuC_Vm3CFQU3c4Xg23Eb5FJ9_Fo7nY7UFPPXQjYX2JFXoiD8klzLCBlUOE3zAiUmv9vj37pod9wBRgVj4DnY_QkFZWvsKnhtswdqEuVvXCc13OWFhOIM05hniUi8NmLFgJTKJR_2HmsZfEx6zNTNSvBTYEa3jti-Ya-J-sBHE0TOXjS1WkmFRNYwVMsOaT_A73eeOJxN8S-eDzfC8R2uRSM0R4My9KgxaxnwKkQROHsDyBAvl7GoA_2vCi1DtgKSrY7UaDyCK6Dg63VWXD7HsxuDcLDbg-vvkk8jwM9DTSRcDqlyasno-iQiP2wG2vaynewbvKonilTLKeFeAe5aF-VI0ggon4sbqGnEDNPSJeJcfiswG1Dv-aNN_rjEIMktE37kwZocNYQSGxPrpeOI6_4PnDmz47nVeXBZcB8Wd5zx1dDZY0_nNTnP-MkO_qTcCmEP7k7aH95vEjKpJTQ_Gh8Kk41ULH97BG1gJIDEmGJniFUMD9U0WDU5VDqb04tP5M4QCS2WeJq9z2sLN6piciljx1quv_wI-tSCFhFlZfZvT0YUAikJet5BOXERiYgXdRJTr0HU01U0yQh-PA_8-ZaGR1zkrOj06OQElS25ce8pOoo_i3qmM-QEPgzGPVpi6WS6ux7jFMKmdl0ZoGDYnjcvhRxFRmQl638sTeheNMvwqeGIPEo8RtMZvPyhMkdXpuLPzFSCqAn7xkfz3_fAWLXQhNzjaYSpTj_Dlf8Zzp3iKTLFWFyVswJaTnV41pNzkryk3cxUEccLubM86rKcX_jx2qCnuXfquQuXoby1qungb1DSqnAp_zH3SOw9iZqJT6KeVsh1p2MwBnlWZB7HCggT9HCy_5j6eHEW3PjI9AymfiHxmK1b62k2RZjeLsZd7w6mIdSxh3ssgFsTl6nuY7CMSV4p-2dwvcoXvC6oj2zfmYguvIppnP-dHlOzKyoVdX3sABVEESMACw6PHyZ5W7_q7b0-lmhpPLeOWTZowUIV4uihsMojoFDj7K3L4S3sDJBn4svdwddl_2mBtc05NQQ-MdtBenuO_qo9jW_oCph6Wzpko8AGbTnXHV_4NRKdxwP_j2ajoA7Odl2MEUeHW9b4s325d81kphKnJoq3Zx51cPIc5sqmxuNueL98K9WXvoOSnSMIHNH63Fg_Laj0jckXOvSvKlOeM4PIes4Lr1_KFT7uKiWzCRRKYGAHz7Va26IVwTp9Bw2i43EaEprO_CBDFT1OV4tgLZwoFOIfxa0wDR0tnIRaZS_qQMwdpUSZSMZkRqGXHNi4QZU_2b8p7kwH72JYKkaiOCQYrhJ_zb4XbVz4sD5rxiTYDsSaVsEgCcwH5Q4UFQdojVVE1IkU2eBsHCjRx7PB416dRj0KhiH_Vz4yDVcD7ypdrLWthT3abNey8SyFTgpBA-p3obHrUtczl5QJDSsDJXUVv2KgYn4ZyADKrIPVA5W1Lh8FznwqUDPsJU7X7oInWSEQHobiAkjJy5YX51Hw79dfFND1b2xcUgzdjLDsQm8XkAKRZ0NVPh9jEnAuAE6ZTrcrSfmw3_thaofdAOxq7OJfS_sDFpSEZOZL_KoGn0G-Gd4hbV8XNtHzsxibsU0Uzkb5gAhskMmq9JlB0VwM_BgHulkZ-Jba03agkbjLvy_6bgxijs-S_ZlRah3VWD2YgPPJaDrUaRTpEw8E0R6FoHQRPectTZIdi-RSFgvellThdO_rHYpssdCLkacif_j3sFxk_IT0ZElUp00OAjSk4j-2N-wbZTna6pDaQzeEu9raoLo_PRQXb50LDNz-3BI14BmefCztDV9kL4MHeE_tT_beco1bPAzUHmhAoJKIelNpk42SAHVmnFVXqObtWIiNQfuR87Ox8CsaXUzKBJI4Ay7r_i-gHfPaWiR2krjIs6biEBhLAGN0sSCOC7ahxi7WR4nj752VBaW8Z1h4BzSnaLZ8M5ZEZTM5NV9oyQbFnPG2vyry6a92yIHFGdn-UfalZHceJOQ9uR9-4G-AgSpXszChpXQWt1cec-A5PhJBtc9kvHoRuZiJmkPbWemT0WN4WXQG9JhnY1yAm-r0ENlQRF_l6hrT4CxD8RDWbBpz5GYSvya-CAu1CfsDNAmtjaHrAMXc8bXbp8NXDZhfWgDYQmhdtFgkExUunbJ-f3iB59DJNy9USfBlPGPf3W1K1_GFUwpW_t5Zf0lkIQ7TbaO986c_1-VmmpHAtV8iHoR7pv5dmZP1WdnNmhhPH8uCnZ6owcasH_xGN-G3kR71XbyFHaubR77CUStMEvVUwcmBhyiKZdBtp6EN70RhFXjaxX-qOxCCD7g6Nb5IrR9UC6kks1hlvkMHMHwuclGh6R-8RUF6kYmbXaHmIBgOfAvs_Bbu9J1jGqMozW0SeEk2Z8kXdVn6rW1reA34fgB6MO-9ORYRXTREUtp7rpUbVoEaPdVOQniWY1iRyKLmsE-YfAw04p9CvZND5LhMACx5c5ed1yOt6Rw-BnwKU9KJmYEYWus_lZQnILkUraa6XTVJGr35k8NohhXAc34-DBc1aOJnGGBge18FU290pGzai5gdoXoouiV7DUnvX5gTiSAxd9fPZ6oSqmLT-r1is2ETDK3yZN-8DeBwDw0_wSZ_38FJg4_fHO91H0sD5Vmc3bjgJSRnsauqJOHmqbgsmEIDdEld-ZHAuMEwW9Z1wZxRRwrQvtN5lZQm-lCUbFGhjz1FH8zNM3DPqjDgi1u2p3AGmE8b8Ch7ghcc4Yj6Lt5ZNWp4MuW8-c2vZKmpPpS3zWbyhkG7dtU9_NPhTph3leDfaJVk2UgQURjyHuCJpo0rT8jK83TCKi-kY524297_flXsYopLYOYPG8vn8imrlTAHeS4wfSFnmTOIe61wd3CWpDx3_6-qBSzYlMjXQmMF8rfeU-4fRFNioJKy4MS82vYyrZE5Y6uonXCVw0xVCraLYpCQ7KpNu-WG72xjGkyO-TS2gPIPaL5XZZSYyexWT8FwYcRR9w5FtLE89jeTmHrE1gAg4AX1gJxO3OdU-GKF_HdIQ_N4U-KfG1dkeLSyVh3l6PNNOkVxX0r1qXjw1dUEHFqyRG8ynCFrBvE_b-3DSpgjfEA4nkSbYOLNkl1sLWjhANU71wCzlXTEd4KkOyx2UaWU-kIWNTMzgZoyS5K6omboU67_Pr0HXEfrwt9QiohZ95ogipXQEnNGYzjYKGmZLWsNC2cfzD61XJLuYnUMNLjdLJ1-pZfo_e-BRJaWTVZJamz7F382PzU2ypeITmbm8i4TdyrsxjPM4u9BCxOs6fcoL4i5ACo8Hfnf-3YMUiWWQJ_KyU8tK4WFDsFvwupEULb4bgOY25I6vPs3802RrWNbNoFPebqqFXTB7f2vbgA1f9FI3l0kyRbWLwLmDfUg391AiZ3vaX7ccOd5tfkUKa4c7PvLT3vxjDj3tMK5iapYGinpydRbOWbLRCjIn24wJSiWkyyrM5EFaDyVd1xE2jXdX-Kkp0IJ_U2m3h0N63ntYF49j7h9NZyZSe9epw8MATxr9Qn8KkI0yo7NXHfGb7J5fA5jw-LQ3gZ8xglqrzp3I8VB5aXp8ydMjxF4Ulkn3K3yCW7CuZoJ_QJB81o3S4KOCFMDFuLkpRawn53WduXGmIO_aQgmWTtPbBHml8JrcOm3RN9jDP0Dc-rUvfDAP5INLLG4MIbK2QFQd08fEl0no03ngR7pceBGAvjcFOOAH2cC3sFrZa4XqCbUc1EGYSqP4J3BATUs1yE-T2ZvDe8TQnIHM_vsBF3P_784w2T0ctkZqjMdJB2Y6wMiyO_z2gU9eIRyl_iB4kuSR6qtLBMLyOV6LLWtRn29GdENBS26-0irLqtcvT371n63RNxGkDqUEUvOS1D_lrG1E7Kf94JtyYnex6g5r3tWEB2n08XPet2P4NLcwDqPg19hEEbgOEjP5LZk47abd0u68RE_eSWvJ0t4c91yFO683C0Ui6pvgzO_SRaC7FO0Hjfv1ww7W5JWOva_3gLroMY35hM4JNZrObCi0t1EDYXKkNVJsSKxbJHA3y6-utu2EQ8xeW6L_7pW5jHOMJJ3MxKWnKr2wn4sPaUTBUV4GPDnGq5meZe0YuBoNGrmRZBpcDIyFLGohtGLRr0Tma84rf1JCXX_b_UyOwfFhtPS2vq1C4nnCWuoSZUZjlsGFMvZAaZSujB1qR4prXDtHAW_KS0C6Zh3v74qsDCFSqb2On5Ty_jhAmKE9LqSk_HE6T7sIBU0iQwhFSOTr64rZkx3twGSU4B7frthH1N6UTfAta3-2QVdnuqNeKzaUqbXwmqp99uzi_pd21N2vhLq2edGlUwi4jgNjhKYow9n66rZqSXnheKf-d7o4WKdSzeNXF9wIvs8gegb_yIP5f56Li5srU5Qz9soPG1f9BBpdYc3FJJO5vue4ODDbBlyZupdRvVcp2I2vgsXgaM1FmVAY-StsioNzydy2EwJoq8giRlpbi51qnjQbEwH9TToMD6Bo50ABog0DGGyU_DLYV2ui3FUXjveyKRKw-3tFoPUa3fCtUjZfRFOhpOGowE0a-RHEQx5ThDA4Wbx55QbgZRlJd5H4w65XphKqcW0vACvnk7NKhYgdGXk1hsE_BtKiLZrQxihca1gvJcwRH8O7tfgm1JiCgXTyQ6o8hPWKceZ6iDgm-L0SzJ4rppXr_KLcgZ78ekjLhTBjWB38aSMAs4fY6ut6QIn9BYWFmCcTdLq9ilpsgIODjCessN3hSfZm7yYwyhDlXIU9P2KekiNS8UawDtJnc1Ul1Jw4pZ-4SYeu-TkEQ6_9bjAEvvbQWt8byJFfihjs6Gd_MNei7jc6b6kmHlq2H1tTuZAFotMI73Wbvu6Tim5Nf100JNQ3jMF1krI93GHQCp_DmPmTSIab70jBc_rIo956E66yeOhRJTmR-P0EHPR4qKrixr7YQ5N2-ZcFzkfuasyee5XXqIOJtQhLWtSP7UY3Xbgc2t2LBQawruFES8xOevVW-rh6rWoJGO14g-t4IPGOtdaNAQqfIoAwia2HWbQc-_CgvcmWnHW3o_B6dQMUDj2tCF30-ShUr5U5LuM2N8z7UvUItMZF5nD0vqrDaS08HzYn1zoXFONqrKnHRI0N3b5lr5IaLBepMeC6pvAV4ig8DW9WPpLydDOc_TjR64MBRf74eRdhb88WP6Hk0-91zZkISPJYLg3k4BXcg6T3VjC3B3lJOTuaDADpP3MZuCG9JAkKTVr3l2VdmdIxOgrZ8vk2NEPhZeWcP0qI3rDQ6QrQSXYQ4ldzS6F_umENCm3zGeSBGwVADIoaUQATIXPwWsyHznNHuyo3FDaI3Wwy6ZVcGIXtUB4X21ZZgig1xHtbGw3Cz1BKw-yZgNTxWoGd_h_wEtFSMKwoPjIyyYmA1cObUpiNGeXmHNgQgBjEid7a09isBhy4zRU7CEZhrJ4LfY2mpImMS8yy7IgEMidRCXfHOg6If7PObTGXaL_zRq9gSnehynvjpQHqKN4bRP4RrgYlJVL4hMVUfHP8ehwL6isihwI4wZRf8fwfRdz2ni6wtWHfsWslUeD68-fDByfqeDtX88Y122uy8BtmTbycyDgwU6ONthAPNDrXq_JBnX3fMI4wP-SGo0REC34pmZOmKPlvPJYx90rmCkt4s1DI2kctaBlgQv4aTR3gXBsw1WAUeb1MggEYoq30lnZyl1NDYQx0FsimlrzqhubisN_-a13j8XFHXRxbYKP9o7ekCQRv1T3jIiH7bAChRyfOu32dvtllD5EOc3SJi8Vj_dVqBJkVZPaT7hDScmB7owApf2eZp6geBB7xwWM4WBmq8qsgnfn8IwhgAcbpFmIKvCOua6__2w_ikA-Tx3kZXxYT1P071HEOulbOml17cwIkAotKxfpv3iamA_WJhZsZxNz8O0XWOrEJRnTfG7xapO-WthU0spb1J_aHvB1B_IbEbO2TD6DmgHgPa_iCFeCCmqN9xl_t8IPuoCZZJw1KfKMNOaSWVam3mMonvBOcYwvC8tZ6o3zbVyScGVT6mcs9AMlEl6AOAEvFhXvk4mxEAWu-ro6Tvmuuo5ERvfe-klFK7AsTw_lH1fVo89SkzXKA8zwsOUmlHLk0N-w8wrGc1VKKqHON9RPbSiSpspz60ToHNd-iYGOZjJUPNbbn780Pj_xXHa54XfLZG8fMGF_B5MeqIMFv1JbYSn9D7_rOVEMtsfJaxAyf1bNqLNa8oD0SJd0p-gwHDdmpLTxyNuAsN9NZpEjOTjJH5xrVVhhaXoFjDfcQpo7gH0itzUfalxe66ZGTq1kI7Ufhl1HsenE5gFZ8HDHgkNqjjioFbVeDXt6ielEP2-dkxPGqmjU_nOUjPjZM_ObBoc0BhR-ufb3T6zMhuurG-RSPiYqYmd669oMiRJeBUdFATkttfsqaF52i0vaCKwDxUsirzEled1T9Tfvwh6OoE7USNv96Dr_ZwVgxeSFuaOvnFu3CgDed6jFPZ_Mvh3E8n9RYU1jhev6IpesLzAvTLxu8hC4I5fWl3poSq64rbj_XDn5tnNvPnXYNMy8b67s-yKov4MsC4MgZVP1n5AJMuNIPGyRQHRPO6EZqG8ZNS8QSD8Hcl6uD-kon6zlH4vALSwRE0la9zP7-E9TOFO-NQ3t0t3bo-ceeK2wL_999JvR9uQO34CF1qUWs7fXbC7pjXvc_F30Z-fgbCLKurYIqjPjTYddu05BtYzsihSMhA6LCMhFtt2Gr_o5_-D_jMCXK9ddQkoSq_Ce-6pOcI5X5p1LAajsQitL1tX8MMDwpKNacRYqbbeZsFuEb38ypGLowt4SYHwhmcfClxLeSVasI0hpW4F5jR-ylY-D_bZp_mSaOhLhtRfkynVuTuyngnbeMseC0aR9xS7Gg36lErUSmbgfPOEV1CEqGaaFrICK7oEDRhHljzi-UXx2HDhrumMAeBTY9L1SuoqN6r3NR5ef_-UNIxWBFi6aAS-RNYRxJrz4CA99AAUec8u12uSKZOtvVZW-YC94nMT5qwBQj_4y8njDToINbkJcq_8Ws9ZtlYlyTQo_HsBfJiDAifvCZ2hvh5JiQlu1DzOUR8N3pTCx6eFBQxMp9NutbHUKtiJhvi1Q_EjASU6tJKjl3JWNRWvCejkhFG0mcQVS5dPwFIzHsXg0_DRGh3qgTRSpC9TnpqKYyxiBMT-YzbYmQ6DK6adgqH0STtiRXrDtflpyapGvLbjiWfp32Q4ooFnEMmP_BIjs2eo2OxNxAW_ubRhIeDLm39RP9ucxjhD11njT8Nu4nE7FRoD1spnGpOSjXVEbWV7RNZ0pnqKo5twDi5Rhf8_anZTMBy0FYrISfZlZgZy7BeAb64KBA84nPy3y7HZvqRkA-RM6p5w_8Uc0jz_NgthNuwXSmwN9B_GqwXJX8erSMST_DW400fa1s5QrC3KzI1UoEtxhaZ-Sx4ZF-9wI5PeOekgj0lAS1sJq4nR8wy1NbAcSolnB2BRf7GXDwzGmAa_vNfD4nuoU01U36THYlOPsxnW-N5ydifNF7ipyB4AwaxhTKzxO8u_2gjRpzArYVeb74f4f4xmY65ztsc7XTdtOZUCmmF6drjld15ez6fQhFxt8AqOUO9m0K4HTg6WSrqmD3_04g7jhyqvu-3chqkmGDfiIfpKWuF3aDDoYxjWRg8CbsJHad-SbjHb2zBYXbqePNVbSd6NWXxCFqKdF3GKDhpDlft96ONRQV4YAFTq5fovcez9QgEuEZveDwpg8Xv_8O0YQjJN6o7_qcZnWunoXKGFpQ0K468Rbaf_Tuwb_jFZKQsRuwXhHSlVdOEGmEkwyDqeFxIHV_XysYUdz-tFmXShawoio2hfCqtnsxd7rA8LmSIrbSwM6lrbemTO4yIjFk9tcYMmTrSpHpR6stUmQ-EkSSCfU1fbr_s94AKQ7cpaK5Z5RApKGaNdKZRhcDuWZtjV8SjvxIEqKH2zKKO8418XvyYlw5VVhUQlEWRRzQ-4Rg3R0BpJypD2uhQl26C0cDyayxrRzkZ6fcPvkVrfdPEsx7jIp3StJEVrcYivofa_Uixe5k3sw6QI5dIS2gl_zQWAj55OzmN0DBeYebG7-kbUUuUMnwc9vWAgVEJAJD9m12yLMn_T45ybZS6ZUWEwHSlR46jWWRjTOGehDpFGjDwG5BRZ2R56l0sQeLnzPGes6vM6LGrtqEUmS_In5ot8OnXlwprKPzGJ1uRP-kZ9KwUqpy9xhQoisO7xHQrFtDs5XPGIbo65CiSopc6gCzTOYOJkgOkLC9m7-09hvgNBqH8D2AY7NgALr591s0nJ5jNizPmh6hfq0nBrNTMnCzhIE34n6s60WspcjRZIFFM6cx_30GMXF6RKuYBzHkW3wIC__Gg6HbZgDhGxZ4A-yPQgSWHiVl6zw7oGOclYgO-I1_glSEDE6pkpS5VkvUr4XU52q_hcyYHcIk3a7C2qy3IXFnFdrnhrqIVApllXWULHvcdpLo90ut06TCOb6iPrWoUc1I9sCvB3Zmt3guuHcTLa1AHuMg-w0EIOdSZ5IqR3V9tZNSn3F8t4jsh7MQgPCeWN1VGOcWodzSGsoJBldy3ZykI60KYSME-eY-xdpVlY2sEzJDNuSu19U9Rhr9MMEgpORjhm__lrBvXnOQoGEo4uhHzHugoL8OgZaE8XPT7goywrNuD9rhXhfhizeby0KwC1gr2p6xCJn8MvaiZFFL_JK5Z3_aSoMAV7MycA5pJbfdB-3P3z216OPed7kS20sMsj9Ytf4OGtO7Ar_XEzHp2RTVmmJ9LzTMK5Qo5HJ_08oYqK0XYfOn_xztqAy-DxZX_PUFbX7TiYNtcKX2knh3GKPSlNCbGnBto-yI3YOKqvBmE5k7amfH8NdthC_-C6B6_e4RAJ2j4X_cRSk-MB6f_P09b28NfzczI8-7h--hYh73mbphM-enVrAovGMPTqrNS_4JgbRx7GsZvxau_3DGlFPzOCJaw548GWVByyWbQ_viOF-kYImxJ8qGXiZL99P1IJaC_jexvPXuFF0qL74fNtOH7EOzsk5VL5QN00TFlAGfXWYPYlPMzKySA7un1pGOZ8FRixS-JS9Fx6aiYZmaPZu4r99MNBTAIbZuyeM-9n-r7R07jM8f6W9b6F6bHGYUUfr3WCWbvrlVSDqExcGl7fCNFjBN3Mzr0LFSpcmyytF6fY0EfC4BqQ_b-JaDWnqS7LrB9BAGMSKCgXQ10qFUcBqAj_p7Teobhx7CQcQtAfPE0zY21_7RIQv1rIAyU-nz9Sh7gkAwy8d2qhMD6159IkN5iT-emEbEY-MU9fXCr3ZrY1Uy0eVr24Jl3ruS8il3kIpN7KYewiWsv4U7nTrbcPuY1Ky9TuqqxrtgL1HN7HpcN9s-627NK7RX3w67z3LaL4tXrb4oj_Inp3oD6-XI-gsotCFGT8xo5CNhcKvpHzOH91xIdoVV27XilWwHpeCvR40vV3yJLmX5TEtArRfRzIt4aVPNkEDn6PPwqV8Mi0o8MlyBdMVwyKBKk7o63ufx0gr2MkzFmAW2aUF_94KRpnCtkD8UrfwZ11rlQE83ZDw-aC6fDgK6Hn8DRAB5N3Fsk-AlQozblaqTtJGCgQcYb7lbqPN1cHxTMs2Da3lz3WYc8uWje4bH-bwr1kRz_D0OIQpMtStuLhLyU2UDMbwnRiPkfguGNsWInf-zsSQRx0gM82N7k1AFdNp5Bs1AQt0Rb16IvzQb4zcOZlVLs3mhIygqFqvJo4OB8OI4LLCgzHsd89FcUJIZyMOu7cK4CvW0dQC_iu52Kbll6xdvoYrAwSQsjPV09TsJpBlOrcjUFH2HMNTK4obk3KeVwn257Cl-hezKPP-y22kLVa4uTmcnREyBfKJ4wX876vQoncsFzQlzJaeppkVNd9SrZzrjd1-eV_Q_0FmD_qYiGwgc1B9r_SY2L6jjmByOGcsro3LuyklyIzSECDpBxroNr0giVlsByL2uLiR1r67b1X2aDsPNS7lxIRrfDbBM-VsCvHHRNWZDAiZH208biCf9p1mwpBqTa1EPHfkFkYOuR_lnV__mxN8imjtQZsvJTJTvz1xHvRr9IWnMKMV2w=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 236,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 236
+          }
+        ],
+        "promptTokenCount": 4500,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4500
+          }
+        ],
+        "thoughtsTokenCount": 2048,
+        "totalTokenCount": 6784,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -4.8284751762778075,
+      "invocationId": "e-4dafd082-aceb-49b4-9cae-75ac2c9bc9d7",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "85ed9a58-1909-4a72-afb8-0a865e8bb963",
+      "timestamp": 1788684812.6027088
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Apruebo y confirmo los conceptos 1710446, 73122, 78672, 80626. Teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nLa consulta SQL de referencia requiere el uso de las tablas `concept` (aliada como 'drug' para detalles del medicamento) y `concept_ancestor` (aliada como 'a' para relaciones jerárquicas). Estas tablas deben unirse a través de `a.descendant_concept_id = drug.concept_id`. Los filtros en la cláusula WHERE deben ser: `a.ancestor_concept_id = 1710446` (para identificar descendientes del concepto de medicamento Cycloserine), `drug.standard_concept = 'S'` para seleccionar solo conceptos estándar, `drug.domain_id = 'Drug'` para limitar los resultados al dominio de medicamentos, y `getdate() >= drug.valid_start_date AND getdate() <= drug.valid_end_date` para asegurar que los conceptos sean actualmente válidos.\n\nGenera directamente la consulta SQL SELECT para BigQuery consultando las tablas del modelo OMOP (concept, concept_ancestor) utilizando los concept IDs aprobados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-5c4c3f6c-aa9b-48b3-8704-f7f610794029",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "8359f4af-7a6c-46da-b7cc-bf3764d44df6",
+      "timestamp": 1788684843.2212656
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "You have provided specific instructions for the SQL query based on the approved concepts and evaluator's observations. I will generate the SQL directly as requested, but please note that this query will identify descendants (more specific forms or dosages) of Cycloserine, not other medications for the condition of Tuberculosis. The logic specified by the evaluator focuses on finding concepts related to Cycloserine via ancestry.\n\nHere is the SQL query for BigQuery based on your instructions:\n\n",
+            "thoughtSignature": "CoYtAY89a1-Vvwj6qjfITE8clWTu5rvUg9PgTCPSB4cy4kq35KbucDHpf3YOFbp3LaZwWKieIbYbDw8TIYWJZ_WgdA5mllWtyTwrr3nF-zgDHDU_p5vh2nySQDmfNRL8sCUEDG_IcQCrTWjhd0OrMYgPjGgiMIJZIFqW2g3naQW90zM8qBFqH5E8cPvPaHC5f-GiQijr0gsPdAR99BUzu3PRZD_ANVrwKNBLp84pH4EYmE8kfBbXBLmKvS0BdWtXByzFsdtRAW19DT0InBpX1cPWelbsPENNBeqWlLAmmkSlBHTz5dZVhUlB7Katgl0dTfG4tym3xIPq_rk3rdFoqwXDf3X3KW34fyjCL8Fpt75G3UBPqX99mmjl-yrAS-8cD3p166ztecDqAYP3vvGBjgr4Cvc3UWNQ8qJdL5rd7YbFw-EHT3ghljhe6AKHlpG9S_vxiQNvkny7cEjkuQPuqYvip2u_XwHsa8ljc-S3SMk9hcC4fzUB4FSQ1UoUpsb_gu3wndFkEL70lI15U0hlErxv2C_PPWHq2FPf12G6VrGCyn4z-W8-2S5ARoHNk2NfKnGZyjj2EOh9ZqkdKoot0KAGOuPJ1_ynza1KxMivskltWiSmDCrOGckufKLSONXbAJgfZ9KH5dgkjHtSaCGNzq0xxujlaIylYxaOqRb0H1wXKip5V_uzOy-6XMI_jAOIkTuiDremfE921pzEKWKrVz_nKJtX3EwpXOI2ZcWKGoky0deJMjw-kH3Pms603VGO-pMsTgoDgW-49piGYok_8_D7S9S_T2ug4trwBc0Ewfgpybq5Mftj4m7eXu2pqVHJ7_jYIJtuBvqAM4rWZ0ZfS0KO2l8Voq-NSH_4sN-KSPjJHKUqN89p9J2hEvxdYaPV4gfP3CbVsWfzehYK5eqzEr-UaKKFDE9geBmlflALAO6GN7sF2XwFLOaPyfBeaO7hLlNyIHNfHlUiSyzQRUylGZHtfD10NyypySeIHxznFOGM5g6j7BA7i7Tpf0qtfiUEUrfULWGSLmbUU2MQYCfEmZJ9ZwpQ_vbu1JALcoaqafc6z9Pdu6rno1b3iHSbnhh52XWaekwrbSGEUDsDgqmjTPyZijR0MYKSgUGN7-2GpKDLhiSy0wBeJaJvs4k3pRrVN-cvrzwiKN-_OaKGV5AoBLeRQy-y-9vMuh8x8me1j5BNwfGUnFRbVoyerLCnYlcgW2qw_08wrYIbs-aCNLszGgUviXOgJRdZpZE_02QUmVc1u1nWHTY3ud0xNmmAK6oxKdB-NuJaQ8HfAvk6Cu1PvAscpKGZOiDtUQ2nQoVpTbWReN3OXTNIN9pe3ESxzuht11m6RKMiVQO3DLqNtAr1PxLpI72fBu4y1RlLkXdplpAYs9GAoS3PGr5V34DJ_ixXQ1IP3xq_-YBZUxtSBw2JuBekrNLgovzTX72_EV-ARAeW-cmuSZOPBCaHjsEKtUNiYJ7GQ01JTrEJURhU_9ULr5wZeCqhJUuWN-yw33uHH-UsMhSR6-KEC5GDIGHX0NqspOdiOGsAVD20F86QpYqnGfnsbwk4WN794IHAdmqaF8ac-rDxJ0kHO5pQQOU_HYVOMp5h8ncF-1vnsoietyeNauy6XyZuUD9aeiH-O5GbNcoqDd8D-zflrIpwEPDlQE9QuGb5209MYruyW4ZH5jFiRW5vezoftS3mlxTxSr-l9FSmMOZ08UVpZ5UwJW0Y7JTC-1RaIimYmJ7Wv1yiRnLxG3JRHNLSr7z1INgGz7tw7RdUw3acEnBnEqnfQ8IYy2zoel_eyFENn82j3iw9dwRitfZuStwK2UUsO-kz_kYEDRXpvL_u0-Hh_U4c-RIh0pYhUEdJlXmImIqlf8R-Hgl1DaN7syV4NxlzK4YOiSAcM5kFM9A_BdApMe3K8oYaYWPpPdDZZHyjsT1PPWpawT4I0_U4UBIWG1Ref5JiC3pNQh7uPu3_FDs0IFXukI74rborQ5f97qjisTc0zw_sreWFjyqLvBVfS8FODJnQMUquTn6bCJepusC7LWxT_Q8XA4h-F0XbBK64bpPVuxqGg_p-TZ5mU8Jc8kTsLLKS3Vd-_glfknNvTs7b-R-kPGKWPs95yc1COyKsEs8dR3JS6h-n7Wh2Ysnxj0FsqY_hw8pax4IkfLeppriCEVXzOAa61V4IopdSekdC5QdAsmUdkbrpKCRTjQ8oQh_YMcDiIvphbQZyPkG5Z0PvgHx4kPdC3yFX199F-SOtSBtr9Bd-Gu_yV0gB7xlDQb6f1IOr6ZYx4d_I66XXVavJzOvXZr24GVycTu4_B6NoFJuIkWxNOZvPe6hFeKwvTSsIiPjDZei2VKNCui6cwsRX3yMbvIgTfjSOfRIDNsYPPiYBjitclFApCScTva6-yy5g-Rbl61q8TMdhYlzQCwLJuazPPpWVWhgTY-nOVOsp6_2WQVIcaxgRwX-AMdBnT-tN5O3ff7hztFtGabD_P_VyEzp2uktMmH0CHbBOuGfIpbpjOT5m3lXt5y36WGymmL02U8etYH5ZmDhwygxFr0ryMCpobnVDHL2RKeXIh-Lfwe9STXeaso96yKNjlxA9g4RQXSOQAq8h5hUmZ5oDz0-Y0fd2QI9yVgfPBEiT4Tw6tep8Vu-Ve3CW1hvvu6wt4A3NVAqZyZO10JuNoO8apU3D2xtu2416uONGniFqykqp8TF75q0n90eqI6rOGe-6a32NkCn27VA-vBX6dc4JHJ-hQTqjumY2c0jcinhyNVF3ziBFkTD6lGfP45q8GyP3VBR-YDvwvnnuMCgq5rC1OK8c9lOSAGhqBjabXIIQSOotgeUmxk0SNC5zIpUxwLrbspu0h3iWye5FCPv29uNAYwUuLwcrN5vnaZwzu9QeMnaHHmY7LNSN0CBtU4odl-5WmKstOb_5-uBQmE9F2AruFHz7mF5xy8Xyh7qtMV40muQKH_IoyPE949jA3UpHaHOX7eHFq1MaSjMJ4MA67yH551a32XccnFMDGLKHI8xV2AGqFMkKW10kzEygEppdlnAPXa8REFdMbfYCejAbJFKtA3NVyY2nSh1qsTQrdfZyDyTIif6buckFfwiRkIo-WC3VwozHiK5fixp6V7-7TJ34-XhcpiHEE_T7hiB1-tF51rIE15kRaa9EhtgjbgTl-F-Drb2RklzJ_uMWd_hdOKY0PWfZS2-hOC0-2qaPOT0kHyTFKfUQ2MWNh30o1JqGUDFhJO9ZekNp2ApOiKdmaD6fg8LT57EmntYc4rp-I5F2Wa1Tmk9vJpl9e2t7AluImE8DOECXYuWQWcf-OIRPYst2rg7uTKIigiQPBkofSGEezz26Tp812O7eKhFDqKcQjWjY3mj1aFVBJzNoLgO33jzYxeoeZafrx1lOQKJpuCe2ZrpRbJqKNwz0mv4yrQQcgHgYRSGxfX1vVBcTRchItt_wMB3SjVTmIjybXu8tX0RI_8xH0rpqB9cSKGD2SmdRR53Pb4R7qIr9VxuevA3dS1aqIsTiZDWD2IKDIUp6p7D5TZu0NiFFCgJSX9yAdRf-NtjPyWAcx8jYaUeHx9jSQ0urdnUYclzdU764Czdj90JhtkU3D08i2qUmxuS4gm6om29Rec8JqLTkC9XtiDNoigw7hAFXkTO38dIEezWca9DlMGEqkzhgdzUE35VaZLQhcio8R64lukpSdQKEvtDImtdy5Ek1j-gQym_K4JYgdlnSH7q7zq755LhXovpltRKW86veahXmptjFMVURohr13bTjzcHJi1o5jWLsdaozLkUmpY5RVymFH0CTl0hq2QGdux7S7CiEn51QyewkZZMxwlg3PtWu277wHT01jsGUFhOW9PNYa4YdDwTw9Rx6j7OhXGrXVtiMgWWtwmOEBjieZKq5A8caTx_0d7YKr4-vPFhnLKOpP-kKgljOczltketZTgrB5T-i-SmchiJr6Zz1NT9nMywu24q6mlQuvIreNFqBEUiV0NeuZ2fArERlQlBGsDbhK_RJD2Hz5GXhfLSMlCLZga1BerJXMGkAo_t2_zddiyfglfhv2B0Zcpgl9NGAfZRLA-DnQm2AI4lQfb2Uxc167Az4xAWeeV5lvb8oN6rGm19l9zeMq8jfDCqiLEjbu-w11kdrs8FHAMgWsZIOPVLUA8RH6gVa5URqSRE5d3nc2DCFnMOu-tFGX1zkKDjZv7ZtSlazytN5FpPVwZPjyW5n8Nso8mhPJhqQEDGsj0eL2ysTlnO6mnmrvsWorff08ZtGUAF_z1_2EV4fvhFjrAJxafIfodjN8sk2iElei8RFbSqVYnvJSJpcw1DzJ6JDzP5UbQFmMnzrkjx72qfzQNGI3cZ0UWjtctW-6t62cTFIBs9KJnvPeRO4p2nuEPenAyuhfpJpPKmwlqy2QExQsquFbOMvspbSeogkkqhtwPr8tMVqCkp3fLDhL52d5vFO__HR7WS7C-JVm4TVIYgKNwkyF2J_-Elb9-X6uCRD-J7nEo8aBOoo6lM_W32i8NP3SrxzilqklazEGYxJd7qqQxp8vSAy1GmZ4g6PAAx5RL7WQGWhjtzvr0yG0zWXXqqjbDPTtP2dwZUQ4llkesjzPfIWS7y-igxCMMtQGZvYxqfQS84O1b_4v6EWZAb9ZhSfOnwqAhJrPkZsvUdr17vlw56Qp-2Wedxd42vFcPM-gc2Xr7EvPRYdJX9QkhdfwBEp97OStxoEjLxGp9BHASe8HHBbXnP4324MOQndxa5i56vhGYgdFrusN-WOeToSnpP0rHxPaMkoLabqiA-L5WYbY0_HPOC6vlqcDk_eYrcfGv1nOl9qMgdmkKxPIJhdVaMwzcbRGEDvT-VH8yMLxp0_IXtijLhjDe-hIocVEbYwhzbFw9l_dyU9L2FE4A5-5yAlHI8nJpjwVgsusQcqhS8KUN6wZRCXrZK8bYFgdltAVPxd-EE49nho8Gpe8DsfgA9VcAGLjHb7zRmftFAMr150iprKDgff8fRWns2ROQzfH3Eas3MHq_ZtGJVIJTXirnRmiVSIEcVV3dRk2ecEttx-eOMfQp1UVgBCRnm4-Z2RZh_D6lF8FJo11lFoLcVDL7xZnvnXPFdxWIDkytpnDTAxt89yhjR7zi5Q4DlyFT1kdy91TgpivXtXUlXprbXf7Ftk9Oa1U5IkqseQHqesIRHtWhq_kXTruMloIchc7DiKJdciOZg4BxUrCsGrv_b6iMb7bldWAIq7KeDasGCwEiY0OjKdTOS88A9uNfljR-5Cl0w3P7WXfYnURpIuKwtrxlFXTxJPftfK9KtvXedVGBGttubmxX5Tw8XI1G4uGiyk8NJZgJBMrHOKSfSme8LLXzPNAT6Y8iuUjqmsZbnEI-aP0kT2jI_ggdWiSV3Zj3rjuSeLhT0SLPXfwYGpMtJ_vqdwTa_olGfkIo4LFoWJDDX7N2BF6k_wYqn7mIJ_etOnCh2STP4cRFDCPtbutNuSnzexW1gX0utJpICE2lw-_2LehH2Q3dfbnapzzYFCVsfZrRxKlFpVKwbgzAdv9i97YvfR8u3L9slECScfhUtYL7IjPQNw8U4jhDiSx3HNB9C290GyyZMXN5esr1PNWdpR8lqDmRnW3gdfoidLcP1aYC0VndYVyYwPjmqz97xx1tTRV7hrjBu-6duvFaiOARZ-SQcnRrZzJkOYC0bM6fns4n6eLjGkSF8zUBnMtKybqbS5lKqHysDM3P8i4BtM-1eAoDlTD-wcZXmneVwRgONpxJpaE8zlBfXh7UTkG3-CAQWb8NesbUCVCyCEflSg9bPv8S2buUZoOPoVpxyjfkhFRz9zGxkPieCPztgI8Qih2uhG5hOFiLSogJ1txN7IpPbju8XKwkv2bUEQ66Eew4yzsX52AP_ZqiIuKOe0jK-FcV6O5qFCREUKdL4y0gsPSplVrPVf8tnd1MF9Bi1Ts19JSVIeW5P8YTckDpnbtFJN_PlvOJQKdmvHGmnkj3rhE3Q6X2EXqECtIQrcHA9rxgZimGaCFsexd87oj90Z2WDmma4zVS9nW2ljgXWyfvmwjk8fYZ8_GobTLQmw8Bduy_NI5DZcLJPlbsP_hdgKTSwFm1FBC3w6HUsgK_EfLmUXj5EpFSZTuCNtQevQ7L8RX0bnfwNkYEYEmWz1S9LRMT0egcjJ6NUSrDQH5IdAr_lPuwsiuCz1B-sG8mal8gzzgZuppyZ2WHZi0H-fsGvl2lbSQ96VsuvBhwfvnPiCeZXpdmTrChtaMhQ9qhY4ZlvVAig6aMhW46X_HO2L4YFbikfIcGkQlj0sPqn07MKl276LAVjOMAAB89Dwqh2hO5FNUnNNbIBgHgbY5auI3x3GD_4jmGdZivvpFthdK39_Uj1mJjFthwYSEsfcBggiQ5Wceb8Rjo57-KNoZU5E7uRD-rL_HI7JDr9ZLM0DcEPdwPN8XexwrnDuAiMfHD_Q5Jt9CkpZFH_YHVw-I5mOWOy69oZlFPdfE3gIvzgHue-QtZW_bE_b2tfP2RnK5rwiWn6y20et-bwsKingnbKTItYfDtoBw-lqtOfznEBx-gGczawvOyx-5RV1YC12622cATwNOq9cmd4RSDnbfWBC_ftD3lJ_N9W5vHv4MhKj2QE1RF4b18mwmGW52ZQbCB1sTx6rimo-mYr7gF9Feqx2bXlBMn9e-BB2049kZOj4-EsraLg6qlz8pgPYWz1Bixep-3TR4miwVlVn3_fbnqNsLgXS7DkPknJSF1HvoMF-zSCBK4MuMRvNyQdpKis7Vu2B-l7AyJunxdtKeFpc_rPukDkM57uUqALLti9_ajRc7Svd0Y_UjxCUkAyVqEOpIdOlfnU-DVJMuFUSLSvyQzB495xHCXu0wyJjXFW6Xj-oqAqLEVfdPwUU7CvLjl1omOHtuKHtqPJoW5SlBl25Kzjd093Xttdw2NA9aFf_DXsDWHiBH9qZBiMI20tRwvdz_c5CCrzquGRrUhLwLBUyy_6WUUU8x8Hw68S6e56V9b6fd6wl-gLEApQTw8KoqIoxk4ggOB-yWwZ8NZLWhZBwIHHX-7p2SEBfo9fetDXRuPHO-08ad0WENGDiu2V5H9dgRPUhC5CWK6JPn2SO5SUns0688AvqlW_1pqPlO1egg_LSXEYC0w2Yie7YMl_zrBJ9SLJpscGX8KuMlwWXvy4SEdbvcE3R9PFn3ODfDAIgUfpKyaA8DUpCtbPlReKODJj5HbRId27kP0R2emdTPaCdROg_MdDuG-QEMaaJbAdmGrzWG0BVEGrr7t8qS67UYRCoVa1WavCnaXSMbavdPB1zo9G1FUUWN5ObRO9ROqhzcwGv3TbYGF4UtbSpXPzHvParfV0NyZHskwvHTWOMweK6oF7Wbt25RRDRmnJU8qUBy_O3IGu28sxPFm2Fnnw6TQ5jdnI3ink45kLBj0vE19_e-pT3LreKwCdO68QZpw4MSEO-uQ1ks1CmPo52zmSW1OGbfJLI2yxL6pbMIaI7AR7KnWziRDcTR3AWMrkQjWI0U8vzkuQ-LsrE_qztvIsm3I63iIGEUeHbJGEmxGXP05vwK-A11ICT_gHzWaPpCOzfcJOIG7ohQssAVAIwbXTXgP4n57FM2ukGwbRPoTdyI1yjXw1U26rQx-0o9PdtTsu6E16YOTz6NPQnTKsQmbPIRsfdr4WJWQX3RHYl2woRSjkBk5WEhnyscLeLZMNjOhSLEj5cBARd"
+          },
+          {
+            "functionCall": {
+              "id": "adk-1642f56d-9dea-44ab-9de9-fc9c2fda6dcc",
+              "args": {
+                "sql_query": "\nSELECT\n    drug.concept_id,\n    drug.concept_name,\n    drug.domain_id,\n    drug.vocabulary_id\nFROM\n    concept AS drug\nJOIN\n    concept_ancestor AS a\nON\n    a.descendant_concept_id = drug.concept_id\nWHERE\n    a.ancestor_concept_id = 1710446 -- Cycloserine\n    AND drug.standard_concept = 'S'\n    AND drug.domain_id = 'Drug'\n    AND CURRENT_DATE() >= drug.valid_start_date\n    AND CURRENT_DATE() <= drug.valid_end_date;\n"
+              },
+              "name": "validate_omop_sql"
+            }
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 250,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 250
+          }
+        ],
+        "promptTokenCount": 7056,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7056
+          }
+        ],
+        "thoughtsTokenCount": 1556,
+        "totalTokenCount": 8862,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.233781005859375,
+      "invocationId": "e-5c4c3f6c-aa9b-48b3-8704-f7f610794029",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "2d849dfb-af59-423f-85e5-d0297f050ae0",
+      "timestamp": 1788684843.2249615
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-1642f56d-9dea-44ab-9de9-fc9c2fda6dcc",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.concept_ancestor"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-5c4c3f6c-aa9b-48b3-8704-f7f610794029",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "0f41e9bb-08b7-4763-bf51-5bd9230544bb",
+      "timestamp": 1788684853.5404737
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "The SQL query has been validated successfully.\n\nHere is the BigQuery SQL SELECT statement:\n\n```sql\nSELECT\n    drug.concept_id,\n    drug.concept_name,\n    drug.domain_id,\n    drug.vocabulary_id\nFROM\n    concept AS drug\nJOIN\n    concept_ancestor AS a\nON\n    a.descendant_concept_id = drug.concept_id\nWHERE\n    a.ancestor_concept_id = 1710446 -- Cycloserine\n    AND drug.standard_concept = 'S'\n    AND drug.domain_id = 'Drug'\n    AND CURRENT_DATE() >= drug.valid_start_date\n    AND CURRENT_DATE() <= drug.valid_end_date;\n```\n\n**Note:** This query specifically identifies Cycloserine itself and its more granular forms/dosages (descendants) by using `ancestor_concept_id = 1710446`. It strictly adheres to the filtering conditions provided.\n\nThis query will **not** identify other drugs that are indicated for Tuberculosis or other conditions that Cycloserine treats. If your goal is to find a broader set of medications for a specific clinical condition (like Tuberculosis), a different approach involving more complex relationships or other tables (e.g., `concept_relationship` or observational data in `condition_occurrence` and `drug_exposure`) would be necessary.",
+            "thoughtSignature": "CqICAY89a1-2Tv7NLd37A-t_6NiRFzGeF1UHi2c3zdaw9qSoEbWsdqqSE9rU58NhBuDiP6MpiQupdQ8hls5Q-h1PNp64muAQVRK5tTuZ3V0aBhr3cHu2vViQS6Nk98eKcFYRZZ0OqID5mr1ELPFDNUkVwq3_KDQ0wG8pc3DPB97Nvyy6Rea08al_36RD__KCN5YPdJPWuY_sJ2JtCRtJld9ZbM67GrE3S8bCKkunGFbtWVlb9sCozS_uKMU2lcnPD_nFd2XmqwMIrOvTKTW_kDQOYUElSaQi_NrDMFfdlv4bSxAFegK23xCRgQ2Bwh0bYGEd1FMZyRIbHUd59AtRtpP_d_5jChRH2G4a6Vh2MRb7V_HisTmkfuJrZmvD-SUsPk4-cIA="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6781
+          }
+        ],
+        "cachedContentTokenCount": 6781,
+        "candidatesTokenCount": 306,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 306
+          }
+        ],
+        "promptTokenCount": 8951,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8951
+          }
+        ],
+        "thoughtsTokenCount": 53,
+        "totalTokenCount": 9310,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.31085314781837214,
+      "invocationId": "e-5c4c3f6c-aa9b-48b3-8704-f7f610794029",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "4f1be145-0d5a-49fd-9ea1-161668dad5a7",
+      "timestamp": 1788684853.5440948
+    }
+  ],
+  "lastUpdateTime": 1788684853.5440948
+}

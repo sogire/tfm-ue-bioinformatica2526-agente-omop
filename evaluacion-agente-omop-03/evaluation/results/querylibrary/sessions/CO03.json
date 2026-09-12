@@ -1,0 +1,512 @@
+{
+  "id": "8e62004e-cbc0-47e9-af38-3bfa2de534dd",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Identificar las especialidades médicas de los profesionales que diagnosticaron náuseas y el recuento de pacientes diagnosticados por especialidad. Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-9d377ab7-48ee-4cde-9121-32d3ca18eff5",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "9fd70365-e582-431b-b747-a30132352adc",
+      "timestamp": 1788682814.283513
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-ac2cf6a2-f263-47f6-8647-a552e14262cf",
+              "args": {
+                "query": "náuseas",
+                "domain_id": "Condition"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CsgEAY89a18JrTqX6LcUbeMWDMKZN-E-lLKi00yejFRztO6Z6XZlmtAzWzazl-m7QR51fbmdIncEAhVAkERCS3TG6rzMr8Vo8csYWospKawOhk6yAts2eYPv5BBuRoTYRDUq_xIPnCepgDNZC2bGJNsYHYhY64VyQRJ8O_axVZKXnAYVqIsw_U213CWseITUSD_fZH76jeZJn13V-WtzyQKxocwC1FjEGp_3woFUQmdc6grBZ52-SHuvWiVKT0j4L66as_xwi0-2YOmZSqUxj_5jj-ByYBFelGiLkReu9zZ9ARwVAq5V31gEoY21uoy3pTjdLEOi6mrw4LGl8RFE3l9wdMujA-l-IpH9oBR0gJKEYfh3STAXgXK6_eFduo6cxRNBSUhmvuZpacSYd33sbNZEAsa6Eqayx0wu5P9sJslkcLa2-tRSen5GULufpbWz46L30uwV7L-WA4cf-JXa-Ki9o6WqD8PTj6-rgHZnAYtGNfLJr_HZAOvdvM7n-FjRBqJqL5Sd6tvD1fF7jFbU6-0-nfC3Gh2IIgB7WUFDXWyF7sBuLA6gaN_OeX-Klb22Sc_IL4n8H7lmxdcZJa46pYJv5rLK3pK7qgV943jo92Jbd2DoWdN42kK5NACn8v8BVdbRuMiFjza2xJYz2teCs2J9ER1lWtLXPH33IMgYHFuj89NQCYaFnshv2utKNXuloyjAh9ejiC3d914cwN_RgJppB9FaSIaHP0ecI8bnbrA2PZshabbNrsn54ViXs0gRJ7NwedivHqrsVGs="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 16,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 16
+          }
+        ],
+        "promptTokenCount": 1257,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1257
+          }
+        ],
+        "thoughtsTokenCount": 147,
+        "totalTokenCount": 1420,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.192171812057495,
+      "invocationId": "e-9d377ab7-48ee-4cde-9121-32d3ca18eff5",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "319caeda-0e22-4841-a645-11d4bc90aea0",
+      "timestamp": 1788682814.2849813
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-ac2cf6a2-f263-47f6-8647-a552e14262cf",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-9d377ab7-48ee-4cde-9121-32d3ca18eff5",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "3af86fcf-45e7-4627-8ab8-3e0620353123",
+      "timestamp": 1788682816.2252774
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-30eafabe-1fae-48ff-b621-a3399b83035c",
+              "args": {
+                "query": "Nausea",
+                "domain_id": "Condition"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "Ct8BAY89a18eJdx7CGXEStYK7OkHQ1V2k_0dAW8fYiGx42TOfTLfc18nAOc8-3WTboKXm95hc5H2CG7jC7ZQvRrK0h-HasZGR9St5n3pJaWnupGjGl-qg2O0iuXZvWknsCoICd6h0hRGESDtDyTnt-K0p0Kys4nIDIs9bqY6okIUsTWXq_tzXYHtxchxuABQvE6G5Bp530RnuESKUl2Mzc2NJQ7zBMJ3UXMPc2oTupd27K3HpyUm6tvia7rsQBoSVLlu_S3BotBf69KUZvJR_8_agWjla2XWlbGPAqyTo9hVLQ=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 15,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "promptTokenCount": 1547,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1547
+          }
+        ],
+        "thoughtsTokenCount": 47,
+        "totalTokenCount": 1609,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.0137601852416993,
+      "invocationId": "e-9d377ab7-48ee-4cde-9121-32d3ca18eff5",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "94a229b9-313b-4880-bf27-b0b586a6b7bb",
+      "timestamp": 1788682816.2298114
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-30eafabe-1fae-48ff-b621-a3399b83035c",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 17,
+                "concepts": [
+                  {
+                    "concept_id": 31967,
+                    "concept_name": "Nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 44806510,
+                    "concept_name": "Minimal nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 42539349,
+                    "concept_name": "Functional nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 27674,
+                    "concept_name": "Nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4274029,
+                    "concept_name": "Postoperative nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 45757468,
+                    "concept_name": "Vomiting without nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4247894,
+                    "concept_name": "Increased nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4143327,
+                    "concept_name": "Decreased nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4104544,
+                    "concept_name": "Nausea, vomiting and diarrhea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4188573,
+                    "concept_name": "Tendency to nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 44783646,
+                    "concept_name": "Intractable nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 1245082,
+                    "concept_name": "Nausea and vomiting in pregnancy",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4032472,
+                    "concept_name": "Postoperative nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4170402,
+                    "concept_name": "Nausea and vomiting caused by drug",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4239207,
+                    "concept_name": "Nausea and vomiting caused by radiation",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 40385744,
+                    "concept_name": "Chemotherapy-induced nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37109979,
+                    "concept_name": "Nausea and vomiting following administration of anesthetic agent",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  }
+                ],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-9d377ab7-48ee-4cde-9121-32d3ca18eff5",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "cb90d7a0-b05d-4856-b092-67319fbcda9a",
+      "timestamp": 1788682817.5339334
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Aquí están los conceptos encontrados para \"Nausea\" en el dominio de 'Condición':\n\n| Concept ID | Concept Name | Domain ID | Vocabulary ID |\n|:---|:---|:---|:---|\n| 31967 | Nausea | Condition | SNOMED |\n| 44806510 | Minimal nausea | Condition | SNOMED |\n| 42539349 | Functional nausea | Condition | SNOMED |\n| 27674 | Nausea and vomiting | Condition | SNOMED |\n| 4274029 | Postoperative nausea | Condition | SNOMED |\n\n¿Cuál de estos conceptos representa mejor su variable de estudio? Por favor, proporcione el ID del concepto.",
+            "thoughtSignature": "CrADAY89a19JNhp5pz5EG6ygDwOxdueLMpTfy05ToN0VYK1gHuDFwrez0c4V2hi9My4_HBCA8Y-YFcdehHPFtyMRrP7uE7ejkGW7JRZVhIlwFWGCaI1zCAK6SQj5WSCZ28QBA64k2f8CG43sHXsI3PultnKHGbwtj8lvxnpvO9iuetTX4DHbjdTR3WERSGlAle7KgvCpX_8HQGC38zCWCy1UdahtHqiP-KNPoumnCbKrCWgAW_bEXjviPC-TKKiWAI56eTEsZXWeQ-WYCvMduRHnKHY-A0pzdF2_jIYHwLF5SNYP0U79PA1mgJaIJZ9CnTrj2Gu-mQNEedNU9IIBR-Mqf3fAKu03ww165WjmAWVEGu2l2EtqpbKCp5BGjnRMVFQYe3AG0_VEDi8qudMho-Tbm17PMH6_6uWUHPGsneHpELsdHsklROy80WHxeZ9SikYiRVRXyRW1e66L37RO4Z7WxXr6gHyuRVNNi6zFne51Q2QuYFz2QWpXCFlpdF6SvrlOIrNI3ll6HWxChfoEQyCpNhEEw-0hpQd_9JhCJmpvkUkiz-yZsiakLgbU7QUQRPzV"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1389
+          }
+        ],
+        "cachedContentTokenCount": 1389,
+        "candidatesTokenCount": 166,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 166
+          }
+        ],
+        "promptTokenCount": 2111,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2111
+          }
+        ],
+        "thoughtsTokenCount": 128,
+        "totalTokenCount": 2405,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.28795780044004143,
+      "invocationId": "e-9d377ab7-48ee-4cde-9121-32d3ca18eff5",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "a52f4ae4-27a4-4401-b70d-3568a35511ba",
+      "timestamp": 1788682817.5387692
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 31967. Por favor genera la consulta SQL SELECT para BigQuery consultando las tablas del vocabulario y modelo OMOP (condition_occurrence, provider, concept) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-882d278a-7967-403c-986c-e759d4d2b096",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "0ba2cb3c-aead-461e-926e-e0d4f541e288",
+      "timestamp": 1788682819.3755453
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-f0b13b5b-7631-4a11-92ef-c8b26f55dd8a",
+              "args": {
+                "sql_query": "SELECT sc.concept_name AS specialty_name, COUNT(DISTINCT co.person_id) AS patient_count FROM `condition_occurrence` AS co JOIN `provider` AS p ON co.provider_id = p.provider_id JOIN `concept` AS sc ON p.specialty_concept_id = sc.concept_id WHERE co.condition_concept_id = 31967 GROUP BY sc.concept_name ORDER BY patient_count DESC;"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CqwIAY89a1-RBiIb8AD4SHfXPJRQtEAOLcqT1zVnMhf-abh8L1Brd--9QauXtFTax3l_OZlOPVLiOZe6FtzWbK_tdZb3jlao6hY2Z6DJI16r9V-l6LwhzhG8MJr-IZK9rcpV4zNBHXHepzlQMGgsJVdoEL5fdKprKVHomlHtL9Xj1ObBq4UVna9IA8s5VKIoBpublBlggPKwqfdCJpndkrOqiRQV6eZvQCvxJQ1i-UlikjWJAzfOk6emusRNmtfCMVkgBvBB0mRrau-bfVVqV4k1K-suclUXFVySIMKpqFB-IjfsCZIjly56Vfly_KNJoUvWBHlWEEV_eiuvK1G_Sqrl9wyVD30pijP53tZkroTAjUUWARtkYxT5r-ZZV-t7GNMJcBRoCdhlL6myuQuuzP8_Rs72DQ3kSmn_1Mh5oyzZ-yLt60Aqc6hkIaFSZY3KgzbI86AwE9-Ap8x0bn2Dc3Qo2qu6vl2ojlubgrXLivZ5PJARJBUqL0T6rZpwfKAnv_KH-l5IKgm4Nxvc7r1okmEja4FlOQ2UWKWzo5prNLNFYQZSqL2gB7XssDY0UpvkNboKX6zrl6McCF4FM3lp5Si7RHH2xC2Xt-UJTEndIwcQRK0PdBez5unsT5XUctxGdXmNeNjaK2eXMDgRBmWSfJZ1Hwip7b20YSCZESpEmX6COsrF7-cqkEQLGUaf_kPh-8o0yPw6UCapdXUQ8mzJK1RBjjmtVLStFDKchte5ocq4w0CnrG1XtaH2wY9-h5v3UqiMEkthdqzpIrBC0IaY3d-QOqerckfjA81OJPeCQ5xt4Hp8eXUrU3CXPZc9VABE3jNaIfNElarIPuv7XE7cxDO3myJB_cf-yo0x2wcgcryLYAHwpI94jakgkj7vTTDCcVDBCvCYqM1B_ANBiPuc7C1xKXq5MgQ9Rfxu2Z7hS-S_Dorm3UrIW76cCgdPzv-8DrC8KA5SMJIAL5FJJ2DSOyDCGBH0u_ES0W0eZMbdbjc6dP0C_uuExOkyjmYLSmCJYKtaPgUGFstod-THubULyct6yIm15XvXx9XPaV95GXVOtlcy5pqcLbyelTMpJZaBOXS-038u5U88gnLgJimLq2kSnqOCN4xWDTPQsMjIXffY_E86oA2oIiBVjuBntg2WHFwFys2h3cXj2wQhjklLCJV1NuU59WTpNmaHE9x2X00RkkpSYMJOlJK7clxvcMl8V1ZLVivsW6n1RxuySqcHBy5PvgXCdBB8-p991YGGMlmPh-M6GhKUQvRLuRR08ASFx9gmVYPc3LuqGUrmHn_IknL95I_O3iWPxHf1b8BgtI_4Vq17Z2-aMqZg7X_-ENFx_lqO00iIgqq7aidAkwcQesaNMNcRtu1KQYmKxX_HkyZEYy834WoWYLZJJvhS4FAV5IxxOGkZtYADSkvscyEm"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2173
+          }
+        ],
+        "cachedContentTokenCount": 2173,
+        "candidatesTokenCount": 110,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 110
+          }
+        ],
+        "promptTokenCount": 2455,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2455
+          }
+        ],
+        "thoughtsTokenCount": 312,
+        "totalTokenCount": 2877,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.33251356645063923,
+      "invocationId": "e-882d278a-7967-403c-986c-e759d4d2b096",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "d2eca75e-69bf-41bd-bd8c-57ff16faec5f",
+      "timestamp": 1788682819.3771656
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-f0b13b5b-7631-4a11-92ef-c8b26f55dd8a",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.provider",
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.condition_occurrence"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-882d278a-7967-403c-986c-e759d4d2b096",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "0d61a543-9b34-4c1d-82f5-e1762ad6bb53",
+      "timestamp": 1788682821.51907
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Aquí está la consulta SQL SELECT para BigQuery que identifica las especialidades médicas de los profesionales que diagnosticaron náuseas (Concept ID: 31967) y el recuento de pacientes diagnosticados por especialidad:\n\n```sql\nSELECT\n    sc.concept_name AS specialty_name,\n    COUNT(DISTINCT co.person_id) AS patient_count\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `provider` AS p\n    ON co.provider_id = p.provider_id\nJOIN\n    `concept` AS sc\n    ON p.specialty_concept_id = sc.concept_id\nWHERE\n    co.condition_concept_id = 31967\nGROUP BY\n    sc.concept_name\nORDER BY\n    patient_count DESC;\n```",
+            "thoughtSignature": "CnEBjz1rX6gake3jYqBiQl1Dzaq7rftdoBugzUujz212skB3kvBfr6s2kG3VL-GMq-YOiSyfTQtGeMF3Cq8eF-rg-lDog3KqxiPLTFREP-fIzP7whJaJ7ZvR0ORPn8fXu1NPp4Mzt9qhdx7oee85Do1u0Q=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2259
+          }
+        ],
+        "cachedContentTokenCount": 2259,
+        "candidatesTokenCount": 180,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 180
+          }
+        ],
+        "promptTokenCount": 2985,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2985
+          }
+        ],
+        "thoughtsTokenCount": 17,
+        "totalTokenCount": 3182,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.04710613356696235,
+      "invocationId": "e-882d278a-7967-403c-986c-e759d4d2b096",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "67e6aa36-9634-490a-9d5c-99eb51ec760d",
+      "timestamp": 1788682821.5219095
+    }
+  ],
+  "lastUpdateTime": 1788682821.5219095
+}

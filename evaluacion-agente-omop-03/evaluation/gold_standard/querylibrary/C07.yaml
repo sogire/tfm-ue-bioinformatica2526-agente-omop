@@ -1,0 +1,21 @@
+id_evaluacion: "querylibrary_C07"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Localizar conceptos estándar de patógenos (bacterias, virus u hongos) en el vocabulario mediante la palabra clave 'Streptococcus pneumoniae'.
+sql_base_gold_standard: |
+  SELECT
+    c.concept_id       AS pathogen_concept_id,
+    c.concept_name     AS pathogen_concept_name,
+    c.concept_code     AS pathogen_concept_code,
+    c.concept_class_id AS pathogen_concept_class,
+    c.standard_concept AS pathogen_standard_concept,
+    c.vocabulary_id    AS pathogen_concept_vocab_id
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+  WHERE
+    lower(c.concept_class_id) = 'organism' AND
+    lower(c.concept_name) LIKE '%trypanosoma%' AND
+    c.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: ""

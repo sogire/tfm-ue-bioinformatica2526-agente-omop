@@ -1,0 +1,41 @@
+id_evaluacion: "querylibrary_G06"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_relationship, concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Identificar todos los conceptos mapeados directamente a partir del código fuente '410.00' y todos sus conceptos descendientes jerárquicos.
+sql_base_gold_standard: |
+  WITH dm AS ( -- collect direct maps
+      SELECT
+        c1.concept_code     AS source_code,
+        c1.vocabulary_id    AS source_vocabulary_id,
+        c1.domain_id        AS source_domain_id,
+        c2.concept_id       AS target_concept_id,
+        c2.concept_name     AS target_concept_name,
+        c2.concept_code     AS target_concept_code,
+        c2.concept_class_id AS target_concept_class_id,
+        c2.vocabulary_id    AS target_concept_vocab_id
+      FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS cr
+        JOIN `bio-med-480108.OMOP_54_A.concept` AS c1 ON cr.concept_id_1 = c1.concept_id
+        JOIN `bio-med-480108.OMOP_54_A.concept` AS c2 ON cr.concept_id_2 = c2.concept_id
+      WHERE
+        cr.relationship_id = 'Maps to' AND
+        c1.concept_code IN ('410.0') AND
+        c1.vocabulary_id = 'ICD9CM' AND
+        cr.invalid_reason IS NULL
+  )
+  SELECT
+    dm.source_code,
+    dm.source_vocabulary_id,
+    dm.source_domain_id,
+    dc.concept_id       AS target_concept_id,
+    dc.concept_name     AS target_concept_name,
+    dc.concept_code     AS target_concept_code,
+    dc.concept_class_id AS target_concept_class_id,
+    dc.vocabulary_id    AS target_concept_vocab_id
+  FROM `bio-med-480108.OMOP_54_A.concept_ancestor` AS ca -- collect descendants which includes ancestor itself
+    JOIN dm ON ca.ancestor_concept_id = dm.target_concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS dc ON ca.descendant_concept_id = dc.concept_id
+  WHERE dc.standard_concept = 'S'
+  ;
+concept_ids_gold_standard: ""

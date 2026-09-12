@@ -1,0 +1,28 @@
+id_evaluacion: "querylibrary_COC08"
+nivel_complejidad: "compleja"
+domain_main: "condition_era"
+domain_others: "concept, concept_relationship, concept_ancestor, measurement"
+pregunta_lenguaje_natural: >-
+  Identificar pacientes con una condición clínica que presentan resultados analíticos de laboratorio específicos (mediciones) dentro de un intervalo temporal alrededor de su diagnóstico.
+sql_base_gold_standard: |
+  SELECT DISTINCT condition.person_id,
+    measurement_date,
+    condition_era_start_date
+  FROM `bio-med-480108.OMOP_54_A.condition_era` condition
+  INNER JOIN --  definition of Aplastic Anemia
+    (
+    SELECT DISTINCT ca.descendant_concept_id AS concept_id
+    FROM `bio-med-480108.OMOP_54_A.concept` concept1
+    INNER JOIN `bio-med-480108.OMOP_54_A.concept_relationship` rel ON concept1.concept_id = rel.concept_id_1
+    INNER JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` ca ON ancestor_concept_id = concept_id_2
+    WHERE rel.relationship_id = 'HOI - SNOMED'
+      AND concept1.concept_name = 'OMOP Aplastic Anemia 1'
+      AND rel.invalid_reason IS NULL
+    ) conceptlist ON conceptlist.concept_id = condition_concept_id
+  INNER JOIN `bio-med-480108.OMOP_54_A.measurement` measurement ON measurement.person_id = condition.person_id
+    AND measurement_date >= DATEADD(day, - 7, condition_era_start_date)
+    AND measurement_date <= DATEADD(day, 7, condition_era_start_date)
+  WHERE measurement_concept_id IN /* leukocytes #/volume in blood */ (3000905, 3003282, 3010813)
+    AND unit_concept_id = 8961 /* Thousand per cubic millimeter */
+    AND value_as_number <= 3.5;
+concept_ids_gold_standard: "3000905, 3003282, 3010813, 8961"

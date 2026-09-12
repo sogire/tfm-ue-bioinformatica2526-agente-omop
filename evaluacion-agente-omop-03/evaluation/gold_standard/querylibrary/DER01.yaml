@@ -1,0 +1,24 @@
+id_evaluacion: "querylibrary_DER01"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: "drug_exposure, concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Identificar los registros individuales de dispensación o administración (drug_exposure) que conforman un episodio de exposición farmacológica continua (drug_era).
+sql_base_gold_standard: |
+  select *
+   from        `bio-med-480108.OMOP_54_A.drug_exposure` e
+   where
+           exists
+                  (
+                  select 1
+                  from
+                          `bio-med-480108.OMOP_54_A.drug_era` r ,
+                          `bio-med-480108.OMOP_54_A.concept_ancestor` m
+                  where
+                          r.drug_era_id = 20
+                  and r.person_id = e.person_id
+                  and r.drug_concept_id = m.ancestor_concept_id
+                  and e.drug_concept_id = m.descendant_concept_id
+                  and (e.drug_exposure_start_date >= r.drug_era_start_date) AND (e.drug_exposure_start_date <= r.drug_era_end_date)
+                  )
+concept_ids_gold_standard: ""

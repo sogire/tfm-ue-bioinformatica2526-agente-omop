@@ -1,0 +1,13 @@
+id_evaluacion: "querylibrary_OP03"
+nivel_complejidad: "baja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar el número de pacientes observados de forma continua a lo largo del año actual (current year).
+sql_base_gold_standard: |
+  SELECT
+    COUNT(DISTINCT person_ID) AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.observation_period`
+  WHERE observation_period_start_date <= current_date()
+  AND observation_period_end_date >= DATE_ADD(CURRENT_DATE(), INTERVAL 1 YEAR);
+concept_ids_gold_standard: ""

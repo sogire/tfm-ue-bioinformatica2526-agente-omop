@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_CO16"
+nivel_complejidad: "intermedia"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar cuántos pacientes en la base de datos presentan un número específico de condiciones clínicas distintas entre los diagnosticados con diabetes mellitus.
+sql_base_gold_standard: |
+  SELECT 
+    COUNT(c.condition_concept_id) conditions_count, 
+    c.person_id
+  FROM `bio-med-480108.OMOP_54_A.condition_occurrence` c
+  WHERE condition_concept_id = 201820 -- Input condition_concept_id
+  GROUP BY c.person_id
+  ORDER BY 1 DESC;
+concept_ids_gold_standard: "201820"

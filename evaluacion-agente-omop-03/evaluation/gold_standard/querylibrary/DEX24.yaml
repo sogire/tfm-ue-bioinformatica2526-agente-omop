@@ -1,0 +1,12 @@
+id_evaluacion: "querylibrary_DEX24"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar la frecuencia y distribución de las dispensaciones según el número de días de suministro prescrito (por ejemplo 30 días, 90 días).
+sql_base_gold_standard: |
+  SELECT days_supply, COUNT(*) AS cnt
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+   GROUP BY days_supply
+   ORDER BY days_supply;
+concept_ids_gold_standard: ""

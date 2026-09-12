@@ -1,0 +1,49 @@
+id_evaluacion: "querylibrary_G17"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_relationship"
+pregunta_lenguaje_natural: >-
+  Calcular la cobertura y estadísticas de mapeo de los vocabularios fuente de medicamentos al vocabulario estándar de fármacos (RxNorm).
+sql_base_gold_standard: |
+  SELECT
+    mapped.vocabulary_id                                                                                AS vocabulary_id,
+    mapped.standard_concept                                                                             AS standard_concept,
+    mapped.mapped_codes                                                                                 AS mapped_codes,
+    sum(mapped.mapped_codes) OVER (PARTITION BY vocabulary_id)                                          AS total_mapped_codes,
+    CAST(mapped.mapped_codes*100/sum(mapped.mapped_codes) OVER (PARTITION BY vocabulary_id) AS VARCHAR) AS pct_mapped_codes,
+    mapped.mapped_concepts                                                                              AS mapped_codes,
+    (SELECT 
+      COUNT(*)
+     FROM `bio-med-480108.OMOP_54_A.concept`
+     WHERE vocabulary_id='RxNorm'
+           AND standard_concept=mapped.standard_concept
+           AND invalid_reason IS NULL
+    )                                                                                                   AS standard_concepts,
+    ROUND( mapped.mapped_concepts*100/
+           ( SELECT 
+                CASE COUNT(*) 
+                  WHEN 0 THEN 1e16 
+                  ELSE COUNT(*) 
+                END
+             FROM `bio-med-480108.OMOP_54_A.concept`
+             WHERE vocabulary_id='RxNorm'
+                   AND standard_concept=mapped.standard_concept
+                   AND invalid_reason IS NULL ) ,1)                                                     AS pct_mapped_concepts
+  FROM 
+  ( SELECT
+      c1.vocabulary_id                    AS vocabulary_id,
+      c2.standard_concept,
+      COUNT(*)                            AS mapped_codes,
+      COUNT(DISTINCT c2.concept_id)       AS mapped_concepts
+    FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS m
+        JOIN `bio-med-480108.OMOP_54_A.concept` AS c1 
+          ON m.concept_id_1=c1.concept_id 
+             AND m.relationship_id='Maps to' 
+             AND m.invalid_reason IS NULL
+        JOIN `bio-med-480108.OMOP_54_A.concept` AS c2 
+          ON c2.concept_id=m.concept_id_2
+    WHERE c2.vocabulary_id IN ('ICD9CM','RxNorm') 
+          AND c2.domain_id='Drug'
+    GROUP BY c1.vocabulary_id, c2.standard_concept
+  ) AS mapped;
+concept_ids_gold_standard: ""

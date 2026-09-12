@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_CO22"
+nivel_complejidad: "intermedia"
+domain_main: "condition_occurrence"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Obtener la distribución del recuento de ocurrencias diagnósticas clasificadas según el tipo de condición (por ejemplo diagnóstico principal, secundario o ambulatorio).
+sql_base_gold_standard: |
+  SELECT 
+    concept_name                      AS condition_occurrence_type, 
+    condition_type_concept_id, 
+    COUNT(*)                          AS occurrence_type_count
+  FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept` 
+  ON concept_id = condition_type_concept_id
+  GROUP BY concept_name, condition_type_concept_id;
+concept_ids_gold_standard: ""

@@ -1,0 +1,11 @@
+steps:
+  # Step 1: Build the image using the environment-specific Dockerfile
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build', 
+      '-t', '${_IMAGE_NAME}', 
+      '-f', '${_DOCKERFILE_PATH}', 
+      '.'
+    ]
+images:
+  - '${_IMAGE_NAME}'

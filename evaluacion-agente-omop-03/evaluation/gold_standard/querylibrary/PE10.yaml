@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_PE10"
+nivel_complejidad: "intermedia"
+domain_main: "person"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular el recuento de pacientes clasificados según el día del año de su fecha de nacimiento (combinación de mes y día de nacimiento).
+sql_base_gold_standard: |
+  SELECT
+    month_of_birth,
+    day_of_birth,
+    count(*) AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.person`
+  GROUP BY month_of_birth, day_of_birth
+  ORDER BY month_of_birth, day_of_birth
+  ;
+concept_ids_gold_standard: ""

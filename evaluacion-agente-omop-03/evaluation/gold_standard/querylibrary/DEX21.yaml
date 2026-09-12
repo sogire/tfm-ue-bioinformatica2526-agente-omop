@@ -1,0 +1,25 @@
+id_evaluacion: "querylibrary_DEX21"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "concept_relationship, condition_occurrence"
+pregunta_lenguaje_natural: >-
+  Identificar pacientes a los que se les prescribió un medicamento a pesar de presentar un diagnóstico previo de contraindicación formal para el mismo.
+sql_base_gold_standard: |
+  WITH con_rel AS (
+  SELECT r1.concept_id_1,
+         r2.concept_id_2
+    FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS r1
+    JOIN `bio-med-480108.OMOP_54_A.concept_relationship` r2
+      ON r2.concept_id_1    = r1.concept_id_2
+   WHERE r1.relationship_id = 'Has CI'
+     AND r2.relationship_id = 'Ind/CI - SNOMED'
+  )
+  SELECT COUNT(DISTINCT d.person_id) AS count_value
+    FROM con_rel cr
+    JOIN `bio-med-480108.OMOP_54_A.drug_exposure` d
+      ON cr.concept_id_1 = d.drug_concept_id
+    JOIN `bio-med-480108.OMOP_54_A.condition_occurrence` c
+      ON cr.concept_id_2  = c.condition_concept_id
+     AND d.person_id      = c.person_id
+   WHERE d.drug_exposure_start_date >= c.condition_start_date
+concept_ids_gold_standard: ""

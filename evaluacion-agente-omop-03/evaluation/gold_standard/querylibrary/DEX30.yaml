@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_DEX30"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Determinar el recuento de pacientes según la cantidad de medicamentos diferentes que han recibido.
+sql_base_gold_standard: |
+  SELECT
+    t.person_id,
+    count(DISTINCT t.drug_concept_id) AS n_distinct_drugs
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure` t
+  GROUP BY t.person_id
+  HAVING count(DISTINCT t.drug_concept_id) > 10
+  ;
+concept_ids_gold_standard: ""

@@ -1,0 +1,28 @@
+id_evaluacion: "querylibrary_DEX14"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Calcular cuántos pacientes expuestos a estatinas reciben de forma concomitante diuréticos.
+sql_base_gold_standard: |
+  WITH statins AS (
+  SELECT descendant_concept_id AS concept_id
+    FROM `bio-med-480108.OMOP_54_A.concept_ancestor`
+   WHERE ancestor_concept_id = 1539403
+  ), diuretics AS (
+  SELECT descendant_concept_id AS concept_id
+    FROM `bio-med-480108.OMOP_54_A.concept_ancestor`
+   WHERE ancestor_concept_id = 974166
+  )
+  SELECT COUNT(DISTINCT de1.person_id) AS num_users,
+         COUNT(DISTINCT de2.person_id) AS also_bp
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure` de1
+    JOIN statins s
+      ON de1.drug_concept_id = s.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.drug_exposure` de2
+      ON de1.person_id = de2.person_id
+    LEFT JOIN diuretics d
+      ON de2.drug_concept_id = d.concept_id
+     AND de2.drug_exposure_start_date < de1.drug_exposure_end_date
+     AND de2.drug_exposure_end_date   > de1.drug_exposure_start_date;
+concept_ids_gold_standard: "1539403, 974166"

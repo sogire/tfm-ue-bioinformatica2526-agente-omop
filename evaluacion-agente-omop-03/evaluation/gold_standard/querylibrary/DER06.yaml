@@ -1,0 +1,32 @@
+id_evaluacion: "querylibrary_DER06"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: "concept, concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Para la clase terapéutica de antitrombinas, calcular el porcentaje de pacientes que consumen cada uno de los fármacos pertenecientes a dicha clase.
+sql_base_gold_standard: |
+  select        tt.concept_id,
+                  tt.concept_name,
+                  100*(tt.cntPersons*1.0/tt.total*1.0) as proportion_count
+  from
+          (
+          select        c.concept_id,
+                          c.concept_name,
+                          t.cntPersons,
+                          sum(cntPersons) over() as total
+          from        `bio-med-480108.OMOP_54_A.concept` c,
+                          (
+                          select        r.drug_concept_id,
+                                          count(distinct r.person_id) as cntPersons
+                          FROM        `bio-med-480108.OMOP_54_A.concept_ancestor` ca,
+                                          `bio-med-480108.OMOP_54_A.drug_era` r
+                          WHERE
+                                  ca.ancestor_concept_id        = 4324992
+                          AND        r.drug_concept_id                = ca.descendant_concept_id
+                          group by
+                                  r.drug_concept_id
+                          ) t
+          where
+                  t.drug_concept_id = c.concept_id
+          ) tt;
+concept_ids_gold_standard: "4324992"

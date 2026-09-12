@@ -1,0 +1,22 @@
+# AGENTE ANALÍTICO OMOP
+## APLICACIÓN DE IA CONVERSACIONAL PARA DEMOCRATIZAR EL ANÁLISIS DE DATOS DE BASES DE DATOS CLÍNICAS OMOP CDM 5.4
+
+**TRABAJO FIN DE MÁSTER** · Máster Universitario en Bioinformática 2025/2026 · Universidad Europea de Madrid  
+*Autor: Sergio Bermúdez Sánchez* | *Tutor: Isidoro Gutiérrez Álvarez*  
+*Memoria académica de referencia:* `TFM-AgenteOMOP_SergioBermudez_Final.pdf`
+
+El acceso a los datos de salud estandarizados bajo el modelo de datos común OMOP CDM sigue limitado por la necesidad de contar con conocimientos técnicos avanzados en SQL y conocer la estructura y jerarquías de los vocabularios OHDSI. Para resolver esta barrera, en este Trabajo Fin de Máster he desarrollado el Agente Analítico OMOP, una prueba de concepto basada en IA conversacional que permite a profesionales sanitarios e investigadores formular preguntas analíticas de caracterización e incidencia en lenguaje natural.
+
+El **objetivo general** del proyecto es desarrollar y evaluar un sistema conversacional multiagente basado en Modelos de Lenguaje Masivos (LLM) capaz de interactuar de forma autónoma con bases de datos que cumplen el estándar OMOP CDM 5.4 (alojadas en Google BigQuery), posibilitando la formulación de consultas analíticas de caracterización de cohortes y cálculo de incidencia en lenguaje natural.
+
+Como **objetivos específicos**, el trabajo contempla: (1) adaptar y enriquecer los metadatos del esquema OMOP CDM para su interpretación por agentes inteligentes; (2) integrar motores de búsqueda terminológica estandarizada (SNOMED CT, RxNorm) mediante arquitecturas RAG para validar conceptos médicos sin alucinaciones; y (3) generar y validar sintácticamente de manera automatizada sentencias SQL conformes al catálogo clínico de BigQuery tomando como base colecciones estandarizadas como la *OHDSI QueryLibrary*.
+
+El proyecto se alinea de forma directa con los Objetivos de Desarrollo Sostenible (ODS), facilitando la alfabetización en datos del personal sanitario (ODS 4: Educación de calidad), democratizando el acceso analítico entre organizaciones con independencia de sus recursos bioinformáticos (ODS 10: Reducción de las desigualdades), optimizando la infraestructura técnica hospitalaria (ODS 9: Industria, innovación e infraestructura) y agilizando la obtención de evidencia clínica en beneficio del paciente (ODS 3: Salud y bienestar).
+
+La arquitectura técnica del sistema se organiza en dos módulos principales interconectados:
+
+* **Módulo de Agentes ([`agentes-omop/`](agentes-omop/README.md)):** Alberga el conjunto de desarrollos basados en Google Agent Development Kit (ADK) y modelos Gemini desplegados en Google Cloud Run. El **agente central objeto del Trabajo Fin de Máster y sometido a evaluación formal es [`omop_03_concepts_and_sql`](agentes-omop/agents-dev/omop_03_concepts_and_sql/README.md)**, especializado en la búsqueda/validación de conceptos OMOP y formulación Text-to-SQL para BigQuery. El resto de subagentes del directorio (`omop_01_consierge`, `omop_02_book_of_ohdsi`, `omop_04_phenotypes`, `omop_05_research` y `omop_06_r_scripts`) constituyen experimentos y prototipos exploratorios paralelos que abordaron otros retos del ecosistema OMOP/OHDSI (como aprendizaje personal y fuente de ideas futuras), no formando parte del alcance evaluado en la memoria académica. Para más detalles, consulte [`agentes-omop/README.md`](agentes-omop/README.md).
+
+* **Marco de Evaluación Experimental ([`evaluacion-agente-omop-03/`](evaluacion-agente-omop-03/README.md)):** Entorno automatizado de pruebas (*benchmark*) diseñado para contrastar el desempeño del agente Text-to-SQL frente a un estándar de oro (*Gold Standard*) de 201 consultas clínicas categorizadas por nivel de complejidad y dominio OMOP. Incluye el protocolo de ejecución multiturno guiado por LLM como juez, extracción de métricas objetivas y análisis estadístico inferencial consolidado. Para más información, consulte [`evaluacion-agente-omop-03/README.md`](evaluacion-agente-omop-03/README.md).
+
+Los resultados de la evaluación experimental confirman la validez de la solución: el agente alcanzó una precisión terminológica del vocabulario del **92.5%** (con un 90.0% de asignaciones conceptuales perfectas), una tasa de ejecutabilidad técnica del **93.5%** y una Validez Sintáctica y Estructural global que progresó desde el **23.9%** en el primer turno (*zero-shot*) hasta el **84.9%** (81.6% de éxito operativo) tras el refinamiento conversacional interactivo.

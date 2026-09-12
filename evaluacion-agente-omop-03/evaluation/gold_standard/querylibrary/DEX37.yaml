@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_DEX37"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar la cantidad de registros de dispensación clasificados según el número de repeticiones de prescripción autorizadas.
+sql_base_gold_standard: |
+  SELECT
+    COUNT(1)  AS drug_exposure_count,
+    refills   AS refills_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  -- Filter by input list of refills
+  WHERE refills in (10, 20)
+  GROUP BY refills;
+concept_ids_gold_standard: ""

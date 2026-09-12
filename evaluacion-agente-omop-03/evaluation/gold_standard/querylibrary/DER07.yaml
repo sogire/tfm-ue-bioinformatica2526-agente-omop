@@ -1,0 +1,17 @@
+id_evaluacion: "querylibrary_DER07"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular el tiempo medio transcurrido (en días) entre episodios sucesivos de tratamiento para el principio activo darbepoetina alfa.
+sql_base_gold_standard: |
+  SELECT avg(datediff(day, t.drug_era_end_date, t.next_era_start)) AS num_days
+  FROM (
+           SELECT r.drug_era_end_date,
+                  lead(r.drug_era_start_date)
+                  OVER (PARTITION BY r.person_id, r.drug_concept_id ORDER BY r.drug_era_start_date) AS next_era_start
+           FROM `bio-med-480108.OMOP_54_A.drug_era` r
+           WHERE r.drug_concept_id = 1304643
+       ) t
+  WHERE t.next_era_start IS NOT NULL
+concept_ids_gold_standard: "1304643"

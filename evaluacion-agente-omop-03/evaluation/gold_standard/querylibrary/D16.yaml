@@ -1,0 +1,37 @@
+id_evaluacion: "querylibrary_D16"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_relationship, concept_ancestor, relationship"
+pregunta_lenguaje_natural: >-
+  Listar los medicamentos indicados para vómitos filtrando o clasificando según el tipo o grado de indicación terapéutica.
+sql_base_gold_standard: |
+  SELECT DISTINCT
+   drug.concept_id      as drug_concept_id,
+   drug.concept_name    as drug_concept_name,
+   drug.concept_code    as drug_concept_code,
+   rn.relationship_name as indication_type,
+   indication_relation.relationship_id
+  FROM
+    `bio-med-480108.OMOP_54_A.concept_relationship` indication_relation
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` a
+   ON a.ancestor_concept_id=indication_relation.concept_id_2
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept` drug
+   ON drug.concept_id=a.descendant_concept_id
+  INNER JOIN `bio-med-480108.OMOP_54_A.relationship` rn
+   ON rn.relationship_id=indication_relation.relationship_id
+  WHERE indication_relation.concept_id_1 = 4345991
+    AND drug.domain_id = 'Drug'
+    AND drug.standard_concept = 'S'
+    AND indication_relation.relationship_id in (
+            'May treat',
+          'Is off-label ind of',
+          'Is FDA-appr ind of',
+          'Inferred class of',
+          'May be prevented by',
+          'May prevent',
+          'Has FDA-appr ind',
+          'Has off-label ind',
+          'May be treated by',
+          'Has inferred class')
+    AND (getdate() >= drug.valid_start_date) AND (getdate() <= drug.valid_end_date);
+concept_ids_gold_standard: "4345991"

@@ -1,0 +1,14 @@
+id_evaluacion: "querylibrary_DER16"
+nivel_complejidad: "intermedia"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Determinar el número de pacientes clasificados según la cantidad total de episodios de tratamiento farmacológico (drug eras) que tienen registrados.
+sql_base_gold_standard: |
+  SELECT
+    count(1) AS s_count,
+    t.person_id
+  FROM `bio-med-480108.OMOP_54_A.drug_era` t
+  group by t.person_id
+  having count(1) in (3, 4);
+concept_ids_gold_standard: ""

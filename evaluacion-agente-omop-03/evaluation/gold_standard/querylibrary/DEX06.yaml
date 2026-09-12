@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_DEX06"
+nivel_complejidad: "baja"
+domain_main: "drug_exposure"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Contar la cantidad de fármacos y formulaciones distintas registradas en la tabla de dispensación de medicamentos.
+sql_base_gold_standard: |
+  SELECT
+    COUNT(DISTINCT drug_concept_id) AS number_drugs
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept`
+  ON concept_id = drug_concept_id
+  WHERE LOWER(domain_id)='drug'
+        AND vocabulary_id='RxNorm'
+        AND standard_concept='S';
+concept_ids_gold_standard: ""

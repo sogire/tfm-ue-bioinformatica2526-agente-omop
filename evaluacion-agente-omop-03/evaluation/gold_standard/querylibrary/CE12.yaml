@@ -1,0 +1,39 @@
+id_evaluacion: "querylibrary_CE12"
+nivel_complejidad: "compleja"
+domain_main: "condition_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular estadísticas descriptivas (fecha promedio y desviación típica en días) de las fechas de inicio de los episodios de condición seleccionados (incluyendo neumonía e influenza).
+sql_base_gold_standard: |
+  WITH ordered_data AS (
+  SELECT condition_concept_id,
+         condition_era_start_date,
+         ROW_NUMBER() OVER (PARTITION BY condition_concept_id ORDER BY condition_era_start_date) order_nr,
+         COUNT(*) OVER (PARTITION BY condition_concept_id) AS population_size
+    FROM `bio-med-480108.OMOP_54_A.condition_era`
+   WHERE condition_concept_id IN ( 256723, 372906, 440377, 441202, 435371 )
+  ), percentiles AS (
+  SELECT condition_concept_id,
+         MIN(CASE WHEN order_nr < .25 * population_size THEN DATEFROMPARTS(9999,1,1) ELSE condition_era_start_date END) AS pct_25,
+         MIN(CASE WHEN order_nr < .50 * population_size THEN DATEFROMPARTS(9999,1,1) ELSE condition_era_start_date END) AS median,
+         MIN(CASE WHEN order_nr < .75 * population_size THEN DATEFROMPARTS(9999,1,1) ELSE condition_era_start_date END) AS pct_75
+    FROM ordered_data
+   GROUP BY condition_concept_id
+  ), aggregates AS (
+  SELECT condition_concept_id,
+         MIN(condition_era_start_date) AS min_start_date,
+         MAX(condition_era_start_date) AS max_start_date,
+         -- Julian Date arithmetic doesn't seem natively supported by all RDBMS,
+         -- using days since Jan 1 of Year 1 ('0001-01-01','YYYY-MM-DD') instead.
+         DATEADD(d,AVG(CAST(DATEDIFF(day,DATEFROMPARTS(1,1,1),condition_era_start_date) AS FLOAT)),DATEFROMPARTS(1,1,1)) AS avg_start_date,
+         ROUND(STDEV(CAST(DATEDIFF(day,DATEFROMPARTS(1,1,1),condition_era_start_date) AS FLOAT)),0) AS std_dev_days
+    FROM `bio-med-480108.OMOP_54_A.condition_era`
+   WHERE condition_concept_id IN ( 256723, 372906, 440377, 441202, 435371 )
+   GROUP BY condition_concept_id
+   )
+   SELECT a.condition_concept_id, a.min_start_date, a.max_start_date, a.avg_start_date, a.std_dev_days, p.pct_25, p.median, p.pct_75
+     FROM aggregates a
+     JOIN percentiles p
+       ON a.condition_concept_id = p.condition_concept_id
+    ORDER BY a.condition_concept_id;
+concept_ids_gold_standard: "256723, 372906, 440377, 441202, 435371"

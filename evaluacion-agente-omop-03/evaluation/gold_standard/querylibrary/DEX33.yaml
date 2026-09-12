@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_DEX33"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar las dispensaciones o administraciones de medicamentos estratificadas mensualmente a lo largo del tiempo.
+sql_base_gold_standard: |
+  SELECT
+    MONTH(drug_exposure_start_date) AS month_num,
+    COUNT(*) AS                       exp_in_month_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  WHERE MONTH(drug_exposure_start_date) IN (3, 5)
+  GROUP BY MONTH(drug_exposure_start_date)
+  ORDER BY month_num
+  ;
+concept_ids_gold_standard: ""

@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_D11"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_ancestor, vocabulary"
+pregunta_lenguaje_natural: >-
+  Obtener los códigos de medicamentos fuente (como códigos NDC) asociados a los fármacos incluidos en la clase terapéutica de inhibidores de la ECA y combinaciones.
+sql_base_gold_standard: |
+  SELECT  d.concept_code,
+          d.vocabulary_id,
+          v.vocabulary_name
+   FROM `bio-med-480108.OMOP_54_A.concept_ancestor` ca
+          JOIN `bio-med-480108.OMOP_54_A.concept` d on d.concept_id = ca.descendant_concept_id
+          JOIN `bio-med-480108.OMOP_54_A.concept` a on a.concept_id = ca.ancestor_concept_id
+          JOIN `bio-med-480108.OMOP_54_A.vocabulary` v on d.vocabulary_id = v.vocabulary_id
+   WHERE  ca.ancestor_concept_id = 21506108
+     AND  a.vocabulary_id = 'NDC'
+     AND  d.domain_id = 'Drug'
+     AND  (getdate() >= d.valid_start_date)
+     AND  (getdate() <= d.valid_end_date);
+concept_ids_gold_standard: "21506108"

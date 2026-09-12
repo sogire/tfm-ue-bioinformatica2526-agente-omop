@@ -1,0 +1,72 @@
+id_evaluacion: "querylibrary_CO13"
+nivel_complejidad: "compleja"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular estadísticas descriptivas (fecha media, desviación estándar y percentiles) de las fechas de inicio de diagnóstico de condiciones en la población.
+sql_base_gold_standard: |
+  WITH end_rank AS 
+    (SELECT
+      condition_start_date,
+      SUM(1) over (partition BY 1 ORDER BY condition_start_date ASC ROWS BETWEEN unbounded preceding AND CURRENT row) AS rownumASc
+    FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+    ),
+    other_stat AS 
+    (SELECT
+      COUNT(condition_start_date)                                                      AS co_start_date_count,
+      MIN(condition_start_date)                                                        AS co_start_date_min,
+      MAX(condition_start_date)                                                        AS co_start_date_max,
+      DATEADD(DAY, AVG(CAST(DATEDIFF(DAY,DATEFROMPARTS(1,1,1),condition_start_date) AS BIGINT)), DATEFROMPARTS(1,1,1)) AS co_start_date_average,
+      STDEV((DATEDIFF(DAY,DATEFROMPARTS(1,1,1),condition_start_date)))                                       AS co_start_date_stddev
+     FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+     WHERE condition_start_date IS NOT NULL
+    )
+
+  SELECT
+    (SELECT 
+      COUNT(condition_start_date) 
+     FROM `bio-med-480108.OMOP_54_A.condition_occurrence` 
+     WHERE condition_start_date IS NULL
+    ) AS co_start_date_null_count
+  , co_start_date_count
+  , co_start_date_min
+  , co_start_date_max
+  , co_start_date_average
+  , co_start_date_stddev
+  , co_start_date_25percentile
+  , co_start_date_median
+  , co_start_date_75percentile
+  FROM other_stat,
+      (SELECT
+        DATEADD(DAY, AVG(CAST(DATEDIFF(DAY,DATEFROMPARTS(1,1,1),condition_start_date) AS BIGINT)), DATEFROMPARTS(1,1,1)) AS co_start_date_25percentile
+        FROM (
+         SELECT condition_start_date, rownumAsc,(SELECT COUNT(*) FROM end_rank ) AS rowno 
+           FROM end_rank 
+             ) a_1
+         WHERE ( rownumASc = CAST(rowno*0.25 AS int)   AND floor(rowno*25/100)  = rowno*25/100 ) 
+            OR ( rownumASc = CAST(rowno*0.25 AS int)   AND floor(rowno*25/100) != rowno*25/100 )
+            OR ( rownumASc = CAST(rowno*0.25 AS int)+1 AND floor(rowno*25/100) != rowno*25/100 )
+       ) co_start_date_25percentile,
+      (SELECT
+        DATEADD(DAY, AVG(CAST(DATEDIFF(DAY,DATEFROMPARTS(1,1,1),condition_start_date) AS BIGINT)), DATEFROMPARTS(1,1,1)) AS co_start_date_median
+        FROM (
+         SELECT condition_start_date, rownumAsc,(SELECT COUNT(*) FROM end_rank ) AS rowno 
+           FROM end_rank 
+            ) a_1
+         WHERE ( rownumASc = CAST(rowno*0.5 AS int)   AND floor(rowno*50/100)  = rowno*50/100 ) 
+            OR ( rownumASc = CAST(rowno*0.5 AS int)   AND floor(rowno*50/100) != rowno*50/100 )
+            OR ( rownumASc = CAST(rowno*0.5 AS int)+1 AND floor(rowno*50/100) != rowno*50/100 )
+       ) co_start_date_median,
+      (SELECT
+        DATEADD(DAY, AVG(CAST(DATEDIFF(DAY, DATEFROMPARTS(1,1,1),condition_start_date) AS BIGINT)), DATEFROMPARTS(1,1,1)) AS co_start_date_75percentile
+          FROM (
+         SELECT condition_start_date, rownumAsc,(SELECT COUNT(*) FROM end_rank ) AS rowno 
+           FROM end_rank 
+           ) a_1
+         WHERE ( rownumASc = CAST(rowno*0.75 AS int)   AND floor(rowno*75/100)  = rowno*75/100 ) 
+            OR ( rownumASc = CAST(rowno*0.75 AS int)   AND floor(rowno*75/100) != rowno*75/100 )
+            OR ( rownumASc = CAST(rowno*0.75 AS int)+1 AND floor(rowno*75/100) != rowno*75/100 )
+       ) co_start_date_75percentile
+
+  ;
+concept_ids_gold_standard: ""

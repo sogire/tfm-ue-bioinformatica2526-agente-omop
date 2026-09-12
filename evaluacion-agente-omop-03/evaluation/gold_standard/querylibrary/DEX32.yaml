@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_DEX32"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar cuántos pacientes presentan una cantidad determinada de registros de dispensación de medicamentos.
+sql_base_gold_standard: |
+  SELECT
+    person_id,
+    count(*) AS exposure_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  GROUP BY person_id
+  HAVING count(*) in (3,4)
+  ;
+concept_ids_gold_standard: ""

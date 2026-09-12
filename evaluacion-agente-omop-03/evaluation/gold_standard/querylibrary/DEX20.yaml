@@ -1,0 +1,39 @@
+id_evaluacion: "querylibrary_DEX20"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "concept, concept_ancestor, condition_occurrence"
+pregunta_lenguaje_natural: >-
+  Determinar cuántos pacientes que iniciaron un fármaco para cierta indicación contaban con un diagnóstico previo documentado de dicha enfermedad en su historial.
+sql_base_gold_standard: |
+  WITH tb_treatment_start AS (
+  /* person and tuberculosis treatment start date */
+  SELECT de.person_id, MIN(de.drug_exposure_start_date) AS treatment_start
+    FROM `bio-med-480108.OMOP_54_A.concept` c1
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` ca
+      ON ca.ancestor_concept_id = c1.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.drug_exposure` de
+      ON ca.descendant_concept_id = de.drug_concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` c2
+      ON de.drug_concept_id  = c2.concept_id
+   WHERE c1.concept_name     = 'Tuberculosis'   
+     AND c1.concept_class_id = 'Ind / CI'
+     AND c2.domain_id        = 'Drug'
+     AND c2.vocabulary_id    = 'RxNorm'
+     AND c2.standard_concept = 'S'
+   GROUP BY de.person_id
+  ), tb_first_diagnosis AS (
+  SELECT co.person_id, MIN(co.condition_start_date) AS first_diagnosis  
+    FROM `bio-med-480108.OMOP_54_A.concept` c
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` ca
+      ON ca.ancestor_concept_id = c.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.condition_occurrence` co
+      ON co.condition_concept_id = ca.descendant_concept_id  
+   WHERE c.concept_name = 'Tuberculosis'
+   GROUP BY co.person_id
+  )
+  SELECT COUNT(*) AS treated
+    FROM tb_treatment_start tss
+    JOIN tb_first_diagnosis tfd
+      ON tss.person_id = tfd.person_id
+     AND tss.treatment_start >= tfd.first_diagnosis;
+concept_ids_gold_standard: ""

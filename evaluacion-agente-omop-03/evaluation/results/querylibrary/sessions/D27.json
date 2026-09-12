@@ -1,0 +1,671 @@
+{
+  "id": "93f1ebba-f72e-4530-b4fb-35a89795148f",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Listar todas las presentaciones y concentraciones farmacéuticas comercializadas bajo la marca comercial Fosamax. Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-88b4fb8f-6eb3-4280-b878-d88215d75e68",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "e2efaf25-75c6-42ab-8b29-fae2e6bc9a0c",
+      "timestamp": 1788685568.7040966
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-f3aa7a1f-cb07-45a9-a221-91b2a42b8b0d",
+              "args": {
+                "query": "Fosamax",
+                "domain_id": "Drug",
+                "vocabulary_id": "RxNorm"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CuwCAY89a1-cZk91C5ygtbyqdJNotV89maDISLi4HS5yp4bTMuN8Xmom73HjU65xCDCrFqMrrFZ3y6z8VrjIGlA-pS0w3BnQ_3YNjro3ysiyXFR3QIKwdp05NCRvS2y2Ez4n5AWFZTE3uJxXhD6owllrRWKjjrhSh2KNNEHOwsg7Je-6MGvDUmnc9wh2C_02nzQg-doHzM2YBsjo0rDPIGhyFTTSSuTuUz55Ak9aUHOKgNbMvt3ZQKe_ZYTSsKcLX-6B1OjOoB1S7xN7DtRXwLNbz9Zhm_la3T-1Z9LczdnwaL_6M4Zp-cbI5Mbr3m1reBykcy4WVq-5GtpTkfURhUOwbv-JH4xjLjk_pC932LuFqDzsZ2wNjqGe7w4nC2ylolvyQ5esdyQK3GXrsLW8cBv52H3Ik88aJKCD9H25_e8V2pellQZEtEmFVRzHI9wNJQG6jcBjO5qSoAKBzSsxaRIzoyNsYdyO01dbXr2IpQ=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 21,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 21
+          }
+        ],
+        "promptTokenCount": 1250,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1250
+          }
+        ],
+        "thoughtsTokenCount": 80,
+        "totalTokenCount": 1351,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.1736643654959542,
+      "invocationId": "e-88b4fb8f-6eb3-4280-b878-d88215d75e68",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "006f4dfb-7c9a-4bb1-86a1-0e9361c24271",
+      "timestamp": 1788685568.705365
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-f3aa7a1f-cb07-45a9-a221-91b2a42b8b0d",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 19,
+                "concepts": [
+                  {
+                    "concept_id": 40173604,
+                    "concept_name": "alendronic acid 5 MG [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173614,
+                    "concept_name": "alendronic acid 70 MG [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173600,
+                    "concept_name": "alendronic acid 40 MG [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173596,
+                    "concept_name": "alendronic acid 35 MG [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173592,
+                    "concept_name": "alendronic acid 10 MG [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173618,
+                    "concept_name": "alendronate Oral Tablet [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173616,
+                    "concept_name": "alendronate Oral Solution [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173588,
+                    "concept_name": "alendronic acid 0.933 MG/ML [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173603,
+                    "concept_name": "alendronic acid 5 MG Oral Tablet [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173591,
+                    "concept_name": "alendronic acid 10 MG Oral Tablet [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173595,
+                    "concept_name": "alendronic acid 35 MG Oral Tablet [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173613,
+                    "concept_name": "alendronic acid 70 MG Oral Tablet [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173599,
+                    "concept_name": "alendronic acid 40 MG Oral Tablet [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173587,
+                    "concept_name": "alendronic acid 0.933 MG/ML Oral Solution [Fosamax]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173584,
+                    "concept_name": "alendronate / cholecalciferol Oral Tablet [Fosamax Plus D]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173608,
+                    "concept_name": "alendronic acid 70 MG / cholecalciferol 2800 UNT [Fosamax Plus D]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173611,
+                    "concept_name": "alendronic acid 70 MG / cholecalciferol 5600 UNT [Fosamax Plus D]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173607,
+                    "concept_name": "alendronic acid 70 MG / cholecalciferol 2800 UNT Oral Tablet [Fosamax Plus D]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40173610,
+                    "concept_name": "alendronic acid 70 MG / cholecalciferol 5600 UNT Oral Tablet [Fosamax Plus D]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  }
+                ],
+                "filters": {
+                  "vocab": "RxNorm",
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-88b4fb8f-6eb3-4280-b878-d88215d75e68",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "51dcb3ec-9d7c-49d9-b707-35f0e54d5d8b",
+      "timestamp": 1788685570.6719525
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "He encontrado las siguientes presentaciones y concentraciones farmacéuticas para Fosamax.\n\n| Concept ID | Concept Name                           | Domain |\n|:-----------|:---------------------------------------|:-------|\n| 40173604   | alendronic acid 5 MG [Fosamax]         | Drug   |\n| 40173614   | alendronic acid 70 MG [Fosamax]        | Drug   |\n| 40173600   | alendronic acid 40 MG [Fosamax]        | Drug   |\n| 40173596   | alendronic acid 35 MG [Fosamax]        | Drug   |\n| 40173592   | alendronic acid 10 MG [Fosamax]        | Drug   |\n\n¿Cuáles de estos conceptos representan mejor su variable de estudio? Por favor, indique los Concept IDs.",
+            "thoughtSignature": "CsoJAY89a1_0bB86SQqbLLUlCbiQf6X6CnhCAq7WoSHmYL-I7J-G1xKGzlDv1gpdk_SCv7s9iz-9m0OHtKBHhomqYCPPD9IOMfZ5BIIq5v8D_dweTZ5jDwPLveJMtEFJrQfnHEx2aDpfT4Ps0bHg9gpiF4iI2DqjjnLeiW_ZmNXpTs-V3DO-42MUIqIsMz6aXDOUEaSRz24vTi02dojGS81KsMG-7W3da-eWkOWeO5mzjEh4RCEREYbIVB-rFn4ePNu4Sh727FHoVjVFQJIwcfA-Vig4O3WNsPaIM7TpjbwMs6dbcqN-dLI4vG98szjRI2XE3RDVoLosFUNvu5uVBYg6zuc5-bI5VneOHkJS-9qNBs2CK7218cNna_9Md2eQKyTTQnUlLncsh7sLKT96lWhKBAynhw6_3COe01IXj1fxPtuGB14A6HMWIdDtbYCMJzkFFb87P-4GscFz7IBjp1nz44p5guTJ8bltALMQxYjRP60lfAeA7ALRT3W4sVba0Q9LByOvla5U8iYbAPqs6Xax-c0mqP9ZuRICxKnivW4zdOadYDekoZxkI-gf5NHev3cPTH8JUKxHH34fQZzzH_pgu6XN0e_yIHZ1YGSHtwbLmkLEk9sLPhuhFJeXv9j-rm1_ovO16MZxHZ02By_sVVynbh4T72oQ5Ll82chO53QsF2Y11F3bPmkqCBx9ZT1At-gJV7x-ajbyvpuxRnwSh48umrUG94SKBdfyHEATeiG-d3G6xihCoYgvC7B71ij6dF0oISmXvYeeTqFzZpx58bS1qX5als7sTPzySb-eyeO-SQ1fWcQ6ZofJxuRypw50LmLv1SNNZj425wJkgVSiqdH3gRFkQnXSRBVB2IUTdVdyXxFqg3Y1eQ82sxFHgMeQ3pbAGCDyt8GXlxoh-BTfOfjFm22IOz8uPfC8-j5A0HRSRs6TSjrj4utEYQK4InYtEz7hphuS5IDNdByvRqOEfc_WRNGdTEcg48_88ni_gkogy0T3kICnpYhg-yap-CpOZLWemI4fEoVMNSfjfVXxsfKzXOay01BF_dJyXACOYN9KOaNAWMHFSWvhWrr2a5h6jKs7RrEhddgJGl-GwHMF24Dj0U73e62TJWgEhldYnGcQ9m1k16NQh8vXhbQE3pjFwD7i5LP2DsHPvKwswddOiIVLbH8BhpOgqUWuldccy-eU9koFc1B53nCVvB7kSVd3H_2uF1R-Lcws9zhuUuCjSWSNDrg9wMu7pBnRbBXhH47s0DtF7XzVtSS8GlCgW8so2X4x1sj-JUGC2db10NUirRe63J7pr9cJTI4v4ctxqi1zf4AE-7-OvzbxOz97uqU_JKN4vjjAFMCepRCpqoLoVwbsyWj-S7Te988n3loSB85Ssb_E97fFAJsgLlT59CQQp_iAB49DS7LzHlSypgkhmCPd37Z1-3iB4b1Vinw3WTJ5iQVuN_nlsBqBXlWtY9O3meP9hDERTIJZ_WbAgmz-XTs0sZV7VfDcgdQLQeV84Yv4W8fT-OiUT9GLO7paMherx4mlujSl-5YSAzUQQDJfS7x61EDSvCRCrRGb9VdcJFwD7Ky-tWzlGIr3XHeCvrcDm1lU1NcoJ1wHM2n1jM71-8-4VhU9Dl-2LhWNLa8="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 699
+          }
+        ],
+        "cachedContentTokenCount": 699,
+        "candidatesTokenCount": 214,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 214
+          }
+        ],
+        "promptTokenCount": 2114,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2114
+          }
+        ],
+        "thoughtsTokenCount": 408,
+        "totalTokenCount": 2736,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.30891186723085207,
+      "invocationId": "e-88b4fb8f-6eb3-4280-b878-d88215d75e68",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "e6966630-1c91-47c9-943d-49ea9e2941d4",
+      "timestamp": 1788685570.6748757
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 19011505. Por favor genera la consulta SQL SELECT para BigQuery consultando las tablas del vocabulario y modelo OMOP (concept, concept_relationship) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-69871754-c4c1-4ad1-b838-a4aa30cbca5c",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "af75eed4-276b-4db1-8fc5-72c1c273ce67",
+      "timestamp": 1788685574.416883
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "El Concept ID `19011505` no se encontraba en la lista de conceptos de Fosamax que le proporcioné anteriormente. Por favor, seleccione los Concept IDs de la tabla que le mostré o aclare si desea buscar un concepto diferente.",
+            "thoughtSignature": "CvwEAY89a18cCXJl20KCAF98HoBACPRSmPWJOYUqsGpFTO4y4zOSFyq2hdnQbjvy10vL0F0-Dhr2KC8XfUsn2hiCo2gbYcCYJ3Rib3iWbDkIahJLmX-s1UVM8-48Q6vTSn3VX2Tk8yoU9ORe56P_zYnBvZv0AkUadjg2Q-PFUSqgPxPmiXns5r-NuR6zfdgfCq-tqVDfp97xddR1t8EdHB6NNE7ovvwkIFm3UBiGJjvrWtNDi-B4uUClTiev63deC1J_mvcITquRHocUE6g_9FY5Ke23l86n6RJOkUDQA8ENcM9kAyQcADEo-ljrZIFbvCnXwbDeoiaViB0u3YmMp2kYc5HTBnb4Z9F0GLpNs3T4Eij-fvvY3Edp7yZw2aPu6fks0GvxpGg433OAV_RLLYqRY7m68ZnKESezBc6Wt_YEx-ko8BLxSLmikZVILotHv4TSDYR3_tVTpgrUoTcwXX6mHCtQnxpAu1ZStgZVlMGczSSXyCw4u16HrFoE0UdX3q4Ka7qD-Ly4hvmIcKe9Xa6fmqtBN_OnhEFi35Q-wLH5nuuZEdhCmvYrTb7vKHJnAc59EggV9NIbNksj-B_ZAlLYbtncsJ4S-ZicUuRbwtak16Wll_JZclY6mE5EMriOQf1gssJScgWOG9UbtqIoLpAY6lkBudSd1QHE7bRQVnMPYwMmPsoquVwSixOv_FU-cEy7D6WqM_T4nGLaGmHB8OzPAOttdtTmgxe8azWwFUlXViLgPvTgcVyX_Q2xtGjuZludUcqthBtIM62NL5Rj9x3lAcFrbUL8IMn4oRRNAqVvkVWcDr1qeQZCgq5gnTEK8cVBF0TJvUDzN-0bZt1a"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2263
+          }
+        ],
+        "cachedContentTokenCount": 2263,
+        "candidatesTokenCount": 54,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 54
+          }
+        ],
+        "promptTokenCount": 2787,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2787
+          }
+        ],
+        "thoughtsTokenCount": 185,
+        "totalTokenCount": 3026,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.3761134677463107,
+      "invocationId": "e-69871754-c4c1-4ad1-b838-a4aa30cbca5c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "00e34b04-97a8-473f-b375-e66f3afa9d6b",
+      "timestamp": 1788685574.4182973
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Apruebo y confirmo los conceptos 19011505, 40173584, 40173587, 40173588. Teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nPara responder a la pregunta clínica, el agente debe construir una consulta SQL que utilice la tabla `concept` para identificar los fármacos (concept_class_id en 'clinical drug' o 'branded drug') y los nombres de marca (concept_class_id = 'brand name'). Es fundamental unir estas tablas a través de la tabla `concept_relationship` utilizando los siguientes tipos de relación: 'Constitutes' (para descomponer Clinical Drugs), 'Has tradename' (para vincular fármacos con sus nombres comerciales) y 'RxNorm has ing' (para asociar nombres comerciales con ingredientes de marca). El filtro principal debe ser `concept.concept_id` igual a 19011505 para el nombre de marca 'Fosamax', además de asegurar que las relaciones sean válidas mediante las columnas `valid_start_date` y `valid_end_date` en la tabla `concept_relationship`.\n\nGenera directamente la consulta SQL SELECT para BigQuery consultando las tablas del modelo OMOP (concept, concept_relationship) utilizando los concept IDs aprobados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-bff50f8d-2ca4-48b0-8bc9-813f9c8000f0",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "3c5fffaa-6d33-4d93-a752-e26b5dac2ce0",
+      "timestamp": 1788685584.1935887
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-b1310d7f-2773-4e94-892e-b382404c131a",
+              "args": {
+                "sql_query": "\nSELECT DISTINCT\n    c2.concept_id,\n    c2.concept_name,\n    c2.concept_class_id,\n    c2.domain_id,\n    c2.vocabulary_id\nFROM\n    `concept` AS c1\nJOIN\n    `concept_relationship` AS cr\n    ON c1.concept_id = cr.concept_id_1\nJOIN\n    `concept` AS c2\n    ON cr.concept_id_2 = c2.concept_id\nWHERE\n    c1.concept_id IN (19011505, 40173584, 40173587, 40173588)\n    AND cr.relationship_id IN ('Constitutes', 'Has tradename', 'RxNorm has ing')\n    AND c2.concept_class_id IN ('Clinical Drug', 'Branded Drug', 'Brand Name')\n    AND cr.valid_start_date <= CURRENT_DATE()\n    AND cr.valid_end_date >= CURRENT_DATE()\nUNION DISTINCT\nSELECT\n    c.concept_id,\n    c.concept_name,\n    c.concept_class_id,\n    c.domain_id,\n    c.vocabulary_id\nFROM\n    `concept` AS c\nWHERE\n    c.concept_id IN (19011505, 40173584, 40173587, 40173588)\n    AND c.concept_class_id IN ('Clinical Drug', 'Branded Drug', 'Brand Name')\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "Cq9dAY89a1_n08a4W14FVWIJB_UWNiextdg56XH4gEBq8ZFm4czTU_c1mVySeCZcVTQlHvjrIi0ZA0z1cQYTy0tSSE5QpHghWYH_8F-FhJn1MQexUamXSGzIPIRXx64Im-wTdvRNDVazRwYv4kqlYosWoA0SP5eDTMEcONsFqj5Hid7EezfYa8iuEbYro4_x3-oPW6ubndqrEzQZCCpeo0x1wcKzbDfMbw24LzLEeyJk6N9M9GJzT-rWOtIWrnGHDbJrCb-oQiMlvisTj8Jp2OiQ1WEJyC60md1YdfQKJqpwn3UPKhk03Y7XdzMa6slabfV25BkmkYiB-PSm8qLPAqxnGNJMaCtQQzb169ukJQNdyAw4OTw8G_b35Z8Rlp4I4UJhO2FgzLy877U1ENYF5jiRf91Z7hDsZQGTRsEvPIOmlJ106uIORDgMptJ2A_1xaVQKY6dzmkA9jY8VbwY_lNvyOeSDsLbnK0DxICabO-bYoMKyqZ1z1pgTnH9-U09tXNnOxzssfaSw0ITPRDQ8kV_2VNcxl9r6fe1UXeCinntKLzjfRurtSFHwO-B9SG4yLwIqXFzvCryH9EKJxGu-w4np_UYouBBGbYOy8EYZW-xml965TGR6yokg4MbjO3asVfqX9LVTOMX9epLiASbM0SJSRZxuFta5PdI522F3fXPbL1Hj1IAuW9x5lM6tbpnYVvY6zAWzBGw0bYrDsKo1MpVPyycvxaFBDkI7DnalP1i4C0UN6-arrceyty-iBcQSnDMdw-D5QrPeKUiJC2cGtJjoQXrJKrRACFvAnBhN_pcQQp7SQdFIlcURUvKCVBoJ_gv9MyeLUl5vZW6cUijru07iCDm8rP-mTF_5TuDkNDIeD6lWRDC2clLaORQj9ncg3Aue_GuEtKdQXWKRq670S21S6W4R2xliW2fGB1doy0S9vpPEVHtHiNJ5OOphZSqzGz4niLW9krDUpASZEVDAnLKnLpw-sghmLg-84NKsSFTrHrRaIXfoINLJmOLVRHYVA1i6QmsMBGekFuRVN6Kr5_tdyWBuDuTSN66u11kpUDKAH-qLM1SFwe2JGWtMtRjkLhWTZBjt4r8yWSldV79E1XGxj7enaRMEcrgeaIyLERRRcr3sxR61IRCSZ0w0Fy40M_wYfp5uS-15p3VJgH8-ooJtA77tq4WGBa67UjOut7_KoHuLgsELc-1Ompo8Ycro5ToM7I_oNze0BmP-DnQK2f98BhKfMxu8MyjxD9-W8sWoi7KLwWftM4vMVTIdzu70ULmfLtLxHjI9uZ3pqBkxpSC3iEzciLyJ5qKmLKtvpOhQgYdvpBCy0ZvVSg2mz9X6M5f_L6iDGRHRRFJhBWeI92N0as3IrQPcQY3yoDt6uaXPZAS9SvBh1gLq4texd68TsOS-8TRSZd6yj3ZMX20OJcnD5GNP8bFaKOsh3NiXmJsguu6NETkyh4P5kycLDk762iwi4CznRJb_fo9aNuvwbdNj0_4X5-xidDPPBYce2lbnp432gHjvlpiHIv7ABIDiqOHLthBSs-FK9X-mn3ubJGHTCNI1dCrr-m4zF0oQozCCmuL6KCk1PcrTs2D39lHr5wiyXKSBln3pi3z3qULpaveoJ-m2huiAdzZZpFl53YtnlEPSg0K06Grpt_bMH0YRA8V0AyleVtnmGYU7Ix0tFW1V4ZxfnKKfSRQlMARCh_pgdSTLjcJOeo9RXMbp1-Nk4fVbSd8GUX4K4xx_n3SeJorAL7K7iFZ2QjnDte3vDpOOxo02sAi9iQPRTkwBoaNlxEA2pHKBq5_wm6sK7rq5WnQ3imgU0S5NLccniCpubyRXf67yILt91CvfJVUdFpiUAcK46jrQZ4DolWVNi9aXpHPI-fniT3qVy1SzNi7NvYYDo-vQZC6AGVbW8ZIGwqUAmT_3KH4AZQX6z1TlCmE-s5AC1krPoVfRwaDBvftlgBC0Zls99u0-SHf8-tifNuA19AZ6Banszlkt3guLCu_93FQJc9j7hzRP0x77fIskubxmzVi1Rb6revhxPCs6zoPU1QtHmGWpY1xv8RgLRIRN1GPK-ymOYcyVwvqRaTh4HiR-mpPN_KE-kk1YGOo_eexnMib7tv7RT13wu0OKcuPYdIlUkt6c41LJ7GZsjlowLFGy4CFucUuoQKn6m0xjVRIzk7Qrv3gXSD3bTCJr2JHvvM-pi4Vmn9PhOZFzv0g9tuAGzVRa0B_wdtWRp4Ncwo36lnbuyQKSg1z0gtSDPMoo1LVyHDfbQPSXD55uU6zA-dv-fP3XrZILxC6ff7mHeKOs6HJRs_YpRytrw_lutvGFg0_sg-52EDJCBve93WjpbaUogsvD4u86haMgBT8bTFxKGh-DoGHK3sazfzCBWoZLdtDovH6oS0_gT7G38YC1LnttctquVijvrzn5m8YEEiCZNn6lGu-b7KBb648yrgRCD6ApF-S76WezLepzKaKbdEF1wtRCsK9WUMPcYfVWCrRu_HmyioKYaIgxB5wu45c__YQ4uDCCZaiW3X1SQnhj_oT3rf3_hZUxkVGnGwvRk8wcY4qFBoEkhVRQKXMYf47RVokWfLFZQGlMlzz5oAu1_8dxD_mbATN_edGaFNvtVEx2xkn5SNO9WWjnX6PZMFIiRnSxRqUx7_6KLJvGLN5OgUXvtgoabZJ80jJeca7Pw1O8jIjlwPcaLrUb7dfEgRwMI1d7KUvH-mF_Ze_U6xQtz8LYwi9h4zqH0HTXLnxWD6XkOOEhwduAWD4ExLFzElr_0CLK1JKBkQacOlngk930tLlWmFPIuQpuaHscgR59ZcTUCMOTbrP97MVZ30gCi9tofNO2BtE5dLPhHHlsrp_qMbYxbDyVQi3xdFPv34XbsPc8j0zS0ob6j6c_yfcMdvK4BYW57T9rGpd-JcgPDLn7gT86FtaBBTzKRWvIQSy384GdPtt_rGsmku67zZFEfr6_8cXS9zwlCagCZR9qQjHTe2WGQG0sA1whSx986yJIuiSOTOiF8hHyYKHnybDU8d7SA09QwBfihIJSfikMYzRAWU9Vf0nRcIzg_voeYYT6Emxhseaxp-SnENvSTDxtrRSbCkb_Ne73aTED9GGWRdEKm3LyOtDhtPtSKbdN07B8zkAhud_EnQO8Wyo5K-XiRfFzOTZG8s4sCzslYJKT9LQxuefLnpKRgOJpKNhonSAhtpjyZ2ooOnrEz0WprOWNzKlmNgvTkkPcovykj-INKaZ_DteKY5zTNDfSEao333D8bT0HXxvXEHMByqawOeeJCfevj7_g3Qu4UeW1pt5-0do7IYyVt8sA_e8QycC-NEmkmqYbTc_9N7-ArcyHQu1J2KGCkkb1-SvG1DXBoqXwkXQWp4kXXPZvmDW8gH0u4As4Py_usbYBsShsrvJV_EFC04KYuOi2da1yLY_XJasG4LjELCQzoe6uzJC60Ox3Z7ie-xk0WFmu6eIOtTHVhlIA9zVOYtZHxNE7L4ifrpfWVCHEv9JcuIDDUx4usetRBZaOM4TbTY-eM3666EkBC4odVZFZT9NKR5jQiWCCgKkQa7UKUsibaDQotnPFHqRF4KHNVzySkqZBd7Vwu_Gxw0i-BK3djCwZ8LF_5uF-SA_ypnYrU87ebawXYLV3B8Hy5ypOOOaI_C3Kc_SpoQYwmkJzZSeyypxPt7dD_tWzfW1nmukgZknp1XGO08zcWwfpV1a5615V1p_kt83gWxLiyk4VVxiFWACGFde90T7azpW1zC31RaoV50sqUQ7YcCxwLfZGM-MOD0gX-n6rrwU6DMg9HhARaQrTLcnMme2rBAJC_vPCi-rFZ471hbIiwm6XVPwGd2OX8oHyhYtuW5PI4q87TElMrW9UUoOz-gv-bO1LXveW-N87uPeDn5a08rY-tGkVj_2PhFT_PFOiOFpbYIWk2DaJTclejRojUZaamWuOJnbW1einM2F3pPQH9fc5WmncZJSxQ2x_wiH-dBl8Iy6c8_HNuMnPUuAYPm4gAm5eih8jA6ztcD0wrZfEK94n2LtV-O53bqebU7epm8nSPPw6oA8HPM5l7ZL-s-t0LSvyIXpj3nN5FQSdalNM9JG_4TQwS94JzgqskfoaAnanafT_qgyvszYMnRVIeQzil_NRw-lMJP7_qrLgpyJR4gBTLBmZNG6Fq-Vy_emyqLWFrBlC9ZwtT6nH1RrFjHxlsDPbT8dVJfSpj_nAQJMcCETYgWYH2_Y7Tb2XIQ110Leo4g0RUz6sEYMoHD3VtlaK03yxnBMmQbs6iYEe7IVgJsUKjs1iANwidGJneY4jAFNT3epy-Fa4nWfpxd3kTCVoUZGusmY61uCufc-y9jhd8XD01Qd-VCTtr0RtEKnnzFT-8XLfxulH_b1oH1meA_bO75oREWPlTOEgqisgIUgHo4gIfICG6BBQwx6tds7VFcVleZry6MQ6VKo4biKcqB-3rLkGPCdYdTHbfo4GIT1lgf8BuOUz3LGuMZ5aPOsHvA1MPMjkpjw0szamiyCAYgKEffRvvMLPnR93h5K36AimNsxcJ2hhxnedwi6DIElfUqaLpI2PuZlGnLH8JsVjkrlB3LNBnsio6_clY-e8WgvvDVw74kxo6udF7-j4fTyPTYCC2QuPORSfxQ-OuIZSR67v-yROWfdgne1JuYRDFQzXWdY6Hngs7TUUm3H_6VP8CqkOZHXtwQ5Xoob0d8QeG5OMWDG9CdnYOIsrzybkyoNqopo_FGR4MUTLKzb6x6t8bZnNF4E70Ar1YBelKqzFnWb4x8jTZjAUPOkq2TKw4vbOL2OPJE1wGK4oIliCXSeFUL11hnLLzvKXoo7Wt9ho9i_58Sjv4-wwD4hsA0HWdLYjP-PjAhWVnHfmHyFGJpT9OX7qKk3jMiJ6X5a73zXYpj4tWCjW6YA_siw4lFAOv7qKX-kGHVydSNYAdKTCqbBfaBd9ffw9hGirzIRliVsfve5fuR44SbkZ53ptvqAy-BoCsTeorAtK1UPUtoMPVQ5cZYMbPGyQ7GBFJB9L7PTwNtKY3YlZ0h-ILgWA5lQWYzYTJxB2DU4gv79jlT_hnUrGh_Nr0OKiHVdaqE0T12pFZe4-QZIwb_608xE3nGb0I6ODwCgCorFPkqKaWSte-DiBLxmAB7nrH8gmMEMLE1MvxWbRqBi-hhKtZ3vWi9FppJlL3ND3sFWVcNxRzOB9ueTtH8KbqwwTznKTFSW-HC7BJNlFZs3gZD_xHS9FH1nFznE5N4vgseci1SCLnZ-bNHmUuSCcIdfS-zVWwnkb3T42Uwirz89z67WtQWsL4TBZWSrks5c6aXM6BT_2Avdyi7G7PgUWolKcoE1oaLv5G7uiANmNyZqswuH0ntLJmYFJnYKwZIjRJayE8uCs1J9gFJaxMgmhefLZqrle5_h9pK9W2kySEC7eDcu5_nKLRurB2UuBqXOtRsYtgtKy3BLi2NuMpouCTgeyBUP6zZweeQWyehyHrPZ0Q4vvqZ2LuR0mmghSUj2Kt2PvsIrMhD-2mQdf5M9tFglJLK-4IkPJPDf4OA0s00plmpSkrhocoS6B0fKJn1yIUw9mCXLbjzhCV1Q9xIfnaRVZ-4NPyi2k5ef-VkGebJyf2eS_BhLDHfUDy0mctgX2uQ4vYl3-M_rj7IsKmT9An4hXZdwUFukj3aw-3LBu9IcvsxiXukfT24c2mmt1qq3dyEieLaRxoorqHQx5vgLIdGmni7PkjWxsFayyg7g3McH13bIhzrIP2ynexk3xOa83lrJX2PTo6ago-WEBroQn8uRK7L3tdVohWWtzUACx0TeArz3d5mr5Oa_Sgr0hhFVpQpt2dHFJDCItzNd_ZuA7zevue6uL09PrvUIGOEm9tn89X5IREADV-yJbrbEnS-Y2DkUO7RBdYdT8i_yzskjPObrNY9-hs_6VGkN154MpIdrTgpatDe-3VAmBPzxb3DC23U6EjlDb59klvWvSsUgp6Bj34KnJ4EMoJBywYAxND64cfcH6aqTTinMHwT0U8CEP1eoUIE7FPZ8tri4CJq3JbqTpy3vJJBEtRIBr_GLNHjRwt2JkerNekNlewLhs-eevsNBAAYIGbj1mvI4MtBEye8UyCk8n4g7XCXCRaiUWWHFe9RJn3DNU8afidjv3R34dB8xQd3RzEGN3XnzOhSoUS_bt2FFYlwh0xCQ0S6XgiUHRGliOLDAJeCwK9dRkJUXURTEtaSTGszB_EfOL7LzKum1iCZVEOpnOxx_smv18_8VqEMr9Kzl5LNQLyRXeyolqIYmGrO7wHowTnr-m_EHrZDFJ6ZgXEZ11Jw8TTPJJOjVf3mMwTHyxpotBp1h5NTPukHbJ7CRD8BcOVLG4XJzbRRixsifRH0RnlGhm5kS7zb6IGtUZ2JXM8auZle2aL6A5xfFIYYsnsSjHlq96IvrnljCQSu-fJDfYpuSI1G9BKCnsGNF9P_BHRSwlNZCVHqC5Oszhpq6wbIhVtxSUiLrO9qkX4xlZm4I5xyvLKRTD-_Nd1QbddDrPwNxocaAoNMZwB74A7y0ZVAenTHmXMriLMNY0ryZHYEe7aoX5kzRrywn7nDeXSfh7HMeJz9M4RmJsaSu3dSydcKR2ai5rTsZUT1MPrZmZ9MTAfXEx9DE3THE-PxbzGb94tHEJkdS4IddZRaXQrNBHpWy-Dbm2Lt8z-K2sw0YWWJ86rn_7JYRGhqfBoupPfgUZtYAYjazW4JPoRvJMLy9xNK5kceYj_3hYuNNcJpySDv85sPjiorGt0aA_8yoQEqkTQNSWb06qxTXCtfbfgE_IXmOgcQsIyx0AUrCpShzEGdyT7z9ofyBbEBjQXZTTk9SKqQZAkhbUXwAETm9suFgjAwK-1JuEs7ssP5ekMXtaaEOflh826PpCAUPkXAm2pEGL2Tu5mv7xChRsVYQybTBjPLIHbDmbLLLd7l74w04Az1T3hQGBIPLjaWHjMk7kpBbTXBGdIrYxVeWrKUWCk1FV6Vl6x92CvEADV1rpkp4YOeLVZzSDKnXKR-t22x8pz7VJauQ6C_zRMRKAqoAOKytvuXtz5XCe5L-ibRyJ4mZank76d0BNMWJtebcqFOf9fGyG_bsalX26bIXLvahF8TfSkZMS1f0ebfB5U9a0bQVQTfF49RWTtromuxz5sEAs6AV-7MEEun1ucUZTTgCv-opBTLdJ7tm4Dp12yy1mwiCJsSWQorGBMuZDojw4qikcTNMxrOKBw7IVAI5qKfSkZlcZhIGy1wzap8gOBKEKLHjObKijHoie51VtWTRP0rbgLX89X83i9mv8kbPxUklJ26MKByFMAdax4dhNQ4Do64s48dLJmnE8n9Pn9YPYM1BEib_otjCsTZa7qQs7_T7rtYy1G1vca0cIF9TgDyShOJz5uGj1LAoh1_Wxpzg-724rk7TdFVAK2ILESZIlKzo_Or-5iBLEJwtPJQWrPoqvC1Nmteut5Vjf-z9XWpVixl8g1JkSDAjONFMQhDbkKghKS2mq3qqe9MReTZoOFczsOMx_KCMIsx0ct__5z75C7Kkat9HojP-5ZOU7JxWBVhViL0ZoQWJVY_YrX6VtXyvl9KCxqrpdXNIRy4LQuqKP6airLjNOZsD1pxUcPQfXtVzjNw3IfgBnHM4jVvufoUltbugj-vGBLiA1hP_s2Epyxs7UdlI4vu4PSr7H7B3y6DVAFi0OSiaU05fM3xNh88g-qaakzwjb7uph3mmSWHsbdw7eFWbKCkjCOlY-sR-ztXKExYm_OkDm3wn9LIM_kb6dWrhrUuNTPi7xn6QKXDHwTx7Y17iFUUe092TGSpLtluFZoX0NPDyILipqkDPNVMUFRQQg3LMF8-PFfkoLyMBSVpLwaG4nwMaHCJgzfaCRiZo7937HIaNjHkWddsETUSIuE-aPtgiWVJV2otV0cAHwooXw-awEAocekoyTzCLht8TuaV3TaFTz6-Xy_mUwp7q0nGWerC9ijepkCTwX_nWjrbsnCec4NsC9sGi2CE4hTdRs7ZOFq-SIKop2hi4nkX9OZHADJ-ot1MAsRSHCsDXs5_Cmkw9qBtJeHIeBu1pmMRLtKjulzxPjK15WHtMya2xCfniDFGNfIeQX30jfIPMlc5prrxKEs-94zdl6IkknZj13tOOwHSQW0myluGAEHMo9JgsEMreM_UXplBALWBhEueYfMdKEbWq3aI7W7DrjMr4Lb_MY-dQp280VsungBlaYtouBoUtDoZLL2YdkX4tW_twFEDG9YbHILZXOx7JXSlRaHitmuNZnVljjmeaXSnHT9Nc6YHYYWvOkiqG1V931n9nxRjQPDLHoGIbCiZpElOFfw6_WXW-IuZxRNirXf4qdEOSritDMK2Z0IjQA3EpIp9iFLXGCiAIWYhT0m0uO_9XViVLLZkRXbj9mKlpOPxm3CMSzdQKeuqU6jlIF_VSFXNbYHAS5CkWrsdTitWmC9fE_eSfnEynT8TDQsl9aIuRrtr-mR9fXd4DTRSjcsKY0NIFSqKcXpN1j5JWRkb1lrXKP60Mg61WPBZ0JQWL4CZXfXv6KwrQXR30nlUutmo44g02dxIM6cCyVTKU8RW2U9fgyVEGKDHfc_AyxC6XeZqOYBZtPp-D_Iy9k8CLwikO1pbFCLvKGQq_U9No7rkNvSuNphI189v7HL6KU36gFHzGWWCyc3m1XUEtCyMAMQqPcvwFTIHjUrmIzyKjY-QUam1oxdGqmKDWSOzdiPS-6Sy0ydUxANDof47ORbuK5pxx_JXbaO_q9PE7WyVxcAZkwb0XUZPB4ko0vvx86cf2dGh0qmxCa05yx6Ee3s-ZzVD7w9NDAQxpR-HvXLC8dIYzHRABF9QNc0nvBWzqWazTSPSnjd7mc6t32V9ywCeMCJ64VOWZBETVbuwY1b-ihjKrxqDVJ9BUxRr6zCAuzaeyfxzNRQZcrmspPOkRC3m0VUABS_hCok10R-Pmb8WM1-rqQ-oxZyU5snAhhuD3cV2xJt6vwmEtMPfAqmgo5z2DJp28SoMo3iRAMV5dvfYSMU8HDDGZjxuD3R2yBUYv952Rcbt7HT4Ka_VdLaMap20xV_5t4Qsf81Zf-c0g4gSTFpJ2mtKDKHMkiU9wNAMh0b8o0pcMpJCzJPxHtE2MFrh8LCZwYrbrog9AWL94Msf-_gW8eCFnu52C6T0vk7vngLQ3IaTlMIZKPvhQo4m_ruT4URZb2-s4fIKb6E-Q2XygaFV6fHNWByBFR3IVdtbggw0hj4EcyPvkYNUc5cIKqsPex-0UgfmfaJgwc1ITESQGJsJMrNdLWd-vmiXnKzYuausDDImoXF8_-ticn9d4AbzaptoaHJqFj5kAOmm_Od3A4WyFlWN0zG7G5D86f9tpYLeR8wUfw8YVNrOZIC2jnsodSitd7EomYO7hY3vOEN67uH2Sa1POaBLuZYAFDZGUmEpB_od1kTql0hoHYF1KHTivbm579GQfhP0rnHZ_QsjWlR4gJh7ifMSlFPQKiGAdNlmdIoYp8sLPS9OGKL2YbaQv3SxakTsX0uP0wUpI_bbybCepRHQ0C-wm3Ylc_2hbdNnV8rIA-i1kIMeD0c8H_m5h7N6UBmrGMmdTxxVUu3DkVrHUDf_R2oRsOLnPOJ_98F00WDnL14pK5uyO_DYuixr1reYP4LhN98_CP3xcrOYtaOUBldifTmkbNY0U9ipKuktncglhlm2jD3ylU7wR64kOE92uM198qWRj1k5Hq7DuMhcxx9Hm_csQ-kAyr6ycRB9rh_t8t4QwUnvzeCyWH9NWkvBzkP0PyCW8TiKKV-O6AxfPFzjMTYMVw_ax6NDDsyUoBAWg5t3EY4Og4FJ2ZUUu6HkaiQpInWwLEmLudVolJKowlXshZamjRWJLwJcqi-kK65rTqdq97VWCy3iB6_FzdJdK4rbiaD81zxKpXEqqSw_VJGddORrD7Vipss8A227PL6e06SqiJFvTMlc3I293qA-mOX2BDL8qhjWerrGws9NYVCEuZE2HxbzQ6jdvsuyxH3MhLmqvErznx8lzbDwbLjO7eg_Tgsj-VkcPWaT1wWmNg5sqseFMYZKdn6GBNlEucRv-fC_cKlRIXTAmVIn1vdUnPioov64UrOkQVqqbtmRnaImUMF-0rQzCIKvPxgBNpZ9SLC1txyKYGbfz_-dor5dO5_Snv8LgAbGtrnO5SseE_Fvn8OofFN8kF2cOHDfPXDatHkcvwGBaYEIdeAmIHr_vXTlTGQNtoeq6vx0lKOaPKkK4bZhM3jzUKq5c04hqQt8PZDF1eLZGB75wIE2D0udxyRJ3CHa8Monz-sH3P6ezr_cosfNweCWOc402jJ7iSJOFg5IDqhqsS0WGDzxlyAWZi4ZWRuBePs9chd0ZIhVufos47OURF_Be594YGG2900LjiKe72ZnrsbKQ4CjFnbPoB7tmvCHU6x_SMaRBtvaY6f2PTYeDUUHWMc4PgrsiwXCq9K1r7kO5V3emMzceOZAgguoX1N2g9CTJ53phnHh2QNZBM06JQitxU0ojQnHQlnvHor8irRqKC2xNSvk80uYx8vrGfyjcxWCiX17DAmrqIMjSc7GJKxEBTUQc9cxJDbeZHwaOvqBqNDd_nCRS24ifz1hYAAU2kL6xEhKKRSacz72WTnrMz4x5WgCsKsQv_mEN7RY1MSt_F-3dirJXaUeocoIPGmHwgFIWAMZyWczBfdobaWyOgwVtu4_MHkg_U3Hg6KExCRIoO7iAYkGJFx3k2rsE0wffvUj_BhIi99HfGLQrHZGhV2RBW-PcX8-hkf_Z_Q3EHYQUDW4S_8oFV9fPNsCLWQGW6QaDVVwrsoHh1S8qdRlREcmnCsUN1U0meT5vcBK3Sz0lTEjIuUlf8t3fFCsMYwdWLiBAUX6PUjqdimrfqJR8nSioUaaruGFWaZ478p1GXCoJMHzDu9srSO7os90YgZhe1ljaeGTXTBY5-S6YM8dE51DyIZJE4RyFLBhPITj9Hv1sJ6ax8x1e4meB8tqndgv9s9Jir9UPR0Hhh7gACILXIR3PgeTtSB1vZ7IIMmiM6V97T2vneJfwabV3wHFXVkfV4yIZJrRpe_ywcWL7o1uc-N5Drxj4Q_lxuCifepL_JyeyyaFjB_F5tETnxl3augsPGaRIUkpKhFRw1Wo3JU5INq_ZXBFOMbh_U9bl1tt2Vfzlwjn9F97GjHceKZj_XLi22iX_Dk9jYnIgHH5yKVYvpmUnj8VYbLuFfkPvaiJnNe0d7CAdRrGc2p562YacAv28RZHD5YuYw3VmDOgouAlFgwa_ufSp4ivM86X3q_3JlNva8055eb5IE1X4vhMptWtjhPCeLaWOMBm_KCbFTFUUmZvdygl2LABInbkCEExYdB8jGqSCFBkKjZiMGHenR0nFiPGHM35z1QERsTczNa7ribWjmoWCEZsJxscuMGRbuvA2588hCjP_avD3eoxA_cMlddCXhwTDEGxhCUhLx9x1Gr3nCKyb3UUqVaQNtdceh-roxvXG4CRHCEm5pSMBZidS04UcVSPa0ys8cQiDhir-29RLxOaaKtW5C7MsHuEFo6tdPfiqxT_HL3f5TZB1jVoQtm1VX1g7TRtiTy3ACI-e4WGzWqOnqSAmuKgf9gLlf3bt4dCEqIPI-f17vBBf3wiuK8CRTkAEOmzHQMLVMGw7U6a-WN0IedBzYmP56zUGd4_ItoY1XDk1oDZwjwfcgMabAB01Gc77GCIwH3bYlp1_WiladgyQ4XYIMOJS9KhyYfysvpHcKZ0tMdOzrUry8zXSSUoOHHu9ABzmJKe88HoSu099Ljae4aYAULJQonpPdWDEa5cnmruTbctV_01v36mw6JAKcOi_Bchu_wFjfko4gikyqZ92og6EiZbp5HIdICYP-FHhI9wYT2BOnZk9Sm-9XhT-r3E9OXuKIwftTc8iFFJfXJmDW6pVaK5AmyoLNaRm5Sf2zmzbmVYQlEL3wiu0IDzAVXpDKsnAC1Nd46LcFFgtBaemWv_PkltObvoymkBSJj_HoBqVpR038uRF_tO0NWX-XKJyWytacrmQZAFcs9cnFJ0w8Rio7hoS05uxbbCcYsV1611_QGCuDATM19wZl3JLFKpZNx4Vt8JfCqvnipc9kItnACsZA9Z-Vw9Jko_hith4XOPOtSEGpfxMBDyqRivmovvzi3C5F3p5tzN94hOR3VUyk8ScBiVWSVVoyA9m5AWZ9L0hZc350DMsj1BShvMZASz7HoOX7nsvjaM9cweFi6sLkBUY1TNo2XgxeezxYGXkB_yAx669-nvyntwWJhUHTqSrKLK_iOQsNOb_ixmU2D_tFK08IsJxAFm3Q6-otfG_WfcLGDEtuOdtjZZkjcpPr604yhsbl5e_vmg1DPJFqqEq0nz5kUOLpMw6BTuKrzSKh7Y0KBpCzhS7cEzTvhDAHo4ZEotEQG-9N-khh8DowdaX28G7kx-NHEqm1tXwGF-sOUnFaHzopOnb4UBsTKHG1vT4X2q055sXtDvl16LE2CKr2qm-xqFn1Al6Jq2-vfQixznwmuyWVr03Lm38uWbhdgpexeKWAUerJ2Z-EoKkP_Ocwwd0VGwvEiECxd43xv0tB7ve-qyg2sJSrdUj4QaoPfswkj5GO8g3_z-DNuYcCJyLA8uXUqeccChQNeIPUdHok4Ah8hSQZxMwPCXYxwyKfdc7OT3kDU_zKd6wmBiD2gubwVUrOCAUic_sfWhwifF7jTcMK3SgIxkrRRgiYmlkRO-5_yURKp0rJp-1r915Rdwf_o4Ae7QUF81OxEHfaJkytKe_NXgbVpqid5Y2n9Vgx43QfRgjHqXtbScN3enj0Mdf7CGlRrlhLQl7rMihI8NXjFfefP-Y69Iz4gDC-9AWJaJoIGLdypCur2yuJ5Jj55VVVQq2_5oEYU7IDfGX6cycsJGn2DLY9bsshMzog6mHjgEREnKvo-mYGbvag3Tfcq-VE-BaAWNS9GA2XVG3bwlsg_K5-bknbLtlYIO6QOQIIc0KPrctww9FIUMsTjqMJlWXmoBBmMrHU23ZwzPNgO9H7j5P36Rs4RBd09aOtVUrY2o6MwEpCb-gAkfAM9d3SQLm10SvU02sMJ_tqdcJexaliYCgi5A7wFV7c4m6J6HbnFjSfDXyOrfoLFrXpg-VZo-u1uWgSfu3J-vyvhJcarmIvAgv5ZI_08jIrlGLQkNitl8lz-yWtdm34vOG7lk8DeqxVlmZNYGshR0dkS4fPg6Jiu7IylXQV_voaKp7Q-eq1c3PcPgQ2BXMqoAwIFtDeJx8JpW-X5GUitpvs9-8vNiBky_695OPPQ38hRHsItosvUhNxKKTw7kXXiUZL1c1LmoQO5rpgFjIWbFFwsXJC8dw2hD2uEIev74IRBeGTfy4QV3GIbDLkNqTtNdc8Q12Vc1TkUZ4vvqe7i8bkM6hYixP1WPZ55DReCuw8G4QhYT6dm0-4BTmzDpJU6QaFWUETi02X5SET5Gm2uEdhyhdkRQydL5X9lbrZPurHhkga4X1OBQTMlz9v_JpD4zQnSn8xyWz24PWADLyHUIe4H0tDf5KLmOLjuFN42dgoqGaYp_ZUf_7nHjatF5yulHsa4aDklxBm-TU6sAei-wAy-rgue8mw-ikvq6nKeK-kXLKjJwl9Th7SuSMInzMjurVNLWgxBYklmMImMu9axT6ABTsXPbCNJ7ElAwh1KAqqqP2_k-sw93JbGtcc4yQf5c6qgaxCEgaA5x7wrfBD5cIcmrFwq8FT3ncUjIt_8bp7HAxwATK8RwMgTa3NU2-D_JeOKkixBqxQSlhqKUFtqSamFqceFcQNV4HhfcatsHVA30LdqYcey0S9uGXG8YoWdJjQCYi8VcNydWT3BP9NkO5tDlXYE8CoRNMwxSWozzDF9e4rwlzqa0ueRTwBRqfVVnzCqaZHZXZ8Ce6x4rhbqhEzz0xQMC7lhzg9VgfXsHr_TVxFJXd8Xaa3SnM2P_h0Ud-UJswKZm5X6ZXhW-SEWBjFcANGDtHDnrBTp5aM5iIHPRvEV20kfwx0XSUgnUpl1FmSg3Coy-b5VL4x5QPYc8F5ihWTqWGA_PMXqa1npWJiIzD-uC39mWg95trcCxDbpdLHw3YpCEP-RubUOHgBJhx1YmVm5vSn4b7r7P4rKozkR7urwBfDayTjgPh7ILO5WSmyST0nmmWYXHLheCcZ4kptd3utHwfTpRtD3sdRZXyZ-tpOY_XzzOdh_ftTbQ5UTh6KpxOvfTTjKxS9D-nMfTNHbonU283JY6R2g-gD9JLJJS7tR9phXGtOqLJP89ff21HBU6KEFwnEqoMtHZ6NCjxWMTsEv0jqcOnc0lPd8tzqT7quI6rwkCEhBxuI-Y1WU6Fd-E7pEHj9hrqQg5mjxZel_dUDQrpuxp3Lt3pZksboRs8Nq3aMP6Q26_MTUF50hnYnXGhtiBvPJCMIJ6gVfzcSLxYjPEYjiclFWCEBuEXFDAlVXkLWdCpGhIYtCBohNV1EZ9plSz872EfGq2LdmQQZoW0r5hounM04o0QBxbNpR-6mOLspWQxlBc83MDPplUz7QITWfh1mU4HJLvOURMyrdL9EVPHnf8kZIM2wqe4U-fmbRt4PWzDfD3BbzmZyCw_nYfuhI6-D5qpMWjZe2jKxlbssbSRLj5MpsgzSOnUQcBRcROL-EdZVLyWSB2ioQxuiCvvZyxgk1epZ-KUrah8MPc4AWyfUX5own6uRxdX3xeHkPcHxJxu7xEV34m1HXLW1w0DUHDukfY_ZxZYZO7s7O5jvezteeXESo17xxA5k_qBvLtEnWQKBRHH4eHqhxMZBNNCz_OBZeOnM6j_44DLIi4-D9Ei58oHnFPTq4twT7sACAvi5nRsX8stDpyBAuCgfNjQqq065Ic-l8HmaV1EwI97x4HvadJuhZ8YajxBidWKig2xFBkIX_lz2H31nXLIAWyyFRjKbvDPQQ0dH14h0wbwnO-lt52rhIFQFi4O3s07qtl0aZiAVo99FQXUOY0dmv-1uHhGVz8MbDe2yicOwz1zU70IPghhLg20HLIDCu8psftqF9tGQ59xYZoUUe0xBrm5d2YIdJdGD_Bw0WOxF236a4T5OYCOrVIi-2COsIpwfpVJ3xiZWDzPEInrjm1RON9-TyVaAZr2Z7xdjn1_TjzH1ngBqZvX9rOVgKf57QQ7yeNz4-ZpUADq-rDo-7hdjG2tLWkYRIKaxdJIf2AfITWXE_UzepeI8Xc0UR4tJVNaQzWS74r94xkZelrdsol2XfF7x2_UgRQH-skl37Whnm_kZSsHaYxKIIXZXysQrxs7_EFZ4I3kvPYcjpdJbrQxL8SExJME0KGHszwp4azCNbXSInkMlqha6T_-Gqb_O_eNggg0b56iN_qZ5jIN-ZaLFppYYWgdVZfSSfNDb5C5Jp2K9v28EpH-XTAbAyMhe761ygFlcjisJ_zKA8hBPNWz1a51-PNZNo1H1k_UchZNjsjRWdinW3VdVf0ceAzAuGZUNlFrbuc8xGMBSglFrkFta_Pz9ZOhP0Df_JtCOKjlHQfHHknIz7IoiV9FybbB-kGjiduV7zQHJtd4kBHDVhcSC_TvAujnzET3rZyJTRgdtpSqj_iK9z730-TF8WjZTzvCbSCyCoPLg8_YJWfIKEygsQP_1a9yCNpdjxSYnQmi8lXl-HHcRnq6ZsQbKhc0s-kSDffqQfomfy3DBosY-t8ICU0eDyrrbwwstHdHz-MyCbEVvntMqLlgQAZryi_L84A6p0tVoT1KjT6mJl8dE-cBt8PyWztg_Nai9Yyoh407uiwHRcN2CDm4GyoKR2ss-sQib4_XvupsCza7gsB3R0Ck_BrP56bxHDAb_n1MMM4E4UglwakM6Ulnsso5EPwkpWxRQXQC-w7P4vtuysyNejD57S79BlMwPBO_JAcjBdjlH15PnVfJNJin4Ly7Z9xPjWy5SYv2MLFApNkLop6QwonrJO6g="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2354
+          }
+        ],
+        "cachedContentTokenCount": 2354,
+        "candidatesTokenCount": 383,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 383
+          }
+        ],
+        "promptTokenCount": 3316,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3316
+          }
+        ],
+        "thoughtsTokenCount": 3971,
+        "totalTokenCount": 7670,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.5796233095014687,
+      "invocationId": "e-bff50f8d-2ca4-48b0-8bc9-813f9c8000f0",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "a8d60489-a6bf-48e5-b8b5-efddfd2ba9f3",
+      "timestamp": 1788685584.1950727
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-b1310d7f-2773-4e94-892e-b382404c131a",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept_relationship",
+                  "bio-med-480108.OMOP_54_A.concept"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-bff50f8d-2ca4-48b0-8bc9-813f9c8000f0",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "297c3936-63f6-4b69-8695-645b107e0344",
+      "timestamp": 1788685607.4869308
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "La consulta SQL SELECT para BigQuery, basada en los conceptos aprobados y las observaciones del evaluador, es la siguiente:\n\n```sql\nSELECT DISTINCT\n    c2.concept_id,\n    c2.concept_name,\n    c2.concept_class_id,\n    c2.domain_id,\n    c2.vocabulary_id\nFROM\n    `concept` AS c1\nJOIN\n    `concept_relationship` AS cr\n    ON c1.concept_id = cr.concept_id_1\nJOIN\n    `concept` AS c2\n    ON cr.concept_id_2 = c2.concept_id\nWHERE\n    c1.concept_id IN (19011505, 40173584, 40173587, 40173588)\n    AND cr.relationship_id IN ('Constitutes', 'Has tradename', 'RxNorm has ing')\n    AND c2.concept_class_id IN ('Clinical Drug', 'Branded Drug', 'Brand Name')\n    AND cr.valid_start_date <= CURRENT_DATE()\n    AND cr.valid_end_date >= CURRENT_DATE()\nUNION DISTINCT\nSELECT\n    c.concept_id,\n    c.concept_name,\n    c.concept_class_id,\n    c.domain_id,\n    c.vocabulary_id\nFROM\n    `concept` AS c\nWHERE\n    c.concept_id IN (19011505, 40173584, 40173587, 40173588)\n    AND c.concept_class_id IN ('Clinical Drug', 'Branded Drug', 'Brand Name')\n```",
+            "thoughtSignature": "CnwBjz1rXy03IXZ3adWChdPXEhOKolfYEEdmyEMbJmc95c1qkWh4w6rMgLqdE02hINzObiNlvVABzLa0aqMkFm0or60kmlyZ0aHaH9-3c2cWYr9fmwfKZUAVLBuxFsRtjGM4SCH7ksH_U8YueEZdB3lrECMVqJ5jlwe3joOu"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7175
+          }
+        ],
+        "cachedContentTokenCount": 7175,
+        "candidatesTokenCount": 403,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 403
+          }
+        ],
+        "promptTokenCount": 7758,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7758
+          }
+        ],
+        "thoughtsTokenCount": 19,
+        "totalTokenCount": 8180,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.02862802983513541,
+      "invocationId": "e-bff50f8d-2ca4-48b0-8bc9-813f9c8000f0",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "88ffac6b-30db-49b3-899e-7fd3865f9599",
+      "timestamp": 1788685607.4900463
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y optimiza la consulta SQL para BigQuery OMOP CDM 5.4 resolviendo las siguientes observaciones técnicas y clínicas del evaluador:\n\nLa consulta generada por el agente presenta discrepancias significativas en la lógica para identificar el concepto de marca y sus relaciones con las presentaciones farmacéuticas. Incluye Concept IDs adicionales (40173584, 40173587, 40173588) que no corresponden directamente a la marca 'Fosamax' (19011505), lo que diluye la especificidad de la búsqueda. La lógica de unión (JOIN) es demasiado simplificada y no replica la cadena de relaciones precisa (ej., 'RxNorm has ing', 'Has tradename') necesaria para vincular correctamente la marca con sus productos, como se observa en la consulta Gold Standard. Además, la segunda parte de la cláusula UNION simplemente devuelve los Concept IDs de entrada, lo cual no contribuye a la identificación de presentaciones farmacéuticas. La consulta generada no logra distinguir claramente entre la marca y los productos farmacéuticos en su salida, lo cual es fundamental para la pregunta clínica.\n\nEmite directamente la sentencia SQL SELECT ejecutable final, sin explicaciones adicionales ni pasos intermedios."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c037fb95-f914-4424-b8a3-dc14e2d5426c",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "914334ef-86ec-4f9c-bfb5-957258193669",
+      "timestamp": 1788685625.1237435
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-70bd7f11-f853-48f9-a5ae-a1d757fec501",
+              "args": {
+                "sql_query": "\nSELECT DISTINCT\n    brand_name.concept_name AS brand_name,\n    product_drug.concept_id AS product_concept_id,\n    product_drug.concept_name AS product_concept_name,\n    product_drug.concept_class_id AS product_concept_class,\n    product_drug.domain_id,\n    product_drug.vocabulary_id\nFROM\n    `concept` AS brand_name\nJOIN\n    `concept_relationship` AS cr_tradename\n    ON brand_name.concept_id = cr_tradename.concept_id_2\nJOIN\n    `concept` AS drug_with_tradename\n    ON cr_tradename.concept_id_1 = drug_with_tradename.concept_id\nJOIN\n    `concept_relationship` AS cr_product\n    ON drug_with_tradename.concept_id = cr_product.concept_id_1\nJOIN\n    `concept` AS product_drug\n    ON cr_product.concept_id_2 = product_drug.concept_id\nWHERE\n    brand_name.concept_id = 19011505\n    AND brand_name.concept_class_id = 'Brand Name'\n    AND cr_tradename.relationship_id = 'Has tradename'\n    AND cr_tradename.valid_start_date <= CURRENT_DATE()\n    AND cr_tradename.valid_end_date >= CURRENT_DATE()\n    AND cr_product.relationship_id IN ('RxNorm has ing', 'Constitutes')\n    AND product_drug.concept_class_id IN ('Clinical Drug', 'Branded Drug', 'Quantified Clinical Drug', 'Clinical Drug Form', 'Branded Drug Form')\n    AND cr_product.valid_start_date <= CURRENT_DATE()\n    AND cr_product.valid_end_date >= CURRENT_DATE()\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CoQuAY89a1-bi5r1GMWE3UxL40VFCjnpzLvYlh6Y0hCzvu42xM07e_CpPM2bxjLg8HLW6yhPHasth3vfg1wUbdnQEJT9l4SByzylF5mEXODRHPeA0yvwDu1u3O18eGY0hcne9mKY-apTxpv0JycGwi0V8IPysB_UBVBo02OGnDP6ctFZFu4AhiwoB5yOeWXVioIc_hUJmNs-ziRqW-oa5bxR5JAXuSb1gN9QtDq5FSR5JzoS8INKH9wh6YyPdAD4aDKtb6wiRCnWrFD1q4tox8MWEhXMz9UbL-o1_2Xibb2gGFKFPO12Auy50y6JUhDWUX_jUYNl6qMJTiMcQQRsTdnTisAvwn0MgUUa-9kUPYlK_rWgDIgU2nQb5rDIHBEe0qByBO7wh37-Xxt-3f6YgnO6ozvQbNz2S2WaWutAhrRCOCIeflJPT0pqFBnpT_HuoA4h7GznHFUzXdbmptfSTayZ1kCH4ddhjfsDZKGkf87NrXC_N9KnfLLtFt-P7L0ICzy2IgnENdGzN-SwUW8b921xLPa9MuFwYpBgvU6Qey2bF1s0o6kLGel3nWHxOtAibwR-WskhrIKunl29WCec47d2A-3ZajkgDOm7qkfDnaUPs9LdP0doqDc9hSv0q7R2RbowjdCHxVMyp_uSGj8psppo1kgKRx3mtVXC7EfvIRJzSpKYPmMeC2wDFiQg8lc-97_9QAFloKVgEehMhKhefud6zrmvp3Enpf99t8MEtGzQp0jGvmcNqJJwmWdYnTg4dBRR72SEc8jfxfjGk9DGcscdSke0GhbHWkVA-SkPxaXdh5BE7EKiA9Av3WgKBxI2HgIqywW9gZLcynPp8E5ixILXJdnX_-VSo8CHPPD8bXTAI5QFgCg_uTiSuZTY06ihK7Fyd6SetxCrhmZQK4F0STA9Ey5ELgxMBbqowq2-pXx7ACHene6QkJj-ln43Rm7NCaKpoWbo5CW22DRBmV9tWpiVDP70VHMjZJy-kEGNjI81aSdbRH6sFdJ6Rh4oTHiVzGvj7gDbLaSB4D5JgVO5g3l5a3MRqV2PtvHyqXTDlWlw1-OEhCBmlzqb1z2vELzunWZyYDOBUwsyjRJf_CnDwZRhamQiLWdgXUlqfuIGd8dBT7X30oojBBXJ38omLshQ5N_lHNsg6N-lH272A-gZtpsVmeOFy4YWLIpckSyIdrBubgiI8rfV9lJqZWFx3G4TIxtI-H8dUeBbwMK0Uxv3Su6x7QggpzF-xulOkp3Rw-oJpyKEIOXtitSCmDQWQkkkeGnj4lzOjVvb7xcrhMEltZUqWzTIS7Ggr64zQlx2AaRdh0D_oUlOgPsd_3p8yxGqtimCnUQql904Se98sJRvegBcEZ1mrqsQhFj7oWbYK9ibOjWJxdCYNHOQzHob29Im2a7jSQhyhNhe-UFtOx04eLrilnbPxf7sU2ImOBApSRGZVOQtyuRY4V7sFEfUnhYcbpCziROzpWu9dwPW1cwjsdpVxqjLfl1o67SvYNVUhzvjz_-RBqfSqWehzwPV1LyI31Nls6xv-qu0hVIXAge1q9r4f6sHUVtgKTUN5SQ7sXTKGOTKOJECRhS2jaTVqocgEC_blzYbOeWNr52SbE7_O0Kh4j3BB-vpBFFKw4SkoiESwW6e593HdjHjjt7lOkj4Ijvq7ng1ECI335Yp9f_2NpnV85B-p3Y9vYn0aj0RAai5D-vGq78JzT7fV2uRTRRPSV_j2-P4uPSJ6F2XF3_UGvQUwH09W_6Le7BpJ1fmSTl0gavNsckv71wLSWyEFoFmdYl16_oskOLX5yenL8NaEpyR0XIzzyAtME5hnnQXHz1lzqzgjPy7-ox4Z8_UKndbXZsulIvd8izeEp812ajCEl5qVASFCKBRwXW9TDBwx3KpC3lbylwOpRJ9bB06Z9CwJ5t3wn65qCpLdSzquKIU6Im3C56mTm_a-gd6ZAnLU9Id31f3fe3JqafHfWPzMc4zGNm3wbiGWIaINOViQ_SOgqhurcSTkgIt6azl0mHGpRMnkh47eSnpJ-3NYGEcnvbPioQEETlEAETBEmSfvliwK6lng2rOGSEsve-4qtUM8EE-eClMevQUjj-T9MTuwgPgpEUG-6mgCXIIEVRtcT4Vl-ygtGVFPy-5JNYi7na6r9JBgzpI0CyM6LHp0Jb9ZAMZcnW2LIWvGc_cBWZGxP_w6AQYEz9PDgyQYeil5H4KC8sm36R5NE-6odV00j1O94hi4mEAXsm70FoGN_RcBGIpp2BGCqLIfd9gtTBHojJCyVM5WpqXOjrBFHoRiv9DlaxqsXplKLbW9ZWZsDUrxj2PVWgfqycKSQ29h7o7nqjPpbRcc52Q_EZK8FMgqeYWWL5C71Gah4WYqg9C17eFBVgJHHhKd2b1ENMVURMRPKRK2RziG1UeKb5fOj7KS1U_byql0J-NTE7lyPdah_SiTDVKDq0bNhgVWSNarnCc44M4KWQfRVDKxcdCnEejTLIRhtcKACJ1wN5nr6L7mFDXs7bHJHO-2OU0kY1zFe2SdDx7StsyImjJqu06VWEVRlM4BGq5Z5d4DpZ9rqk0fi6vWJZOw39WFsbVXlpJ10wmH2HyzZhN8vMF9WhFpJOOWn2Jp_Zafpo32oBicbtBYzE4ljvGVFWsAOGX9MExB7I758vNFY1PX_K8fdAi7JEAl_wrd8XEX6g34yKQJKr0fAItx0lpD4IJM-aMjS0aRfYfb9SXuRsBj5EDFqh5ZQ9UZqbxN2pM1JVx4UNTgZyB5z0A4j6fiU8_SoVpo6SzDaqYbIjdmfVWcUhTJtXSMkeqAyxxI5Skr1HOrb-iPZokHacRgE1-GmPuSEO2hxNUjvXM1D4pikwexn9eSdHf2JymryTq5X89yzL6MIY5eKyHtz3Oa0upz9Kw_ZEB-IrW8ElAE6145SXPyfZ72QhZE-d31neYjdZikS6B1CKTtweSyoWfIn1ub8gpn6FE7ntxKlgeHPqT68xp71qjDu9XTySKvs7raxVwfxhIdb85SjIbEzW7ToMJPVipXHtSditUwxNRI84kxPd_VZYAjtBNQZlKtlqgr1dHR4Foyj9F-YSExXVMe-HsqEt09m9Zfon3x5KnqrgVodfyGx8ocof6bKY_iyEQWdEoW8R8mw5othiTRduFZyQXFQTH1nwDE7eEWGqb6dJhcZNpuC9CnQXx1KMqldCAriJMAN27h_Vv8J7TdqQ0vAskGyjZOXR0eGE1CawAlxUhz1gYFz3ZBpfCBnnao8TxCd5wevIo2HfCzx2p-Q-1Zrd51RF7zTkGmSyoGIriv3OwbhDoQcU_euxOC6y9606Y5N5tGH2ZkSRapAksMMtC5_FJzOd0oVukPM_WYL2GNSoULjPbkQU-CXJ6mDWAEATPzH7Zq7NZ8ed82E-wsPj7D2HWL5b5Jh_KpZH0XSduGkf7RTD228VVPa2eDS6zuPMBM1bt_tzzdsYWR39oOStHHrU9lSrEdni63P717r_gcwp04G6m2UHWnduyXrbKCpb8rlwzMhX6Alv68RHck3HF-_PfKq3GpOyigvkxG7nLGwxU_bT88FHzJK5NDCDrrS5Z25GFDn9lcG7rLqDRyZdNj2X3DGehHF7-AuoPgtHZMp7gaOqUXCidDx9vgxr1z2VN6iI6web8ifnlmU_EiTIo-Pqu3bXiYSm-uGRYfJHD534XHAzgZpNofiDOSMKtQBRv38hQmENWXBlSpUAhxyDREzE2iS0dZIx7qglfXLybgk-fl5Z00syn1uJXyGRK9fB5tAkqtIJwof4UUOBG8qukaysB2q9o--NA25oRrkadZ1rQ0QP3ym8KXUR7JVzY7ZtLl5pUKm42fawhmbyFbs4gkgC7ApUAuQ2APrT3ZcNpSIl6PdJIbOpQO_xbZfKFJV1IwHvxolvufM_MeZ9A6GQ3AI25CAT8wOn_Oi-ffKtrsh2WonMaS10IqUdu4JmFfIQQp0sfP2ni1N1hios8K1AcnVwTopDyrPyXq0isAZumY1qnJoOldh8L8lqkbmBqrzHP1NDX6djXEg5HH9vbcc4wzQgwuPKBJKxf4ZOzPbY5MOdW0dobSr6Kp6pbz8plpKM2OZYPYGctltlASX-1YfycT7ixnsYMOhPA0xBrDdTiOj8xf7v8C9cJmN1HS6fyuvDpcyVojwmYa2MdM5NZncRchb-gK17dfuZ1fU8nlUPU9pxOJ1GdSGoaMiP1WblHEU8gMP8Y2O6miygMbxurf8nwuuVHtgNDA4cPZhou3vGZ_1Wxa6p4Ys5jWR5nC3cS93dBDRRvA2Y6QRlvXofItx-5RW68C2WtlYVo2JFfvqaheOicRwAp7ozFmwoJ9nuCYtpgJI8KIiWqaEYu5Ad29UGIccsezWaei0229UtiTGnJMJ2LYecKQJq5kcuZFeWTYaevOkLu7xJCrR5LXHDipUk_KNQIFejywRXghPwyuhiUn2PFIvOYG4HCnThZCGn6CaEYR3GFU51Ico0DE0FvTNgcwpgTARGutzK051owuffTo86WRExFV2OvWYUsTN8ufedeNw5HFJqKJtp7T75ibz8WM8gvbHIJ9E5vG5sT-_ZnCyuLGTk258THEJFTSViBV50a06QYNHUk7-1EKk_EMoFE2Q4AmvF_Dr4rJ5hqiMDaQbx7-BOrmll8RLTTs4EuHHDa5xx2gOmogRe3CeZvrHOf9ZyF_mca6VymJlG-zZ8_wocanZtTTQ3LorfVuWIx13cLskn3qVh3MtV3H-S6NDLShkA7CQ8fGqVqTfaZ92WLreZxrVqQ_1U7sTltHwEF2cLaM1N8I9Bt6j-EMioJoc8_J0KOaNvTmrnhAd_7yOLGJOQiNWaPShoOExe87U-DW4SatuN9XF8KsOHfDYGoxuEBPs1QE75YHt2ONM8sdo5FIgxBimQPOr-tI-Ny4CkRaPbZzcezuGevji6FqTzJWD1O0_fecVPgRDYObWl7fLlQAaNLT8clK6YHD4DPkYr2EVeP2bLwAErWE2T9sHiewfEPKMWsd01xEMQoQoJdDK_ABZzVZb7pKlT1zFkMlSkcYiM4S6VwGaAKc4rUIZYqIfTc-2kE7UK6DmnDyQ15u6TXm_WqXgYGHZNNpILgeBXLDoRSEzz7gmjlcMQmZBeEITjG5E0hsutDa1inb7Jczdz295HeX_BXhrFfvGFBf4AI0Q8W47VuTW5stLloOws_6lXPsm0p_W6dFdIc9NslyusdEe6Mxkf3gkAHkZKUrsDYyGB3DMiqTtt2ACYuiu04f0c2IMI6WjHBKRqSJAVvCx_tGCe7zjEdFbiq5MRw4c5rU0WZlLs7qqs87BVTkeMPhgDmYSG0FVreATbmCsmYalVSEF9lnD5fWVnsH6_N-pvL1Y6Bk0jgrn4VbGXH9hvpJMzpHC55BRuPRkv-WQ1JF2W_tP9nWkx1SUkajCZSEOxwk5Jp8mGGduOhQraEnbUJIwq_Mrs-jf-C5bChGJM6KUc6c26M1iG1QcptqbVHIDwLdnii4MaxrwVi3FuiOw9vnYpthIShXWC-MJgM4LQeDoA3-TaTPEkAb9qyKSDuIh70TeXsWbKgTkTP6jVkqhKoMwJjtqZ2oVz1q9lLGrKcc1JKsGNIwjO1z8ODDhhYqi0GfBO2s1VtN5ATjrX52d0QrS30IK27C9H_9TbE6zgYCh5kQciK5y44KgvoZWkt0k0O28eRF8vFmcXoTzp5Dh62gUQpqGLRUYpXvdX6pDBY3zxRYN01GyGkKMs9ORqnKwkhBVrAyEiYCXTUJ2QIioGfY6R0tLt_PEnPYPjbrZXbC4Vf9csPDVCGpnKOl7q7c02yIwDNMOh-_O7RPTweAQ36bSUHEbhH6cH6-WeA6SFTd2HO6ihW8KdeizwOBOx9wyIUPqw-sBKkZdl71u8GhMT6IJH2ielZkpFhhc-ma4rb2pvAbCw-kXAqZHKhay-yuEZJcdGrGcicdVo4Iq8UVFTBHnUfiKlWLK94y88Lld9HnhEN7A2m0sSgignGnOpSMlYsTI-uiKrVcL_l0KghudY8Mbu9vj3RP0YNOHDoiwwTR9loV-dQKIQeAuREX_Tc59XX__Zy9PX5BD9nmS3iv3_0xclTSO9cgumJ8GaSCBoSGG3M8XPhypvjSa1OMlHCnEYTF938eFE1v3jPMs62T_6Eu2TEY_t2Vsruwju4PCesNcc_gAVpwOKk9sDQix24dL648PBVQBJu48Ex67ibEkp2pAJPM8iqepBmPfPJoiObkLVOcACbkzNZUcVwGF49zl6obZpsaqA1LaJ7R4Qru-AMVfPtOWGENGYWTIQOH1GyXOS6uVGXxdZZJJDAGKG96rW6TVBZjOVMNVhzqQGfNGcQWSyIxWuifwCXtaQiX7Vahm5H4DYjdHljuTE3KA30sfxb4rob___tI5AEe-8KdwVUKgxLEctOysjD-LanmVlU98MOwkCO65vlA947HW4UXYGk9aVhp9Dv1UxtupSnwb944vFBr_zYSHGfY2omaTRqBnuE9zH5M5gdOeuCgdFYHsxq9oJWznNJ3Uhn2650Aqqa740Msh-janmmuOQIODgrpf-5vj76i-GqK_Pg09V9a2LMBM7jl6Vv1uuXkJbQBgMlXgoYod1nQiM0Nbm8wRh8erdlvuhLLUcokabkRSgFz5CKRAX1Whbv8Q-2xfX-HNFoc7jRALs5qpZ-HFDmWxaaXGvMevkugIBq9L4T49bgFuJdbEivnQsbRbtj_u3N13Qe5Y8263jg9AepcBrhSGzAz3UDxtLP5vs2S1hg74aMImQalzktWBcjZ3ca0qsMf1jXNRq_Xi-n0RealDoK_Qr9hgXt5FdGNbkNCai2PzNycOOjPtEmiZLkpuFlGlFhWHUR23xlwaTMRjRLUIB8xipBQ6WZMUQuFRzZ5woHucDKTP0qYNEAMoNz-Dv2nJEzi6X8xktQFstuFlsq2T_f9Xryt39tWMl3A2SXGqfrlBjQzuDdUH_XQ-Wg4XQEBSf6AZScMBjpG9xzX_qkpHTZEuN5Hw4Pyynh9KBL6UFTjzJAxghYRZXY44Y_OYWOTY-NUW3sHt1TXY4FGl11TwPdUQVqA0r9hZD8MZ2lUZ_hgP04ekgDckksOdt34vP4-lCsojBboCoPsHcTpPi0nyzaM0CCW7VdG3Rd5SJdmaA7U3YxGEZVr6AGY1m-XiNVnVQwhlcpD24W39abbfQAfeoMZlD0UYembO7CFNHh9VYkbhge9EUfO8Xa77bdnwtg026elXCRATmrpfVH1ZMnx9sKh9Q6LYtCCf-JcpOjEyt9u3Dwv0n7ISkF_aHJZIH-WtOsuUF80c3lgj2xWgKnhpLyzoDfgfXxg8VRPjlBkP_HPWL1Fb4OWvDyeduJNSMpHAniaNxshAqp5yZuY8bwG4ROHYBnNKxwmd88UylcYdMB8LriP3Iaxxfro890YgR82muBdxg3NksZR7aRhKLYl_UPWv0pHs1ixtWZjXSsoBHW_hBqLxFdU7ym04VaNpi93a6SeTtfS7z_Z8Dk_xO3gS6QehULO3eN3kJj1mbWkblf46NGulA72R39USAGdUly7m2TAK8wiMta8u7GN9fbicQiiXQJbyZk_AeGXlYJSnzrG6zYSwh6vQ7AsBWfASRCw49WS0qqQkfS5LWX9yvC9-VVSRr9g09Ff21v6lb_kUW_RUOImX7k9eGxqC08jfZk0EBg57pnY-FAFYeqm-kDYOZKVW-XiX97QBGJ7YJ2P2aO95nna2Yq-e_dMzYy9CNhRuG5fi5s6d1HX2NAwmVbPiuyaVb7ZvU42cm2CEjDnFQVeboyFeykd5O_zlLgF9lydr9M5V-HQEWw1xt7W-V7ZChYq3Q2k2_mYieEUn7YKVbR3H2_"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7238
+          }
+        ],
+        "cachedContentTokenCount": 7238,
+        "candidatesTokenCount": 432,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 432
+          }
+        ],
+        "promptTokenCount": 8450,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8450
+          }
+        ],
+        "thoughtsTokenCount": 1708,
+        "totalTokenCount": 10590,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.9524620197437428,
+      "invocationId": "e-c037fb95-f914-4424-b8a3-dc14e2d5426c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "4aa4b6cc-287b-4004-ad2c-181da157edd3",
+      "timestamp": 1788685625.1253922
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-70bd7f11-f853-48f9-a5ae-a1d757fec501",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept_relationship",
+                  "bio-med-480108.OMOP_54_A.concept"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c037fb95-f914-4424-b8a3-dc14e2d5426c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "f40366f5-450a-488b-bf24-41d5d0e2c2c2",
+      "timestamp": 1788685635.6715648
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "```sql\nSELECT DISTINCT\n    brand_name.concept_name AS brand_name,\n    product_drug.concept_id AS product_concept_id,\n    product_drug.concept_name AS product_concept_name,\n    product_drug.concept_class_id AS product_concept_class,\n    product_drug.domain_id,\n    product_drug.vocabulary_id\nFROM\n    `concept` AS brand_name\nJOIN\n    `concept_relationship` AS cr_tradename\n    ON brand_name.concept_id = cr_tradename.concept_id_2\nJOIN\n    `concept` AS drug_with_tradename\n    ON cr_tradename.concept_id_1 = drug_with_tradename.concept_id\nJOIN\n    `concept_relationship` AS cr_product\n    ON drug_with_tradename.concept_id = cr_product.concept_id_1\nJOIN\n    `concept` AS product_drug\n    ON cr_product.concept_id_2 = product_drug.concept_id\nWHERE\n    brand_name.concept_id = 19011505\n    AND brand_name.concept_class_id = 'Brand Name'\n    AND cr_tradename.relationship_id = 'Has tradename'\n    AND cr_tradename.valid_start_date <= CURRENT_DATE()\n    AND cr_tradename.valid_end_date >= CURRENT_DATE()\n    AND cr_product.relationship_id IN ('RxNorm has ing', 'Constitutes')\n    AND product_drug.concept_class_id IN ('Clinical Drug', 'Branded Drug', 'Quantified Clinical Drug', 'Clinical Drug Form', 'Branded Drug Form')\n    AND cr_product.valid_start_date <= CURRENT_DATE()\n    AND cr_product.valid_end_date >= CURRENT_DATE()\n```",
+            "thoughtSignature": "CoIBAY89a1_ylwkY_L-kwlW_CTozzrwpHRCH3KnWGFTM_3jHvIrg0VbWFtiqG5wAds0IyQmpkmeNTxYqTstEIidZ1iMAMrf6ABphcW1tPLfyomdRo0W8M3cxCF8aDfl-RgSErVzfWL8VnBseVxSm1m322iT3McoqQ4bjyrRn1XcIayYJvA=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8284
+          }
+        ],
+        "cachedContentTokenCount": 8284,
+        "candidatesTokenCount": 426,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 426
+          }
+        ],
+        "promptTokenCount": 10678,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10678
+          }
+        ],
+        "thoughtsTokenCount": 20,
+        "totalTokenCount": 11124,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.018612294129922356,
+      "invocationId": "e-c037fb95-f914-4424-b8a3-dc14e2d5426c",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "aaac989e-b7a5-4e16-bdda-15121a4a68a5",
+      "timestamp": 1788685635.6751523
+    }
+  ],
+  "lastUpdateTime": 1788685635.6751523
+}

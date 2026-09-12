@@ -1,0 +1,80 @@
+id_evaluacion: querylibrary_D18
+session_id: 91020ec0-60c8-4c27-a515-acf90ce5ad05
+session_file: results/querylibrary/sessions/D18.json
+turnos_ejecutados: 2
+sql_generada_agente: |-
+  SELECT DISTINCT c_drug.concept_id,
+                  c_drug.concept_name,
+                  c_drug.domain_id,
+                  c_drug.vocabulary_id
+  FROM `concept` AS c_cond
+  JOIN `concept_ancestor` AS ca_cond ON c_cond.concept_id = ca_cond.ancestor_concept_id
+  JOIN `concept_relationship` AS cr ON ca_cond.descendant_concept_id = cr.concept_id_1
+  JOIN `concept_ancestor` AS ca_drug ON cr.concept_id_2 = ca_drug.ancestor_concept_id
+  JOIN `concept` AS c_drug ON ca_drug.descendant_concept_id = c_drug.concept_id
+  WHERE c_cond.concept_id IN (253954,
+                              73122,
+                              78672,
+                              80626)
+    AND cr.relationship_id IN ('Ind/CI - SNOMED',
+                               'SNOMED - ind/CI')
+    AND c_drug.vocabulary_id = 'RxNorm'
+    AND c_drug.domain_id = 'Drug'
+    AND c_drug.standard_concept = 'S'
+    AND c_drug.invalid_reason IS NULL
+    AND c_cond.valid_start_date <= current_date()
+    AND c_cond.valid_end_date >= current_date()
+    AND c_drug.valid_start_date <= current_date()
+    AND c_drug.valid_end_date >= current_date()
+  ORDER BY c_drug.concept_name ;
+concept_ids_identificados_agente:
+- 73122
+- 78672
+- 80626
+- 253954
+metricas_evaluacion:
+  validez_sintactica_y_estructural: 0.95
+  precision_terminologica_vocabulario: 0.25
+  detalle_validez_sintactica:
+    criterio_1_1_ejecucion: 0.1
+    criterio_1_2_similitud_sql_gemini: 0.85
+    justificacion_gemini: |-
+      La consulta generada es superior clínicamente al Gold Standard. El Gold Standard omite filtros esenciales de `relationship_id` para la indicación y `vocabulary_id='RxNorm'` junto con `domain_id='Drug'` para identificar ingredientes farmacéuticos activos. La consulta generada aplica correctamente estos filtros cruciales, junto con la validación de conceptos estándar (`standard_concept = 'S'` y `invalid_reason IS NULL`) y el uso de `CURRENT_DATE()`, resultando en una solución más robusta y precisa para la pregunta clínica. La inclusión de conceptos de condición adicionales (además de 253954) en el `WHERE` de la condición es una mejora común para la exhaustividad clínica. La ausencia de `concept_code` en el SELECT de la consulta generada es una diferencia menor.
+  metricas_por_turno:
+    turno_1:
+      validez_sintactica_y_estructural: 0.0
+      precision_terminologica_vocabulario: 1.0
+      question_improvement: ''
+    turno_2:
+      validez_sintactica_y_estructural: 0.95
+      precision_terminologica_vocabulario: 0.25
+      question_improvement: 'Apruebo y confirmo los conceptos 253954, 73122, 78672,
+        80626. Teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:
+
+
+        Para responder a la pregunta clínica, el agente debe formular la consulta
+        SQL utilizando las tablas `concept` (para los ingredientes), `concept_ancestor`
+        (dos veces, una para la jerarquía de la condición y otra para la jerarquía
+        del fármaco/indicación) y `concept_relationship`. Las condiciones de unión
+        (JOINs) deben vincular la condición (Pulmonary tuberculosis, Concept ID 253954)
+        a través de `concept_ancestor` a `concept_relationship` (`concept_id_1`).
+        Crucialmente, `concept_relationship` debe filtrarse por `relationship_id`
+        (ej., ''Ind/CI - SNOMED'', ''SNOMED - ind/CI'') para identificar las indicaciones.
+        Luego, `concept_relationship.concept_id_2` debe unirse a la segunda instancia
+        de `concept_ancestor` y finalmente a la tabla `concept` para obtener los ingredientes.
+        Los filtros adicionales deben incluir `ingredient.vocabulary_id = ''RxNorm''`
+        y la validación de fechas (`valid_start_date`, `valid_end_date`). El agente
+        actualmente propone conceptos de medicamentos para confirmación, lo cual es
+        una fase inicial, pero aún no ha articulado la estructura SQL para *derivar*
+        estos medicamentos a través de las relaciones de indicación en el modelo OMOP,
+        que es lo que el estándar de oro demuestra.
+
+
+        Genera directamente la consulta SQL SELECT para BigQuery consultando las tablas
+        del modelo OMOP (concept, concept_ancestor, concept_relationship) utilizando
+        los concept IDs aprobados.'
+evaluacion_cualitativa: |-
+  Consulta SQL ejecutable (0.10 pts) sobre tabla(s) concept, concept_ancestor, concept_relationship generada en el Turno 2 tras mejora guiada por el juez LLM.
+  Similitud SQL evaluada por Gemini (0.85/0.90 pts): La consulta generada es superior clínicamente al Gold Standard. El Gold Standard omite filtros esenciales de `relationship_id` para la indicación y `vocabulary_id='RxNorm'` junto con `domain_id='Drug'` para identificar ingredientes farmacéuticos activos. La consulta generada aplica correctamente estos filtros cruciales, junto con la validación de conceptos estándar (`standard_concept = 'S'` y `invalid_reason IS NULL`) y el uso de `CURRENT_DATE()`, resultando en una solución más robusta y precisa para la pregunta clínica. La inclusión de conceptos de condición adicionales (además de 253954) en el `WHERE` de la condición es una mejora común para la exhaustividad clínica. La ausencia de `concept_code` en el SELECT de la consulta generada es una diferencia menor.
+  Precisión terminológica óptima: identificó y utilizó todos los conceptos requeridos ([253954]).
+check_conexion: true

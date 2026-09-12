@@ -1,0 +1,27 @@
+id_evaluacion: "querylibrary_C09"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_relationship"
+pregunta_lenguaje_natural: >-
+  Identificar las condiciones o enfermedades clínicas causadas específicamente por el patógeno Streptococcus pneumoniae.
+sql_base_gold_standard: |
+  SELECT
+    a.concept_id       AS condition_id,
+    a.concept_name     AS condition_name,
+    a.concept_code     AS condition_code,
+    a.concept_class_id AS condition_class,
+    a.vocabulary_id    AS condition_vocab_id,
+    d.concept_id       AS causative_agent_id,
+    d.concept_name     AS causative_agent_name,
+    d.concept_code     AS causative_agent_code,
+    d.concept_class_id AS causative_agent_class,
+    d.vocabulary_id    AS causative_agent_vocab_id
+  FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS cr
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS a ON cr.concept_id_1 = a.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS d ON cr.concept_id_2 = d.concept_id
+  WHERE
+    cr.relationship_id = 'Has causative agent' AND
+    d.concept_id = 4248851 AND
+    cr.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: "4248851"

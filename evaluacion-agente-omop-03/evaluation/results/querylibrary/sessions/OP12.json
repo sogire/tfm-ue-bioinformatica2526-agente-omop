@@ -1,0 +1,905 @@
+{
+  "id": "14fab811-1abf-4650-a23d-f6ffda9c4bdb",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Calcular la distribución y percentiles de la duración total (en días) de los períodos de observación registrados. Genera directamente la consulta SQL para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c26a5231-5df9-4c4e-ab0c-260bc65a4431",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "c168ca05-b74a-4beb-b237-6c36f7d21259",
+      "timestamp": 1788694314.259874
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-e82b5084-44e6-4ba9-90c1-be765ae69b04",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) AS duration_days\n    FROM\n        `observation_period`\n)\n-- Distribution of durations\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Percentiles of durations\nSELECT\n    'Percentile' AS result_type,\n    '25th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(25)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '50th Percentile (Median)' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(50)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '75th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(75)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '90th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(90)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '95th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(95)] AS BIGNUMERIC) FROM ObservationDurations) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CpRCAY89a1_PI0F9c45p_8JlCh1JRXQk8Uss4XXubiGfZO6tkOHEp779bFFk1vSkPGSh6zRriI_pd8A3cq8SJ5iScNkFmVJwn2jYCbrfDzYZ9BzfI7yprcVhJKECki5SkUSx3sJJXrHqG1HHkPAeXAd_DEvBGTzJNUMr6V8ojAAf2E89IWgoddIjNj0G9ER8ya8_AszTCfQfuOnMoF2xZ6gFaTKxnNgPTT-VTTOF0GIhQbCUIugR5R3zkIuHujjG0L2qP7b362Pnw4MmORwGjNY9GgZVXGxJhNJU8dCo1YJR99dqnLreGwbiagRdNWaMehjkhBlBvTRQKjcvkCFpQFcDI1WM70ACcVYuTSbmaq1wJ7PfqYL0tFdr5OTLC-rDUlN1yApyuSCCg8Bcuwk5Ql5jq-VhqeLYtuLhrbGquUb8Cpjwdw7fGGxewcl14yPY_MKX8mkoV9wulhBeTm-7y9Dw3vwgC2sVPUulzPib3c6jr0r4KYYOsGBJwlqITUe64G-h6fJolEjdVMM3Zb9dW_rRDiV5t72csYqfmA2PKTpbvv5clt2c1kNhLKjkB2aNio0lunyW98Q7z1nPRqOFbuvscfD4-D1WSf-iSnTHbf51n-7idsERzfvTp54ZuJZPl8palYz9BdQFc2j78wWI6DuxpN0srDXndp_tQchJ3jXlMe6HnxPRL-eFbN_3etgPePuukrAvZgLb23AzVaqCkYplFnMht8SGtY9J5-2suVIwJEWmBd_qCBCQSVf_JzEosNTekMoR6Wa13fRxAYnXwaTzupGSsG0xxU9yF6gKDYeEVlS-L8JT4c92GkFGAxbd-qrgWkPSxmtcyI1GZ8fZb9yXwHjYiCv9s2vL59cv4SJPheZ_QKTTWjQny7NZSSgxyKCFVMiXCFcTAjvdjDtLMGxvnJOKN_WEJqjzrxHKeh1kP_WystWab-D6lt1alGuuTe2jp4xUBG176HB3hiiEyvN2XSU3kSRgUR5tsGFszPMNTQqgBaPCVinSRTiM91b8CDVZEy278x4V22XFjNd_skNbR1v8uMApB5vWLXhPsAH3k1yoa9dDl692Vc0fGZiVL5nk7AUSJi-dVQWDqGTkhXuLP_Rsut4uzIbHEEfWC8YAALCMM2E9q7_RlG-pKbM3gdKFdSO33HqL2B7KqRtzKpvwSS_vGcTv61MEwHZXZ4AGIzXUcTu4NlLLxBLGdraYgdtNvJiJz5GyS4b2CP173W9UZe81sBoUpewX94SJx_PvYpeoPqpqqggWOBtz6p38lBqeaRQ0KRe3aYSWQR2JZwGWbVSQ67VC_8e4ZNKnzxLEeo9mL0Xai8b9OeJGskYYjP9ju9PAVwMrRF4lpw1sCuChyOiMOKDclOYwv1j9Knx_KHJ872Hj9Ned4kiYBbPn-5A2iTjHlzWYN5P0IIcN0VdDxkaP43LTq7sqtcOwofJRs7S5UNojAk4DHGj5XHApvYCdE59hRpEOI-NWmI4kt2mIa2CKev_tle6zAnpOrLapD_XCCk5UiPiVBAkNLi4xwzkGfaz2b3z4xHprZdzbo98zqmU5pnzwtVRxFLHJYKz8AzSMh3O7dM23xRTo1brDtrAYkkmSY_uAnh6fCYI2vfrusuQh_5tm-alNIoC6Ew0CyY1n2wBb_T9DbxNJRzgIPSajZrx7aNkbIwJ2qogFKyyfeBLv4k66SbrKgeWflqjdjvnNTbi3qn8moT3wJURQdYAekxMl0-EBRt5Onj1r2Wng-x8wORbLaQ7kyLPXrvAgEjq-bD-1EnYHVmy1jPDfuBZ2B9pRiOjGGbcJxrpSZENfPtqwad5FNNe3aEMNy93f48VxJk13c1MQxJs2oAKcun_rH8xh3FRTVMFzk1BsdNDnKF-zjEVjMSmarMu9zvzwROHDiQIBzLiciT3ykb9C3DFr5-h0dR3uz8kuqNvxLwsW6zSIARt1q9dIbCFXSuwy5LhavyEOyScUKT-nIih1KKPipESbvVhOuFn93jW9Kk1tYHwulckLsMy2MYKoIvdGFtSzSJPtLItPkJX2OgaQzCETIClHexaKF4_TV0E9i8BcAd1DqhYADtwbRvJw-TNahL4hHQtA1XpJePF2H1E06YbNelJUvoMH9K2b3XYnweWdWQQqbo4zPxGYODV6-J6lRUA1magN28tojHb-X6iYloFZMsGH3lsaSLu15s5CfUGE-lFH1gqCt-W9-vLgnS1Im0Yml-okQKnL2369iy2cxSCHI8U8S4-DPwcxlkyNX0KyYA2GzptSEi8U1E7D0dbA7or9MKMyAAvZRpdOPOWCYJjPAKtXytRFPwO0fosPDwR7b1O-6IMjmR_lyHuYZeNTGn6a5hTZ3xw9sAcORRUcaH_3iYD7cwaL113HbCIurMjvWBqDlqO4fsTz617-U-fD9neuygZmM38430nwCOCOeY8ssdgCX0sD7iOUXGVeMhLn-tymfmTTqr93PcBQstnq4HQROQE-sJCG-P-6enxyU5Q-ZZ1RAgXWWb9-3Hriszu86Db3LcfEXUqYVXzjVYG5an48yBam7y1H-vewAgMqAgfObMUvxQ5Ya50ofYOISxYNu09go08DhsUkDnabylP1ro5ORIKQ5oKRL6AWkHsHC6Dk0y8IlMEpXos-Cg-qpbVx-RqXD7bv7pEatUjhrX0mq7V1DQkaJQ0bewIIPkG-nPe56t9osyCCcwPA29GZPoBiQ7uQZ6tM5QEJ4aGh2STLxBRHhMgf50OyK05gJ18llTtUvAUu7P1R80QWUDgsc2skTyDN3Crw-mPXmMmUEGf2QZT97r9wUWR8fYj2ObfxwHIBcojrkoLdKOkKCmMPRigo3o7M81RBf-K2kN4RVqzLS1srgerUjeAoBLfYOl_uHSnUkHdjcC6niBxied5ovOpj103vylpvzM2ZUidp91Kk9SQt-v4TU6okwnkTpFVHm7HkLhMYXocblBQi2LgMqPPfox_HjDPb-0OcDTXj-Vdlb7BCVGtGHRrLqtH1jut0a7_de3z2uptc9mef07yeNw3eslcsgp2Y6xZSNOS7k7Vn2CjVOUeeSqWoVNyApycF2rXQpJ4JT6i1a-14xa669DNSdDqpZ0T7MYAyPGJBwxYtAUui2d2xdHQzbjMbMh1MkjmLK9qs-47fWyJSOJAIMWDVcXcnPLzCCUabr4y-zTtldC7bbtvhFPUciMT6Za_NVA1nGrLhiOzUBOUzeW2Haw0ARDr_hdjzavHDnzc5DfMzbWCMa4ioNrtZaHfGSlb2G1YeH7z_v6ySoijH6cVxt7lhTYL4zeWshWPm3coELcEBXV_EBLXf_3-r4oMyVyUsMTQAyvcIyZClPqztoqx0iMOAdLOHMljqJgWXb8iwD3G9mYR6Rvqz1WsiIowZD-n07opNao7KgG-Oco75uFR9wtzZ1Q6ijHql6TrpTXHwN4l8sSMIL3Y8UqBCeOyWwX_PxvKZSm4AZlfxmW5marb5nrE5F_WFZ_2-nXSYSjfEZFeQZRzwIAXhwINqMA9N0zvHVJl8G8OSu2RdMx5uYV0i1-1aKWXXwdzH9lnUbjCXDMR-k-vuJibCQGm3KslSEfiHrWuGwNzoySZ-RgFtuvSpbLoQYVjV79tjBvqo2wTyfNRudVfbEy7Kkta6xv8eoufqC17wiRn6lxizOyZ62wwc3DYpUAqbLgCmptyAXIb5ImF5Zzsl5Q2Gx6skOJcOXUAYlwSrJr_wbx148ZB2lcQ7DdTj9uSNxlhNf2_aKuL9CYXBxa5z-qty07Sf9mhe2WbnzPUkXQib4uD7onnsu4yN53lDxcyOiIE8LeYg_UBEPPdrWZJv_opapejCp05U2Z6mni5nvjj7qITEXa3rSx6AOXQZlSz8ERwt_CdW53Qn4ZhNSU0W3ccjqlSjvu5f7FLlS5bQFOPyhgNj6uES4cR8xycRK4QzH_2WIp9I7JjF_2Us5WBlMCrncR0I0ON6OOF2azmaMILA2Lz_11PZO6aCbEf5YeVtk7n4DHR1KA6uTSa3VvaH3dttmkCiXexl9TLKKj9BLzJhK5qYIAQxqQqPrsBMzjnRaJ2g-GwuIkc8h_UC1xP7TjALzbug6e89qMd5otSPUm0AQRWqx4UIswLFvgxDF5OBaJwKZq9VWO7r2-Tcg-Mk-t2F_ZixD0xJMYCd3Fnjfnfno5swqGpQ9-CukH9xJVsm2mTdc-GpM-AiUkFKDxevzL8o5NVmw23_VObMXLOuHQj7VsJexI4FYrHNh_mQJ10bPQOplj0nXhM9aZnecOZMfSCrYbOVwP-kn74kFRYXK1vv75u9jdyCzBu0QxqRmRuq4NJMgNM3oHv3rkeEeVfaXv9RE8F6mhjSGBgLTdRzO338t_q7_wonaGOznkGaOP2LEYFtRy4-wohf8wZXQP90U0D3o_F2Ctu7gpJk6j-uC0LDUfRwgQifGX8v33uIBV8IK4mvHsFEDbaVcEspFcPQdAJJ8MvHPqgHijiwLZx4w8eAzVYhaQQl-9TtU52VShPUbs2My97IZifkMFZqSyy-_NKuzrNYzsxdFKzd7ouX_RFHD3D_5wfasWElSLEsozbjnqiY1nSrTsjP6us_Tc8FnSqLhOL8_W_kPi3O4sbw3I2loKL_AkVz9Eh8RoT9TR0BrCD9lk-LClN-9WZ9f6l7fT7CCrFCxvp-Ep17VVCKXp1X7jL8IZ2aj-0XALQD2FpPx84OW46Ww4IZptN_eZ_Jyf4V_o5Y_9N5UnJFK_V5MECmb5tHoZyark2RQ3pmSrzm07SlohqHo_OQhnBNv5fkJHRk2yHGgN-PUn-Yb7TAW7c_N1Ug6KNrBnPgMFRU4DRjXhsTypft-m8ZJc6vELoAWp833Nx5Ac-wjxCFENkyuqM7ARpC6GtYiDLs5qgzTxUJ6pXEM61FNwASReKkZotjZaKj__pvnDXeZqhA6auojJ2IIpdox-KCXDGd3o86rGCO0PaJqEa95AcRAvA20zbtpvKLexSbLqTjstifJxuk4bgv94PWUrdlUXRYhVle97OA64EQggHIEkFPe2znTpKXOQN5tbx5d_9I5BWyizeCxb2WRXJ5arz2KsFb8XpXJ9cQYdDgGbDza8CoBXKSmw2dB-hLiHN-199hTCjgVceOTQife4h-YtJj8145x_ipcLYt13sAW16rWcId2uknAT-80Ii13OV4YOH3y0vWEDyDA2a9g_cFOqh-MDqGkkSnMNdtAg4MsEzjwaFxj3I7xtzVepxjSEl7TznFbYZVNsPcy_8rEUB81fdAo_iUmCrH-DFzpFxZIwaOEf5YVIohowGb1TgaaIiwTBXLE1P8sT7NYcOLHuZrlgrXKqby5kio6fjt9gmZMdr-776D2W6lFYtcfzX3ttx_iqusTFh_-NlubxXNeEUK34gRn31DpoIHPpLNUw2oPu-ArzMICCdg2CSLDbbY_sWNdVnXcnlsY9-S45c_-6GJgo7F5yPwZgnD2W_auVg0PPMNFqpyaPgL76ehdB416CMmTsux3wQrEK70MP-nkN-psGt4Pxb5ra9JekKVrYahCd1RLst6UApPzyHZ-5Z86m--Itmimrg2DJNCeojJQdqPQJcVTDYlYeVrFheJmwqZy25ld0U28Fn8QXeuVmKXth3n5dzLAuE7zmLOBNZO3R4esTQK46QbhA3IxLN7xcK2F1vH8DNEH_Mwok4R4JNzEuAcj1GAJJGCrwedKSRRCfBF8MLJgt6I2fdvHP-aVnAcTMDkm5ytOJ4CSXSHpNdZmVUs_d-Gk2T3y0p0MxCImcAJCwoBTj5uKYF9U4P6gAvyxIqyROVdhOGWJrs0QTaxxruvxBe8GH_H9iza1u5S9b2gpgWiuRW2ac1qEAtNJbYV_wDLza_3wCxHHz4bKcD1b_TFe_98eQRmXsFE68sUsM7f2wuOt1c92vTq-kh9Ge1GpQIwv0WAfqgBW4t7GXDGe8fqXvSg5rpUepP4Ro2wjN4hGJs1y8xMdFjQvGc8bp8cjDHRkFjaZltLf5zka6sTaNuJFtmWG2D1Tt1M6VKc0zzuImq-DbjvT4EBtxb3t1SNDbDi276bznIRqPAsNXYa1P6HwtLAtfTYCsGGLqBCHc7bpAHEPU50hRG8cErqkVRkrK7Z5snbnwhITc4wJe1TL3huuwS_iTwozcvSDSWCxvyyjS0vR8j33GmeNoLcd9zS58TCLj5Px1dmEICXHK9YwfE5atAelNGCg3bYJGG9CikVWDbhF4kIDWmN32I9cILYnx4Ad1clry4fc83A34Ds_cpP2dIrCkvBu6g0EGgbM4_jW_bWgm5M1fSP7h4phSkLGtQKijttOz0loIfqN_J2ULVMrp3eFyZldNnl7kp_JL4ae4vM5yx4V9aVRigsCLlPCQDJoecqf5ly6JS6e2AcxVwbQbEsdB3YSNst8wTyA59FTuwiUB_cB9LeD2R6uGbW_I2du_CIuV6bKWqlXK5uL-LuN-nUDS5eCR1uRIt5B1RHj-c1lWKMJzBnnJlCXf06I2GJKCt2rs62Bpp4wkah1jYA3G_ATzdGGn3D41OdAgKcDWGt1oHiQT25FXeDl8Qdd0QIvSLrigr-U3fGFRbNg0PfrW9nHaaK63rk-VP53qtvtH4Z8jqTmrkZEhUQ6yXKlBIQmJHGLbalfrgGNFOUc5_9CPFmrjZu5FBlGr7yPXDv7_9smWA-_01VXle8xb8AT1o9J9JyK_r-NqcOsOX8m_husuIWNVpwwzX3zs4t4R1mIwRLdGQsX2XYMr9X4zoXdTSbUL1Z3046MGcPODSEIK9KvTzMih2sVn6JUYFRQBZhZ8209NUyjQftCQPXFZ_Yu844ghet2rQrDV7Prf9ocWXpGABCeBqtzujUpNIPTrvy5YAdSXsso2VLtbW02P-xujaubKL-nNuxiIo46tuI4ql2-yMIpA7_n3yDDFoNeSfOjxHnolHt8BX21a4L7JzUSZwZgNPcf1MWN9-ykvaC_MiDcBJ2UzjimSF4lflE7RNbpo-e4B98IujnzUyJoDzNdHu81QbAeDJ3PRsz3ABaaC_jEfMbHONmSSyrEF_SykShNKSn79BzoX0psMsXR9XSgk0JCe270LnsD5BGbaeJiMzrP7Kz8AWp_2q4BA4SjK-us8naJTXYUFKaOBKyD6SWrY9eYzFJ0Qri4pDpgZ0hNzHc8IwhzrtaiYd1ziHZJyGHsgwbmIU-_ecsbGXqnvRGPR98arA9EnWT2s4I0pptl-ltS57478_C8eYf4D2hy8XsoPho6q3YLMjmbLg-DhSzMRv3P0wDcQx9GG3rIHa-C5FtC6ka6jTOopsb9C89EEFij8b8p_WFoyBg8L_ZME88kp_hrlbsLitAtjj66mmE-hVePQF6dG4hGOgdbd31NsqNnIoAi2311q7tRmOOAp5mp4qxoXsn-X-9_MLi3bKSbvxU-2gU-A12t7hcJE7GwxIEJLTSn7kSdjIlaAepXFipOZgFANubBWxGYihP4XGuI2dqRC5leuhI0xdrTahCsP-jeHNyUk0x9WrH7f9oAy76_CJtKX_KQ1YBKbrqMZ7YlJqAefScEuYuOH4odv4ChNQtnycv5eZSHnup43MzxDJI1TkyR_U5Iih6xeaKGJWgpKmWiKtPLhHPD_BZTAChB0-hc0N8gdfPhMbJ1Anr92QI5WgrZZmbIVAyRD-pnNw4Y0Dh9-xojGFPkbwwpwvEDVgey7orqFeZFPM_FeB-bR5FCGdim-vHVk8WjfwoAvGZ8nPsBBBEUS-RPULdvizPdFVgUABKPJw7bYVW1sbG0gXvLQvr2xISugJtSqDgw-T0N4_TOEKaYkzhYV2aJnITaidUemPcVwz-Gei3EggRjNKzi2-mKWzCWgzV-rvK5cKxZY8fyJieXucZdHfx99R_YyebpxWi0AxtbrSGdeqMM4afwxY_rVpZSh8AR-cxDSEGMifF8zhJhX6GaOWvOL1xVLPWrN1BWF_LS30cA9mWVa_NXh7Jez0P1XqvqqBKtyR5IK29Lv-SnMgrgCz_oUTXHYKh8wEwH3y4nCf8gYN7WWIT2PxT6ABXJ0dtrkn9j5qi_X9H6YtjZxZY7OfprPknLvPdsNUVtJUDBbvfqsrw_hwkQPAZnieRkqHJThmI85Wn411sn6URzNF9UPaNMJmvJLNO-C39zK7DfvThELAY4ctttCUridj9uWpEbfQHw04Nfl9jxs2zF4GIF05jl0P9H7BqXWhKoSz8fuFTduuA_OKVAWMR89-nPeq9LMSe0vRzAOwWvEG4Gi4THPbkuShMRxQmLGTSZxov_YiohT5yOT_OsbOGNxGRa72LzZku3PEA1q4WcZvdIls4Fskgk_BsHRGWtyY0A_DX7J-fn-mHureWHoivUvY9PU8U6Eh7TtdNJzWDXfn0sq9CaPeTzGcdy6Uh7ne8WzpiDS4i8_V7N-5crElAPsTjja_0a_WcMfJUZPviI55IKujC9fLEdYk_ZfRh07yUI5jCYNxBnH6-ucohdjldJ6YQoTx7N_zk1kFxaNovDzV8ak2tJA9zHuS97CjVgIvVQkxvUfaOKGbxl9NEprqWthNgFc-rbOX5_VOs0C_OBMOk-qAerEoQUy9dCYnuT9IaRdPH35V7E4HQI_fXkmavfrwjmDeBz83lzI2RuIW7Ki-Kre7_XaK4IDsQAhwbUQLBNOhmPV4LTYZqwp8lGLY_ukyUcz3fsVcTGqF6p3eTOMZb5T4f5iecU9mjIg0OF23Exq5IZc2Tx5qeopdTbRkG2GD9a2urNy6NUzxdOwEMnOslJTgPe80l8X4VyVt9JZDv_fHCV83RvLmeutmTz9eTr3bAKUajl6hk80FCaDjteIFiqjQgHapHbkWVcHKr5jPnqXV5wST0Dm5M5xH4VzV0t-gKGcGzwkBSYJHOcatedCjJERN6RB6jS1epasSZ0NXiljt37w5RToUGVUOyoLg9MkQL70NaGNscS6voPRRGVnvXikTcVKGqYcGlBO7sc9xScyC-DZkJeCfru3savA_jXIxH_hkqff065l_dWRqoKKW42_N8FAHDr9y9auTpPICdGtwn3vkiX5ngXkaR7bPvPDoTaTX--MObDG10Yu8MciREs137JUlJh2rr-Z0X5mJayCQo6pb2HIV7IvDKJcwzySq7gNmq1behlNlE038cpTgU0c_bL8k2JaysxxpsdYu3Kn66uWACJBU49oLLRHpPvRdGYERCYjE2A0eUM6AY_eFYZitiXYUwjgbofAxZiDBW5IWJ0xEiXrSz-0rjRhaxPP56DaMhNi2LoI-UyxXlqEc9nj2Ufw-Ex_UINgQgwz3jjyVI7qqwSTnybMuB0mfIlQvNMHpUoYX3CFqIJan-G9q56b9bbBX53Zu6ydYZmTDpB0YsCIcsyHNHZgO7aPpVWIWBXQMXRkTGziQWE_mF7mkkUQUobFa1_xyHJs718jQVWtLeCdzDOuuFig0CxET-NZUPwm8h5s8-i4UgeukqUIaY5Ty7Ti8_kO2gyUNN6CJBi-Rgw9fqSpTLB-EXJLLSlsrS3n9dQ7C3iXCXpdNlT1KV2K4dUkzinO0z_51I8dpU8Fil8TZEMwQBYACjNkS_5aaxbKlChTCHTqLIOilAAqJvRs2cgMO50S9AmyvewvbGvJm5F-9H1vMOhiu4I4Bd-3uaUo2Lab8kQUN-9gtTIhjmoiNYBUHv3lQhy8m6dDrzlwOElkPFccTw_5qmJfGl-POeV3YujN5WvvEV7Fm7j_MnKAKxfceVZ_YP9EnopwgNC1ma72uDAJO2tybHgGRVwRdQjMF5ZtWsoOkM5bX4dWjUeXo7_YiAGaS_X-116Xcj1KAGiBaQP5XpsOpQXNSngCNmifafXeeSVISfbXlXiUVORm2AhPu9PSPMFYEOKxhj0h_5PvX3hYQSi-h2SrXa3SWxD4OvqQxG1awfJkA2Mc4ruwggOch3iOqNNIyDGDdY3BES82xUS4BTuDgBQQ5wvuubIJ55V9maKS8m94Hu7Q2ecIdJOVkxPS-7rEpLZtYUTdbPr0TcJSiaROqPCiGb50Feo_t0FMZGiEJd5_HkWE_7iJrvtZT63wHd3I4yOGNYF-tRZydZ0YiqVZnDSox0wYa-EF-yMi3C8gre0Gj1xj62kF8v6S-3bxsqI8VVxMpxTKXK3JRSs2I6OupEUuWhzWJ6XCAC3rDXQdVJKMatjg1uC0altedUTKE-s9AkwkoTp15ExSUr3fOSr-7r4IXacPzSFKMX0qnU8C69eUyF4Hf7Al_83tyeDjnZlwNdhrddO7KKeudB-QRnEIYoWy9YxHY32qGIrhfCFLE67RSNYS7dBpeM0Pf_mkTo64K36KUIEfyv3PgSSYbEp2d5gHXDXT7Fe_2NpA3udausbsKlN4ibfNOnoTNgggXumCsyOaa8hvvSASlxINTlTMHfvNe2b4SBHmZbty56XIAKrIJvjrK6wXb_NHGfkQF4zgD-xqXmrvghF2QE68vVPCZg5vRc8jIqPkdQTaQfrh24qgbhJC6lEgXVLJ3MFqgKb7-YXRNb5Gy_VQJrASxlcquIwcQBMr15W_TqPQ3QcJbDiDd-39zhcDxOHTS-mVPa9u3DjG3e1RdQ-CPrxt05lAPQ8_yZPTXyyvQZHgPVQJTivY-zfQux-ROJHLd5F9M2vqrE6F3ggvBRkCZ609DWdyeLk-Hq2_z9vRkwhvtM5TIgi1LNX0J2W8DJESGazuyql4Qmg7CPT9FJJw7va_48A2zCC-RRhfvclTb46w6cEF_7GIvFHbQX0PZGY1f48vgVV48F6tpSZaK-PmTLm3s1nGr8n4R9cQmy3c8QEahparR8XHtu7lllbutbyO9Y6V1cU5g4Mjt_OFy7y5FTv22TgncJwkn7O1ppE35uKg0bCDzHhcKICS35IwWu8tAJ-IETfELL-uxmw38CeuBKdvBsQqYIHQUYO5Z2dhC-gz0bKqe2IgT5agnQQfOkS2kQgDgr1Esi6ZHB4DjnIdhDxnb2FE23iYUHWj6UTzcTrL9IAovGhukVdleBPzlCyIVva6QjLTnKfmo8_YNVmSWbiu22S_ggZSkXXkjepg_yi0m3pQqBM1Pl8yCWupGq03KUKyUzHcGqeHfwyxZhSwB0vqmS5aDE72oTukfD9UcO54fu9m4oAeAZTJ3CyTtiLNqMh12Td2RUINJ-KzPhXPkn-0qS7Prt_twKs0Wpq_XJsDJR7a-YnIjOIrePkR_6Vxec3QLMbaMUq3WRc6-1KT_K0H7286kfYbD4f-A-DEZRpje1glYkhOj-nTDEDLbeeSBrk9demJLexp8IY32RjFLZVl_wjb0="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 479,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 479
+          }
+        ],
+        "promptTokenCount": 1251,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1251
+          }
+        ],
+        "thoughtsTokenCount": 2423,
+        "totalTokenCount": 4153,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.8436518213196438,
+      "invocationId": "e-c26a5231-5df9-4c4e-ab0c-260bc65a4431",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "fb2a9a00-7170-48e4-bc8e-3d12d1eea976",
+      "timestamp": 1788694314.2628996
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-e82b5084-44e6-4ba9-90c1-be765ae69b04",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.observation_period"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c26a5231-5df9-4c4e-ab0c-260bc65a4431",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "aa6da0c2-fc1e-4433-ba3b-2848b48871aa",
+      "timestamp": 1788694326.1440105
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Claro, aquí tienes la consulta SQL para BigQuery que calcula la distribución y percentiles de la duración total (en días) de los períodos de observación.\n\n```sql\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) AS duration_days\n    FROM\n        `observation_period`\n)\n-- Distribución de las duraciones\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Percentiles de las duraciones\nSELECT\n    'Percentile' AS result_type,\n    '25th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(25)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '50th Percentile (Median)' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(50)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '75th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(75)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '90th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(90)] AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '95th Percentile' AS metric,\n    (SELECT CAST(APPROX_QUANTILES(duration_days, 100)[OFFSET(95)] AS BIGNUMERIC) FROM ObservationDurations) AS value\n\nORDER BY\n    result_type, metric;\n```",
+            "thoughtSignature": "Co0CAY89a1-Birywm3feol1l_jujpxjG5au9CTLvdWH7zDm8QzDiMT9yV6-NjpSS_65413WR_UIZxGkLfgCxk2ZykixgRDLETABwqOSwrTPRrvYcKUAfXGk7ppPVGyfW4WxaSuO7KCL-uixz1tcpw3o2eIXwg05CfJgHLhu1xHMTwXrUELfttjP0L5U4WYnLWyb64RT6KX3HBzvOm0xRjaEYujQXGwqBuRqFRCvR9NjD9M3bJATnbBc2GCljroDcGDTubaqXqQU7bkfG8cUbjK8GFn6Tifw0DPiIovs9tu6LDOwQIXYFXtjpS68G6UuAaLs2Nd_0CPiUSNDR_26cr_Hfhr9wZJu7zv6YitbsGnI="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 511,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 511
+          }
+        ],
+        "promptTokenCount": 4221,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4221
+          }
+        ],
+        "thoughtsTokenCount": 53,
+        "totalTokenCount": 4785,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.039147845453012246,
+      "invocationId": "e-c26a5231-5df9-4c4e-ab0c-260bc65a4431",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "5645759c-f80c-4b5c-a9cf-2c478245200c",
+      "timestamp": 1788694326.1475496
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y mejora la consulta SQL para BigQuery OMOP CDM 5.4 teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nLa consulta del agente es funcionalmente correcta y está bien adaptada a BigQuery, utilizando `DATE_DIFF` para la duración y `APPROX_QUANTILES` para los percentiles, lo cual es superior a la sintaxis no compatible con BigQuery (ej. `DATEDIFF`, `DATEADD`, `STDEV`) y la lógica de duración cuestionable de la consulta Gold Standard. Ambas consultas utilizan la tabla `observation_period` correctamente y abordan la necesidad clínica de calcular la distribución y los percentiles de la duración. La similitud se reduce principalmente porque el Gold Standard presenta la distribución mediante estadísticas descriptivas (MIN, MAX, AVG, STDEV), mientras que el agente lo hace mediante una tabla de frecuencias; además, la estructura final del resultado y el número de percentiles calculados difieren.\n\nGenera directamente la consulta SQL SELECT corregida y ejecutable."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-be59f7d7-ff13-4869-8b68-0fded951fe03",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "272b1381-16e6-4c36-97e5-28975ff6bb4b",
+      "timestamp": 1788694368.6348937
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-5e62cf61-46f8-42a6-af34-060c328c1c06",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) AS duration_days\n    FROM\n        `observation_period`\n),\nDurationStats AS (\n    SELECT\n        MIN(duration_days) AS min_duration,\n        MAX(duration_days) AS max_duration,\n        AVG(duration_days) AS avg_duration,\n        STDDEV(duration_days) AS stddev_duration,\n        APPROX_QUANTILES(duration_days, 100) AS percentiles_array\n    FROM\n        ObservationDurations\n)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(min_duration AS BIGNUMERIC) AS value FROM DurationStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(max_duration AS BIGNUMERIC) AS value FROM DurationStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(avg_duration AS BIGNUMERIC) AS value FROM DurationStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(stddev_duration AS BIGNUMERIC) AS value FROM DurationStats\n\nUNION ALL\n\n-- Percentiles de las duraciones (utilizando el array precalculado de DurationStats)\nSELECT\n    'Percentile' AS result_type,\n    '25th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(25)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '50th Percentile (Median)' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(50)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '75th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(75)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '90th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(90)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '95th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(95)] AS BIGNUMERIC) FROM DurationStats) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CrMlAY89a18c706LUQwZN36TJO9ame8tmfcMdkdVz3VkzyRMsFd-Nbtn9FVPwUXD_XBbjr-m-b9uzLgyyBZyPjPqzHEBOL_DfByf5xL_EKBQmWjl-FKdK0ggIo2bMP3l4_kt0OPSmtMMqaVgg-79Qet1yOvPuJ3PcL_EZ8SAa7TjW7f8dQODiQRM5gqL1hbqVlC67R8CTA_VZYNR9r8LU7B5BG1xwHV8s5r3kfNLYTJ41vi1Y4n8OFM4Px9Iq7WLkJP08GH8I5wg0yq_IpaLwzBBag4rTnQlCt_4TS0fv3VZPrwyEwDXm5IzKwL_X1rR4ER4lgky1kqjsqQMesz2lKIQst361R4WQZkkvCewvj7ZTBZUZIlfLru6QXcNDtc_ck_e7dN5CywOrnXIIDR3GSX9j9wt7e1QiU6IyGW57rjgi-vkmtqU_aVT_cLTCB6HHvk-v18Z2dNr9hYCOXyB7mpyuiO9Un32ghH8vY7anmuMNwtYBc8-c-G-ds4WOrR3FGUfJiEFCFSNtFTFCWfSA6pYTMUGmQsHZaGnvKj39tpsDxExk8BZzf4uGqF0ulApEAv8KtbBTCMJ-uRUxr48fJObYYJrgxh6U71Kl1cDBrrB_6nLGC1L2VjVMLaZFqWOSiawq3Xw0X1vflFiAj5lbzm0sLR7kUsFygfPB51maTtw14-FCclV-QrXGXuPI8OBcfOBnytCJ5NpJw0M_O9VbOgObn6Hl34tlJr6gQ90G1nMK-zkCmMeHQ3_nLt1tiQuOnaHMn7xuE8CxXAaAQKq-8uiVC_FEFv6umTGR0y9skoiEidbRkEjRbrM35tWcJAkbPkVw5MhWJMYI-2AxMMB7YzJiNHuvPNX9t5sDj5wXYYsD196DI9xqJvdQ-VwxepXm2xeof7nNshCFEelbGD2PHbdXWCBisRe8PVz4dmqqAa3FN8QU1ODNSg9J9q9HjwNGjYfqAkF1cmb2Ct91a5pjPwskJt9IHniFkOV_E4n2ywfhmOqma9GKY4EMEdfbFZ8QjEofLYLj2RZrg18oshI0ZoJILaHRfV6ensEZLajMAe020mSg7XyElzi9E2rdNFclGdPmYg8Y0x8al5WVf0vI2uuSgRr_s8lgMBlO5jYTW3L7CDdIvevnhN4nN3ywhikwzx1jT-76gA5gPErV2F7loaHHeomQc2ygxvpb_1-KzUdCe36tdntMVyZKXJNq4M6ipDtWxKiFH2HWG7xVqLSy53hbwVfyNRI886dZJWDe6l7gxxd7MmGCwMehPzeohbc09ZGt0kGHMTXrxfFXNGK7aZXlCRgWppxTEpjOPaNQn0w1qQZzN_McGxMdEmrGW3PmZs73Wa02RxOBwVHBJYsEyTQuwmO9f3J_vJmvoHbuJAPhTDJd7-ugGQEL3pynKmIr1NFRdnKyUMFFkwHSOrgnZ3a2u96HFZP2vtEksEutvgbSfUTEnDaGvpgtiTLQyA9DQZAEte85_OWtQrwtYKaGbcZ_0WMjhEVibCZbZjDYbGlPcHyY9bjZ-rvFL1-JyYarw5n8gED4pMRhSbLBqxwWo8rf7QO3amDz2kCFPeXqggCcguJEE2k7_MSgaQ-ghKDjbs-ox7NljGOmpgkcBW0YLw2pWodZW61Ju3OdBnzK_8teNqJh8sAEFIaWtShWOqQ_SQK_27I59iRdvvBB6r9bYwuRhGmJPI3_9hmWjnNXEX0wQv30-2euNOmp3FLj5fMeo-bUeMR7ZpXZLbMvxATpq5uErK6K5PzDNFZYegfYFNrucPAVsxdkdawMfcAodLgelbWvgb4EkMQdvcnTDEwgEA1VDGX4doIZfkeTkgcIvUAIrfOwzARPCRQOkcqeTJyPe6WH3EIC59mUdNoh6q1QmUEYrkR1x0kMQgv5n6FuXVUFzkiTrVg-j32PqtYUPoxuMfxsAClE9UbfDyJ8hBOM1Gvh0Tr3cVDzWAY1YK8EbwmPR5ICmVguUegsxZ93k3cnTYL_SBqQ3oahkvN4v1zLRSIQIcps6jy8Kl1eNJl8nRa3oqwTjy6MyJScY_ka4mVbUlRcYcdjrWCJyZ1OOogJlTWa3bIuUrwQufvDRT4LNTeJvR1h8KdbqKPG8i8nvT5z1hnk_f9MAEkZmlFPb9B9Uh8zzreqaCxHVepoPJROF8u0eMnbxJqSwaj_FPPT9p0TASRdUjhy7Ad19AFE-matxXnp8GbwEj0PgYtMGSeQ0DHH0Mhexq8izhIK5KEpqLuwGNW3IF_qj9zN-Awg5EbamZHRp3mjPbOwX6RxcrZkLE1Hdc81Bt2W6XejwF0c-3MH6yVfA7hjSI4ApugBypws1HyvdMqPjZuHu5Dy1-6ePAanctWnsQSZQRMNV_IyhgqVjtjuGYRP0isJF0o2Qd4uBbWELm237RkalyuiDvn8Uk6_ShQS3a9EkRgK3G_2eju_eeCMCep2vGV8nivJHUMnVgJOTIQgZANSLSChuK9GxkpOyq8vmWCl0y6QxgHcKMBUw68q4A5VAsFEr25xhlvFQaLnVN9yl6fje7kythN9hoUVXPBCCBoVfKiGnbX78MY42q9uropHPWVaX1TsBqRQBPpXRAfx6O_uP4ISkCzJdaHBAZp_jalkrk1Q0PS3bVUmJ1UoYzKoTrIs_wGZZ7OVa9npjyEV2WABOCB3_-ZFy3Lco31Awjbv_j1H83RT2oiGDljyCAp0R_JHrFO2QKJTy4WkinN_p4nEnxct0dMNB6YFQdhAV5KakXW9opqi9tGAO_lnVtD1L0MSCEbOe4izkVIChJGCIIRxupQOaBB4gqPYIjATSzGJW8H7-Gl-7bMvxnAvWoY6V62u2B4k0_6GgEFgqy6rr9qy5DmSqhCA_IxQyNBG1CYQVeYVpTr9PVLgZaYZrAr5aiiw-glEweuSsfXzskefMM21TQ9hB2AGK4rpdHYgwjKrQSoGH_RvEsf1kEwAKQ0KaP29XgbOaF7i4dOtXPRkkryKEo8_YlaAv-3788sP8uti64G9tWTxGHppmfbndca1ebF-Tq68cvZ4D_s8AjtswN4edJGGPk4fT32bEOnkZZeooQboEAqgWu3OKHxcRjrd9-ogGWZ9YccAWWfdvecxyZebPM0htVulP6-qQvH4lKHA3Zj_bo-wd9HSL_-YHCt2cf3OKkUkp6crWGQdSz8tNi7wVPnlULdsb08GWeEYmf5aiPZVv82l5nQd0k0F59rKSlXw3XRiaZtLTB5Yicsj3I_5g9BPbkB3Gw9-iqYl3t21DY5ICTT1jy82kPBLmO9gaeElnod1VR-TNrzSnSW1zgFYZPrrx0jXsJdDGYfrjtRMvRojguk_anwsTRo-ekdt16D6NM090l1b89VxR6mA6loRRy3214juncxZDScXwKgZ3EblVKZ3zFvjth9C2eN3u3eWQfEKKCy55p1d9q50vs2ZJmlXFgkD2FIsWEsaJlOhuwEcAtEQkOzxMkCsQ0yhCrSRgtdWLXMq3nzCVr-DpM2UabVD55TlNoKli4b6broNR3e2UJUrpCzOyGKVscbV2AWegYR1X12WqZF-UcNr24OW2cmO0bLENywcZ0IyrXGK4CmQkBvaWgw7hepOUMnJOyz0aalZvxQ0DMiwo21JkD2jRPf2NtzXhnhFHaUBQrE8CfYrHR1NXf7vddb-yc0r1W6LRydF_rv2CXQcs6IN7WRdcVRdBg7sNGFVIScsUa4HL4F_T9A0dnBTVTlfYtb3jsT0D_lN46UatucmlxbSRvxYRF_MCeyyc876c0vEedMsmyjq9Qr4nis2MRxsu3NNorSN8LflkrtdZwzbKuM5kvm8nbDTE0NSTbHfMO_pJZE_N9gW03w0OtgV0Emx85xX-FT6DZOKt34_qcZGT2sFxS0Xo45gpWl-pfqzGfwpsFznYjVb_QmZdVblU4oFa74LEJ27QqxT4WxgPYECiMOwbCXpXLHcx5TDT0bb-icE19nMPOmB-YWu0PJ2T83KQSJZI8vHY7QCQ1xb0wNOa5gDQI-paoPxAvyfP6jngw70CbgiANLcjnO7BDiibgDYOPQ528sD9yYaKuJ-uU1QA004KNVNFm7hw1JJjnlbDuiN8Unb11jk8boS6q_nHwsY8Hg43OBhRYuE7oyAxSGJr16hqqcYsICV29g4FEr0jUUoF-TR01ZCEBFfuia0N0n17UXdMAUhTsJ6cqBnE9mxgiGIVxwFElDnrUdz4DxNC_cQw20BH5Yw0u_b8zq2A-MMS2CnmVsOlQj8XFapCh7dpGrSutOjZcnkVZ0xFsciwyHV7O9ozy9LpUQ005R1Aaq8568ztCz9tX7ybtED4vNRlApuogviUOjLgasaddMuRuLEx5kiHb93klf-VFWf95QmzWXESrfjHTIAcJbFhU43cK_z1QEPyckceLo5V52fM0XtRHwN7g5aUTpwhlZ7dEbQBwimWHCBjs47lVJw3SWKcNrl59TQoSPDJDTU89f6BDMrDSxPRp0gkhg2Y31n6DFy49yGJGjLBGgHgGzb6vSlRrh-1M7tVTzv5-oFSQGAv_uQItYD_fDdRyLMVyoAd8Mw6fviYh8A9-RoRLEO98TP9hiqTkDyMCqZR2bAoQRg-5ZvpABvWfVEDSKBHGyzZ3fGngHweG9VEiYl3UX0gXjCO5lz9T2QAJlRgyiB5NrhP1zkZvb0q-rJFJmcUR0k9ZJ1Qfmh6UD130BEWrixpb7yBVvVvhsUc0NnYZgX63VC0OEPzT0-2nGKpSIjV9p6UEYn9Enjsb5VtzUcLmOG34FM_NmApUCenD7a2oCF8n6Z3hLN5XKjSamrM3oyYI6BbZolP08TPYlfKKhMJ1SHwVa9PMya25FCoGAbCCeFzMkPMZ8qIeGp2REVSy71eyWwJ6TkEG-G0IkInHZ-C-YZbM3fu7_OuT5z0d3c1NL0HGSpXd9OdZFbx9IF_WWoZ0XdZaAg_IPuifRHDBbtJPkQ2JMOAiIS9B5IBoU0SUfPlJZ9i4tDPvKhffcgjI8extqoskdgwxdRGOt9nX4dTTArj6S-0E9YUGz_ndkQ1JuiRnpfvqayrY8ZbUICv7Gli8mb-5X3YBLkJyo5sfo5xzjjNh25S8LCtqXrYO1P4b96n2fWcqYADyMoILv_eVgqO1j1MF2BuGEWrhmQ_u0cAqpZJkpb0HEOhJsgQ074rGLvP_I4zy8CQ7XlM8PAeDbUwJvP38Iw33F_xpMOPjDg-Baat_asST1sP3JIDxcreVOwFTE472drobtfxNxsA2m67pBw6AbMQ-ACE9CKctf1yna0LL8SFQffJzE4VKwm-VRSmZOclCBzieaQEkpWuNbeDiADzxE2C8FwcstgRsyj1ujxfhqi4iQcYLFA8Ey6iGYO7dQjgL7__pashX5hloxdGEObtTvwpPzhEGIaUKTv2-GtUDOaGMV2OvhPWaVWfwhOoG5j3-uNGAmi4bvBDVpFjlDNYnlR3qXgVzPR2k_0uqpUxk1OgfhwMZuNCOyky91vo8OhpQF8O3tcBeKYlWEOIhVp9AsXDqJwzcVQEmQHG41ebtuCEh-DUNVsWjDkT8DJujANH9hzNGvMcP4gJ9xUunjKan2jAOEiPPAPmR_6zOHWKftC5mxkobXMBNSD8qFeOx8Nsvzf6qvsRcfiRR3ClLFDGmOu-M3A68T3ltowCYOVkRLvoZXrHkiHfk_ExV2qDNyFSoJ_AB9QCTLAGq23tvT4kWIlFV0VFjl_sHOJa4zppY2825sg3kWc5Wt1abrYZjzJsD8f8To93c4tHzdMqwvJ0lesRsTeZkcBxQ9BMi4R06MuA2UhXJU77yhOiaK6lOuQA1Ddzu9Pc2O0-SKkQVFLbW8dX-rhj5SdhxRx2H4wDCLl-2z4wNb-Dnf9s5cJTRq4cdzLgCTlj4HZwDVAB-lcs8HuRjkJM6tJCN1-CMdB2d4-fYoPpscJyNZtCbYYqqt-L5OF2U75uXG7FPltuv1EANHx-wA3A5KSm4B2kbTxUjWnAaM9D3Ck6xOnkCODasXJ3igTYbn22a8zu6cm0hm2weJ4GvsTuuBsh6neVNRvTqJSw-AoYANrzGk6FNMnmyH239kA2MFtOLsnTtYyLQFrSyr-KoBkjMb5TgRldZUyuQcLPg_S1daNtsobPyUkXseMdoyk0MpxBuyP6-XPjjbQ4khrKDtnHtPCxGPGAnLJqZ5-O-im25laV7N1Q304raAOpY5fnWX1Ojx9Mal9LLaQ1HODFACWjlGFs_8oWtUPd01JR_0UNfGYdGbZqiOb1fiY9xR8GCioccPiSwRQw-38VT_1p5Zb4GnkvEp2R0Bt-CMzfgEOpr6WRFwv4ZM9XCitVkAVn3BDY1tECoq-kPboSN9QxE3yW045zmbWcyuR1VV3HsYAGJ2SQsHU0T9lziQ3_dmnJQ="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 914
+          }
+        ],
+        "cachedContentTokenCount": 914,
+        "candidatesTokenCount": 696,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 696
+          }
+        ],
+        "promptTokenCount": 5003,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5003
+          }
+        ],
+        "thoughtsTokenCount": 1188,
+        "totalTokenCount": 6887,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.35008141090129985,
+      "invocationId": "e-be59f7d7-ff13-4869-8b68-0fded951fe03",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "01ceeaff-9412-421d-9b23-926cb959b897",
+      "timestamp": 1788694368.6364713
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-5e62cf61-46f8-42a6-af34-060c328c1c06",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.observation_period"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-be59f7d7-ff13-4869-8b68-0fded951fe03",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "7aa05aab-2021-48ac-a3e7-93a4337d1633",
+      "timestamp": 1788694378.3996422
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Gracias por la retroalimentación. He mejorado la consulta SQL para BigQuery OMOP CDM 5.4, incorporando tanto la tabla de frecuencias para la distribución como las estadísticas descriptivas (mínimo, máximo, promedio y desviación estándar), además de mantener los percentiles como se solicitaron. Esto proporciona una visión más completa de la duración de los períodos de observación.\n\nAquí tienes la consulta SQL corregida y ejecutable:\n\n```sql\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) AS duration_days\n    FROM\n        `observation_period`\n),\nDurationStats AS (\n    SELECT\n        MIN(duration_days) AS min_duration,\n        MAX(duration_days) AS max_duration,\n        AVG(duration_days) AS avg_duration,\n        STDDEV(duration_days) AS stddev_duration,\n        APPROX_QUANTILES(duration_days, 100) AS percentiles_array\n    FROM\n        ObservationDurations\n)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(min_duration AS BIGNUMERIC) AS value FROM DurationStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(max_duration AS BIGNUMERIC) AS value FROM DurationStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(avg_duration AS BIGNUMERIC) AS value FROM DurationStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(stddev_duration AS BIGNUMERIC) AS value FROM DurationStats\n\nUNION ALL\n\n-- Percentiles de las duraciones (utilizando el array precalculado de DurationStats)\nSELECT\n    'Percentile' AS result_type,\n    '25th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(25)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '50th Percentile (Median)' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(50)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '75th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(75)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '90th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(90)] AS BIGNUMERIC) FROM DurationStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '95th Percentile' AS metric,\n    (SELECT CAST(percentiles_array[OFFSET(95)] AS BIGNUMERIC) FROM DurationStats) AS value\n\nORDER BY\n    result_type, metric;\n```",
+            "thoughtSignature": "CpYCAY89a19vAH5_vn6xtYaE1zg3tYoal-i-TY99lZaP-vEkZxC3eHhat-YOiOMo6UPtf5LyScLnvLb_swXSCRZ-z5ItEZwcxhufi2_FK5mZigQNWH_SQm3cyFtT4Zo1ZOjdCVCRyQqDogiY-FzTOLv-qCO6an7rxeKEDkJJcDJ_H4v252F5l2z5cLjEzl0rkZ3f3RDTS1aAk0TzwDtEAwm3GqHmVtXxvjDMUlTQ0J6bK4YvX72g-izvvT23iQG-tZMpAgWyYvMhrqVIhZNM304xAjZSNQjO0yAAm16diJZCUQ1fNqTJimpvXy3hs3cURrmtJ1NvyKyu70VjEiKngFXDSfoRH2eQKIhLqB-8r1lOce7-pOGPMQw="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4648
+          }
+        ],
+        "cachedContentTokenCount": 4648,
+        "candidatesTokenCount": 780,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 780
+          }
+        ],
+        "promptTokenCount": 6955,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6955
+          }
+        ],
+        "thoughtsTokenCount": 54,
+        "totalTokenCount": 7789,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.03858498793381911,
+      "invocationId": "e-be59f7d7-ff13-4869-8b68-0fded951fe03",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "b57be423-40f0-40c0-a6a4-99cec916b33f",
+      "timestamp": 1788694378.4030561
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y optimiza la consulta SQL para BigQuery OMOP CDM 5.4 resolviendo las siguientes observaciones técnicas y clínicas del evaluador:\n\nLa consulta generada difiere en el cálculo de la duración de los períodos de observación, utilizando `DATE_DIFF(end, start, DAY)` (lo que implica `end - start` días) en comparación con la fórmula de la consulta de referencia (`end - (start + 1 día)`), lo que resulta en una diferencia constante de un día en la duración calculada. Además, la consulta generada emplea `APPROX_QUANTILES` para calcular percentiles aproximados, mientras que el Gold Standard utiliza un método que produce percentiles exactos. Aunque la consulta generada añade una tabla de distribución de frecuencias y percentiles adicionales, estas diferencias en la lógica principal de cálculo de la métrica y la precisión de los percentiles son desviaciones significativas del estándar.\n\nEmite directamente la sentencia SQL ejecutable final, sin explicaciones adicionales ni pasos intermedios."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "e2c4b39f-a3e3-48f5-a624-e47d60a816e0",
+      "timestamp": 1788694406.188571
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-470dcefd-af6b-40fd-b96d-57aa4db6a2d5",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) + 1 AS duration_days\n    FROM\n        `observation_period`\n)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(MIN(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(MAX(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(AVG(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(STDDEV(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\n\nUNION ALL\n\n-- Percentiles de las duraciones (utilizando PERCENTILE_CONT para percentiles exactos)\nSELECT\n    'Percentile' AS result_type,\n    '25th Percentile' AS metric,\n    (SELECT CAST(PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY duration_days) AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '50th Percentile (Median)' AS metric,\n    (SELECT CAST(PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY duration_days) AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '75th Percentile' AS metric,\n    (SELECT CAST(PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY duration_days) AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '90th Percentile' AS metric,\n    (SELECT CAST(PERCENTILE_CONT(0.90) WITHIN GROUP (ORDER BY duration_days) AS BIGNUMERIC) FROM ObservationDurations) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '95th Percentile' AS metric,\n    (SELECT CAST(PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_days) AS BIGNUMERIC) FROM ObservationDurations) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CvM-AY89a19R5OLOsvn8MneRD2kzelkxFsLrmHA8nKzZ382yvHqaaXmrTcweb-iuBEGWbv_YekKVgHwCQlrl75L4rz7lVsQGw3tGKX-CvHD0lpu32V94STd7sZJljde22_XHW8px4FOqTLKiVt1N1Wh1tOZb6-U5cKE5TW7zS1IqqXQLVzGeW_A2g-55ckxRlOnkaChxXUoK4F-KeRxHCDiERZYoG1ackJC9TJVFPkBaCXIsJ3rfqrfE-AIa3vlcaobBNvyTHh2bFfnPzspuoBL1zqyo2wUtQkiIxH-omAMnBzcHepgpcghYDcjxzgk12cqsC3IBPcdDoXCGDbfnUxAhBnTN4DzdTVPBfNTN1gu9TKWCyarb5HEI4ux6t5PQ3ACEGIQvMm_lfU0qYY-YAcvt4fojfSvvRYCOUenta_wCZbvyU3Z_2ry1nui3zocQiGPzqnjDIamKQe8VA7JPUo7aUTCfJqaG-GdCz3_tS2NjHu2kbXPGJJVE4Dw_nWBj3tArKjnVwT6y-T5gl_cVHPQr793sLyGg9EdwpB8ReosR-HNeOHMdh8eXHdaxEZ9JlCQ0GvGd-IhpbbVng7TWQH8E5_P9NgvUc14qorOxzJ52PPOwJWpySz39du8TZkxaTG8x4B8KcwhjQUEGhoP3rYn1vtztg75F30NElPPDyQVRq8m5DVjJyZaq-BZup_iT_HT1fEI_8FvPPj48npCQKo1QR6FosVMyyMXQIqXXNZRAOfxbvquCKvC1bXyFuDVKS-m-mfIoO3vd1VvgyFsLsiyuff2Dpkgy2JcLxhjAZ6l4UDzMJNBlR1bXMsBiyltsemfkSaRiCmoerMnHnpWnmtJbgsk_EM-B7NheX-qxcft7VoEYPwl_UUnzuMbap_tW1qG6zhDLtSBSqs5Qg83kxg8gxGmw1TR39FXpSMy9wEqcaVtsZJPpSJMp5aIX15VeTC1M7IsXd-b2rvW1y64crgFKYP3qvw0SrLksC-50Jx1vrG1zFxJCZp3EvTq0Z0K-jEFGme0b0CVdfSWgZqJhtGVDrDM94ow4OGQCXe8BkO6FZMREPvno0G7WPZTQa_SSSl4k71Ga7ekmqdqrRbArhmKB-OFzlAAnLcOe0DobaEq7nBoOlajFchcIO58oYgPfUALuCuh9m5tnl5J3lLw9v1ufuo2tcmZhglRQSeV82uWFuSRGOUntoZSUb-A6KoO6UvNbua-YwtPmUR7UJYxUj14Pv269h_Y2xHRi59e1EgBqbsvXbuPg-ovaSl7_0Zd4e7D7Lot8W4IjMangfWTbzdjIaq6vhObuiDI4pWo0gnHj7_kxj2oD-7TBV8i4qPPH5b0m7MuvDef_rAWlAGjAprcTlGlIdD_Jvb_wVAmTQ1icAMYcc7_R1Mu9u0jQ2oRMAYEvGAXku1YEpCZPKGKD2ySUCGpvX6ehUqgewTtYKUcwqQxi8CosMLMAUSeRIALEa-uBohNGQi8v5CpyC_QIQSYobTg8mTRpIxMMnJxDCA5hXY_JRq3O9umDWPIc2b8-7aEOojnLtyCFPriJBUbUGZfJyeBkbL38CFm8qdRaD0Kn-bqBopI22NZLfzptT8jfbJ3dc1SUOemQ-CAuIaaKjVrjNjOr3e7g3S7tfmBxk6foK9Db7peEtL5KwS2GGa-YjJvFvP1cXkhDk9ELThjOCZlz1oAzqaLrAcgGPeLtNW6p8fmtEt6WnWV6LscnJ3QquyDp2KETpf9TA5wKvRIxQYywXBImWItU0K2KZ0jYj1-PBS2EikTcdyu_uikcTxR1vPvx4ehdkMxkrbqhRWFmPDa5bda68l1GZ7vLib2a5Ii3Rs5FIZ6gRQ0Zk8zt7wZ3bxtILn4efycTCiqhfzAB1YlL3iAIUhzU2bOERdixEUZo11omYL5QH6LjtPmBGA3VEm4rvVb6KtnHIT4rvLPYZ6HqjUCCXacmnMHYTlBeaFZzUDt2OkYszIMge28dCZmPbL1-XBsKJZh52h7r5w_oRBpPzS8jpirPX3UqC46m53H_-EfDc34htvyXSMzwoO2n0PDr-YIKJbGGWUwaYf_szs1I7Hgc1MRRiRU-dLqf6M4GvNgAMy9xl5I3QuJpZAE0HgGmwd4a-oZQrmMvk57nDaD2RZGDZJ1KpT4h6U7hOq8DMT1w3y41vro6h_KznTI9CM88IC5MkBQ4fCFGjObhLEWfyBm1zuBy43643nX4Q1CCBLCu1bujP6CB80xS70rHBl6A3x9Owlr97vL5Fdp4zrw8KEvhQJxQBqRKF2HO5ghagYAUSspyxoSWvRsUs7X7C57uAqw9yLjCH-0TwbL_5Zps_cZ2wwcRzaP03KFM3fDa8jR5f1WmDvaUf7O-t96jatZGdmr65k1dU_EiScYHuItCCK-jce_LVL9e1GP_Smni1gUhlfkMT6cpTQCLlegmgcYxl5G3NQaSZ93fIEMDTLCAiN5jaCMA9gjrnY0mFrKUhwps2crY3PwuZyj37N587hHTeyvVCU9tqTKfZeXSXvGClk3dEQfnrHEhZAN0_5ddrhakPZj1NgKA7ixs1AitYmhhx93-dbx_xUTLTODi3V4E41ETMve-VOn5EotFMqGXupL-gZ8rh8RfC2jCkU5AV6J83siWDw18_u5OQ-qtVQNtGVkTtzJFG32BYtvjDzbfC1sqrqGvli7Xu9SAhwGIyGXfsYXEGZiFYlQb-2Bt9FBqftzvJDWCgKXP2T9oF0-2n4GWEdZ5ZRez8Xrtc6hqvTFo9oUK70XlEg2siBwXITeINRlpwpCFe5zhELaLAq-c6LNtLUnG4nbx0cn9rj2kSGJYTywipX1eA5USWdGT2bZRz4RS6MXgIXxXcAeuRN44hrE9lyclxdOarHMvefECguow3tTH8ZBRlnDBie1OVXQRFncYEbEj2QauoLFhp2dgBNO6LyKGMhGcalLaSwqHH2azrC756tKTYKzumcxfUQ86yjJRu7cUiJybfWi1_q0_T-Cx0hzZK5gVVg_ZxzB8NyXmU675VVFvTtParqtmL2K79k39AfP4vVzMe3q9GO5YE3Zui08rlIef2cW9tDvRG0Zz8ZbuVsLxOLxwfx9SPgT5ZPa5nF7nkAK_KQ2qBx16EVY6SREQsdpfTdG17k6qO6SqXCiD_K6GkoJLJOTJaXH1oIgCszncrg_u9W9cgYTzAjcbkLaGeLgJx6eGDzkBUIYlClhQvLX1A9JwWGd5R8oCB2_i8S1SKCCYedXW0NoqWRvAxyyt857cNnoCnpEfcy-PaqbenzUuyYQ38lwaQ3kveKBoqrmEq14ZuRXfZeFENI6REySsx-5GHkU0Nz48xEdCYQUcVAc7uUo9DKgMuVNsgkX_CrlQs84zyO8KXMPKceHVaPA4E_EgFAvGdm_PSIIetsjMisb10XDIJH4ntoOg0zieyUjTDorh_jKtzLT1dWflhiLwFSKfbzFjOVfau3WXDIttsBK7Q8YoMeHwxrycM4pgOlSjnqsrY-kaUiiEuul_TL3EyogBceGe3lKxw-iBtUcu4kpnStfAIk6D1IyIbi-oWVAXFikOqdDtqu_wTphDcIp_XVfTsJ23FePGafXP2NOa9gjWiXNUQu7ygjsHqMX-YKG4geAeUxD76q3AAycT_zGTVVk45q1s4ZVcpL7f9XZHOv1sGvdvbHTtklWWRukpUQPP_TswCCcKfOH9oJDkLhVIiLTTlSSFZ638Yt2ttJfaQjNx1SKHEOEurbliWvfYlSFIydQImnzCniZkArmwHHFLrhs4E4FNdzj2aNqoCsLHQaNdHshZw8zBN54xLsSDP3zlver3lFoG0WUMd5q1hyRAy__YKk4E_UjFukekg3__ktcAa_kmJG8rywFh3sPrRL3uKSXJ1eYJ5Wgo4-bNOI7r3pzcSLMLyRSXDaU2cECABmk1WeJrFv7yxQt1zm_tvTaXJJING77jaDSDX6jJo9qTjNlgDxl0rz7atNJxBWVmkTti5wDQNCsIfbz_zuSh0IdJ0vVwzkYKK2dX1VeKTWnoH8oHZHf-N-z1j283FJXVvl8WvHF0SivpGELVQBO8KYrYgSm_U4o67PC7spQ1jHHo9zd_ByBSfPnbU6ffmpKgpPP8x37snFFR-Ej47kmQAqwkFA6FBt7I21j1u0YtBLHzJmXpFMQ9zbFFJJmiOF57KJeTaT_tf4FBYS8DKq-vM2TVpoKwBwVdGjX6ds-ku3lDqgzPZQ06VIrvH490bidFkXtUk5jgUXk87EtmuaNKsPYdFFPuslT4J7aR9ZyLHgYx8jvFYKyVDQmjR1yHp3KPWdN7w60yQbnFUzTPtlHGwWCAFsvt1gqcGFybO_9lOS4Gb2LcXY0v86LSXh4000ja2HBiZDClcQhowujSkkiOjHriLCYHR9LSBAmjFJh2cTHUrDC8NO84KeWCjYPZyF2mfqDJsXmcjBZmswKOS3hbKKe9FJtGRAX3lFXjtEZbe404OHLzbbIiQnQXj2rIPPrK0oSJTjFLkI9bELSuZu-KaEykYs57AMGuLrfMdnwG6FBsWb-soV4h6krDzesZtCUE8IzP1YGO1bKdgMRo3QIrh24ab8jY480pNZkQ94V6qe1sSGxO0xSEVhQd4jeQ9C-1NyhGrdzJag1VNqKyxqXlt9915fCWxe60POtUASP8q6UaEAGUMfFDD26q0qz1YpVcawAO8U8u3A59S8n3PswR_Kf34ZWN8b73Ho-bDlVOS1b8fKbipbtpf8E5hGb7V4pt9wjoVCovKTQVhfUokhpQNrZLVlW3A6VxCefgV5Ib7JoIJ8tsPWOpDsLjDem8mao03UJXzX2SD8xPYkBe4UTkF8WsldHYxmMHtrJgfMr0QpYkHJlFo9pfvQhOCxNxbF9na5F6lOY4y-HNDVozLF7Z_l6KvIx0W8365YP55eGrLJccBv2lpW5jRGIBkkJzK5yI5-SlDCmeNaDoIiSJMdVP2rDSHwSK1OsBZqE6ytUtfxMfRc_pHX5hgJQQd6PlKTLZL8r_IITUdIVYno4CfQMhf0eUUs2dMTUig_hbGpZ-HH9YyZTrxLmhphDGMp984xyDqAOiZr8Db1WYeqoqBRfLyh1QmsTbAbBj-9Pv7o4srOFApFp1FgteV-SnXINZhQkZgrIhRPJ3PxrB8dcH1OPqKoeIpJdvwzCbXk0yi8DRCuwkWZX9Y5gmjIbvqmzBRcFzWlHRZVqIUtjKTNiOlJpSGgmTM9gwe-MQZT--zNc-bMWGiRUFNyf31abgaQVthGHdcBxBQWRZVpfxP-O1BFVs4HCqx31712Moc8zsaqrE9KnPLNzec9COcwE026ZlhRPjD3mYiTEBFbbG3uk2dSdDkAsaMETzmKxtjqBgN6AMF3VDjbb4k9jhPlIe2M9cc0j1FHl8Du4wSyxj6EE8eard2X91UNBY5FdSnnyMWSzfqB3lcNU86WMIcZRTyUum6vDw83z6KsXarsBtqr8uNvxdD5Q11g79EBiHScuc3SY9sKC-4EcGMtSs2O-1SKNUbiplp2bHC8SpAWkq_NR0WLoL2KkaghZeUNCOgJc9tTuPyo41LZBL6cuP1feiRSrj7adX6Q2YXGSlIUh2M0NQskom6y9bO5ImyHM0oTO6fnbrigLarYEWtEIkpQQHkM5om6xA0X2epsIl5WYQvyWwFrd6jTyH2jh_zkcMrHrZ1Oyl5GogOWvcJYaAwOFUquNkEcqg9QonWP5I5IDTOzMtKgkIbxIcT06yBSPAeqN_P1JE-_GcVHtVtqIlZtVPlfiQJZEUewu8HQSmvdJPUuo2SFip1OqizNxvaWa2OivJ30YryQm7-DKbwd72oLzZNiXjlgaf7nRBL8ausDHZOhVNAQhPwNZKrrUKdwuelqtUTJ2GDvJVAkoAI_t7sojLqyWgR00m4eeAhxk9RQXJa8ypRxafrcftCqUjkvEfRau__XDk7bQjYsf0ALXHR5s1nL8a5yLwjK8QPfo3NE5gVOnK4y-XEypzmknGSFhIu0d7itKOjnAUam9sCOYFgnm4QJhjmdmlBA5flLi1bPvQ1Z2ZgyFDd80MhpMaKxGlsm0Wx5KxDgp6_tticyw3QFOIArz5DKlAzrUe4tVaxcXFe7Fl_TvSAYGIQw4TlIOnYmVuLd-sa5joZQcraLMqeCSEvhD1hcr8O3t73c9tK-uxA_yN-YaH_yxEpZp3tZ30L65mKdMDfaRg2gwUfo9s04IXNajWzSkrfExCjDBHtXD_cnLZWvDk_Tsm4DFNnRE5Cgs8K9gKp8YlBPp0x19Jr03OhBMF2GzuuT-FL3yqgTTpeglO8zLgQeuK3cVVx-J3nMDu_59vdUMq4RMu1I4XGkNB_m60YuUbq8_etC7Eg2Wzc3k8UtZUtrplF6b_45TZ-DxcWZIKpTAWDEFcwG54am10X39J9x7RTkgEEwSUfY3VjTB2xe_3rkY6gvvcgD7wC4-XhZuxHHD579GQGSQjTJwdlh2t_s8QwNer9aycxLqVh8I3icJ8EJMlzs99Sygd_wYLJhL8TKeLpofAL9ScaKd5FtUgh54IQ9fW6HOJLcziLYdQljnxiMUpKjHeu_lsiFuMQhg9uwYlfi2QdjLX7tL3bvZ9I2B25F52gMDp0K_gN5whQ0G7VNKAQ_MO35gkxK-eevxKzJdZVuWJVQHkgjllg8KaT9v4PDBwde3O6AlJoV7tYoLXrswcoNdgF0BnP3K2KsA556GxKhTYLeix2mip2mYSLqg5kBAGzM0Jce6yOgrZdMzVqi5mOwmSjUpmaXcqNyA1AmiumUSy-g2PCr2i0N-Ys_xn1OW3yUaMdmch0bvHPrw3yy4SeJZ6NvVm0MSlUf5Fk87cP73ZpMkkfP3KDwxX1VHgW9Peo9Cs-OYxXIIoQ3DNHSdfrZAH1IypBK_-4aV_8oa_zIvjLopgiESXak2b9TE8iX6DqiZrGbUiRO-axltoXnF7ZUNsoDYBB5bDTHhFdGdljnRq8ttZRj1TfvA20iBJ_aEex56uquNRLnOshJ6QCFXIAomn6zR8kS-KOTcu7R5dw3NCtgp8v0loW1sfAKU6TZE1ecnxfRYpkA4hT548cR0b-T_EnAFo6CJAEqG1K0VL-xf2Tpp7CYSy0OfJrCFuJgV8qRIgY12dsGz6WPaMG_LLtiVYRhU0Y3dY714jS6kJsSFTs6B7awTFBDyYfrZ4TsCrjUI3t4QFyphudY-VmqGBOlKl-PpfmA8JAggqDOVE4nD6qMM6-Cj0BkHi4Eel5sJi-7Jrlwjo-e0C8MrCwdawTa0MMP9adyD0trgPrvGmmq0dKy6CerXAsWAvpwqoLSL11JL-NeqAsBpoIzRsTSx6stStyjW_X0krzwaK55pM8JXzenIavRzYlk3QYn6oxKEsxyncqspiEADa7_CMoWQQZy_wL3n_hBCdp6PvLGAn8_BEgksZ2YMDOz1oln4aI6l4Xd8a_aiTKONJIf532hMvWGhY_YuwlhkI7baJ27gbB8uRvzUW8NzuBKO8WACTfA33dx6RGMVlE0znYEBfR3PyRpwWB4KZNF25AdhS9-75_EFW6fp5fGar4rUl6X7k7l3jOw8fo9RuZIwCQ2rZ0Rqzaf2L0QPDxaUDmYZG1-xipuuaCYealWzA7gT23sPogDVaHQevgOWs4IjlHqDGqHTlwYctKuPKApTTm-hVnrWY4gw_C_qM5EhKUQMLuZtK_Er6XGZZnuc7QP-1yNZJjJNTkJxy3W8d_9MAER3SqPBgIjh1UfcLm_oUbmyDdb_B3jSiEK6-JcuEDZcDjSSqNzUAEPcxtlKPvq4BndVdJ4w8V1Vv3YEDY9edg7yY3IRRBBySe3tzkQvvYQ5z7ycw3iWEG75-j49EMHg8lkX1xjaglDC8jQSIRiJm-tCG9372pmzlVf7v0DEkaKy9Rhry2zyyvX5aPg34cpAUS0JzJ6of6H8lRqcKFpinbC31zMPf1sLKUCbYFnP8f0dGwAUau9BI56OzibM1tZz87OpaLyBtoPwIRrZRa0gWXxY1N1bPMUbxaM-_k-U5Vf4K5c_1J6q_YQJng1yMWhF6NdQdzH7pQFpM2je80F9fJ64nZhjOSJ0GNhZJ6-wOxBB4GG80kWyKpY8rPLfuNwjN-CuZVs29Rk-Lhpio_nHK5bY3-8x_U5ecN5O24llajrSxYtpLmgK6ilSasET2h1C6mfi2PFFFScArpd1iQJbpi8b8EL6EvkepBHSA4lkSPBNswtXUZ2CsLMRw5YpR8fw2Rx37jZRsFm-_NDg9SMMyIJm6LGu5soIB6Nv8dpY1qczr9UQkvsMx_HgjI4L4ITIOjXw4nsfFIJXq0oy3faUwKENz1ll6U3_WNOHho4jJTw1MofJc4RbN_XxzQs-bxtlh7jJ3oJ2A1DPpXBD4lwbcaHQu-3eJOY831Q1zrIcnpMPM81O0hdoWZ3MDHSS-s0Jb3m1HvP5GHUKQT9CkwaSjD7v4nlJaL5xPgdb-g1K6-LMIF1wC5zk5HQpMUq0zF557TZJg9NPm7c2ZBZDeNdGuPxK-SsmWqYnMl3hgY3mYGxmd37GkxpzTfMDTmVtBJqX8SZPowkjWvQzOsGISNNiBNKnvQXVaKTAJnVqo0KHTgCpuNUEguc9P0zNsX_iPN8_rJwRftcLfvZPbzXluRPdvNpnMe6CSVuO1G90PdVtYLYOukK9j37-tXmddmUxMKRrsbtDm6dvIp8eDKMIegfqvE1knUOggfEfZmlB4fuX8vzwfHny6ANyEP6JrYupmBzwfdidjGUPXXSTFMCOBQ1l-As4oHQ_C9J0ULrtpzkggZt1Pw4mtSgwxODTD9tfl7aA7lLpFhBNb8rO7jmEwzBybOLSXZPJKNN6XqIyb5JGQjjeeMIDJMT99z-JFCSJwqKIrlFdZr-BKmt7L4tMAtBEXLTDwc947ogZHoxU8Oodqnmkbk-EBqaSBxIaZ_1gU9jTvNREAR24wt6vxf5qTJz5KsKgoj_HVsMXOyKVqW_s2Ffb2mM0lxGzzFSVPKsxxoM9bRYgtp79DdqLe87Wcu4c0K7uDqxR9xyOzoexAfcqWSW6iWUO18g021QJl0CSfqb3KeWwh4RtWzoc0IoaNEGXiKAaAcwNkv__6PLBnEfvm4aXFoyzA_cU0jzz8sgBZRpgRNmlPulb-5P43qSYsxInb6gEfEBAGYvrgScUzpR7bsKeWYYtkGtGcWl2RcCTcsCxj13ArZolCiQ3iCewO4_Z8El_mWNIdkfWO06rFznhafk1YRJQAWnQPJzIgaV3RmArCbvmqZ4gz7_Wpe1uMK1-SvivFZeI6pfGEDnHLvqH2XXVZPpJEEUVoZ6-LF3KIb_M5CdwKaP7gcLabSx9YdGTgOLh6PUzaip7tq1U9DRpuZoGTJJS_31HJnA0TdTUE0LuL7StjJAs7-Cph2iFAdQoAFmDPt0iEWjkvgt7ORW8mMedGpdtQ4npcEI0gy_ge5EtSdjnwnWXz3neaQxvVML2lXs0VniHWy0XSlqO2f570E8NNE9J1rnRGaS_Wk5CBO5KjvSCwoAJ6NaSOdgSaNARBg7r5raTkXJw58A6KWA61hhIstUMKplPGMpIKN0qUf5OKZUs6-ig9RYD8cXqBilOb3mf7_2hlwwlifjsvzklJEAljrl_nphfrHgyoMdQiMdwAKvNh30pDLowhDTqx6fTfxZli79WgB7Y6K7nElF1N8ceY42DdghD_vJZecmB77QxuNL4JIXCgpd2yTxVN5Yp-d9sKLpx4UsBvEHxGOeVQAxJfd_vBURypPQI9K4nr7r5FLZc2ReiePLMqOtq3F2ta9ZzxXuGJISAkDjlc2nzmZ21En7X0InIjH_TYDgN8DpCU5TFgNsfuxHXQvpo3fBpKROhOEgufs3icbpDMG2RDwo5bbuRWTi5HTOWRWfNUYbLSXR_YZx1vFSycyNeuqPPgeZH_2SOIOX9R4i2yaqRdLXa7faVFfsP_HEI46ytuFgR05zKF0d7Q9PBrTK6WJKe8fFe-z5a9rzv1jRNvzVZv2IkmBDvLVXRRYxuOjsxuYu3r0r-s9VFue-geaov2MicgEWwMlDw71rtqf3rYYM-XhlOfNa-1yc7g0IlOaDaPjQyJo4BB7mNUlMfgyTyKqxPFT2B2gC4WFHOxkagGCmyIyUGoSOqSzhjVC5BUwo2o2G-B9EQ76WbJJcb6woroNtbGNK7cESwbX9AQ-ml6RGcpm6FTur6CnMrE0rLIciD1lQ7STyaYJ4tzTkAOlQ0CF1dLbSUxFdRI71gBO4dWRHST6fz_IJP1r7a9yGRDBkCEs9Cp2wRoW30nQxf-WccFCXKpv9HMVgpHB17vAg-pXDrE_JzCnfYB_bQTqplXRLjnEVKgIWJZ02xFT-2cFLBBQHElx3IfSO7Wazz2CLRH5-KQF8IfSHYqQ4isYcUFj7JaYOSeg2aU-6JF8dLRytZpwVLo6EHt7171pUolYHBmWl9qNVcbiDWHBjLTGNCqokphExo8v0Xa6u2AJsd2B077lbxDjqhorlHsQKs5EFkHoJvOa4PTU2_cHKwi0g8lSOaFX8d2xhqJNwuHyOlX4wuS3T2Eyf52vJiSG6nkORPUZ6LawwVhIFjr3re2O3-Q4R_pfwv_HRXi77zjrcTpk4K8SfY8kFJ9yleWGzQD3aEE6Htg_cXZK9KU0XN2R2TC2CGgVUKNqZNbQjxEZhYTZ6t4PcndSF-2z9pP2mBpniDfnIGfVmd1TzsjqK5dakDq3swnu_gWPAYA7uY="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6577
+          }
+        ],
+        "cachedContentTokenCount": 6577,
+        "candidatesTokenCount": 671,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 671
+          }
+        ],
+        "promptTokenCount": 8002,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 8002
+          }
+        ],
+        "thoughtsTokenCount": 2164,
+        "totalTokenCount": 10837,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.5080426780370948,
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "42b89049-c2c5-4d4d-9e03-5fa6581d66a3",
+      "timestamp": 1788694406.1900787
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-470dcefd-af6b-40fd-b96d-57aa4db6a2d5",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "error",
+                "is_valid": false,
+                "error_message": "400 POST https://bigquery.googleapis.com/bigquery/v2/projects/bio-med-480108/jobs?prettyPrint=false: Syntax error: Expected \"(\" but got keyword GROUP at [35:47]\n\nLocation: None\nJob ID: f0784214-ee9e-48a6-8434-03c616c0ed6f\n",
+                "note": "Ensure tables belong to bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "e1dcaa86-bf69-41c6-9faf-06da66e4a0a0",
+      "timestamp": 1788694420.2662418
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-33b54911-aa82-48fb-bdae-9997a3d5b75d",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) + 1 AS duration_days\n    FROM\n        `observation_period`\n),\n-- Calcula estadísticas descriptivas y percentiles en un solo CTE\nStatsAndPercentiles AS (\n    SELECT\n        MIN(duration_days) AS min_duration,\n        MAX(duration_days) AS max_duration,\n        AVG(duration_days) AS avg_duration,\n        STDDEV(duration_days) AS stddev_duration,\n        PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY duration_days) AS p25,\n        PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY duration_days) AS p50,\n        PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY duration_days) AS p75,\n        PERCENTILE_CONT(0.90) WITHIN GROUP (ORDER BY duration_days) AS p90,\n        PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_days) AS p95\n    FROM\n        ObservationDurations\n)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(min_duration AS BIGNUMERIC) AS value FROM StatsAndPercentiles\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(max_duration AS BIGNUMERIC) AS value FROM StatsAndPercentiles\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(avg_duration AS BIGNUMERIC) AS value FROM StatsAndPercentiles\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(stddev_duration AS BIGNUMERIC) AS value FROM StatsAndPercentiles\n\nUNION ALL\n\n-- Percentiles de las duraciones\nSELECT 'Percentile' AS result_type, '25th Percentile' AS metric, CAST(p25 AS BIGNUMERIC) AS value FROM StatsAndPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '50th Percentile (Median)' AS metric, CAST(p50 AS BIGNUMERIC) AS value FROM StatsAndPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '75th Percentile' AS metric, CAST(p75 AS BIGNUMERIC) AS value FROM StatsAndPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '90th Percentile' AS metric, CAST(p90 AS BIGNUMERIC) AS value FROM StatsAndPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '95th Percentile' AS metric, CAST(p95 AS BIGNUMERIC) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "Cr8uAY89a19I59grK_6h9Ces9FIva31ndxqxVkbj92Z9PZbnNj-q_uFYYYnJVSxp62qMCWhEXNsLYKnDs856LplqXwSUjeY0MtCbmvl4ZnalHgTMlbczMzbivpUYQaqhi6_mECZPpY6Nr2CIFRAL6_qIioW6A6ExkkRIX9RoaqW7oSBG421fq6yd-xLYnD_kXevg1GRxKD9YGzg4A8FZ1tICtd34An23aODAEe1wI5BW9AjoB35euruItE3kvNX3GeHnl8RxeqKCWx0RIsFTgIjlZD6KJceIuNWn2TLb3zDeBMhEkDLDV25Vq1q69D0r6TeLfNlVOs54ZAwlToWG5YiUDfpwfeqJf9is5XsPRmWyQmgfPW0CBnkQm0jJOdLsf3QBZnXq1utNXH6l7PAPOYeseUUL2MuldUGZLg2uf7vk7PikXPaRB3h0MM9OCEEus7HibV0jacLfeQL-6WSYCyrsrtcJILafJGz47C-6Blqu3EhQprK72pTJ84rQGFdEVLsY98QJXlXI7-oWjJuMv9h62KXs6u9t1YxhBso62Osh9DjlI6ayEsfbEK6Ckg8mYLKebk5TNsCsDy2uFoKWIjBViTgLKBI-N2bgK8Nkr0qlj3Bnb469lDTNHOeUc2dWNlA6auJk5QZKfRuozd6pMIv4-44P1Ga3P9NBdVVJCRyNWzbmvZYWpkEopSaK57grhqdtz9dUOx5gcWnYkZs9y8LnDqgSkKtjC47zUNz5tmQ5JdY7QvBRfCov-oK36E1NW1ddBlsXdV3BSNAsLC4PMy8wXmh7nKa9gIdmECXBM8adpvQY0ov1Y_83PqTjA12zSv-T3JKyi71WgqiG4CBlShIH31_FikyCHNmDMoJ0SB_peYvIbjDrCUSlwW5KsFYNO3z3MJrWfkdsNWp535wCMO1F0hkReIzFm-1XPuqP-hDbiy3hL5A3SeAV-7GP5aYr1Qy6TowwU9GVoOTYc8qH4YtgX651tZ1RoD7EUkf2Gn_0bYHyJ3SMtaKK-Dp1NsG6blLQhuKxIHqF7EfUDgDPEOhNMtI-5bBYk6WNmnDniWm8McThUYpmHcXUh9U0cYoFPu7MgmS37cnl-ZaxcbMc2PI2lVX8hj1rr7u0d-SJIaooIDnugYjXKw3-Y8BkAlZP1oQ3jAm8dcEPG9UG1yeCwKTZ1ROFaYK5dXIGo5J5TTelukx-pH3TwhD1RkKekWOo14lgF5z9m490RbUqHtzywuLth2JlIVCIAzIwGEmhmVCvcW30pKoWWKpb8nqxwYNWU01HQLVRfDpKUh-gxdO1eAKq1dkqalODrWUdGpTSd5EUlCHE5KMjRdC0zJOVkNAZcbb1jjajrEoJLxPDfO0cx9fCbAJQ3koIlObSB6ke5G7_xRnDUar3HQ8me6FEhU2aUHb17tvc2Dcr0hpg6RO0IhEHmx15lZEpXIXMSReDR7yEci7H1XBzIwv0tBYORvRlxhxaZ9vqYEFN8CObDkEf-QW0ybYAFCulbvCjyrN36hHfZunweFL9RsD7sho_dmyKa5rQCpvZG-prC7R5Pkp2u6VfVUyEcDbCncOH_sKHbmEuqEge-4VK1wVQWF5XuqtQm_UCRDx3B_4yarpyDGxhQYxdcziCD_f9JtTS73PCKv0BzCyE_VvUmcVEDIIQjY0EUVGceFQkV9gTykGdFuHqGvXY1N92JBhG3CsRwiap3cxVipZU0B2Kt2scsEzblSPU3kHrx7GoCsDsONf--7_xVGwX9RstLyfi6471uIdE_mTlUNLhbELTcdZKOXccLtmpvdqM1AnJ9qBYbgWB3g7ZlimZ5AD2uErWk2AJfIoonrjfWuPCkViJL77UWaVDcdIuBM-vxAgD7sj14p-l9ZC0IikEi-R3jNFZ3BgduzrYd71dxk--bohie1d2mmJBkhWZIsojnRHW2VMArh-KQM0TvKuivGvJ5MRNiD9lhNtHpy2keAaDv88bdac8hq32yi131k8QCYN8qGBt3llAZdUKdvEgNTIg_GlNL4zZmcFI4M-ybpBvIZPHBwaq9ojvT0sesFBtPWSCnPDroQp-zPTgMn4YOywELXP1sb1OFhJ447d7rzzmwOHzjO5V9dRl-DPbftWlbtTXfrefYdNuv3fzwmPtIjssHKeSp63f-ikFuu-4wzFofabVy9xsE_DniXeicNCHUuVoJyDt4TUzBRKaiovMNv_qCnNt4txzwt3wYUlSsJEZFryF0eoNlSC9ZH8yXS51_zmxcEp6v4xY3zO0EXerv8v4LIPQy7FIBAE-deEhL5NaztFqfrg7bToEHv2s88t4TblM9UJGeMzKQqJQq_b1myxAzUrxmTXJ_eHhhMnmeljVVGldOYWz6KCnxdxj90hROR7O7EYBlcdveU5lrkqYr7E8cT7oi9wb-3GCA4lYjG8pP485AOp3TXTOGH88gdnFu71fxks_ylSSmDw85E9h2aYrxSEwzo9RI2BjJ1axgLeg56y1g0f-nq20VKdkVbnz4VFvSV46mn8lD6ifTq5f12zWBvuQiDCOe59C9uv7P7UL88OxV5BexXrqfyasqG9SB0Vi4igYmJ3POPH_fENUi3mmtujeEB79Rk4slgbCu8fqMmq87RyaGMP1v9OZ6jeEp6qUOhyZgEUM1fF9Y6Ayt-daObeY2qkDjsqyF7942xFnjL_mjBQtWr7OhNA4Qjjx9imsiTlEO5FqXBf16AHsI8FQDy5ixmuQ3F31xyK5zbDvBr_09J7UDUxtptf4SOdlc7zWG3sRmVxAsJtCeD5FW32cdt8rptYpLA-p1sH8JgJFifI70nchFWIHKvR8r2Of_lVeD-DZ8ViKrjTyevSc-s4REMZkdNnoQlBRZpCQrh1Gfi_S2aQoRfSDQfhBwmL-vwZcCk_x2wExCGpIc1oq0WY-sYbu7vWy8CSvpPXawYS6NeVDeNFQBIFkpUb6zm9tRUB8m8KjVuqhpXjm7Ywv3Rrq5PEywJBPuGP2J3971-FOxyDXpitQWCdG_lMQiqfTTbRjqiUxTn9kXJttDq9izgMXCkJEACrYhPzJm2aL3skv6vdRKWZymrMtGUrBC0P3Bm8Ekl7QFQxA3nZd2m2-LG6GWc_C-myZr2dEPw-kswzo7P4DHlKXAox8m6fD66rk6kP-djGtfYC1dcUcAIu6L1qWn8sM3kbfajTmUPHHsta2cPDrdIbw4u2NJkqFsHxIuKeCfjjJ0gRbTY56w47UOnZcz_FLyNfeJWdUHpRregtnHzW4Y6218KeVslqjlQCx1V1SfCCpA8KJv1Jho4JJYk2zTkwaqIA14MJAvX8OyT_TVKEphYfGg85W8aVt__S5ExAiZA_QdBuqpmLWnWsYdet85et8qah2V2C_v178COEF99kbgK5LldqLpXHewzDpkVkwq5Ic8vJAO414u7bCA74fd9FMp9GO0eEfx1Pa7g75jgV59jMgOxaQRsZzoPpDMQQ0IevFwD68nLI51qSJaddcuORH-ZF7R5vJv_hW7gGYqcsJt1X6YIxrDlvkKoSNglFnGRSWd6b4zOoyns_FdVcOE_AKqlhoOZEvRGB8oTU-gPi8FOfd8JwZ7OJ5asJeoRbwlJWEqaX6wDSv9MX1f2ngbs8KFL1--lG_jjIZzc_FUvacGLpEAFcQN_iaBR8h-3YKNknKJGgk_AwySOwrj8L8jqApCUf861Dbl6bl5CmODIsz5wyBYlw-A6Jtt7hJnAesJe2kmNtVGf4P9g7ESjjp2wOdZ5MBxhnmd_4U4anP3icJq2U69e7pyAz-FTyMsQwT1vrL3HT7qmrAiXm4eOGPmHvmc9cWtJjx2rUQwoLRj6MRAcOS-HJnenYH7GNlw5uiqfm0dsUq7SmqOb2xDQrt5mc4LjIYfTtRvLvXZ4T5Zc8xbZ_oSd7_XnzxMDGqLxBJAVzDkjU0QrCcMJiyWVBBIt3ygv1PUzAM3DoHJJgCugNUZJk4-5Jun_QoK4zQ1HukqFaoMbHiZJyaVsIVCe3Q8AaZzhdOwRTkYBW6g-ukRMLXSRybTeEV3G2ENzJX24f90r5JzVPb-qXO-SHGsPz3cfzEzNaHKQ3tmV82qQzpYOYFwjtu3vE56I03YcX83ng2zMoZHmMk8QE7_U4tp-h4jPrmmkEJaj5B_CDFlF3XbCgR7qTr4Me5qW0sQHsPeEe32EiQjaA5J621ueTBcHTI_mi8nsRyJ69A6InCaIhmcNb6V5UDcC-CCDlBx85dwNWqn9k1ei3zTHPAY0aYSCxU2stRs8vNyfRl5ewuL4pl9TW0pp2-Nn9fLTtZTPWXjmzjM-FAs1v_tfUe7-4reDhiCRU_QtHAARhKprIdc_RVJ0y0PNLcJAqnZgpkLEBNcPs4wBtJdZtZWU1Bkyey7UndyD80wZ4_ZL4YtUTroEuKAinXbHEdyIU5FZZX6eq4VoOCNK97_y97XukpKTtgxqDmsWmh4aEg4X90NWVuLNdkmFvXnY0u4LOvr_lMGo5dG6RkVt19z7gR-dgBUWBFHgFMBcR7L114EyE0qCPMMIfBxGmKYkX4jgjFpS3wUigJyMx6soFJDjnk76jy51llS3dZ0D7g75ZpOA2p9OJafo_ug-SYNjUwBiHOS4QqkUq5FasKv5TsyCmT1t7XXddj9KOwmGowXZkR46Kg1gOVQyGREJkAUcq1a754EZK9-VdzD0hJu6IjS7RW3UJd0nnl4Su3AGi9cty3TSlPkZ7-cc9bhxWZaj4A0IfsPEo2y3Ss9Gw_Otr5Mqygk054I_sOhiJJd4kIEZTVe-xwn9Bnj3kMgxnsdt8cvnTLYIoM8zPScRy43FnUCyn1TM2tMzFfl28fjNSD2RpUs0UdMfJbG2CwfZVUaIpxGB62Eb_cdUGMVTF2TvOUxPoAPjGdcU5Si7iLntCK7ph8DKbyzl5Me0BC5622xmUqJ-HOBakjyT9MiYRHoE-yDqsSOoZuekfXBzfMVPFcH658u1OYHJuzO6UjHccABZadCKUQQ006omXn7QNAE05UAKRYvG-n_hDoDTXJVtFGTQt3tAe1KygcEhxMUVBjG28eBddG8UfSaDvyEqRKccDV-XnVyFLVY4hCqHjBNbN6g3wEeoN3pm9DowO5uWSBMFeD_TLUJj0UPqaqGvGOnfgAphtiQKo5xxfOHVwkVyYiLV6QQuqBIeULOgNSo-GEhsOMqV12RdUromn64JdLu46sKfb_1Lf9EVPIVj1qdQX4kJcTe2iZAgwKDrc9FSJR29X1gZnl-FjKg_1dkqqyCtqwTyqtkuh0p5fET_bKJB3YPtpPupi6nn3ULRCe0WTFAee60Voa2kllmUDfoS8TLHpu87-hY-4le433JUo6G7PixLHZV7bPF0h-IIdIkJHsjp5-7tspgOg2AMIHfuUVS-hrvTxlOxEW3w4TGRPzffJrJOc4fl1T0TfHVXVsT8NrX9yQWCyMX6H_WCP2XGj_Wk591U2Vjr8BqewJdiHbkpKGvKOMmvPw5FhqciNvV4Vm009Zs8qQHnbMn19LEY1ZP6emmX1PRXi3sQipNuZriCT6B05Ifajr9bUUV_8Gu8n-qEcQrusf3YWtp4QY6iRatPMNve9XLO21yapE3oLOj5U98vPLOQHkHb6ohu0V0NC3lhD1vGwiAJyW3ExSXyRIIr0S0wiK0gtmJ2htAM2ximUYQYY-c_q7Kf5lVOJbaoDHAj70izqd3mrKhGr7fO_e25Gexnuc_BYUE1my7ZH7ZMuv-8veL8wsrxNWLvKMBw1UPoVsES2xG9JLS8Gim7o255Ql-mEvpRK49zWiTXchOuSnGRF_r7jxCKUlK9l50FdlAIOzq0bKznVjOHqBQbEbsgAhICh0EQm2T8L48UjJxjmcQOi13Ne-fbBqRuDOIjc-soOIGwBC6q-L_8nWM9kKyKHi3nXhRjEhShSBrw_Ic2cGYstVsYlTlJAS5_E6_l2-nxtgTqFnvq6sa_Iy9jbpM_-ZLhlhQZQtD41dMWWbsvc9B1rmfkOoOS7d4RMlR8lDISb_UiFbBLdwV7AMqoJq7eCcctErgqylM_VxW6YaoPKEDyI9qFI1eiGBPitDpdf8ndMAD4t0bDANRPYv4NpSue_rPgrLZdSvhBpYTjen7loCB6wRQS0TZ-RsT8CjzQtsQePW-zMwADhicQItFwryzNFB1OqsxJ3qtAcRksHpwZpRfmP0D0JLTUSheE4rNimXxWMkVKAM3wTK6dtowqCS6ZiKp0mdt7KuZw2HgeNni9fVVR9hDbENw22Hb1S4PZW5mIhR7Zj5_dvwle8IvmCBmKO4x_dHHd2D6GHVMXsX7iryzhzFWD7Idgs95sg4wln4ihucifrrSBwexzmFFQ39iaMlSFac_WCovRNGGAQK_aQUd6ni5IF-K3KEVzIOFqMiDxlKp6_ACo7tufrR2zvwX0cWVTRoS5R87rOjFo9AgoZFWmjyjFm5jxZCobNNeDQ8QE_tL6tR7WVGQF8ld9AhRtGRa5NCc3JUY_Z9TXzOO3c2FT5e3Rt0Zq6feYxnm3jpt_7nfCHLBVVOPAKsp7LMwHGbkekiWE40Fa1ZxaxLSeFChqb-0c2qq4A8ka5tfPSgmpk-i4RZzMXzDmOVoz0F0-2Dckg73cTu-7qcLD5CDd5weyegbf3G0hkvJRRi1rfEup6ZqxtmSdL678wwBwqvu3IhY4grVajb1SaCk7ifLqNcQyUERO4i7DSMdFkT6piD7uCiFp2QF8fYJE6iws4_lrtgh-T7h4JYWgXZs8AoF2uSi4_O0OmfAF5pKKjF2A2Y0AK-laSzjIDgYEXCElef32-wGKRdU1oesR9bFez6f506O7odDY94JhHzhc0pbeVQ5B9LMqTRTDUoMxEWXccsjAYiMxYWTa5NW5QQndHUSEcRxKgJvTVBvh0n8c52I4BGaZGHxIJsjhYc_SQrAkb4PvKXdD7qwKtdezIVR0iSGSf3WOSHHxVjaLeWzE6JudrCaUca6im0Pof28JgmHDI6aPnPc68ADBYBTSC126FH2_jfUxUgYL8Gu0uDGWrsSM4qfs7rrMxOnYumyASZLeG407UWREklNW-7OZL7WWFdR240pe6bXzbL5SvLqZtzwQsVKgs_q61bVVqLvTC1ryAx1yM8Hkkuy3_v-Aw9o1AxahxZH_H7087UwmHPLH6FTdkcJbbeOl-gTA66RZ5HnujxTxE9mTGz0G83HfZGUkk6ybCe1Y1EDAgAsPTXr52uYaXNSX47Okd6lSVP0Xvwa7nTIDrpaRD2feXdQFGf34wRlvUERM3g12pOKny-3YtisvTj2strdGI-eUb59a8X-bOy3bXW98Db9O264jyMUxLqX5hGVRqEfVRp2JwwWCCJ0MhV1aMLk19b_uX8IHfTOh4-I-lJTIePCDZO0OogqZL3bhfUKmHK_3VFhH2pjHcdEJjgqak0U8aNwza-1aSqGenUDzSnd4u1T74FaUyVGqsWer4hLOXueBVLxQPDDDmE8AEtXNbfDPcmlW1A2ZOg22xknuvJ5kNih4rnEPYWGUTfXCle0z3I59LnNRwl5ogRsSzJRTwFWkEE7ikgOK9SQQQuwGISiyNGfy5fR7u32HON0BuLDYJYXZ3wt99oPwjSBtxBfT2QZ_h8ISuwt4R0_SM7fSs5DBNFSlDQdpU4ktlThlI7V-tZsdH2R42ieypWoXQP5tx4tTKap4cKQv3pJfOtTpcSc1CaTZmxJpTOO0sQhSD1vIafkeYiPOKqeHSQP7ScuZ-oDZvKn731o2My6xdkftLBc7SReKcK-Ktz9y1HuITiUeOSoxNKXktBauOSEMkZNezETBA79aZ93-J_13fXXs8UaiTnZuN0-kNE46F1eAQvxUDrIDyNH5B_ZXZ16ELAcvA5WsFdv3SlGYF1YoYtnMEU3OaCLG-sX9BqWgLwn5cjSK_8Jb8X1aSc02scCzzChO4QqQeiuP7YSYM="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7623
+          }
+        ],
+        "cachedContentTokenCount": 7623,
+        "candidatesTokenCount": 741,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 741
+          }
+        ],
+        "promptTokenCount": 10974,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10974
+          }
+        ],
+        "thoughtsTokenCount": 1614,
+        "totalTokenCount": 13329,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.40489458297750086,
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "44b61e3e-a3a4-4299-be5b-097924bfea66",
+      "timestamp": 1788694420.27189
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-33b54911-aa82-48fb-bdae-9997a3d5b75d",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "error",
+                "is_valid": false,
+                "error_message": "400 POST https://bigquery.googleapis.com/bigquery/v2/projects/bio-med-480108/jobs?prettyPrint=false: Syntax error: Expected \"(\" but got keyword GROUP at [15:38]\n\nLocation: None\nJob ID: 9a5bb32a-785a-424c-a170-6dd592c4827a\n",
+                "note": "Ensure tables belong to bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "5b605c36-c9bb-4177-bab7-c3d85e34fe8f",
+      "timestamp": 1788694432.3680816
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-0453f7a7-a915-4bdd-a9a4-6bc009ae6147",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) + 1 AS duration_days\n    FROM\n        `observation_period`\n),\n-- CTE para calcular todos los percentiles exactos\nExactPercentiles AS (\n    SELECT\n        PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY duration_days) AS p25,\n        PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY duration_days) AS p50,\n        PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY duration_days) AS p75,\n        PERCENTILE_CONT(0.90) WITHIN GROUP (ORDER BY duration_days) AS p90,\n        PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_days) AS p95\n    FROM\n        ObservationDurations\n)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(MIN(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(MAX(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(AVG(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(STDDEV(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\n\nUNION ALL\n\n-- Percentiles de las duraciones\nSELECT 'Percentile' AS result_type, '25th Percentile' AS metric, CAST(p25 AS BIGNUMERIC) AS value FROM ExactPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '50th Percentile (Median)' AS metric, CAST(p50 AS BIGNUMERIC) AS value FROM ExactPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '75th Percentile' AS metric, CAST(p75 AS BIGNUMERIC) AS value FROM ExactPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '90th Percentile' AS metric, CAST(p90 AS BIGNUMERIC) AS value FROM ExactPercentiles\nUNION ALL\nSELECT 'Percentile' AS result_type, '95th Percentile' AS metric, CAST(p95 AS BIGNUMERIC) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CsZNAY89a18orDR9yhZtplOSaogO9u5LUEUoGlMwsePLwtkwq3ZkeOGo4smIdXeqI28RZHDY9TLpLPbHwy43GJA27OV97vTU1Ism8soizMikLCVgjHVEl_B77taYx5BG-WGJAlR7cP6ZF_0CD0EzL-JXNlRcMDLJy1cwmkbj7fb2hj332qbp461a4Zkm_Fofy1ITWBal7Nijrw06GzX27miw22ZVpC-a51lEFHn_Jb_STWQjVyHLX4Sls-yPq4isYWOEEEWsgkpcJh6s41eAQLJBuKj8ag2DamXf6FkHxBBYql5Efrshotnl99H2dzsXyi_kAWLNUSr19RiqtU-jAMNNiLEcyNhnLqvn2HzB7yz9p0Mcyf3y2Mot2KgPcuXQ63fC3S0us0GddD4IS87W59O6RwDUKGgPmcKvmI-T2ZSdT5gNNaBYp1El7r4WwR2qYa0E6XLPmngcRz3_6wBbTDdJxLa7pCieLexb_rK-e3seZHzBTuMLY3vo3v55FXy5nagRFslsJoJlbOF2hc48PS6_wrSQgxoJNcdBBPmvQPY6_B7w1Dj6KkmuE5JAAltD-KiZ8fWJroBD6sWOdyDW2YU8mrBqmoeHbRRsGpJ_7Qf_CniUZ3X_SEKH6CG4getcYWDic1PMMaovbmC4JR4JtOadN0jnWpd62zWxV_0O8D1DHJVwiXKgpQGiUDZRxh_93KnNZUQezvKLEkBPZAibQrQDOFXdIGrYoVkcEraycLtiOSzY9_ujWLXTYjLC6gACa4yVlR_tdVzgYIMnzyE1W4eKqXWc2ZEs3bUweT0m7g-wqakce85ggys0hrIYdeaVHex_tie4Y1uxVyKjs2yX9q0AHqroOpK4D6I361cZJ6D4Y-xVnWwAcXKUchA9O4ZNRWg6IzTSjlEaKtBXcYkXtWkUWlYNfDZoSl4YX0De-dvyEy00HROvsu8ImUMWtX-Uc9bb1SQt036ObHMpCPF_hqyrJXuTbkzW2ztv_5pZm8ruIGIdlJ764fnXqwzcHkVxkBt6_QqbR6vlRzoMOwRiGX0g3VSXDXeDChqK0r1KKXXsapquKNC0GhTMrz2OAyinWqXyjcFn1OWxrlVjuYIblti6SYvRHoqyxvshqSum547Fk38CHpxav6KwRxroICqI-oF10ddHbT2jZnMViU8rqZb7mMC31WVqj8Tr70Es2yqBTYzz4GW75BH-ZDp3nUZIlA4tPTjuBZrN7R_qWRZe6rPWfkK5SzR8eylGln5IZt09DVO85iiYSuTXEagnRkI7vXs0KJwjEtXJeRMmxsZvRnXejWSFUbyU5wlKL6_Ju5VzObreZtS2kj9aAgUrVs4ZsFCR9zEqpK_hIziCEK1wMco-cAi-_lPwfX8xfAuMYwhd2bHCb4frncJp3KqVwo3-yWSzA3xsteeousH2DSR4N24pmFGMHTZC_kH0O0turYjgcuBC10_APA-_shwzp0kBDoQqYup25LuNN6BGa3chSxGxCSVJmmhNWXuRZb9tea24iYbbclxwvOkI5DFrrh3Z8Ec2g4e8fhpuArqoNpXRpACI1XPP6rQc5T0Py05xSclg7fZUuLkyQDeiBVpGD1S6v5uZhrgBmyIGwlmElNSfxwUFvfH4-B--5uR2ggF4ImvIG7t0-MuKLwXDkAbNBCY6kTNz5YqtgcGRX0t3-FdD8BbfQmMoyE39yLJjqQZA7HPiN9hq-HO8F9K5la1WfUctkgBbNExAyhVSUqjfDvXdnYLXUQn4VPDnaN_iRPRyXunka9fA-vuM-JDNvAZaL0qEQGfOCcr5nCL8GwJ_KrBvCN1ERg6dVLecWVDq-HKaAWJPi8h-2WEOJoC9AC-gfOsNw93unJNImQ_zJutEoRFxgpg79HH63X8uYJJ-Ola0Jv2Aj1rb-MyUeSbddbOcJZGzknFo_N9UNkwhZhxDUzGC-wxr4QhAzNdpp6bU3N-1WXsfaXBITbXVc7xOhKRmpwo7xezaWCAEF9eTfRU5Kup4u9DCy3P8-A7q8xDVtU4oZZAQc9L6NEVLSjOc4Yt1fja5eQyRhFP5B9QmAYmgMGl5KRiyA-P2L8ONMRgNjhvxl0KCbCQrxTVTkgzRiTGg9EO-NNUvnVHxdmGLmDoYYFxMHhztZalkXD3ipLPGqm5ANhtw4WSgrK7V-fTnCxNudGhY83q0s0Uuug9jiv3VEBTF_SUKTaLkPhPHTXTbSnLI-f_bOJkweFTaPb81VBLwZCaAF8MKQYlL6VyowigPsLn3F1eIk1Y6y9fhjgO0PRVGHYR1Sos-6nW_z2N6q67P6Nu8IxGRq55mRafts7TCudCoVpvLuq4ju71_hyfC-EDL9IPDFcV1SZlihIvHCn9IxCJvIKUIPRfw6fg0h-WHJ5pOMfVd7cfgPLd64-KflJpcXpQrsBRwacmQSz3D0XiEWlmAqHfxUMuvXSGEwvepj1b0wqHJvo9MAyFcJb79leZZJmRJgzdAZlN0-6GG3Q1e0iqJPnSWg-2KhY6SsJ_i-2Uirb0rqklgjBLJX5pPEjB57mpTT_d45QqbkgK31t6_cmGA04eHcH3fUXnN8mIHymTeKxznP6Vz0Y2jR87nswbjy7doT00sYFJjzq_xSQ0PPnvcN7NITi44QlYOdem0LXujUqaXdii09ZPw6djD3Mkp2ti6KRYY9uU6hMva0sQZOMH2m9EmXvtlXnauE2ZktDSeUTNBKsgrKgsI3JvNZlRLEslkOUHhNmvlJyykiUPOHlelXY5K5NyZN_05T_OpjO84fZuESnAvs08U-kROIygiv6NkcuvWhtQVmGCMhelo9vmuuWp5II9ezWuxMApbOI7FiTIvAbkby8imH5QvenSWQhku7WIjTKva4jjX2VLab7rQAC1D8Fp4J55mlwF5qexIkTCwkHWMPslo1gZ3WVJbVtoNCjHIiqRp-Q3LdaPiWHdh_gZBPKa6trUdjCI-CxyirqBTTmCpOCBFjCdP7kbC1JxKqRYCzoHlm-WRpgFH3vxb0H4RufhmBiHE0kfsjeeQhBl01mgSJclafNTN3tIELBC0PMwPfy8fCxTNTDPoqAJzQhwhZFEvhokcwaI7wR-QCy2hBgFoy2ELklkDBS3qKj2oqWX0imAXymUUCXjbVF1_kRja52R1MSh7Wwg4-ULjjE5e5CwdvPl_Pq-LNjOFY7OoUMmWbrMA7ZOqHmqz9G2SSgQUFD1fFyYcZw8Fver7TWiisX7uwXe_KNdxkBbisLnOQp-UyJAWaKMEtWKos59r2PFw-OQL1nu4T2vfsw7dVtS40unhwpvQfZHgUceVP2Izsi7fEgpR52vOUoWXiQIqxo4unkkv4p1UfEN5zieTl6PC94GZZY1iSTakp1rIQQi0NwVzbHEBQibuI9AFz42G5t8mwfaT4bUIsqOa7Kesv_R-MTWddfoQPdz2UE_Lu9vMz5-0GZnDiJ7nlqssbk53Dlu5ap_RVhFTjCQXdNH3dgz_hRwhTyaVGlZJpAssik8cCFx_5T-KNp2imqc6pFx-x-oDxIfhS__s1KWxBYTafgWgF6oXaqeVzMgY-fYLDxuva-TbTWTu4zUiE7-ieVbaNCLCUvzkjI4R2bsDDjkMc1hbYpKdZq1UlGR_qaRz3o3EQGPsI-AcULH7XYdmfACLQ1fihG1IVAP7YpgEut47c3rg99A7-SNIGnnPDkECPHBdqOXdI12zZ6Y06xz8CbOw65dJhoei2YpzLTSKoerpYfneYFStrkKpgAfrhoWYEcp8kdZiTKOZy2HN_nkHSpWRvSZE40ddxOfyF2AiEwcDYKIZRsgNsFQ-crYSv6y_kQEBHdK5IetKOmP6lAFHQJThlg4z7eVhGpJTXPNBoAJn60zaZKunE5zUxUoqFSND_pDRuCbZgeBBdH5P-_Z5RVSa8BGPl14blQUWu-l4ODQXb9y5fpKMizv00H2Q0OrTJe9c-5Uxi_5Ma7ONpfeBrDnH0l2jYkbgH7uv_Ft1OAXj2lbyFtRTl-nKCnT17VljAPcedUHzv6_8QfSfUl692F0TIeZs2Yi7nSHAxzAAASvBB1f-FkMI_FHhkKIkUlQB2x_-O9meXKpL_Aj2imx6pv_n97nNC1AaAOECAUbrpdbo_GvZU1CA79WyEEOhnfSzMPwVafgTes_pYJaCuTNYM68FXojLXAIpKzESMRLmruCEnEiE3e-R8I5q1FYC-S-nLTB1fI_jSEOouvzA_IyRm15DeKAWve-qt4-3ZyDys3MLeQflLWG5cNou48g9c1ZVBCUQPCxJbfqqln_X6getWuH3qLIJLQDvf12yDI5mTOeaA2U1NkCb6w6XLI1YT-gLaWc7nh2zAQxl8_QtGZRKYMl1iqeGvzECI0VF1gR8kqbeXXLST_P8yr5VGcorRQVi1zChFWdjVr3G-edt74s6UyvRc4zgR0UOWNbQo_JomN9Od5xNk7SM8_GtLXCjjNMs4PxTyJ56bFNCn39y5M4jHko2i497KZLKqtsZzBN9mJAkJgTNd7nu1v0b_crB1ny4sH4sEpp9K9fsUm5Wu_hiKAdYk3JDbuVO8vCJuot0s1s797G0guR7wf4VxALppVL06rLEW5f-YG5fAFYW8Pop42i5EFAqb9Ms4d68N-stnx7EPFmKHTRbLwLqQ-SWTwd5m-wD_VnR1VSYr9qM3ad7bVSG0PTY2Yox-BDAtFxUsLp_KZYYh6QuqfyOUqT_S_zQ4x6PkUoSEcsX3TXYksptQyGiTU9kH4a3AUE3DlqwpK4NjafmCJQR_QRH51bquxqggzuUOjHKCK-9JMZ628E5xy3E3VeUxUkgWrelGTXnauDvTcE-gyFX2nJ3DG4Gk1jnmJ4T7CHJm7_KYdv2WWNfemQx6jcz6u-guLlaFUV7ahuGfHOs0uyo1-zJZ0LZG2kCxsoziyF_XV3fABk5PoFO7psSAa6xk6wt3lx6xRIhCK9lWdTPa1kZyBxcqgYROG69HCPRLYjBGLrXQD07SB3ZtVsC2a5N0e5UGZ-Xz79knStwsacd5xNObYMeTj6nDCFC_Wt4l5eaC61MC6eUImPdhr1o5FhHUK9rRtkhkN52D29bYEDjsdDSojmt_2NuUHDu85yu6zqgzp4cKuNceE3w1_wI1kH4ldM4DwBTZCe0lmZC3afsVVc_l9noXr3vVu6UfIT7_PSPPVRVtdr2dsZ0N-nKm8xGL4Y_1cbeEFHRVX7gqr0IlwuURYdgsVGL5HNEtuenjEIPj1GUOCIXOphmPcD1mKfY1RB-FuvbJY9ZNXr2vY9fkhOqUbkY2nTDHz02dMFkRCh7Eu1-Flk9xlE7MQYSTMnc4SicQ7g1AE6tSIYxcc1-rZCGmpTSLIzOBuUt-7adW_zN9GafBqJwUZFlTj11sHMJbGTZLquD65ZKcKdYxrU-R98Fr3CgpKVzfR2rnxDhcP2VyJMC0VGhNbEW62JdQ2nRPecy9gXeQanAJ4yPb7fBJ3R1Ru9LNCHJCvQZTIx9cGQTiU-p86DpPaebkAQeuKN_Dz2TjTEqRQWGiQd9zGcO2xpV_pr54j5mgQMItVU7pD58QPiuFy8uxkfx1V2QrZ5iDj6-_fVp34P1HAzbcPjF78vCR7egFfqzOVfibaPxipReydQsEj6lJrhFMa2tkei5Thh4A0PCmKQnYBvOV3iLfq-eCHUQG_HA5dTmyRQgxLdnvcnMbXQCJQMThZkNdyeV4df-LQvgfihZXOkahWMN-Q1rmxjufOhIYwn061dNehTFybNDs6SxDPJw6YEM3mRTu4_7I4YhBx94YxvoZA3wfIhKQ_NUtgqCXcO7NjNP2OvbaXV0n1zc_OQs8Y_sr0uTnTNtr65KaECpOGZOq_CO6qShwQu046VkZkZyQ6NGDVwN33mkqOi1Suw6MiGY6OROzZOMwsGqxr-5KWLruFKEs9ZilizHRyytylec1GhQkCqrxCsdiE03LG1A8rbSEe-1xl3gk4ElxsKrRIthI2_hA15daVcDRgkJbqf7L68D-A09m24EGrSypGJw99bflkzplK0cNaOxlYjGS9HPg6qNyxzcA7u2hmscL6UnKheJI7rZILXRKQIvJW0ZY0sTDbu1hKhhfIX6KiLQpatggTklAIptejY7wvqUcJREnOWoxPwhRPEPWFarDRoI5v91OD2QuSIxzavj1FRs8xi1oMzj_I4dX4iL_X2Bos7wyRUGl9aZ6N3A4ME2VJWGmKoCHtaG0T0j_t5kCJdDXfbhLAq6eXbdOtBgHeor8T03GEvQ-h7qt7tld6iKmma4biV_wMgGgv5hSgXXroJQFXDyEXGOge1-lTCYLpCB4HR5fu2LcbMIPfT6ywfSuUJHy-nTxUTLwCezTdgS49l0NqllvoKzJ2QdqCNsDdwaP6CLE60e19rBdZKN15GaMuPA6oXh8PrQMjFgU4if05jAeRmFWvz4rQiQZHRkdOGykck-YZYe4DYIMvMSfcoCPnRfHSVr2PN4KBSmynZ6ZRXvAIgwjywRn8s7eVl-4qE-fEuLZC1DFMc4TPWnLebCF-NLuOgKU6O839Aa056btalsPZN2yKRqd5QQP1vsZVZ6KtYGx9QcmeRpMnZ9BSTo-QhNmWWGk68YiNv4RQrB7YWUqRutGrfmNRMuND2clF8X79C9hg_5XWowhcCsSy7vWqKLYG_ojghCtz7imlI6athQqxo7plUaeBbDFUvQWPOfPP3jjfihNZu3IZZE5P5FWuVwj-xj-rwE5A9QBKTEqKKIobOp9v6Xpf8zjqXUkSfiGzSlk4lrR4ne05hwAhMP2XEvXxqVsFwxQPb9l-kqTJpQtYIhn3Y1tN-Vj8WynmWByHr60x-FQyFcd2cEvylIrmdBF0FoKQAaiJeJFY2Ex5XwzqFeeCg1870tlqpMkmuT6QsFSbC1vMt3fX6V-zrK3BmaDUhJDYuGvtGJXNwEonPQlyOs9-RDeqgXB9tc9wnUK1Zr4KyGLKEJJjtdMs8yNscxda-KfsLl2Gwido8ZFW8dgewqv4ZEPqG_w1NzqXP2idZhdfNMK96RKVL5so6UO2ove9ugk3b36D4ZVncjzmujXWZTW7QU89Kq15Zte44Gpify5zYO_PGL_Va8158kBpqt6P2jjsaGHs5q5o9xYX_PYO_ptOSt3ZPw8nyyDKfAeDIyZVf6FWVwijJ-o9951UdDYXsLP-zwCidlnb2ZYBhMetcQKkYZHnangQ2DdNFuA2U8Lau6ryQXqR6FiVxCKgRXmVizYBINRXm2NamvG1ImT9PaCXiJTPP92aXchoK8Isto0AMnTSKLm7Bq5J8BcPTKeChh2cGk0aHk5DHtAhCQi7HsUBNgZcd63ekIa0Q-s3mMrjpTsFAPQtHzQKtq1ZA8Ukn_LpdolD-_9YaOUL1jTd318TUSq5_tUl5oQ6XiFIhi_-AQB6IeQoRxtW6SKNcgDUYOMdPB632jlEhrA1YjzwlRRueiw6cfK1eITHwJBcRppN1ql1czUZRHfMvvl-L-9lTT59NlfNp_Wnbl-8HLTqf9uAhvX7wQUUohBySaj_ythh9hZ_vQ1JgfESObe9j7krHsh57jj4kaGqaLg6nziwOKEQ8bppdtBxjfXuHaYKcxGAqGdBH63k-BJoFSLFKc67Jq2VwtnYHq_hv8m_W-q9iEyvUskYp_xg1sZ3HmeRMJqe_sdZcoYld2BX5bTjyzZUPclW_umSY5XWKjc52bdYJ9xTYBUUvImfCbIo80GX_QmjosRgbHv7m02YwFUp77cvivexbC_rot8y3KQuPUsKUsPr40Il4-Nh3n07mr9P2rY4i3X_jNxFpgtnfxV5xiPsqEWkRgSoiCdFmHpH-7Nc1pXgqrbtHlan_h7PR_llR4Tr1G6dwY-LFb7IdWAL2KBA9FRB7KDKsxQEt7BizE6otKLMgpTxzu-lfbUSHug4bYkS8G2aYRjirQXBKtCiG9mlpZmoY9LtOMkOH8E__jTZ3AmKWvNb5IU_y0Ig0kAKHXg6u0BNPgWeNt5nluoLH5I7qGU5isEvxdDbbwuXifrbTOcLn7xnpaiOymm8AOOBH0X1wls2tygt_-V83nbdHgoze-sbtUnXcF4tEtQ7JEfBVpF-rbd94cwVCuL9ZaZHALSLqDLC6WyXxU5V_Ft8JyORaaoOHsc9RLbLg9QYEPyEGPxl6qFyDFhl5sMM0plpUG_Jzi_ZJrEBhKXOVsA6JN1KZsW7pl8f1Fay1v-7U9oMWFMcMQm76jOxCWXKeYlv5EzK1S-UGDV9ilOheK-fnX2oTY7kfUbsngUZTxtXbHRn4nkjnoCgoBJCpHZAQNsM7zDcaTJ0zc80le2h8ZEliAomJCLHw9jy9Jo7n35I_jDguRFKVHnE85FQapqPD9ggHBIZeskb6KrpFfCMnDF85qNWNbFUguVLn6C9UteE4GU-LFcqIzl5uXfoRLCxDIG3wKxKDyEIDwFDXZLW9q3XJcPHbGw1dHg_Vg0BbYFGzfURtCMD51CiIRaM1Sp5bCik1kK7DeC2zmI2mMPt3b0KpVnEqPT4ZJ02bUdly8WJYlhJza2Sl08sg_BJB42QH53kDcxvsgoknMaQyTYIv__k73ni8M-teicQ-sos2wz8ZzNGIEuB4TFDg7Ka3iCk7sStVeIEHZQ14hA1rXZ_wvmHsWdSbbBUT7k4SOvlOolubPSp4fV3A2OM-5f035F8QhyZyQqGbVbI_pE2cZ5tTU3e2IwxImP9e0P8w73yGTv5_Spd42ZTiA3lDReMqBhTlFqWMgGL8QVO4FUdBM_CusWdNJIkiPFVxaX4B9MjaI4wSsfei48U5dHJK6_kwHNEHKYOPRybih6oUS-mUeOEbeG_4R86rR241a_r8q8ptz6iLpEiBNU1stobNCQ1DZScSKUdDZMlW5gGApsnFqNS4FRn4RKRItsudcpn5qIoD7tkPCApKS_PcZF09QNZtYDxUYK0wNmZidOuJsnC7ZoBE7msTY6n0tWBLv8G1aosEBPQMyLifCuXVGkMUqg6U6seSjRl3zDt4NxQLb_hKOzfusm2BCWpSIBU9RAM21OX6OU1gtjS-QSe5XcVPo3lQkz_acC5QXspvcgXS90NMyKPPs-vkuN9uB9E6_jZtpu9X6Lr8LRcgPDiwHle_ouXvfplnItivwxYoePWoB6KL_Cij-oD5uz2JJ4B7GLkc7Infc_i5R9f9SSSHKD_Ch9pg055AIupNAkwNDNaRQvv5t0aHSqXNpbZ818I1sndGAFz5FQ8uNIyhs2MdTn8FZbdKJX5YLDNXXKEHePP797j7ePXWAhb0q122CUAzGhXSVIWr7GLtrzvWlDVUOEJkgCth5LwV4UCs9IUATXGtixKAQWibleitF25R67nRRH1_-Rnq85NHr1O0uwwWUUCfk7pWV3pLOfkJYoP0cQkSn6muXB_FwegSlRhYsHRRVnjzhrOGsoS_iTBbPBpGNZXZzWrKzcBCq1tt3VqCI1b81174KYnNMrKPBBc36hqbfQDJoRO8kC9MJpshrHTJWgO4pyaa7Jpk1lghgR1KBnVR7sS2xeHBW88rWDiFneJI5YH7hwLqgdJgLXmrJVU4W7tCccvkihHdrUSbf8qJvRQz9r4XdddXBEtQbGDNgwbFLfmD9dxyDoQAfIZWyRZQn93ED2PeBAAohwmDs1IVp8X6TuFVDqHVLN4r5gDyPMYQYwvO6t4dWWVW0bR5_YkWRy7l6CNxWXGLwqATSjIulMBA3PPWlLHD_axR8GEWYYnmlXIQVxmFQBDgOU8Xo5BDQfMBbJzPaegAIPI_16n9JlkQj17veqw8y3xQNcjmcOPAE3YscbszSHfIm2Ej5-Dw-pcLksEdg9Uh5_i6uFsHFNRHdYpR-PiznBXvkJmKe4gxGpo1fCYXUJDuGO2J0ectfusn_d9NVD2sQ6C9hg6jDTUq-izlZHYUn56SVFqf-MWDxJbqSlrQ0gXac_MHK1iHk6yBo3q8H47eB4jCajVGK4k48FCvqctoLQ_6U-esVY0VKeE2cApB1yw39tBmKfy4uaX25CeZAsJKi7rI-95Zx10Rcpa7gvsSdABJUSSaLxAWABaBm8vUcIDfU7IHipkdo_SbPG5JKME46pVlMXeIcvWbQWHrXvNoauRbGy1-TLzcHSeo6udxzQu1cJfX_qq1nMoH1TPzsid4PHVI6P6XQSnKa9IbG6Oxrps6iuuw9tBRZtJh6rqZTocUydEnTWQ0YWk4QmwCOIHzh21j7ACGIKK2w11FnOCAlMj_YbIsR0gxD8FJ0Ippvsu9toEXM9Q5hBwy-SII0h6NXggRdsrwUuHPWr979A79Hj-4gzkjNEJXl7vgtsep0IxeHDAOqElE7QCeQ8mUIPMlam3TyF6T2YrGhr27EuvXukADn1evgrcu8ynNfsgYfvig4mtyGApsjLsIbdkbGvJEEqTDrmkpDmWS3Xn3Mmi8crNSUf5HVIcjd71Sun8M5vp70XlSlhPEruhuen9ZVvWrm7qxle3y5wfSTmLdrNyafyGdFVIeFXNb3Ge6DC6Of8KLCBIor3mSQkkoOSRQhwwA0-Pi8_nBVxJ5mauDiSgNJ27HbEBm0RKeXDBSH1vX0AOnT1aVEG4xAMR0fALZ_lG3DehB4qdADM1Lwxt_y9S8McPfDRAgFHx4P82YLGy4SKeeViOnF1C6nHQxPyXbjQn1wvsYmtN5XqQyD_pDkIWTkYhNQq3-xpkVmjlHnQIZQhFTKYrBZFJoGcqazlpC9ZNi1Rj7P9l7sxZdaJhrhIRe2Y3EdfSHVZHcQv4isKAvdkrLR2G6AQFVt6RQM5FFub2gr2FLdGCu36wyNBF_CkNZC_2IoZGuPI7NgRgMzgQ98ySL2q5VBHQeH6i8NZkryx0wao2vRuTp0TScfcDNbjKoUSBoGPeRELZ2Dxxqn5U7Dy1NH2H2CrElBWxUZ0hP49_6wW9MNKrGohDTiql3jjspGcVyMdwJDtABxlq51TQ8VHjODFWxnXHVOXnHNtZSCM4zlqqV7yCAqkkXeQr3lOyeuFR-AAHVwCyTQOrja5XYqY7FXDDVr98uXg3qgYr9c_KPcoiGbQUtyVg6vxNvDodWGLkkUEEiB1V62QsnRN9PrFEHpU7Tr16lTQo6qBK-qHUNtgLHnVQqfjzCyRO5VKZL_1kOucUKpzMX1BbQSanlph-dSYSnEhDgFVbVrTGmIEhq2iNtdbvIpcGL4CP-P_mMv_Om4qshDazPi-bBKk1kMGNNvSaH5g0jUMno93jhoM4Z0RFq1UtIt7aspAX1I79f7d6WUvy4wCN_wTf-IDc-JbxDoZEQZKui2uKZojBbx-8COUKcxVg0GMAvOCepLHtRRhkq29Wbsi7k1il3R4jMj23wTzDAnu3pqe7qIuphlVXZTdc_kd--NVSRfXjkSTKLd0LXGMOdDDDtkNc9abEFomCw1xRO1Cik_9DZmexgcF8T9a-Ylz7JfVLTZx4bWzFepSM7TYFF0S40rw35BCriFjS2_0PXav2XP3RtwE_yg7RX4A_r0eY25MDbt5uoJ3ct9QOyBO9_wvJBXg1asNWez7SLYhdEDZhjivPHT2lhTMk1IRDLgqJtOpZGm9m5cpj0ixkarG8V0JOFSS8AbJBUSFG97kbb9m5XTl1zhQYMwBuGaUaX0P-upTacCuHm4X6FVaURqFjEl_ZDXo2XJPDIxgVyyRUWXOe-TrdRKlcffts4U-2lPt6MTz4iY1Osz4RMTw6u75VhVXj42kYQnmXvMmlcVoG_WztCrorI3TZkKJGGN2nvPnO9IzA8XxETVYsjSJAZTHfdk-2QrrioMfouJ6pEUsDlAIkjAEt7o8bWT48DFBf4LcelCB5JVIxoGHGf79E3Pmpj_LZwP8wLsICr8rRmxiuux6kKGbGyOSy3wxfH8o43TA222SZcJA_0bNkplceGzJSwRn-Tk-ynsgZ-i2roKeO8Sbls7oxkDpUrsn61qNc82m5K1fKdDmzLJ7S0O0ZR3vvJx4B5WqWQ1yUZeByvd_a9lSjmgjEugz-nzRrNMBQU8FEFJxKoCSIfEpxngCc15U338hb8EBEbzXAGLxP_--sKTtBbIMUp34m26mpyXbymBij4x_tgZxkgSMVZzCI6OPwdV1tnKqoOnOeM4Xs9zGHp152hVMyH2Fl-D013nf9kav76OavMnhTFqqTJjCOJMPQY1Ae7LvcWhq3ju4X56ZVk4orW8aUmOBH7zGleg7fUxZRM9NHTikZAA1KB89s36J7Rjgswm6YdYG-9K1rbw6y3wM1W2vg0UsYX94waKCA1AF58BbxAzBCxN4G9s6FfY1pJYe-1fYGJgdoVZFcm0nTHRHdmE210x9o3okyQQ2qeTEmU7hrq86-dTow9g22FO072J9_tO2PlGvFvLY9o_RaQX85-dKvwXt8J19u77ZaRGU5Sp7YXah7iHWPxTceF5vOuj2vrCk2EpuJ-taiblzoH3XtHPko7ZgCF_PvAwlu4KmHFsHKSBDb72LxedXbxYsXJwLUUilDG9eMXs1-wLkxe3uieJHn5v80qfn2x-MsYtUG_XIGsDAX0_dCmBRS8eowXH8mh2-6iaD4S0ngLY7lym6Pqkr2uOev6cbbUlIt-8AkbmRtkmcktXNBYPC36Bcdy5p9YYVItb0xvroAHeQQ0dAOB4YsV8NNoBeytZ47CN3e4lTpHVKaKOLXUZOjmLW26yFfPnfIGIRGTlChAocRjOZinjjZkSN4NLkrsy8a3nK9DwCaj3YUD9ZVryi70G80coDrM6DOm0XJtHltHrBNpRmXJYzOZvT9yi1khD9vXqSPOCddef1pHQlK_IX9bzDQbC4OgmcwvI1707_tcx18GBCzgHYw5CFjMQV_eTPDy7rYpSYiw9pxq0hf_F38zgRE5BSI6jgwGhgOIei6m251RV-SmpkvubW0BcZryRNaJtoLEeLusVZ0DJPyIA0Z1WADp-ojVLlCxS-19eogoRGLQ6SdXY7jXlNH6IS93IhpNJ0_U--gZrx8ecxG4E90eSHCY_9yLcxIE49-0CTkHuTALoXkb_txsWPAZpAfg-VoUjd41qrrGzcfKrAnR_H0Mhpv_GQnRet_qsbJS3Efo3olCsR9bjH-7NhgfOpqiCFhexwIE8xHymRFU0nUDFJf1J4m1J8qLPzKU0uOGXrkZKs3D1SQT4HVFM0sHzZ4tp3OjHSk9j3Y81mFvuNf2ZtbS9Mb5RwwJGKMDAX1gz-UHcbVVymb-TDvpQNLzcEXLS1AOFjkz-gFeGymSYGx0="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10545
+          }
+        ],
+        "cachedContentTokenCount": 10545,
+        "candidatesTokenCount": 688,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 688
+          }
+        ],
+        "promptTokenCount": 13467,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 13467
+          }
+        ],
+        "thoughtsTokenCount": 2660,
+        "totalTokenCount": 16815,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.1365891390068585,
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "5b593b3b-b882-4042-b1b4-ed926643256e",
+      "timestamp": 1788694432.3713152
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-0453f7a7-a915-4bdd-a9a4-6bc009ae6147",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "error",
+                "is_valid": false,
+                "error_message": "400 POST https://bigquery.googleapis.com/bigquery/v2/projects/bio-med-480108/jobs?prettyPrint=false: Syntax error: Expected \"(\" but got keyword GROUP at [11:38]\n\nLocation: None\nJob ID: ba2d8de9-40b7-4a70-9333-f49b1c73c339\n",
+                "note": "Ensure tables belong to bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "74eed1a0-51c6-40e4-b566-a1f1054db2df",
+      "timestamp": 1788694449.4208868
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-9134646e-f565-4dfe-bb7e-1344f64d651e",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) + 1 AS duration_days\n    FROM\n        `observation_period`\n),\n-- CTEs individuales para cada percentil para satisfacer la sintaxis PERCENTILE_CONT de BigQuery\nP25_CTE AS (SELECT PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY duration_days) AS val FROM ObservationDurations),\nP50_CTE AS (SELECT PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY duration_days) AS val FROM ObservationDurations),\nP75_CTE AS (SELECT PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY duration_days) AS val FROM ObservationDurations),\nP90_CTE AS (SELECT PERCENTILE_CONT(0.90) WITHIN GROUP (ORDER BY duration_days) AS val FROM ObservationDurations),\nP95_CTE AS (SELECT PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_days) AS val FROM ObservationDurations)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(MIN(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(MAX(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(AVG(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(STDDEV(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\n\nUNION ALL\n\n-- Percentiles de las duraciones\nSELECT 'Percentile' AS result_type, '25th Percentile' AS metric, CAST((SELECT val FROM P25_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '50th Percentile (Median)' AS metric, CAST((SELECT val FROM P50_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '75th Percentile' AS metric, CAST((SELECT val FROM P75_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '90th Percentile' AS metric, CAST((SELECT val FROM P90_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '95th Percentile' AS metric, CAST((SELECT val FROM P95_CTE) AS BIGNUMERIC) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CtI5AY89a1-rfzUMIxassKETpRocNpgjYvet2yo9n_hNQR5WH2twDkGF7eeX8HP6_Np0Wce8U-B5uANpxveHFz8awYJpS6h1DISDVZjs4jUFDP8-u_yYTnYKJ_YHFYN7BMG-Gede4urHcO-21GgM8sY3yG7gFySQ2B2Uzp8Ff_lQtBI1Bc1ViNjXrFXPFCtGMgK-VreJ_lWjJsinkDuZXQR0SpsN-p4ul5uUERwzGaxG85EwYCc6Lyl9_mslhcKvDzMi8i-JlKjyQ7GGq_SevMBf8MnehvUtwZ0NwvnS-tLMihe_dUWGKXrSvo8sk8qj4OYH14JVZhf-LqOTbxLjdkz6be0yE8Tj91IF0R8TGSR1Q5gTZgdY67WxA_Trt7u0q8nWcHThwd8pbIvgqMNbafJiVJ9CDFp35XLenSPnhQwoSYU7q-dL9Q8gD6qDRzo7mbSMLdkDQOFDX--NoGnx8tZJRzKaetg9g1k7UxqpPUCKEA6tVJQyXKr6dk047m5RqB2bxc_YA80jv7TTQUInIV5h4dJuUF8xL2saNorils7Unh67fIe9JQWHJog8nnFezHUTTe8GQPQK7w7Vxvax1_gnBTTC000nyiDWMEE5ZWNdlIw9IWPQZUnhyCJyk7ygF23maK9fJaaDX3THYj9yRNfQkCNC48sOzQ1tu-6LQfJhtNbn0lrc5uyXTYjG7lBXbobbWiNEJVXrWksTYrwj9RpbhiMlHI7wN0MPyhUtqOREb7rG-MgRsmnCyjBPYgy7i25vDux2vRMCbeo19J4ha0UJK-Sgg7bqXYxBdejRxij10PNlkaiJkdVDLMF-242cSBcjOBRogTLysiyTDo-0XcNi_dr3a5o4nxMoDOlEgp_CPztgLLQ8-lAOmOHoA04llxXxh5dPQykpE39rSu15OJs_8-y71A5o-KeKxdi_anx3tahT-7b8iZg9hwCBeKh9AnanZsCTD5s9r4wWMKmuz6VYD6tXMZ54-dXMyQlwCORukoQc-tH730TubXp8NzTXpj_Pk-opYRURwLaAB3soTPMyglp79J8L0w0pcX-36slXPCygyLc-Bl1E3L7MzdVGlhqAaasc9JFfHoRtW1c_mm54TJGibvFcjnNF3oaRFyTcJzlL7ZAiYxcijp9C5kjjrU9Mj8jedbQXYgewlB7WBxQfc-DxkqMoZY5PGPOEGT2liRlNb2NusVYd-TsoIa8875MDSDzMq32Zz432Ydlj59k60mZj5OTevYLNe7lMYfSjgX3TJSGk6gHHJHO26xWdJHJo7TpoPehN2pjG-tUkrfewsO-y7k67E1bbsHWdckWiC9bzdRME7k7BFWRZXxoj-C4s24MabJ-8uShwKPzg0g9gbMqaP4uDT2M9hW4qMdXQsvS7ST1KKAMeC4Ae0TAPRvep2arH0UOEh1VBN-j1TQN9xTpPdjGsweLIf6GZZ9f9gE8Obmpo7hydOMZRRiZrniKqztnbeJj0ZNG4CArcbTDZIqTpqp6FyUwVE4xg44KeiLHPMlo2S3TGycNspTJVyII860zhIMhKsOcOcaCvl_E45vjGrpuK5CZegUOMN_jFN9wWE0NT_EIiqTE5G1_U2yQmsMjhlQHuYCPWHASI9qCzqMrPuraZPpgqikdF897AddXetS3pl2hQ73_pNxU6sp7PZR2AxIzpLJwiGvkm5xGQ7aMHPxkPw0XkfSfQhTJ4afEeGHIg-RFscUzCCpTlAUXAbBxCxHild-eTUdamB6i_9IlsLPAHophF0wkZZ0uE78LtlaYy0pvgOXR3i_dTxkSGwd6nQN_dc5-QiDlwrGLNZmrI8M2aR6oCipBZ1xgQAMOQAKJE1CD9mYiVxxeLxsMlVkeRA32WPnPYfzoqtfHJaCio3uhJA_v0J6gQRbHSTdNzztytDe5IzTWq3tBt6Df9BIe5ZznKlU1Q_LJIwARFdgVvuMRDIz09JeuGhNUES43tn4SxdK4hkhKptp--ILs4JCk5Kqh8PEnx0Totmtvog5PdT0E9oYdDBtKb3puRRxtwznFpx0bXL47CXZ5M6yAKTSCdCVaeUns2fO_Uqq9sGxB286Ss_tEM2mAVQBJOPsGyqjHxaCLbQygIsWzDfuOokZIaESPsxD58kC4Wl9WvcjIuLr5bEhGGx6_W8fjCeyyuMlTkfpNQCqxCI3U2-07f-HkT2VDoBSorjZsHaxmPdYkKJ0stGXubxzIUqaH6-Pqy2Qw8Jx-dNogH_XZDJMICu8NNOcB7GqNpNcqQs2ppeg0h_gGgGBF30je-hd-jgP2Y0XMR69fzjeqy7y-vSrypQwt3jZiwhoBwv-Vlxs3xk_s17B7_Jfaqywu0FGnbJzEAMrrE2Ukq_jZ3xAOmHLtqGdzPFAC33jAX9BYa5Xi-t4ScyX9-yDv2bn4eZPpDjnoy7OOAy-EaLF7eM9Htj9dG7sCDSDqCqx6i0oS0GJxUDZJsUCUtNz0XI-CGGILPT00hhoLCebUuJKuZJzEmtXPNZPvwdQDIGi_JLhAxpR1NnbHAsWZEFyD9JW6KSNbeGKV1_4sNQSsVSSm1_rx27L6Hh6y44WggvpTWG-dw4H2zZTI7mF1_lnmx6HTQBMJUafWHuIvGdyTSc74R2vz8MXTO4T_Z-a3AuE9GHZMghbMtEllOJM3z3JVdhQ131dDACf53x8m_l3q4saZm-WQt3sI_KZYLvUfTqkfk3xH1uNj3R3VWTmOuibDL9QzmdRR5YchnMRF_VJs4dcCnPopP5icJnR2AAzdGIi8NAx_s-f7e7dLAJNO3QYswsPqREkzBvI3V7-sR8oMSRrQjyQ-5nVDbDBwi3g8O-si5MPrxympsBPSxkSI5ocsBFWpfLrBfrzSdDkM59sok5hUnHu5R4TitQPDJWham_md7a6n5BMqQk3x8xxGAz_A2xFhielgq5eqd2VEyBLchbir29hWJN9yzYEmB3rsJVAdNpw3AxEgaok4mMFzqQhB4rhmVYU0fooNpY7edX79nDPkuXLJsM97Mf0CGccMU8RdQY0C33d-sNLX1x8LhNUf5cDj63fpt0fvqw0J22WzLO2TRf_p373bW8cL6i4GHLAhomDradEcbcusorhPdScWlxQXW1h0upCDrzEWTS5pP3m1qXZeMQ4njFYO-QLL1pDRzdKqluOS12Vs3VoeDdQdsgN6VFi5KuHW3jTCnFQNp9KGakn0VCeXuFEkrQZqUVU87PUZb1puo_S8nosuZpTsI3_N4CV_bxg_E11MOTjpgStZ-dWC-8Hpg5TpfrxYD2jOSKY45GuAvs3cBg-gxUuYYo7dVeAUTAp3VYrXKwLdo-tXu8LbBdJgpSqxEIgnOm9lJj-b9bdFqrX8nO8pnp_moozp4elCEw_K-GUF4cwkjp9DMX6zLsVkm7RCbzTa8IXyqFDlTqxpl7p-BPyLxMmLFNkp-3fanQyljOG27AsjI-z6Lh0uM2mU1eycB--ulMikkIJ0Xgd9YT0X48s8gGAtZf4OhMvd_D30a_7SWUpVKRoJQTLrBu0Jd9VBPVX-7rEttQjSgggU_JlIiM_eSY5IUsvsCpYogMY1Lml4k5KuTOgIGVOKZZI4SBEOIsDzT1vkk3W6rJHXn9T3XLp_QxOMuo2qBSt0_GVv5pc5MRADkf4ozzUY2tPFatuAHbEX1LUbWU_PcD5HWCJeqoSX_RFlVpzU1JTIL0eClSDylphB9ehlzg-H4V4eoQg4ODAS238VR10MB_XnUmWTSkQKOGe0tgIXq48MQRKmpJmHLwcoKB6Rj-4Gg3_AfHWXt1C0vDteTsJBTGj3iE22PC1payqq5H_8p7IqD7aFB0dry7TY5BU2LiWm52j6vRhmoetUMjGNWNGF4o_HQzyBpe9b3B7Jr5E0iGnvdVabzgFqfrmgrqpLu39La-L5tnV9FCooFW1dgd0ASlvsJHA-8PvRasuBSPR8UfgSY5bdahyvOF0KMlohrwNkgPr4W2-0u4GyaLQ-Yg3GoTnaMaHsVaF2jJYyPUOq_E5HoWMAs-ceqezJl-xBzK8CerLzF8VZ4coxNIOcECgTWHcDhd1-Z9Tk3Z_5ZUdvGMxBv7-hFBiD1yidseCnkV6naqPx17FxRmavtutF1o57x6IONzcpNb0KOg4aI0vtqkyqKbYU3h0XxfQkftFYzQGHerWLyxu8IYZEOiHDaW0S0Al-R8i-JJ123bEaZ3zzshJ2NGr3pwzndBpMoACwZzRZOHuQ2CHNtS0Zl7Isqu6t8GXRjet58jrEK1GuKAB_aKbZjNT3V77pi3LMnit48b7yk138xM04SxuV_ZMKj314J22nD8eqZzamFq6ayYjZyWgTxWbfsyabiQzZw8_YoNPFKvCAPtyulppxzXi0dd79iwm14-S8onFoeVRvJOFPipeAiQZAdf5PQXw56bboan9z73JZ-2LY9georDOynEupynaApkypC9w2fzNF5pHcSHrbhlejzmbGb5ihnvnZ1IMYxf0tsW252l9CprVEJ_YyWWgoGBX7fwon-2FiVPUtrIXdpZC3r054ERyIlYwP8z_AwPJQ86uqxeohH59SfZgCAhYcllaZu3sWn8pg2PYbftqCi-nSTwlPvmonXV4wq-8GAXT0JM5XVDbNiK_Op4CGgItTRoX1Sxg8IaY4vg4Xz6G_O9oUStUHT_sxbFdt345j0OOX0jgK1a2UtnMW_vXb2Lj1s6Ivh7jLly-QQ2ODdsVmWvA4-eIXSUu3_k-eKI2WZNrgSr_uTJGVBV64nNHe4UTEfGrLJuIDHVr98sNATgGLq_jH2WDK4u3Ex_bhNlIUxwwggIMos-g1DpSjKWQb8GsWC3X5R-JA0beHePCQdawMqM_owyROHsPKtU7cruAOdI-7JhswtWOAnnlpJ_xDNMxg4tc_cDL4-EeNuTVaZzRfcOzqJHz8sdn-5q4tJcMkxH_ATKhlMHEYOJBUCdN8fYR84sKiZPCmZ-E5lPUovWcoi1KkOQ9MT8JCKCTzhEDqLIlTYhs4yPraSi69WlpkpG77PwToQem3cf2h8T1s-nUnomIueu6a7-HpmkYD0fHzA042oBSTJY4yDVspagg7bimojmPUdXOdjo1xgzon3VAgjEjLP_zKWFcOUR6XKPfHqjcuiX6g5Mp8dzzo6J-FisfgOfFdFLJXOdOc39QeNB18MmhRY_5W7OlrPEDrNg8uaKvVWzeHclQo-CL3nUKVk3mPI0CCjLnBnfdxWP0B2R7oWtWubdsaVUx11xa_bmfmTlailpy4GgbGGL_cvrpJWM-G8GOdpPHlRI6L-QRv23aI_yWKs0I9VQkiuqdEEMWN-yVsM9yleUBKMYerod2Oi992wGC71-WYpRRxBACroDYmzrEqetGPxstDlftIOm_uTZyifjjider6unMeI-ha6VXt8QAewUHdng1uwUV4NuxrOdArW4spsRpFYKUZSXKzOecqTf5GzARyLjMhDvA-FsXFigBw1jhF6ExVCxs0WmLx15sVDdEc1qX-EM6Sx-hMXqMm3En6jTsPo8vO11QeW7DbcW_sdYrnt4jrifbDn2FF3EJ8xbXSgYV-P-v-9ACUdrDrNOrMw3qOuykv8cSwdoyyExiVMl2_QOiXSiMqp1-QtzLqX6EWOYyObMI9FfFkQ8Q2J410ZHzBpzDoPGnHYx8VwzndW-pFFR6BZCB6x90NBdeU-UReSXZBAQT6n38Akvmpp58pP6N8-cpjEb9kX58s75bXC1e4yqcjb8eLbCcXKukqFyiigLwv6_W21IItlXcfCJjNjmqyqCRVjJMBIaALpW7PXVC4Fg-AYomAySgkKxW6ar5A5vZhuvWJjVfgT1ucy8873jORr0JKqQ549QSnLxbklPzdoDvxrdHqz0ZAkCvC7dytrsaGWggSq-muzbtE8YkLxlU-w6inqqmobXs_mkn7KKQ-R1-BHMZ6hEls_Bv7uJZKXvIu3547z0JUN69R72Xr2_6h8Do6iSA37ltO2axRrsVDRuOK5Sip_ka_RkV4wZm6qHaG7J2Fxfmi4djN2A6Ii4SAaEkWIcyDCEckX7oPWjgB0J7aB7vbJMu09Oe0szSOGI8PNxde6T0MeWsM8KbRWK2K-J_XT13k6VtUk-o5GWnhXze0hAIyJQ9QLp8WQbtHdaTUIWCILDtLE0vDGf9GCFpAJdOpwHV0DHdQ3EJrQZOnpGxBWZDhsjkWuAlX8nu80abhBFJSHO6FdoijVYOwEFBKCMjEZMkJ8x3WRBV7aFa3N2_K-XbVttfMQNRnum_rK_eb2spZ4bzHfiDakGnxrOie0J-9wmOJu8LReC8NiIgAFDirRX67rgVs9dR9DSLucABPwWpqfTSkNfta5KHRVCtBTkDRwx_0zsgO6D9AQO34e51N_3CL5AG1J2K4pbKdqukx7AT1N_YzGKLKtTMioCRBNXNnNpzsGf04u7OdHgs3zHOTrMDpjof0Y6ROhbkUWtzAYDlN4s-8TFyVZac9gD9AVgkwOCTBMqPG2HTMkHSjT54xG5N7iOnJO_M62th7H_ojZUgxQWgBCJIIMnml5kpmse6-BJaCmiIQ5E-y9U3dCGSCdGwW9Q6t15D78N09zhcNFGXJiR0tSyzsbXfjdAvA7oXPTEnfCbXd2_COaJVvqR5HWdxUGApdY1cYGWzQaC0BLcxyhulsPspZ1j9xYA5z2EJJkMR4cBBnIpCx2VkuSoy9rQZA1nzG3eXTsNF4tG-VtbzMXyX4e6EIZUFrLGO4uCkHSpnCCQWb-sZ6OSdN25n1zYCuRIsYjxWvRoNJ2qpjL1eLuCNyNJDGt7YNjwxio7rgs-PXmxT1XJMhhprGxZnty0tIDxflTQAtRgjwBC1bHHV1ctVeMLvT6AdZ6Ws8Cj1MZHqoGaBZRcxKJmquzEibNOK1cwh2ZnZ-UI28n5hxHtC0G5QA-EbEtIpExsnHR3Iu2o2idu8EnqDg6s-VdSKwo5kgbVjiKCS00INVhQoCazdg8aRtD2NECZqqkp-sbgPtiBf29BPffDYPx2c7sby_ICbnX3iO4vL2guBWQ6VKObXpz4sQbywLZVjb_S8KWkSoJGGe9R5Xael6DNI6k9roIU1AbP5mMLM9rhLdPlYpQAofGAhiGgPl-3-RyDdxiSDFjJtp30Fh_DqD6gfvt0Y4zDcaNJHnf1lehc0HAvivsMnZ1hIi_bGGg0m_c611q25alSRQLL33wJg1Ixmatxfv8Mzk7KZam8FCh4yAu7JDySKCLZy96ltxiQuRS25GSQkw2oYiMEgFP1lYygiQ4u6AAQRYAJD-9b1UIjp5qk217AaPrk1UT4LWBMfnQGjXafCY_FAC3tZ_fXW_8YwwZVXilvfcJSc7MlMMQCQhDqPrWUXmsJZcEUd3LtbegvetCbzWe6B0gQbh1NSCqcKyDBvuvgFx6SN4aX5LN5vQVUfnrWP3i7FlZNa3TEl6sKsds_5wKIF_lpsdyF9GGe42Hkrl_NfPpJPm_jjjWpsKCmdU-ZlF40BOJMrqeEFDLm7LD93lDF8lhRQGwBEN0DKXtTJLTEpPuy27tHNTSVkNcUwQqpdFIfLiCP_sUYttISS_sGU3nPUyedoKu9QeBCmzswAoSrbEpRq6KHG9uRsAStDXLZVXk3XX9x1Hi7F-I8US7Nwqn9P0CL-rGKjD8d9SaxTIKqNnMcBJZ3jfs2i9ET1vob6Kpioj5kaFPm19rLnO97gUkAr2W1ya3kdsTvzpKEiYxN0Y7SRVNvbDJe--FGt2RflVEa_yrGmmsiOFQlM_5q5NqCeLLzEu9DKbJUOM-jDkyW9vt7wk5orKhYpz1xXw5egFYKWPrqE7ohoP461j7oLc0of0goD5ohDuWFJQJzMSrG-GGGFLZ4KYcO-q5Z2dLmm1erCLGESUwWjQaxcyr2hslKT1VPO45XvFqvo7EF-AGtk35Dm0bOx7zdqbZz_QdqiB6sLMh8FRBuTgeAjLqEFlPIj64HD_wr5LYqGMGCdDL5IDMFaUnhezbpmfIZBNTDI513uzGAvBfp5q5sXRhrxxwxs6eYD9D1rFHJFB4b7UtSqBZdd6TyPLHB6Ms4QZW4oM0ZFXwIYT0V-n1fDa9WucM1XXTRxv0CXjsOwObgqTumCaftjhGaQ7-OcSouG5DgARLLnP-uu0T8I8IeV1YdR7phi7vZe1tbSAUIx1rXGrYsZA9W-KtglvnJRgWUw3w4VnagC_Z030kAe1jEzXa25L_mgZ5LrdS8XxSXa78o5-3aeuexUMzp2MZ9HK0uew-92_ls1VSDjNVH7IbAo_dAvabSHbIMrCnE4e-Rdi7Vu7gAzVBrp4qjsemMl47FLEJMNaGknCIkh39NRMcz9EZluZMu8yJw7dNIemVmNQ4_iu4LhOLiM_6xIDR-P1nAaK7pC0EWyzoApcrNiU2T3TpBFzdjhrKmg1c2ffgTrzK8wxmi3-eF_HMOS2FbMdywjjhtp339cRu92_SgFrG_cgsAP33-A7yuHfx_7A2Xcce36xedKnkWdtBFUEDeFBqiEcBFSio_KJXRVGce2BhKfMkJLbNfz1ZWgHkSMihPab82vqqk6APYk62QuEKrSwv2dJDQprQ9FD2LpHzDONSKzncBACv83GFskmh38a37-gfJZV77WWyaUoGBkplfmhUoilhHd6Q61zB0ITL5Ls_x8VJceizz-bA9rKg0jcljqQg-2l35HonBHJji4JRYO_I68c-KQXZjS10QZwbYSHe8BZtfMwtXPTN69UwRHZ1viQKIjPWmcjUv-IpmZ9uydkS57syw6eAc1NOViRIKH4tMuYGQVRCWxSJFPeV6sLbnOTcCtVjYdulBiLp4pNGmS4fHZNXddgblT5e6UspN8cTaCxp4Mrrplv4pbU8KQ0Ew5CiWV4n1E8nc_HOmD0LgvOk_ezGOW39VaAbKmUpf-SqKaPajjOwsKofjJdC78cgjbfmLjrC1VG9fBKmV6YpaMroy2Ex5R4yJ0Y9owaGAIfrvBjkkj9C1AXcQdZEjbVh9yVKm-TjcflcMy7h9P1N_3_3NDvd4Xbg52QspDGUtexwxiLGEfz4Y8h1aF0bon5bl3byAjcDNsLNd7yTZj5bXKQfGgO0FreOLSKzhKlIi_p_wll-YylWbRbAtUXXrSDTTUyOHMm7IK7c1QwF4Tpihh6J0rXqqq9ojAkKnI9caT8UVTPx3dlr1jc3nny9BjsnPELeS3RYTeBF4ATYI-yUxNZrwiK71w04DZUcfJtdm02LWyMmfm02WbCrUnG_08_KVhkE0jlbsJQ7HCgqXlraIwl8av-72El-oOiGa04PeVP1MQtvPDT_EnUn1iwla_5pDtiOTOU7ldl4NPGh16UCQluae25n6PDdG9X9vS-9pDUt-dLDdDm48JO7I5i3GETLn4Q6zNeaRy2nO2Djz__wDvvPw_oAMyL7bZ4Vr-68C48ER35Tsb69TIVw986knN8aoA4Ez0Yt2039T2Z9h3iuw35WgqE2163XtzsWw8uxRdyQKxhYAhg1TnNojnaAZSZWOnB4NCDlpHTdQkiblCp8Ch5CyFggATChZTh9wxsbPPuveihz1XomRTyLz-G234KIKLGdb100SLM7-ze-vuB9Fi7zwRo5sjAm7A5roR9hWj4c6wfXUum5QQCW3kVrQUQdZJsIVAwLp4wIsipmx9-CcOEDdWmG3aGWkKqKRfe-FSF_y4qXQreTcyr3s-uTYPvY8MBURhOE3yC-U44kK8SpBFuRFC0e981l1hGTsLpYO32szfoQ-BasU7FOZ07FVhfpz5H4yNW1OKU_Fb63zmz43Mki9aq2XtupMH_AhKpZFzmh-SNyseXLK2ee3VgyzKH4_M2HH_t0559qYVIczBx-2g=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 13523
+          }
+        ],
+        "cachedContentTokenCount": 13523,
+        "candidatesTokenCount": 739,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 739
+          }
+        ],
+        "promptTokenCount": 16952,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 16952
+          }
+        ],
+        "thoughtsTokenCount": 1980,
+        "totalTokenCount": 19671,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.86636810922171,
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "3be92860-d0d3-45e8-a7a4-20ef9cd56573",
+      "timestamp": 1788694449.4240844
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-9134646e-f565-4dfe-bb7e-1344f64d651e",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "error",
+                "is_valid": false,
+                "error_message": "400 POST https://bigquery.googleapis.com/bigquery/v2/projects/bio-med-480108/jobs?prettyPrint=false: Syntax error: Expected \"(\" but got keyword GROUP at [9:49]\n\nLocation: None\nJob ID: 674b4672-6716-49af-ae98-12e0938df24a\n",
+                "note": "Ensure tables belong to bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "f3954316-64a3-46f7-b65e-fe3f882b3267",
+      "timestamp": 1788694463.4542987
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-3d6d4ebf-1a0f-4d8f-b01b-9080b588c475",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) + 1 AS duration_days\n    FROM\n        `observation_period`\n),\nAllStats AS (\n    SELECT\n        MIN(duration_days) AS min_duration,\n        MAX(duration_days) AS max_duration,\n        AVG(duration_days) AS avg_duration,\n        STDDEV(duration_days) AS stddev_duration,\n        APPROX_QUANTILES(duration_days, 100) AS approx_percentiles_array\n    FROM\n        ObservationDurations\n)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(min_duration AS BIGNUMERIC) AS value FROM AllStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(max_duration AS BIGNUMERIC) AS value FROM AllStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(avg_duration AS BIGNUMERIC) AS value FROM AllStats\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(stddev_duration AS BIGNUMERIC) AS value FROM AllStats\n\nUNION ALL\n\n-- Percentiles de las duraciones (usando APPROX_QUANTILES, ya que PERCENTILE_CONT ha causado errores de sintaxis en la validación)\nSELECT\n    'Percentile' AS result_type,\n    '25th Percentile (Approx)' AS metric,\n    (SELECT CAST(approx_percentiles_array[OFFSET(25)] AS BIGNUMERIC) FROM AllStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '50th Percentile (Median, Approx)' AS metric,\n    (SELECT CAST(approx_percentiles_array[OFFSET(50)] AS BIGNUMERIC) FROM AllStats) AS value\nUNION ALL\nSELECT\n    'Percentile' AS result_type,\n    '75th Percentile (Approx)' AS metric,\n    (SELECT CAST(approx_percentiles_array[OFFSET(75)] AS BIGNUMERIC) FROM AllStats) AS value\nUNION ALL\nSELECT\n    '90th Percentile (Approx)' AS metric,\n    (SELECT CAST(approx_percentiles_array[OFFSET(90)] AS BIGNUMERIC) FROM AllStats) AS value\nUNION ALL\nSELECT\n    '95th Percentile (Approx)' AS metric,\n    (SELECT CAST(approx_percentiles_array[OFFSET(95)] AS BIGNUMERIC) FROM AllStats) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "Cs1iAY89a1-bxFITaX6ThLrRX_-nmeWNTm7AgsQ6aDzbcmscQ2xNsoAzYGFxqkwW0FbYjVQsfwRvE_7ax1QLSFH2vAHrIUt9hy1_Yik6vIb5L5h0xm0KBBFQVt4509C_3diGany4LELqWLhA1iZWT18_P4Ph-10cG6OxsSyKm33Z2x7-mnBQr54hzRL8LiPOB_FWCAGJEQyIaWloIaVnn0lNIsXvvHv-cyPo4gn0Wuv5jiS9p2E3dyjLhBFK1K7BLVTtGzeJVojUEVeN__LQPkZFI8Kq5e7Wn-nKsDRwK2tzdVFrOunkNxR1Q-32-ujNQNBCUO2ZB9vTFVIhIdbvzotwXd7HjSYiOpUGyeDD2L1mOxTQDz6Q_aI2PbEOwt4LIciGeoR4Q7NkA7BAFFFH_gjziwoVuJwFL6zRytK9aRlXW34qv9yXV6ktLzlp489CAVOVECjtZZT08G8SCV_YeugALwmhWCtLVVksbSooo_goTOuKvTTHlAIOB3nfdZWkzrfOxt2ZoZGDWenjgI5JUrGSGoNty3ohnKYxKVUbLJswLSbsE2HF7HtgnUm07lulbqK9pONfHkEVgVYC5JAGIHB1lNE1MYZAbgBGZC-i5RnmW_CnN0jdZm0FB7BJzTj9ugQ3xA3s3fNOBkGcylgMygZotd2oTJJpXxy3UoO1Cglo5s1OJ3Tf2c1_rfWe4Xw6aPTUKr8FYKAXUJmuzBQ3iR8MRBRCSUFkzqgai2nCnMIkwriD3eciKJueIgi4nb0uaLezO4Fcp7Qxt4uLRElF_Vn-MT5yRsihkt5vU8Z6ILYE1CnFA3Q1PeHKBYKRIoPlFBgcwUURpymVIQtiFdzSb7pd0X0_i6TrQvE3LAsuejQpNY9AIBGE9PnbzQsHQDOtPrDpCDtnsj5r5PdLxixVMeFiPCTt4NHxf6kjFtwLr8eIeFvc-ukQ3dzbu5xPYaY8zs9DidvG2g2K9giL1c383EwuPR1d8k2DH63KvHfEoMAwK8bnqyQXt-9O1qzP1tktpe_cJUClkd0dQ0p-9h377e_TDUfsW-GKt4BWfybSv06kltz4Hjm-xG-nPtECFBGB9LNoDQcnK5f9Tfd1esgx9C80IbRcVDqpSEnhDmKN0JfCdYsoyRznH9ofha7-cgUUytUMEJBzaSZDzt078PFuXWjOn5PyMe9D51E0lhEjTCVUQA5ZzaBzFh3NMZ4rUJ6QF9sCgqJA8r6L_iiy9DKJyGdXU68B5lwSaog72m76Lf9IRbs9fMeFg2BGgH3E-FRXM87SOzmxbbPcBOcncE6wQQu27g0F7ylt7z8OVUNXQPvNb4E432-1YutZXytLzphB0hbzsEhVBwEzSwpTHpwHhA47GMP3c63MhEImo-PL8UUV5krFQa9fnX6t87YPP8LPY30O1Hdrx8K8jYPWKxx1orrguGRXhTO12iQUdnMUMC64xhtApIQ3LzojoS1MkvryDYK4byXZ-X5kFnq5jN8NbvuH8c7SVbB8twvFeW-jTbAOoOBNxSzsZTf8UpXVQAaVtsXC7Q9yOT872GT-5cfhPObXCxLNpqUKBa7HecFgW1lUaWZmuDo-e100wBAG0dr_Ub8y7uyWPK9bBnzccYtSV_jwgAvng6ezTQLxG9iF9yL3W_9zzMh6VQPpJJfB7BeTgC8lifTdYj9aX3vCOLtNnTgSAQnZN6jUC4YLJd1c3Yn7i8CkF6pdYqaxCBBeoJb-ZJyX4x7tsAY3Anb6QmWRLZZOME_InybMztTgrxU2rdJ8dNQchraXHaHLTUPbmbHnYWf6vZMCsPeViUTp3BPiZc3YQofR034dz_RHv5xcn8--n3nY0J1k7idKrLd1csmGfLUvkM3ipnBJx5qbteLaxGgc5Q6BFXSvZVNunqjcXq8YGt2Ctl-gqIx80gPI58nlphcsaiCiB5clkAkPVPr0tJGQH5F_TdfNtjWDKCGUyqqvQTEF82RF96hvjZuN4MLPwg8h3gZHLenWL-De5QYq_Cs7XbLiri3owRf61KBC9lw4YsEbGsyeuc9ESAsI2EMtSl33-wEm2PIxtl6_KQTMzkLLAnFcLmOslq0aWv8RTLBE22uhlDAIcYMnolQUn8M6frBbDly3WE9k59jp1PdCoDYUjFCnxFhG0iap4CqFE-WzNOhoDVZq_dMSR42UBXRLs8oBB2pfh-bgoooUp7eQI3M48mAb6UhG4jowdZJoTNTfoXT4PGRP6q9c4ULOqfZHYDxknQs2gsGlBl6A7hrTQhvf7vneSSTxg8OAUIxaXjg8IIzTPpD8vrXDSYoTWTIoDWnHnUtskySvZVZl2p4WtrwMPLjCDUY1oWC35cTR1LJU7esgFUwpjqS6y1JUaTHdkI_qpwrt5dVt3GcuvL2nrvDXSl8S9jaBvFTEZ_Kz-zj3AMh0t2b7YwWFH_YCDkO95TT8WTrbgyJ9RLoy39dyPlcsM1lVqbtZncgxdHwaOIoaPLCXW7hJhV8yFNge40vfIWiOPE0Mh1U4YnSymSuQFGROjnzFDiARiMafYZxOxvC6Njxua3Wj4zqzVNlcs9bQyj3gIC47j_lbkgOvSRu5itbuDLOW27vJBYljqdKEbgPNOQdTgUVMTMk7y8_3JaV_3wJeRS_Pl7RhblmuR8aZzwyQ8e45TZ3gNn2F-q5qQxXvjxgv0mKnSpOaNhDfQfKm2fWc3bh2RokHCkbKmJt13c4C5iSEOsrtBhCShADz4e4wFhEbre36KX8aKy1A-iNRYApoOZAOdq9xYe79ShIekzX9BanuceM9ltcb1EtVPGmOO_bUogHVqr3nBmemxXl0NlEy6T_N1MgB4c53EYn2qo4fsCwlHr19cScGFWIt-u-vxd6fmmahXSYbc4pE63_FwGwirlt7IuEe4RFQldwaGimcE_STVGht_pIlYaHvzXRxZYYXG7JSzioiqNCPb_mUByQ1c2u7ivG51uwrJ55sSFHeYbro__qVlzjiJFDgM_cTetGkyf1OCjYnYsKgQSyEvRZJBkxywKrVM83trbWCmeXumv_ClM0bwBJjJ1qUEPJM5g_mKLHCP4dNVgd6xPrAy3fy40JGypyFx8AKpsuXF_BKWIqaX7NzPq4ohp6b8QcbfvWdRVc_8z3HTT2YguBsEp-5PT_MD4Fv7d9oRSP2pzZkqYoagXv56JruS_dOMe10Wr7sMxYuKkK7fKdojNK_E_OiRc2NV6FGe0vcsyJ3t6iFbI6OA23t_BqD9Lxg7GJ6mYz8hPkabNMJzfXpYLHg5pB5On1PsxTKcTc_Fy6TFuBHT4lTEvbFskut71OMWznX8Z6jzTpu_GQQ-PBBJeZi0YDBH5ow-1-EAVEgaa6J7drgHpCwkjBS_-A1uLPFCbeW2cpvyldlJqzth2iC1YwJ-dVeUwVQzNQUjIGAowvzu29U3c_vyxM6R2wEKA9F59l7BilPo0-f1PRWHeK5sna1UZHtvxusX9vp-GpIDh2hnP9WydXXPGmBcVEphJxDMWEXovms2bBgsuUKAutYr6Pk3pmjqsBBlANpy4HF8xbPmcaH9K6fjX3hY2Owlby2qgE_y6kmudbadOUzJMkN7gn2mJGEXJVr_HIJ4B_28HJuj82_rgQK0Tv9Rje4rpz4WvqL2brq6QuXRIfMmni98Qmf9xn9sw6ccY2Ja2ar6K_UWlL1_UVW9JvwNfIj2x4sGEzEb4yK0HtjF9etIqrLsTkQ8dj0dkUnJy1tHXw_-itiVg21TS0rVLECRH9L268huo0y8BxoCQpofRx1Lw08V-sWT9b7ADKju5WwavYHFZx_8ypZK7H1d_loVcsqxRe4yg3UnnK_KRPRqsRR8vipUWvee6dTf5M9lflixu4zx3SVS_XRYr3yFVmGNjwKH3IoLl6pvaS2TfmiDcR2mnXbKuDciUtZNvmpkMhi7L_dkIdi23-pXh_Ji49RKVAso927-2PAcKtvHR7EIVX9Nka2UK1Ws310ivCnpChhI1IPN_mY416-tjJDAditivu7iG0hgdr-pYZ0TopHjS_aS9v_Tc5IxuN-S8gVxf4_xq6DpKd9zAXCIEfBMws0aSI0e19_YxNBDl-Va9WbbzRLPy1kwmLZSb_cCh9FbviYZeyPeuTP3dpt3KzIQDwi4cg5Oo1JDqOmFncsZyCKrqkyYMf5x2jbG6gRDqujoRQvpUhrANLr2yHw3kP0oS9Uo_W_kAcLwel8UZkqHKIxFQrqlf6JXkqew7_pIYBvYJDtWfjM1-Zfu1TO822sk57s7Z5I64otJlV2TyY1pCD_IWtddalMSzsPXj0n6VA_E705KilZB0JDBi4ku9O0Vp69KCS07Jn2U-v-6gqF-eDZtXJnbHbgwkA2aRxxoNTQuc5iXXE6PdsslV6YSv3z3wE5fi4GcoKNGmm5AmTPR9-0GFcAQmbNsVJSHkGA1d8TWfA4f0fNCJp4gnDLVjhsatQrlcT02BW0kOgZoxy6SiDl66zeBllIYPDtGj-mtsjfYUQnmHvHyRPL86i_i1WMUmsF18QZjjgr5LWqyuU4iAqH0C6kDuLsxwPhuxaOtCY7N2zEJQzEUezoQJRHOZH90FQ1gqTWB83Q6zm7YGPrxhwrFdR5IP1bZxrP9M1bswMAi6rWnTA18IBonn4RSvMGAInh1xJ23Jb3sDrVvQWuO2nwcy_nVMjlObRW6U26H-CZr_s8rFOYeNMNWbWP-1-FfIeUTH_YHtUa86oIqMqjvWylnjXe5BStLcgcuy83LwfUUgoNfRqsG9-26DA4nyHGGOsG60XbSOyHxa8xfAqq9tg-qr4FXbQ0JQ44BrpimMvMxx1fL61w7gP8ChefxgEHt8pQvFIbNJIfRjZUX46Sh9HxrFzzRKvcXcH09Eh0fyzi7W1xJ45unr5DPbd8jL8ouQdRUfIgb0p37Cj1BaE-mkJsnbHEuKvlD6Ew2KUpNv8OPZj-4LZfmfcTqO9CmBSYqL9sgzbAHl5TyMCUZrWPj-1ZOjDIgdroHI4Fh4DCX-Af_SbV-ZrSkEmo4b45aOhNZ1Ru_f_tLy2jzmeUZEtxKwcmHKMRsxnCeye12SMjdgxRtfjrF9LWXAzx187G8pIDDlakEscoLYxP6j8ZKxqWPakIpY0tOydVpFwKoowasm8xJMV2hWd9OtK-v82ZxzDc7jXo8n1wqYOB_B3r1Vi1kfl22XuaihmDtrrNyi9zprwDwCXhSSWzWth1bYdpS5PIbxU7W4WVYC0-kyCAP7l29skhlD-vvHfp-WTIifpU_-tDjd_iwEPOldDnj0T9-wivypsWcvykwt8HIFChyR3siz_GdfCtFtw4mfvkoH9HYEJpA0xhzS9B23XCAUFfw1Y8C5O-FKjcqZZs4_JbG1pPhPRIDgOplP4lMfI1sD-PRh15GddXmIs1Xd1X_t_u08buJi0RkjUwPIonYVo9s-Baq6ND7sg63-j0Er_lxgNjxBqjXrLudUes0DTY2-ikOvLex8-ZVmwSDYF2gBpoUCozMuBvitJn5CZumHE-AcwK5AZ7ohQYv2aVpu2Mub9G1E6sgdKpJ7HU6fnzFRM5SocZQJUf_oGRl411trwtnuV04B961102hQ1b2cDQq9oP2hQCNfDzvW4CO-clqFwGt4V06KWqY9DwfGoQ8rSq-2989pSu12IuauYP36fvL7P0yKS9JkXOTAH42mzVsvTC-4QYFPZPEm_zVGajlT_CP66Hwq5CabroLXQRUxWPuwMlMEbocnND6oIkeAGJZCLpQp3HBObwCIxOxujw3JK-F4vMR1g1X6jbnFL-YwMA-G2PSDxY6yTfnxXk_XKK4MYFnxQlDfAz9UnqYQDMWURIf-XHyXIh4rLJCo947s0xVsZEHuFjx-hremPGGLMTYt1APYdLqhrg1sL9f94cBXlvbt4Di--1Ftva0LnwBBdWEZyPn5HSyoF4BilJRzZZRniW7pB6Vns7xEfCvwGPv5KKJugIwXPUQ8imP_bz0oeIZKaguxmPdxcHq2rU41n4wNxdqZA-745tzsskUTY81towgum6Hlj6zowNY_CtnvXdL_W5jT6uLKxGre5cCcyUcd29ZNvDNQVVniArz-D0bHl6SpCNKQPTMSL-f0VWrTWe9RWalbnmEH8hHSWQAMs7yYatWn2g4qFPsE6THaiYYW9MzXR-WdaZ3COPvY4jDlGoe3FtCJiKt2bGDy-FJeU1ORvuTH8bdF_w-R6KvruYDqwum5FJUTvgY5ydmRDn0Xv1RN0LHTi_CxHb3mxuF0PryHvknGcgT2y9qHAdJPdJQlFh3IRh5uR8QhI4QyVCO8vchlg5f6Ulue-UaNb4NG95WJupfRKvt3N8KKPFCX3SrlIAR1E8BJHQO23WwwW_Zz-eI58ab51k-1bkbay7YelwJ3VeNOy95g2SNUVb_2Y7VdwwDrz7-aceyzC9pPdkOsTGZFcjpLMtkpMCM5vabL0BiPUERdzCGU6kIY7-rGbmg5b7cc56VaBw-hJzSgLkc1MR49HVvM_wCi9bryxQ18j8MKWoD7G93Jjww2r3mN4hvS0TXwFw9jM2H8oY2SW6op109I-zn1O_C2jM3p8mg7g_c-aR-y4uhJfccRd5Wml0O1fNT8u_JlmnxhTIY4QgUnYW-VKn7uZCXPgmEfONQ8ko5RVD2Oke-nEiT0QZag87yZ6p6zlBR3zKQy1GTYpl2wxfsQ4n4ClqdOB7pkQB74JY3ntZ4CrDHgMPowlwW7Yad5ftoYYca6Ls5uaPRtHCLeAqOkSpcpK6Jc1vf5IvQ-yCbKMLBzo5jFYNIDxhx1WQufijnmARt9yxfXXHWy8lmgmgGs8z0NXE8_H_4StXBH5QrOlkTYIFQnMpeGXYGzhcWSwaVRcOqXBpA8RyjYIfwChrl3sA2j_0b2TWx6gQa2OrbpCBmlI413Ogxem9sDIctRS5NBkRye9IAVo80SAben21Hnhb3p9ZtM1K3_k91-g1A1WYgKS8H4Jz4IwO-1t1hM_RX_UMwDXVU5G2y1VgIVqRz1LYarJCxiBOw5zw1PNgxbY-uJpZlgt9FppAN0ELjP5m5YEq0HB3j3pZ9JnxqCKEYTUysYuCSvtUW681Vjqa0qIbUtar_ynJIUDhLu6dPp0cxfi64R_iN-Nbl-JyPxcogAmDniMI7aqK_WqvvLKF8ChA0Jgj8zd5QzKJSgeyxid7ykimVy9GmZ3JuQ-oGlJC3dgmkRp8Vh9GooSiRKYe15rJEgPS1eu4xYAIvV2m7ESMgYXsqaI01WCB9q8UidTCHrcN1zQ7dBb3sLL8TcauNWQZPgRH8msJUY93VdiCsrItJjznd0t45tu9MbpSpJ71m2hBhld6nLtu1adb9xnFN7wvhdLwHST1ptTLCbQvKkkrB5c1BHl5X4DDBXMsuYVQb42y2Mjiiu2pJTXDJXlh3ESI7ef1ZRUkfX4ciS7TBgTPlYId0e2u2d2Qsb1Ii3g7o7xgqnGtW19fenudgaiOk463dQxBFm7S-CaZIm70SDMceBiNkIf3wTh_qmOG2jREbsnXLKnT893xJ79_lJ_sM5q_awEHlKm5bIOYtzaC8ZrmqsoVZUmn0gWuqFp4_NPDIA8Rzopbwu9vIlQU39vFWP-HAVUiZIU5yBUqyv7AmHWQkodz2m9R2YHtbT0iH6yuwsbO0E91viy3UEcwC68Hp2fCCJegXHtJjc9pDWnJGHP7hSqPZMl-gt7SltzUBAkF8YlKxpuHt76RlcHUfdr1PR_RinRvPacaQXQ6hymiv_EpaVrAdLrNPgjIQP1WPjImS_otNii0UuJZdEiHTu80Rd-f39TIbReoyFiIOL9DMbLxIAwwsrb9huGLG5CRvJks4BcvoFJHir-Xq9tHAIhucn5ujUhSasS2UOIXgcHiaNnN1I3hpy15HCO1OX2uDnTTwYyJh-WFqyjdrJ2z6ffOfsspqVCp0hRrj0tXPMc_EhlMbxtvj4_bmyF60Mn6riAfiepddKfgGXShnhr-Idyf_FqUs0Ajw-Fgt7qulWyVRmHyuLVbzSWs7tHaQyMgPzi4irgUQBg9qzJX7lwoShUXiQrYKaiEYY3qvqQlgzQcaBWFsFyshd0Mw7BJyxLAR6M8OsZWZueE8NEP9N7JlyqW262wFNtBJL0t03nMpaZW9xqICbhPIW_lBbvSU9BVGk3OVUzQ0ypekN28m2r0W39qLUqwLR7A8KLFRoDiBMAcvjmSeZ6pQ5Dz1ORjD3HK6Bp6xp03KeL-iHhRd2MzyICDVtwphml09smGOSUuDjAaI1bZcnpc-N34WN1q_RzFD3IpVZ4m991Ko244wympBW85DA3BeIvrQS0-hrENspFXeqTo0HkPbcED4xaAB7HH0ylBIvs2lzocv_2bEaAjHZmhJuP7nnpG8hRMvO-Mn3D_MrkxMP5pJ-gdaCgGbGfY0bBUPaVvpaesitxwZk5pNGTYRoBP2plPnUiGRdxo285cFT1NtVtHlnhX1JyQHcbHkMxO76kl1JJoabaNSw_inEQlHLGccpJFz9Fr_qpbhquTzQUfiZIu5Rb3JKCGulTtXrVG_2AFY6yNsLmmAFGcK57W1SW37SvMu33HHAeaIjGKalPazm0ub_k6hWFJsCcEZDt750h7p257q6OElaqJ9-hsLXWKUJ5DiXDJYvLS0yv0amLO6ZcXxkNy5lGWREargRNEfNKQPkhx3Fmi575zMinHRQS2BNT7ADghjK3gZIFk0AjXBm4so_UOqmh1Fva_zHner-pjoJzRsciPO7vSoeowUjXPkhYStgTcvrrim3a78bIKClvKeE5IuVX3GYemlg_bsBvxc69qPyBkp2m79YxArE1n4IUmfhmeIuEXAPGB7DDoUTlZx2Nf0MIIR7VyicBqVuCEGzCHnOBYOaK0rAp2-xXHMwFumFCxqXzI7cnPQq9y0iovkfAySd05SrKyCoHnCctiwmr2P0Rk2bGR2PIVOf0duB-oBpdHF4yuqLYpWX0eTy3bzVGV1SUeoVUw9gYaMphySc4KO7suji6M5bXdNZc4FlWEZushO3sIW59GiqLm-_tXriXjmVnliL46yyvpAFold1V1YfsAVTD24YOJkn-P_LG8Gb_NzfrtCgD84TXXyRjSLcX96FZDnMinMzrseFCvBAk7_ud9_B5_T2Qchsufw2Q5vox3l4C9--5a8IJqkKhqv9_gvzwFRDRickgT5whBRV15yvupv07SSLhP3CgUCByLDUojsbFuI8UbNHrvB477uO53EW6T-j2AAKaAOqMGb1fubIQtJNipim1iPkYcoBrwPQF_SlU9y0pKwEFfx9rdcEbmUO2s8vl_mcRQqRzm8AMrHtU82hjaYcwUmaInm1HvverWuMVuMQtSZgbodEWPnSb8PcW5nRQVvEm4fFunAHwGPKg0m-YjvsUfs8U23qF8X8eZ8nGBeUCjG8jcL7MxDX5_7lJvObLwgCOn2DhA2UI2ShZ7VFN1e-T_uOQw5ZYZ_L8pdtNjokJ8KRVdvBCMKWuz7WzP7zDlmBHp1kt2lObJ8F1kqBDFqaYig9qdkCIUDqyiIMaNcItpyg0q6qqRP54TsTQvISiPzIRS8aTaJwlrAC-EHHkTrxowddbSMy4FAokgpMKg5EcZt5tAocEi3JE9uONsPTZkAnevcibqAinH7eq6IdgwJh_NXMOoNj0i5BQaHOs-UGzvprzcEA7WADm_PLmACU5Dtt4ywKF8yf_pX0ybekuhVD7hsAKcLmivF1ejkmKhSNiJhXQhjHQS8rtIEYhZEsH1qGbpKXvbbbgkBUEbmjnEB2oNgiMhiFZCuHE0XBWPkLqnJzod8iYBcRP-LTNVAeFmwD85jcxSvkjhkte2Xx4K2cqfznbg_lq2FibC5ha16x42Hp3tSc0Y9YZtDVL5csw89Vx9sMg5h9LHTL1rWK4UE8NOwoimA01ANMjx672-OFwtfQ73Mu15i2V9t5JrS-_bVpLnK5NtkdD15akqpSQ0e5zaK6semnIsvG9-uOHkQ75DIvOu-tzY6mcprSJChoOnLL2QiQ_VrKEfTYS7fY23TGs_DkDEr7BJgUxX2nSIzWziiEEgLH_4ufKjBTMDYOzp2LVfrucpq_VwrP4chle6RDDLrRJmTq5EOCfjgC2_-_PQbKn0cMsO_gCcuXFBZ_QbraaNQswUlKna5jWhX6jD4WRZ53oMr6xFu4LGJhRXEgyX5CE-AAU-E_GHm0WqT5LBUECT7MZzOrLhVj5lRIUPLRP6DoTWX7DEMARnNpIVsdTKLvE4Ig1d8q68DhiZ64ShU7jfNkhoyTr7-UeWLS2Rldh5_b8sQbo5dckNp3dr6J-hja_rQO58jdYYMG9-ORLFKjAUdVQlnQNtMnlgnvtuuwsDLN474RDHAhD-R8-ix9DvCXH2M6pOpc-szba-dMwn7xCz8KvjcCzqk2YmIbhR5kWVDCHISCugF16er96R5mpPbYO8aRD_PkijJ4qS9eNoMIMckjhYGmIKyvWqndm_bB9N_MkY_aOehQ7q3pFA9NKdNfPNVkroHMaXEES5HtB4xnVlOhg4qlZy3vaOZ7VobEuHetKxBakvWkV10VjjoGYvMEBtGvjxtmeRxqHx02AUZ6tza1A5wJgwR35KMKzq59z11ZRFW1uaBl1WwwQgHNMhT0VOzAYZ9jhTIBLiC1cgGxr8BQZgqZcmC3JlW9NPgmrsp3MiovmPAi6YgeaXIfmH2-EdyE6aimhvKN92rb06NiCh-Pbu--TS9-zQz_eMK9B33XGkQnqJhFc6kCrTSBvMiltARPVncsvXq-L31J3I4LSBb-JtlHtdaBcapz2sEdRUsDwu0MnIPQdusaj772Mbz_bfbCKlMOfWsusg9A2Pk01lilmIzoEqX6xDnXaPt17ft4Dtep2nuA_eYxz1Beh0RjR0g7Y-enHh-ouwlNrukPGx193QHADaKvwxfEGkc3M4objo9j1a7f0fvI2336PzPwF5f_MtZUd81bR8NqwDLuUgSQAmq9x5qsWh5giAQ0VudBrgsf9rtSFSeQHJOehQfokgT20e-U1Cu8Ooumuhg7hiiXDgs_F2rvEZvTKUUNqU3FGSMBx6g0oIYkCVvODuXysoht19F8A2PwwqohcxuAGNoZHOM6ewnt1zjFMplEDxcQjpD6_ZRU2PFqaQJolxJTcv0YS2e_K6jKzMzGBwDCU5mzU890UYQxN9JYSHIJcv2wt2fc401B4-1mg0dvEEgivh7FXgsKWLUbjpxxnxHoemq_liXMuQRDZjMokz00cAOu3Tb_vvPi064uRqX3fdit2zTYsjm-c0hk6INO8RY5Cebt3TWdUo_wqbzR2O14iGJ-bOTL9SGa8-_X_6gmUuokIN4menacnr3uSRVHYPERZuXklQTKXjnl3DlbgcQnHRBZg0KvPtgs_jcxQG14gFmDIVSeYiDxsOmJxymOsgOx0g_hlEzDHJDMc9-ZOFPnu49rF73hJttgqaOJcst6tWTJX8VwLMdxEzCig6mnbEE5tXKMIrEyrPrD7eoxkEKP6gsGkhB3TcALXuxcJEjkZj_vhTlaK3A0zRq5Zmu4iZkhzl95xBLaCWBqGReIhBuhYvMbjqUaV1wFjnpqQ60dbf9WwJ9ano9pSk3rYyK4fS1aY3mVyHkyJZGL5aD41ssBM-wqwhkxcv8vyw0axIVssTAWvlvJMcx0YMC1iI8fuTBBh8e_JYA-xWriCoPMQr3Rzde94PMzakA-NndU_dxGzgjiKo3z1-A3Lya8CpHKrBQKNrsLQVuLpiaAZYLXPe5FzCYtnAIu_T68QroC-cTAGoW_CK5tVQm47eNIKI_wGwQhJSIvyFi7fW6OGxXI47oJ626JudZvUsI_N64aFjsk5ZlD74p8OUACwqykqSjVdvEciiCdySc-OGoQDyaWyJZ8a7lS3K3vpIxhwfkyzrjH8EgsdRCvL026m6VyhfRH_Ic0qGq5FppbHv4_1vw_FPNI8gw-Y7bnRtN81mansQR-FE4yc6q1fquHQsMK9yQq-T1KZePOcIfXcIJwBswr2vhCzUqIdFnZb0PvQ8hj6aeIpzOZZztYKz_waConM-Ua2fp87J1-A5b4Ob5rAc5dy4WOaRBXSUkj8KhfeuwxQjmNJ7bDP2uOb-BbUHJ907Pwu0y8dzjFlWKvh7BUynCDhMes9BasdaGBduE2L-ZqADE57yE9iEgP9LdUWSxEseYJpsf1ltsKXlrijXyQxRi0QI1sAwmU3kk_jdVAjVypuRlRh7u2Pl1TasGQx633JQf7F1qZnKR8oAdVSxS7RZVxfANy68fsIT4WZaAHSHZ7ys7QMVSHaJst5C2QMUPfeZbek4mKH7P1ODkxo2cOh4N7wI0tdppER8hrtIYXaNxfUv4uFJRMUmD9-tbgJ_nz5FaEwcG_OqCaTBJrVu4_dTN9UgYaTidC6sZWo-qDBKkdaP4zw_ZqoLre8Rce_sGluaTBTdaDl39HUNdQnJSsirzFAVGBAZ6168uQrzLgxsRF9vGp0hHKIp45VuyU7Sex5EanR-THc19HjkA25-5RU7lL5BFJb39jja16yelXRxnv-Bq-RziC0ZPBJDHljxcvd_dZDZC3KUCbZyOL4RMfKwUBQDr8spQRkA_MM4Wt3OMPbBxPuEBi1JjGoYbR6iJumSPCOnyTx1X0imy4TebTmVCJndK3D5wUpBnkbYEcsZRfqSlfDuLdXN2CjIX1enMTGN2yisAvkOm2UAf1KD5_w1anE2e3pB-xOnFbig0R7ter8MlGznRa7UpbZPKIsI9xlv7-dClpDQmXjdBD5gZafeqUlpkLoYFMU82Go5DMqxlW31zBTlTE2cTHuZCAejZsJYcixLmnCaq_2WMsCejeU4kkhiGlFZybcd2KKxu4QK0nXsXwuX2TuKzAIlJvzEV5AbtNCP5xMAAZGCdbOv5ES4jhVA_5XXjF4GcSkey0CD2SJsEbO4Gd2nuBvLu319wgIifVVCQkwclKtLzPvOeCg6_3UQnTTAFD25NMSSJBVdGOQvNw7q6uueFcRiUa71zrHnwioTXEfZyqQD5nLCo4FZuzFJsniS3oGAIgpC4tctxZpSmpKJyVroqE1oVAJJRRQ2TqUEVh7X2AR6mCXFuVJydXDjKcRlprrpdbpiBsuVBkYGfovk3hMzKdt7veDwNPW7_OaK-tmO9-JxXJy3xIE_ajaZCF7usooO53Fc24m0SJI3vKJ3NdF_i_SFix2TwoqZjA7xg__Ew7i3eZBfaIYKIdpmYK5a4xtkFSSADw6dZC3T0-9GY1_u0yEFAblwElf5LtM1Bl8Gf-OXrV1grt_ctSDyKkOgZ6j6ZBU9Tvuh-4XmtU3rhPTRmW4QG8wu5RvHYrSMJvGUm43iqzyqp2-2Zs-GWM1-kKExmlJQoavD0fHZ1tQfJy_pdYI7PJArLte5EMSILecUQx412Lhe5l8p1WPKCjpe6fYF9GZOr23NNBlunkPtzTQ8Lv_ZHZc8l6Vk_4N8jUBckMRXU8S1MkAw0j69kcM4fRAmEOdz4aYpcqpxFF6eDM8k0tWqPTsaMZu209gUJv2E1uwHY5YTeZVCiqGrf4B-ErOQhnoHeZlbg1-gMzOGucG4lKmUh4fY5ywpbpk6SYPLs1q17fbr9s2Y56XbgbXuqEuNxH2GzEL8VT4JBrLw2I41WCxNxVckUu8lAswVP6PrnZGhPgTRu1CKLcvNiqZqrEym_7_b_JiR6fsb44tyRIXjk57kdzz1LWoBn-QvggErgp-6mHixaMT1KQKQelNOT0aoLgek-zbwlLpksYqiTJQtS9MAtbF-JN1ACfPG4To1yS1kcGVQ5j34kKZr1hPCeRPKwM0aR4c_lGc41ddJ8Dvci-x_GW-rcWWR1F2aECovN01H_S9l-O7h0zsLZ64aKZAlRC99Fg_BmfYXTd0Yd5K86Sm6zTkzysoRKFwXrrUZPH8-Cv0TeKygYOABHd_YQdt_Fxptv77szssW_dx5DknpHUamDmE6K1q2ft_p2_9D29cTX9A9EoI_m1gonbCAfpb66wjQbdCzgUM4kcraaRsLerdAlhVq1Umwc6Lb2m89yGTLosNCI1Bt6IK3rCMp3jZ5aWM4bFoarRwkf8zoGGs9ILKd0kin-Ji5PFp-53CfMJDCddP1vrP99yIrIdPMnG72nF67emWLqzJTQTrXEzn5nZXDz5YuBvdlVK3KI6OGn7HStwEcD4tu7BsKkmjG9L9HEzjnTcDh7DRh_tCCA47NsjFGPYwyR5iUYCgqXnmsKfv20-ijMfLqkL-1U51ZJxjx7JZ3pSVspKgauDnWj98rVJwdmtj_7dLeKoPCXCDrV_Ebm3j6EW6NeH4pVdhzPn2EqbkslLQ759w2j9Jpcy7bs3SAXbrU3b_ESLTHE3IviX9YVUKhdJrJbeS9qndCB4cC9DMk7l6b246NicPzrJF8UzzRf_5ovfSJuiQ8gHlWTlYkJyZ5zQTepO2QYW3o5xgtMwIp2w5aVI7ocNiGvekeqSHPd5eBvWij7HlBo_Cx9UGKFvAR1F6jQ-Q5KAmz_YBHixuFNZJm90XbaoIjyMYn3wt7zSf2xw4_X2qJZk-2LneCDhQr71a5n8Et6SzLntbKz5fBMsBrAWuz8rqyV53IveKnHQ7PbbwjHKQUn8EMRKtlxku7pHx5afuH_iky1sYKGtoRrxQPbA4kXmUQLIV-BRhBA2UuQUg3ZH2wHBl-_Wyc4yFP7Ao5tDbK7ureAoJdb_cbIZAlpURvL9T_QdcgVjC9Dc3FU3Nbj-XG8FVFhph7XyiFtYcLY6pLe7nZNSND9stUBevuGmninNbOosMxNSOVL4TSvwJLp6k_fuhIUgOHbr_ESvlURPjMaZT6kHYeR6FLdHyBgY9mmsY22gmZHHvoCbUkk7JG-kQlFWvL5Ygv1ZGXhZ-iW6CvjcfYYD9_5VN54305r9EbKd-T79hlJ9OP_8ld96zX1m-GHTzJbNiFsFIc0l0Ku_ROv0AvkoW3sjgJbkidaiI4wCHcGColLtYcYNactzDpr7uo0OzTklWpsITESsF_GRIUnavq6rI8mZYBJLXP4vFunTQP9jq0twNe1mGqWpAAfyxAIU4pnZu1ejDbPWZHcxFOqFsybTdrX_4g0k6w57KkG3p8PrW5gT5hTbv0h0xIhAWv5knEvpo-L3-a0bels_lta1uB3MAfrvsH6iND6CcW91KbnoMi1nRlRnWKbcEqArAbRaTUihIadoP7hdUslHsUOniEdKf0d89LLSa0WCTqi6axcgyxG0_eYAaIzDSvZ3v5FBFFmrDy4Rk16E0bNZiQk8b3CGjjB5L1ogPFd8cdjMjQQFMP6USY9GNVMYvf3196P9DPx-Mre1cHE0jRXW5vJiiEkCG8WhEt6JzxwNfyPpHKn7QwJFv03IE7svkeCA_MnZ9V_GlIsVByx0-j19vh5eoipwD-L6F2aOkwYdAbXL3OKibqAmBc7QAxcZdJvKzCGQqN8FjkJ9efiAW9JdpIOPPC2dK_O94mtUpIEKmjH6lvsfddTHnGpDWdyoB8KY1085H3x1CIXF7aV0rL5S4UMn-rm8H8dTbIAw99mYf1z0lmkhVfGzOC_r1RbBDkNLKyDTDHJwYlG50jDoU3dT4iOpdb-X5xUUHEcSgySJOf4utBA1tU9V5PHBQPSuitifErjkbXAp3DWD66756agsaNCZoFRMfBZd74Ip7hN0_STO2ZKUSNvP5WOALnnabAsABcXLGT6QXn1Mx_3HMmC99yU8-QFkSD8CIo8q8gw9p2XsRFp3z9Gqbabb-swZdpMye78k9Fzx7xE6Y4WSDxVUsLT2QUY7ajBo5zJXp6Lm3tFGH32n865kRNJkNBD9ikhRKVdRI8_WY_3ybsiIa0BWWcMr3Z-NN2QW-TT91xTOkg8J6vciD4w5tTe-CSOz6uiOW7pwRs315D0Od-DJWQ5_MA7tGlNGb_v7IODMCmfP6scbVWtrznJXjVW3His16PcxjlAXd4vx27um8aJnJwJAHHZs5f02SIJ_GzG6x2l4P1VTtGDzyOJjIz7IQ634Txnh_cZuuIjW2-zawDt9vtVwUdbdh1Cwb3IlHwlMpxTau0fPezUsBAmkul0d87YMsKOdFHHeCrE9qKqnm9FXMcviibVfY1ACX7Ssd777FGNlzZon04ytxjUr58JMlUq1EJSbQPgRHsENWET-glot_qud5npl7K1xCVFhEWYfOUrVggkYzPtNx8Egnng2eU7CuhzRI1ZMP4ZVRLOVA6NtO6jyoqf8GgtsZYj11pwazI1qTDihy5HGsTc6TOLzi-A_hEkUdn9tL-5qw_EzEqsG2Y6KWFLmy_hlNayZY1HpxMeNMaI3n2_DMVIiPP8l7NkF5B27BPNVWjy_KQfHzZ6OPsMh7dUtDx6IIeEvnBZhTEENc1cymcTl1pZWxrJfu7cmQ8vYpGvULn0FcqUpMQi__IkYrjBkj1ns8OVVFe0Mmjx7nBWfEJyNPqTIoxIficChmkJATCfieru5KWax8LL8oz9UCtJMmorA1kTaRr_j46j87q5Rmf79McE0LyucB1WEVet6-c6n0xGEfPGI3TVEJ27USZAbWqb8hV3X6XzX0fV2shf6lsgisHRYCjSn-q34uPk7fq_CXHrCrhHLyEyNPptfAF2wmE1kmDLGKrsGI5A7p90TNsyddDFUXtFeYcqsXuFFSktY7kyG2cU57m5yNMR0_I9CRgJPW7QxzzEe5XihdH8EJ_KOswWxkSW_Uw1nCasZ8pSetvP4HkjUrOt4emMbLq9acsR9X_ZkGvfJfXF5yEqAK7QCrkWkrM9C1ZsFs6aS7m1eobeQrkBvqUxe17O49UV_N67jBa3JapufIwJGlNBTIgIYON"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 16485
+          }
+        ],
+        "cachedContentTokenCount": 16485,
+        "candidatesTokenCount": 714,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 714
+          }
+        ],
+        "promptTokenCount": 19807,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 19807
+          }
+        ],
+        "thoughtsTokenCount": 3458,
+        "totalTokenCount": 23979,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.34459842286524,
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "a974bade-dc00-4f0e-ae15-9d24aed5d90d",
+      "timestamp": 1788694463.457636
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-3d6d4ebf-1a0f-4d8f-b01b-9080b588c475",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "error",
+                "is_valid": false,
+                "error_message": "400 POST https://bigquery.googleapis.com/bigquery/v2/projects/bio-med-480108/jobs?prettyPrint=false: Queries in UNION ALL have mismatched column count; query 1 has 3 columns, query 9 has 2 columns at [57:1]\n\nLocation: None\nJob ID: f3ce4f6c-1fdc-476c-bd5b-6bb24c0d69ea\n",
+                "note": "Ensure tables belong to bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "f44e4059-8f56-40a4-bdf5-b942315c6693",
+      "timestamp": 1788694485.0252037
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-e60c2370-90ef-4582-9ead-ee0d80eb57fd",
+              "args": {
+                "sql_query": "\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) + 1 AS duration_days\n    FROM\n        `observation_period`\n),\n-- CTEs individuales para cada percentil aproximado\nP25_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(25)] AS val FROM ObservationDurations),\nP50_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(50)] AS val FROM ObservationDurations),\nP75_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(75)] AS val FROM ObservationDurations),\nP90_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(90)] AS val FROM ObservationDurations),\nP95_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(95)] AS val FROM ObservationDurations)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(MIN(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(MAX(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(AVG(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(STDDEV(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\n\nUNION ALL\n\n-- Percentiles de las duraciones\nSELECT 'Percentile' AS result_type, '25th Percentile (Approx)' AS metric, CAST((SELECT val FROM P25_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '50th Percentile (Median, Approx)' AS metric, CAST((SELECT val FROM P50_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '75th Percentile (Approx)' AS metric, CAST((SELECT val FROM P75_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '90th Percentile (Approx)' AS metric, CAST((SELECT val FROM P90_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '95th Percentile (Approx)' AS metric, CAST((SELECT val FROM P95_CTE) AS BIGNUMERIC) AS value\n\nORDER BY\n    result_type, metric;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CvIzAY89a1-6m09kae6egRvCWVSqOrCUERRVJveYKEhzhn3aJp7-dtWs1sa55GbSYmudQo0qBuP-pMTICm8Y6Js6NgOKEFrJBFFlHuzugc6BSpae_6w94xZi3N5FHeUXe5EUGKbSperO4rguUs5HtxR4iJb06in8tYTt_-cj1gmyhUmm8f6J7RqP-9aJ71HQPdLIUe8tg_gAu_rrH3WdMebaGtfdKpotJWvNY8U9cV5CnHmp5MiMic9yR2GIar2HZ0IB1tx_EJ5MyIjIoigaweWAydnxE8HLMopkKFO2D_JrOiSErD-2I4xeaVDgbzWHSJ2zHKeRTr6-kMVgaQtU45Z8khlKxZLOsve4RP8_8kJMLp6eQCVPkCiaIDs3iW5oQz6t4QGNWjz6U9QyIL91nXsoNGyBrmD38oOP43G8RVE_8t3CtgD658DNhu6SPpYzKMF2yLV8O_117D9cWXO_29hfPJXTS_UYgdrFAE3w3GBi2BpJ5s2eOtOTmklvoah2yj2QWQepacW3wdYkdwUsGUnZ8UmJT0_vTN1ZyIgGeb7mUJdXceEqDA9dyUKQ_u-TqVCmZ__vojUMquItdx124ZKKTc-9dmWyOSulPMRqixfwwNGAWjIARc26UvEzhqmtI-bpRhTUoB1ZHHVlqg8zlOSkrVFJ6NnClP3JqSNAaZG9UeWV6y7JDXeVC9Umh_nuRsXFoyRhyThdr55zKEmiCfeQ07pMGXOuD-sD6jGBFwaCaFPer10xZhn7-1pShHhzMuxxz4Er8t2VGG0waPZ7sofhbuGlROY-EMZEcuTXTEmadmKrrf_EJLAjagXfySEC3h3v__BK2F65cxIty3EyajKdAGF7u-Cewcpivxm-yXzFTkAlG4vEvFBKgpUsksJS97FIH3kZlA3wKlIFkN7Gu-e2SKZIsRRXediTHnwh4JnyDRuyhkcyz3l_e7-qrkayBIXanCf-_4Nkljdbw_a41xlwaqAH5p2WsZZSPwUtzH5CPVBZuXPrHD7E6G6j3_gWxDx_jnRi8ixb-umkvj41KKld-jq1vFVx7BukDE0-AKQJcHAcB-KXD7D1slw-4xLqUTEMlqHbGJ8QnHA6WnYFrcXb9YwmrGQBeFVwX6_sVfuhKhmvz9pqANBnec2UPtjcNXjwrYANs2uNCbgsLNT04vTJKJ22zotqJVgRBGnKBwhq5Lm_tgJp6SnBOTlHzw_1octimTzIDLJEmCHZ1qCT29J-9X8wsagfM4XusxTARLYV8Quk9A2wu7k-fKCWMLRU5QjbxxtjEVoiq9pJTHTYyWRuuNbUyeh4-XgwJg4IV6tw6s6trPWuH368GVSwHcS3nrCVZwDsxEV0hYNUqjPyZi_bi07x6EcFYRIdyYP4X2liPvm990QVG7FgwtdcZmvamWemi2YE1VfsEs2UyCfBX5MIG2R7yMIaCdjOu65HsZN__GImFnhkCt_az5URwPJYgYc_Iwl_KTcP9e1x4vYhrxl_DCK5nqag2dvHFabbwkjKiMhZpNw5NTxnEcB6EUXo5MuOS4G_K7KZ-sJ2vN_nveQmpVGyOn6achgG8sJh6GTOU2LpAzPCLXjrTdoGH7ciioV_kYmOyvtb6TWUH9IUKQT0eY28JofUui4vuvhrFgbIhDH_EjqmZfB852vkj864kl4aGP1YsKOTyLqsKwTzIFwZKNOdYvG5CVmsz_8k21exmObMYXHeyEx1snaEH82ueTdjc5gcxtqpxnnK8ijVYINda8gRJVl-ifQp6K0yRsye0Vuj2rFn5LhnPUac4kZCBkllgXHUHDF0_FDlvoTm9z10vSyI5tepy3gs9QgGKaUytH3HVNEXAej8xrYHfzQ-ptdBQxrVQ_MTvBXU7DLCothSUmKQD1GOMtomWpNdAiVMEySlEg-M6ERJ8Ao6dnk82wpIlcvi1DHdSAUNrnhkd2K1KiCnxUYwtrmXT0f_AkNcf48yb-bSHZENph7U5Vt_ZwEyJBzYpNeABBhWOC649TvX6HKYA9fI0LybkGLP1PJu9OWMTqev8UzIz8wrAwtbiNnmhKP28mSjbqq9nugWYx4vO5uauWOUzsGX5OrnQ09wOx3J3kXiw_vHsVCYix6GyA-mg56YiqnE4XOvGeARCuO1wLNJ5m80NSDNOcsqjTaqUoz6q4EFpkOvrw-7HvmCcLUpD9s1YwuVn2EnrRCuDUosq74Jk95n0KFkLsg4z0nUwqK4YogK4Ch-YW7f4PAE6q8F2DB_nIXTX3EWfATk691pzvuyKBkr73sjBCdTwPaP_MaOwAMjh4mok65S0Zp1nqiSNw6m2iOzf5rFoOtUrujcMzFqQI7eJv-qS4B0hRsybUvyutWg31VHKp-wNFP6sXycYSlRxs2LQTMSVHofkzkZPyH85V1PMyPG55cKG3GvF6YcVXNiomQcwjbC584IhdbwNNXfNvfN2zu3DvZ3oKAApALFtxq8vmx1tSkLVMrpcponbS6dQJsPtOlG2s_Mg_3dAXwL-rPOFMYGJUBZNwBDAMdbhoNbQdVc23_K85IQZKmvsNsW5NioQlr_FpEGCj-V5ZrHzZWygrqW69WhFo6RQSkV3ZPoB2UyLnDcKMptp2Wx-p1J_vLHsitXGI1HwIGHXTFeVoUiunM5BUg6V4q3kM9ttRhqrhP--KPXRnV53quyEGx1xooeYt4VvHjeQ6oc9hCFQHLTnkPYWwVRKB6sbSiuEX0USHj5FdTvc2LZPEBBaLgQbpM7k6CSLaV1ABFIpnTWMCNMkDq-XyIBDf-cKnesw634mdseCgEqRmeSy08pZajQHzpD9WF5z48ivKc5BnHML0JbkuDP7trMW-koN4aSB0nUEEsnUQvZbGH3WVv9UCwVDnfow0KSzBxVM9Jpjpfhly2LjK2NhvIx1MgWPmafUGa3x-ZQhLgiDq8-C0HZJEUb278K89urYklU9xDZ6Rku3OdDLGr0XMcbp-NR6tU1kmVwtiznT8-ueOelUPCNNlZVEULAOZQmVkH8BTW3JyS9nSf-nFcbSamMRDNp7dE-_KVrrMF0xujxiehAnc8ZUL9ZhVRSrvVVpDWub0_aETYrVh7LETH36AfjM-5zniX-S7IWxzjBqSFatJn_HWORIKQlREOF9Ap7rj8868cEY3GlNqt0-2j8W7RJlGNVqilcMgmF1wzjwz5_dsacLANlHYlBN-xRmlgKTOdjf66tv-gi45jcZLDhzvOHgHy9PA5tvWWJzM2or0qMjoo6LwNktvvrQE3S8nLsCTNB0pAU_p2XW2niIy8nGRz0bUNgzXkewNQEFUBHS1BlqNWzxeiFdd_GYa05t3AaK0ZhuFqcjH6hospR5omql1hV-XnACJtOrjH9zLSsl5lwlrBPBMMuT_ph4XVNidlThtziIegDgtBDKA6JhD-KDGK4FHg-3N42pg985F2kSSLfXRwkYdpCs0zkoRxNEUelrRukB3i_JIuXhuBRghTHrvMKPUfgcYMGnr7oLXmrDaCd1nkXYmNFIkgaMdB1d-B9Yb354YnnaGxdmM_8y0FTlg-sZJ2mcfPKjqbJrtHIWEvbqYoN5CI20Y3vFPED32PpzXn1BQr5tl4X5c5CBp2vT7FVZs7riopadGiL0431bejHxQVodcXAo81Z0Fo2kpXuJ8lYnbyuFDNm8ycOsL7u8BCADvLTPYRMt15EWPRBzlnyoobs7ISqTRoOgphxLhmBwFbXhX4F7ZVp1tnRoM6u0ryQMmOMQ93k2R-wM4ozulbiu4VB6ttVEzqXq095Z-R82rb9Y_Hyg70TlkAfnSAvNH4grrDVczVbVFEdtMGIYUlt_Pvp2b-v2-VNC_Al2n_pKPOlL3DbJHiUUhe7PAxCojEB-RKOa7Onw55chIMqhowRkhJnwUng-aqvxkjDbOWwHdpxXHR4aqv1NqN7t7O1DMZcsAzjGZAY2F4uHlypWjpWTbeNECgm2mETOIHMTO1qhsPSXofUgE2JMamAgfJw_gamAFWVT0j5qff8hbFgv5VnNnseXHNbOGvR3PiRghw2n1vTcS_NKB5XcRUh80GP1C_G6A5JWubHLCeWowsA2JR2f5p1aAZxRaXe8nL_Y1fkWpjFEXmjRjaF8X8s1t07MBWZwod-jJ8UQ2KHQ7WZ1Mb07chen7a83n1mS88IdXDimWgJSTA6hHzCXfwroXpMtB1wioMi9D34Wt3SSGRffOKGDGVmRGUwJkMhJl0iuoCqKjMGPMKloNBiIqcaSwPV_0F6Peki6Dnoz_ZcaZs1rTBV1j1rqdnUBJHUxG3M_aVGONCU7Sf8sMxaEa5DCRxLeMlrjoqvAsHK7c_JNdPDP5Hx7Ff3zDst7_bR9gTOagnj1IIHg-KQ8vpsItzzyTIdO1oBUlm1XdbX2260B-t67KHtKt8a5cAPhMtrk8ua3pYGyYzUZNrgcP55BiX6YfI5QI2AplM9YtBU25FWzPzw-wiAfhBiwHvyegf8cQlTgBf78l0yVnSc9nQgAfT-goGmM84uVgiCjVqzSmQ2ecoI6tw0cq4rpzv4Ijyv1w4vFlrUQXhhooa3LOq7myCqFUyCqho24nk_ZiHBHAMPI_0ASDripT7AnmIoxi2a3TMBS8oa9XjnK4i4ui21l5bBiB9Vp3aL5DYksEPvnx2dF49a5gLoCcSecE1TXb7ynSKv-jQls8rZK5el9SutJLGCaxS6OK-KNUZNk45oA4eiDjahSdmXZ8y66kIilWP80AF2qc6PeWMy9BPtoM4ucFMrlR_xFT2EJ5kmMXw0Paoz7bCNz-jA1qnRuV2667_kuL6C9lKZbqaxOJsTF7WqrV_VXbxIcmGh2p-kdm6fyZQaIvqdAGGeJH3T0BfLwqnFxYXbvA5rb8pjgO6O55T2BOY6c5dg6NRC0X-22fJCDmcRO969g93yHuT-MvFCneOVSG7hKRA1g9AqqkUYvnQEj2AeiY-YxvyPOfIOjUF9Q46s_0T8pD_lgC34l8MD3iij_8Y7CMx6ULEkAKWG2PgTnJ6Z50imS3lwWNaKmub_cWWWiFzchCaXEGkD3M2j8apseEgST03R_tAJjADNbQLaUnNRzamEX-sr6rX13gh2DOZERWf2fcYVapitN5YFPpdtuJ4AjoZcSrJKKLYkXzTPLNcmDOUE7f0jyqXBFTvQClcfbL5g3-yV8hCSe0U2Gl7OvX1xJs_t4MVjmfmWZuOQmuX_ByoEt-7sh-xSquBCrQEfcGME2hMtSDJ8XVULxku2s55aQWYJjPi_NGbQdQ3EVlOn9TIKjWR7o9r8tu7MqWEQd6UVS_LlX1aaV8yv8NNWnlxtRYy6XfCzCHeQBCggGFrYczieh16pMgw7h5bRP00ODHkm6Wa1CuFtVJdEP8wOcjaoQuUyECQzLK8LG8COokc0m036_6sYhXjUuogw21nnYsRb0kgO_TV3YAASJ5X5_CEFQtLxdIs-fgAqFWKsxJ4T2_zm9sMcGl9yRjKzttckk0KtasFydmJ3ug_tVOnkOAIQP-TWQ31XRnKNUcZM_xBqg7qxaL_3vQxmzG3We4foCvfqvauM4j3isLl4btAHElZi65qAP_hD5wK9d4UfWz-nKL_BEulMKfZ7hJJ-xpm2YDliU8PtFAg5H5GEEs1AxJmcq0hx2tZYCup6jrsZDTDJShpoe7LeTtXQq-Nuy3qCogTvv_X15_udzdB8CI5CFuyxaiC_YxG8B_7CfmDyMHvhqgxB9IdMmysWXbxu8zs3S7uIm9Hs156563eAl9phQSYBcBB6iyRi8AgHlxR2ksXAG8NactU8eRlf5OEcvUuwMGGybaXKTYSP2F0z9lsH9_EAcfAGHyNcVoN81ZSUeloRKKu0HVtaTptMSVZA4lUOSGPR8xYlD_UFnenHcZmGDWRB_aMqnC8H41qbVgTbynKxzP4XzcJMMTHXRYG5aLfb7UDWBAsjNWctgdirEPrge3HADpua4KTYc4V0tapY2uldW01twZFWx94EtX-4VcPW7LXw-mGCK6W1BEHCChSbZmilg1wwQzfh82hDjD5s8QpsrWMwIaIXegidC23qZ-O6_FgCBrWdsp4UFgAhaihSSz054Dd1PzGMSuE652hOPsVabKhlAOf6Cm5wvl0LrLACSIJ6UyB-OWk-stpAclkRpPxUsFa8G9NE-AGJ58e0P5enCxlXz2zbufVrucE608HqyUd8ZEOFOVgeWmlEl9hvCUOTkt5Kdm73MHGOonYnSG2T9XIVSXwvNWhhjP072FQklfjrcPa7sXxc6erPrkBA-oT8xUtQwwdjI_0hPcD_uAcRZarTWpnwmkIa1amNrziTnMz4zf-_2KJw_2abpk4ndcHBUfAFWB1UXLMMf17O7n36XaiYvq8Gs9lqJNZLca6s6A3A4SHaZGnNUAv2llaE1F1rexOMh4QdEXYuC8ZE_8v-aKOYt_uSss0NGxS9P0gCmnzNMezfUbcZ2n0OVjfNbRaJuvnljrmhZOOMYwVLmELX405VDj6UhodyAMpnsi84_5a61PsRNQSQOMI7hejGaG2ZK8qkQhY1xnaQ6xBCu8IsbN9-5G05pcny3oZP1jq6WFqzeYVwAH2KBqiMTZisvyBVHvfPt53FTuc60QgLF_6ZmcGR4C7H8bUbNkvrfnqnYHSAIMMocZ2jyhun-1oJP34pdIJk59MlzvaAHd2vs4-5l_kfTT4ave19YymnzHyWd9s7UFfDACzBgT0-bxqW48HC02qESZuvWvJZJTVrBIpMpFHe_N3yZXH8h4Xo87j7U-eUmYeY9BEbQoPBy9digdiKh913ctRdAbdBDhQeOUJeanNcKEbKBYd13OxUu28mvUOEy2uuML1wFzzPWhJmjxswmrBj7CwUowY3kh5F5u7Vz8fB9P6YUrvMfw5mcSDGemIwHmcg0McUyw5hFEZk0h0wheC9ehUwoU16tGzHZLCssZWfwELCJtfS0WhLYfvSsp3uZWJohfAq5yR_HL3EDRcl9lg9FIH9zck7Kd3yFPm7i5cVM3B7BWSkHKdKMf2GJjw3UxqSCH7Mn2AlDjRkzLoKwdKMch9YZ-w7gWkipLbqCUOoxnLuhsYexMUZAEwNbT7Pn8rjccP5YyyHxcAvOYf7Bmygxif9fJrzIb_fCp7vzOfk3mjZwM92KtdKfNhU9QfkTLfwgSmKy_3K2Ejkm-1NbNHYHIG2lJdW9GuWZreMp6hUHnoBOXGccwzCENhbQVo9JAJz-N9Tt2YFhuWIu9W3lczznRy4MhYk-8YsScUXBe9jsL4ENI-q6NIxfRZ963mKgcY2BDHbMR9VOmuWM3HW5mnxxJcFMlj0nBtFF2xl6Uf1l8qQ5cpPUjoF8SZyOy89NIAA4mB6wG0Q0rgfONzFT-5tJL594l99xx7mpu86CeSeD2Y80oza4tdhoX6FMgUE1YVcGafD_Ppq8BSDkDqX7hkSXDULaSvxWmmm5uaoj42lCLpVROCZ5oQ0DOmfHfyOWjo-H3qMpVDNrOO0PSewgE1ICioxayTkJr1UqsOzajsQwIDY9RMBoE-ynWZBw5NRDlRqyzunh6bwXQN9GBFGGfce4qtTFdsWePrx7rrfch9neT9WVZa9XR8t5Dnhw37XiA1AIA8RfAj32WOJgfC8LotwH04QCLGUtN-Ybl8Z8Y6oKUAZ_OaBEC1OM4zI8wdXlJiIy67kpNs7bQB3_RYzvEM_eOJf3QhGF-F7pmECKrYbRehxCBbDam2YclXZvo8E8kbNoEOZ1ObMpURh64Gc7VgrbRXUSAD9YbU8nCUvO0aoXn2XT4JtacVECl-VRzSxPtwOkomDOAspCte24HoB8p2rKK8slRzq4Aqw-PFeEHlCHCCHG14xJ2syoVHo-Dre97OY0UbpOiYOL8buXL5NIAf3DWCXYOeWD8Mv_dhzOl9NjNpjFEytggFXinilobNRCv78VXhjW0FTx8cCQUV5lc-WfKzapnzl_Ti9VoDElSsy30t0VRb7FrKu0K8vF1BGXI_EjDjZ0aFEDkRuYynN3Xg3mbBhcqop1tRrmduO_FUewXX-eIVjj9G_DccA84K0NaEAMLuPGGVDUpJv83SfqjduH03afIiOSCnxQDTLNsWI0JYNyIQ6kanBXAi5Q18SpBajETRBlQObZok4O8fyms9WY41s8ZYq6QMRzvdluSS6pY2RMP0NGORIHZc2F5tr1tU7gnpFlCONMuIESr7HS-b_VrE0DwWSZdOCOwdGEGsLr97XXOzTiHokUsFUrM1Frj5TdfzlvprvPkL24-kmnoWpsvuFNDaUvWoWWprFwfVgZaqUXLJqbcu4CWmz6LGSAXasZPYRm_Vh3v952ZZPnQnB_MXYrW-SCxmxmTlZkohKaceRevaymZxET4AxvXMEcAX-qYGRW9XxxcON-wtCgVelup-iA9ZexaVWZatMeOesqishwm79dGn6jazPgL7R7EfS577PdDRwyRtNi7SJAufgAzejaVsltFroxNT1XjZVA_zp-C2fKWHbZL1AIaYqO2_aGHBF1OdTvHBvmdq0MCeS1wIW83dkaX3RdJI-JrZ8nxIhb6pDk8iQrgnY9RT_Ygu4vQC4TR0tajSj9AbFu80Xv8kKxl_GR1sUeG_qc4RPy0mlT9EByrlbvmnLPZVZdoGLCjI93jZtQNhXvWoRyrCz6RO4GeqJjgPP-iYjdVE-99yvUxqcBoDlT6mewjp91f6NPsGyWPxCu7VKW8XYDXhBbP6m_7mKvwOtzRlMhNQ3uuQKol0RuAvpKnQ5HGFF9P1ltTOdZwK7Cggq5a3C27b8n1dOhPDiBKolcTsaeOaUMWL_THxjcsvwHJlVDWQsR8j1ThlMnzeaRwiapt_TsypW0cc1-J3dThwZirHxdtDfn75LiFRXr2pS"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4874
+          }
+        ],
+        "cachedContentTokenCount": 4874,
+        "candidatesTokenCount": 749,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 749
+          }
+        ],
+        "promptTokenCount": 24127,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 24127
+          }
+        ],
+        "thoughtsTokenCount": 1867,
+        "totalTokenCount": 26743,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.6723841016537675,
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "972e8767-6fc2-495c-9df2-a2359e96b8df",
+      "timestamp": 1788694485.0284388
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-e60c2370-90ef-4582-9ead-ee0d80eb57fd",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.observation_period"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "66dc5f6f-b681-40d8-bfa0-0a151113b680",
+      "timestamp": 1788694498.9285197
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Aquí tienes la consulta SQL para BigQuery OMOP CDM 5.4, optimizada según las observaciones.\n\nEsta consulta incluye las siguientes mejoras:\n*   **Cálculo de la duración**: Se ha modificado para que la duración de los períodos de observación incluya tanto el día de inicio como el de finalización (`DATE_DIFF(end, start, DAY) + 1`), alineándose con la lógica del estándar.\n*   **Precisión de los percentiles**: Se utiliza `APPROX_QUANTILES` para el cálculo de los percentiles. Aunque se mencionó la necesidad de percentiles exactos, la función `PERCENTILE_CONT` ha presentado errores de sintaxis persistentes en el validador de BigQuery en las estructuras complejas requeridas para esta consulta. Por lo tanto, se ha optado por `APPROX_QUANTILES`, que es funcional y está bien adaptada a BigQuery, indicando claramente en el nombre del percentil que son aproximados.\n*   **Estructura y Eficiencia**: Se han mantenido la tabla de distribución de frecuencias y las estadísticas descriptivas (mínimo, máximo, promedio, desviación estándar). La estructura general se ha optimizado mediante el uso de CTEs (Common Table Expressions) para asegurar la validez de la sintaxis en BigQuery y la eficiencia en el cálculo de los diferentes agregados.\n\n```sql\nWITH ObservationDurations AS (\n    SELECT\n        DATE_DIFF(observation_period_end_date, observation_period_start_date, DAY) + 1 AS duration_days\n    FROM\n        `observation_period`\n),\n-- CTEs individuales para cada percentil aproximado para asegurar la validez de la sintaxis en BigQuery\nP25_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(25)] AS val FROM ObservationDurations),\nP50_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(50)] AS val FROM ObservationDurations),\nP75_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(75)] AS val FROM ObservationDurations),\nP90_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(90)] AS val FROM ObservationDurations),\nP95_CTE AS (SELECT APPROX_QUANTILES(duration_days, 100)[OFFSET(95)] AS val FROM ObservationDurations)\n-- Distribución de las duraciones (tabla de frecuencias)\nSELECT\n    'Duration Distribution' AS result_type,\n    CAST(duration_days AS STRING) AS metric,\n    CAST(COUNT(*) AS BIGNUMERIC) AS value\nFROM\n    ObservationDurations\nGROUP BY\n    duration_days\n\nUNION ALL\n\n-- Estadísticas Descriptivas para las Duraciones\nSELECT 'Summary Statistics' AS result_type, 'Minimum Duration' AS metric, CAST(MIN(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Maximum Duration' AS metric, CAST(MAX(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Average Duration' AS metric, CAST(AVG(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\nUNION ALL\nSELECT 'Summary Statistics' AS result_type, 'Standard Deviation' AS metric, CAST(STDDEV(duration_days) AS BIGNUMERIC) AS value FROM ObservationDurations\n\nUNION ALL\n\n-- Percentiles de las duraciones\nSELECT 'Percentile' AS result_type, '25th Percentile (Approx)' AS metric, CAST((SELECT val FROM P25_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '50th Percentile (Median, Approx)' AS metric, CAST((SELECT val FROM P50_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '75th Percentile (Approx)' AS metric, CAST((SELECT val FROM P75_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '90th Percentile (Approx)' AS metric, CAST((SELECT val FROM P90_CTE) AS BIGNUMERIC) AS value\nUNION ALL\nSELECT 'Percentile' AS result_type, '95th Percentile (Approx)' AS metric, CAST((SELECT val FROM P95_CTE) AS BIGNUMERIC) AS value\n\nORDER BY\n    result_type, metric;\n```",
+            "thoughtSignature": "CtYDAY89a1_mECyuPoUrbw-Hf8BzsxGzYU05gQiAnBzkt1ufAdWHSB6HtpuRST6a2Vn9HFG03o_CaEC_yve0eLyNnLo5fOc0mK4zu1hVtyHlnWx6zFTJC3mMyWCK0-OEba4XGwXraaZrmRTtBnFSux421xpMDMW02sxM3if9yHr6ADM7fewGoQ52Q8K0VbWLn5cgB6vbb6Vy6OSavSZOdxfaz1rYA3e5Nbw3ZbpZ_DdoxrneaId3OjX_RiTMhyIyA4TMAPdw-gRHknVxh97gQuRmL-TCTG3E7zZI0Vgk7_xJNyGFmWFsGY1_z-8XsxY2Co8IcqfkLcSbDaVpVdQFV-C0yTj_zr7KscluxmlnfvfIL9yKdCQqdOjQT-1Ic6d_RCwHuW1z7NLbeArgEcagZ_LfUom4KZuv-Frz4gdCWo0_IMyBD6S0P1fpxMdl3T-TMPeg-_PhpWgT8eDASU08FAMgUAL6d5tqWK63gj-MZYYsG993kJZeam4wEWgs5VTv6xko4NRX73AYS3erZPUhl0tnYn5S4NL3o45PsvBwYr_Qu7ubKk69tEYlNdjVIX7lDuB714A6S2ljt15tF2UgEGxZ1E-yateEPhB6M5CWwbIiPDcZoNyXunA="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 23430
+          }
+        ],
+        "cachedContentTokenCount": 23430,
+        "candidatesTokenCount": 1043,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1043
+          }
+        ],
+        "promptTokenCount": 26811,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 26811
+          }
+        ],
+        "thoughtsTokenCount": 110,
+        "totalTokenCount": 27964,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.15615228815709642,
+      "invocationId": "e-c5eb5300-815c-46ff-af61-f25514f6e509",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "6e72c606-f754-496b-884f-598be5891df3",
+      "timestamp": 1788694498.9318504
+    }
+  ],
+  "lastUpdateTime": 1788694498.9318504
+}

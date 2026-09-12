@@ -1,0 +1,17 @@
+id_evaluacion: "querylibrary_DEX28"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: "drug_era"
+pregunta_lenguaje_natural: >-
+  Contar el número de dispensaciones de medicamentos clasificadas según su canal o tipo de dispensación (receta médica, farmacia ambulatoria u hospitalaria).
+sql_base_gold_standard: |
+  SELECT
+    drug_type_concept_id AS drug_type_concept_id,
+    count(*)             AS exposure_occurrence_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  WHERE
+    drug_concept_id IN (SELECT DISTINCT drug_concept_id FROM `bio-med-480108.OMOP_54_A.drug_era`)
+    AND drug_type_concept_id IN (38000175, 38000180, 43542356)
+  GROUP BY drug_type_concept_id
+  ;
+concept_ids_gold_standard: "38000175, 38000180, 43542356"

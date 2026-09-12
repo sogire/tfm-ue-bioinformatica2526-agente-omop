@@ -1,0 +1,51 @@
+id_evaluacion: "querylibrary_COC01"
+nivel_complejidad: "compleja"
+domain_main: "condition_era"
+domain_others: "observation_period, concept_ancestor, drug_era, concept"
+pregunta_lenguaje_natural: >-
+  Identificar la terapia de primera línea (primer tratamiento farmacológico administrado) tras el diagnóstico inicial de angioedema.
+sql_base_gold_standard: |
+  SELECT
+    ingredient_name,
+    ingredient_concept_id,
+    count(*) AS num_patients
+  FROM /*Drugs started by people up to 30 days after Angioedema diagnosis */ (
+    SELECT
+      condition.person_id,
+      condition_start_date,
+      drug_era_start_date,
+      ingredient_name,
+      ingredient_concept_id
+    FROM /* people with Angioedema with 180 clean period and 180 day follow-up */ (
+      SELECT
+        era.person_id,
+        condition_era_start_date AS condition_start_date
+      FROM `bio-med-480108.OMOP_54_A.condition_era` era
+      JOIN `bio-med-480108.OMOP_54_A.observation_period` obs
+        ON obs.person_id = era.person_id AND
+           era.condition_era_start_date >= DATEADD(DAY,180,obs.observation_period_start_date) AND
+           era.condition_era_start_date <= DATEADD(DAY, -180,obs.observation_period_end_date)
+      WHERE
+        era.condition_concept_id IN -- SNOMed codes for Angioedema  
+        ( SELECT descendant_concept_id
+          FROM `bio-med-480108.OMOP_54_A.concept_ancestor`
+          WHERE ancestor_concept_id=432791)
+    ) condition
+    JOIN `bio-med-480108.OMOP_54_A.drug_era` rx /* Drug_era has drugs at ingredient level */
+      ON rx.person_id = condition.person_id AND
+         rx.drug_era_start_date >= condition.condition_start_date AND
+         rx.drug_era_start_date <= DATEADD(day,30,condition.condition_start_date)
+    JOIN /* Ingredients for indication Angioedema */ (
+      SELECT
+        ingredient.concept_id AS ingredient_concept_id ,
+        ingredient.concept_name AS ingredient_name
+      FROM `bio-med-480108.OMOP_54_A.concept` ingredient
+      JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` ca ON ca.descendant_concept_id = ingredient.concept_id
+      WHERE
+        ca.ancestor_concept_id = 21003378 /* indication for angioedema */ AND
+        ingredient.concept_class_id ='Ingredient'
+    ) ingredients ON ingredients.ingredient_concept_id = rx.drug_concept_id
+  ) therapy
+  GROUP by ingredient_name, ingredient_concept_id
+  ORDER BY num_patients DESC;
+concept_ids_gold_standard: "432791, 21003378"

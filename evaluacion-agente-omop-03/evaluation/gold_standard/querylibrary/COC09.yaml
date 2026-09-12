@@ -1,0 +1,40 @@
+id_evaluacion: "querylibrary_COC09"
+nivel_complejidad: "compleja"
+domain_main: "condition_era"
+domain_others: "person, location, concept_relationship, concept"
+pregunta_lenguaje_natural: >-
+  Evaluar la distribución geográfica y variación regional en la incidencia o prevalencia de una enfermedad infecciosa (código fuente '088.81' - enfermedad de Lyme).
+sql_base_gold_standard: |
+  SELECT STATE,
+    count(*) AS total_enroled,
+    sum(lymed) AS lyme_cases,
+    ROUND((sum(lymed) / count(*)) * 100, 2) AS percentages
+  FROM (
+    SELECT person.person_id,
+      state,
+      ISNULL(lymed, 0) lymed
+    FROM `bio-med-480108.OMOP_54_A.person`
+    INNER JOIN `bio-med-480108.OMOP_54_A.location` ON person.location_id = location.location_id
+    LEFT JOIN (
+      SELECT DISTINCT person_id,
+        1 AS lymed
+      FROM `bio-med-480108.OMOP_54_A.condition_era`
+      INNER JOIN `bio-med-480108.OMOP_54_A.concept_relationship` cr ON concept_id_1 = condition_concept_id
+      INNER JOIN `bio-med-480108.OMOP_54_A.concept` c ON concept_id_2 = concept_id
+      WHERE (
+          (
+            c.vocabulary_id = 'ICD9CM'
+            AND c.concept_code = '088.81'
+            )
+          OR (
+            c.vocabulary_id = 'ICD10CM'
+            AND c.concept_code LIKE 'A69.2%'
+            )
+          )
+        AND cr.invalid_reason IS NULL
+        AND relationship_id = 'Mapped from'
+      ) lp ON lp.person_id = person.person_id
+    ) lyme_patients
+  GROUP BY STATE
+  ORDER BY 4 DESC;
+concept_ids_gold_standard: ""

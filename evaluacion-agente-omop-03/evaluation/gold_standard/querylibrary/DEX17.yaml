@@ -1,0 +1,13 @@
+id_evaluacion: "querylibrary_DEX17"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener la frecuencia y principales causas de suspensión de tratamiento farmacológico registradas en el campo de motivo de parada (stop_reason).
+sql_base_gold_standard: |
+  SELECT stop_reason, COUNT(*) AS reason_freq
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+   WHERE stop_reason IS NOT null
+   GROUP BY stop_reason
+   ORDER BY reason_freq DESC;
+concept_ids_gold_standard: ""

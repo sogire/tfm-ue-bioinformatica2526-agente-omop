@@ -1,0 +1,32 @@
+id_evaluacion: "querylibrary_CE02"
+nivel_complejidad: "compleja"
+domain_main: "condition_era"
+domain_others: "concept, concept_ancestor, person"
+pregunta_lenguaje_natural: >-
+  Obtener el recuento de pacientes diagnosticados con fractura cerrada de cadera, estratificados por edad y género.
+sql_base_gold_standard: |
+  WITH hip_fracture AS (
+  SELECT DISTINCT ca.descendant_concept_id
+    FROM `bio-med-480108.OMOP_54_A.concept` c
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` ca
+      ON ca.ancestor_concept_id = c.concept_id
+   WHERE c.concept_code = '359817006'  
+  )
+  SELECT gender,
+         age,
+         COUNT(*) AS num_patients
+    FROM (
+  SELECT DISTINCT p.person_id,
+                  c.concept_name  AS gender,
+                  YEAR(ce.condition_era_start_date) - p.year_of_birth AS age
+    FROM `bio-med-480108.OMOP_54_A.condition_era` ce
+    JOIN hip_fracture hf  
+      ON hf.descendant_concept_id = ce.condition_concept_id
+    JOIN `bio-med-480108.OMOP_54_A.person` p
+      ON p.person_id = ce.person_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` c
+      ON c.concept_id = p.gender_concept_id
+         ) TMP
+   GROUP BY gender, age
+   ORDER BY gender, age;
+concept_ids_gold_standard: ""

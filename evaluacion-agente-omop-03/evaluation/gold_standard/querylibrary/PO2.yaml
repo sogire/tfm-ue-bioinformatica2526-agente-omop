@@ -1,0 +1,26 @@
+id_evaluacion: "querylibrary_PO2"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_synonym"
+pregunta_lenguaje_natural: >-
+  Buscar conceptos estándar de procedimientos clínicos en el vocabulario mediante la palabra clave 'artery bypass', asegurando que los conceptos estén activos a la fecha actual.
+sql_base_gold_standard: |
+  SELECT DISTINCT
+    C.concept_id            AS Entity_Concept_Id,
+    C.concept_name          AS Entity_Name,
+    C.concept_code          AS Entity_Code,
+    'Concept'               AS Entity_Type,
+    C.concept_class_id      AS Entity_concept_class_id,
+    C.vocabulary_id         AS Entity_vocabulary_id
+  FROM `bio-med-480108.OMOP_54_A.concept` C
+  LEFT JOIN `bio-med-480108.OMOP_54_A.concept_synonym` S
+  ON C.concept_id = S.concept_id
+  WHERE C.vocabulary_id IN ('SNOMED','ICD9Proc','ICD10PCS','CPT4','CDT','HCPCS','SNOMED Veterinary','OPCS4')
+        AND C.domain_id = 'Procedure'
+        AND C.standard_concept = 'S'
+        -- regular expression containing the input pattern
+        AND LOWER(C.concept_name) LIKE LOWER('%Fixation of fracture%')
+              OR LOWER(S.concept_synonym_name) LIKE LOWER('%Fixation of fracture%')
+        -- Retrieve only valid concepts
+        AND WHERE getdate() >= C.valid_start_date AND getdate() <= C.valid_end_date;
+concept_ids_gold_standard: ""

@@ -1,0 +1,57 @@
+id_evaluacion: "querylibrary_CO07"
+nivel_complejidad: "compleja"
+domain_main: "condition_occurrence"
+domain_others: "visit_occurrence, care_site, condition_era"
+pregunta_lenguaje_natural: >-
+  Determinar la frecuencia y porcentaje de pacientes diagnosticados con náuseas que requirieron hospitalización.
+sql_base_gold_standard: |
+  SELECT
+    number_of_hospitalizations,
+    count(*)          AS persons_freq
+  FROM 
+    (SELECT
+      person_id,
+      COUNT(*)        AS number_of_hospitalizations
+     FROM 
+      (SELECT 
+        DISTINCT
+          condition_era_id,
+          era.person_id
+       FROM 
+        (SELECT
+          condition_start_date,
+          condition_end_date,
+          from_cond.person_id
+         FROM 
+          (SELECT
+            visit_occurrence_id,
+            condition_start_date,
+            condition_end_date,
+            person_id
+           FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+           WHERE condition_concept_id=31967 -- Input condition_concept_id 
+                 AND visit_occurrence_id IS NOT NULL
+          ) AS FROM_cond
+         INNER JOIN `bio-med-480108.OMOP_54_A.visit_occurrence` FROM_visit
+          ON FROM_cond.visit_occurrence_id=FROM_visit.visit_occurrence_id
+         INNER JOIN `bio-med-480108.OMOP_54_A.care_site` cs 
+          ON from_visit.care_site_id=cs.care_site_id
+         WHERE  place_of_service_concept_id=8717 -- Inpatient hospital
+      ) AS occurr,
+      (SELECT
+          condition_era_id,
+          person_id,
+          condition_era_start_date,
+          condition_era_end_date
+       FROM `bio-med-480108.OMOP_54_A.condition_era`
+       WHERE condition_concept_id=31967 -- Input condition_concept_id 
+      ) AS era
+     WHERE era.person_id=occurr.person_id 
+           AND era.condition_era_start_date <= occurr.condition_end_date 
+           AND (era.condition_era_end_date IS NULL OR era.condition_era_end_date >= occurr.condition_start_date)
+     ) AS c
+    GROUP BY person_id
+    ) AS hospitalizations_freq
+  GROUP BY number_of_hospitalizations
+  ORDER BY persons_freq DESC;
+concept_ids_gold_standard: "31967, 8717"

@@ -1,0 +1,45 @@
+id_evaluacion: querylibrary_CO07
+session_id: 31e72588-4d83-418e-99cc-8b3792852c41
+session_file: results/querylibrary/sessions/CO07.json
+turnos_ejecutados: 1
+sql_generada_agente: |-
+  WITH nauseapatients AS
+    (SELECT DISTINCT co.person_id
+     FROM `condition_occurrence` AS co
+     WHERE co.condition_concept_id = 31967),
+       hospitalizednauseapatients AS
+    (SELECT DISTINCT co.person_id
+     FROM `condition_occurrence` AS co
+     JOIN `visit_occurrence` AS vo ON co.person_id = vo.person_id
+     AND co.visit_occurrence_id = vo.visit_occurrence_id
+     WHERE co.condition_concept_id = 31967
+       AND vo.visit_concept_id IN (9201,
+                                   9203)-- 9201: Inpatient Visit, 9203: Emergency Room and Inpatient Visit
+  )
+  SELECT count(DISTINCT np.person_id) AS totalnauseapatients,
+         count(DISTINCT hnp.person_id) AS nauseapatientswithhospitalization,
+         cast(count(DISTINCT hnp.person_id) AS BIGNUMERIC) * 100 / nullif(cast(count(DISTINCT np.person_id) AS BIGNUMERIC), 0) AS percentagewithhospitalization
+  FROM nauseapatients AS np
+  LEFT JOIN hospitalizednauseapatients AS hnp ON np.person_id = hnp.person_id;
+concept_ids_identificados_agente:
+- 9201
+- 9203
+- 31967
+metricas_evaluacion:
+  validez_sintactica_y_estructural: 0.88
+  precision_terminologica_vocabulario: 0.25
+  detalle_validez_sintactica:
+    criterio_1_1_ejecucion: 0.1
+    criterio_1_2_similitud_sql_gemini: 0.78
+    justificacion_gemini: |-
+      La consulta del agente identifica correctamente a los pacientes con náuseas y calcula el porcentaje de aquellos que tuvieron al menos una hospitalización, respondiendo directamente a la pregunta clínica. Sin embargo, la definición de 'hospitalización' y su asociación temporal con la condición de náuseas son menos precisas que en la consulta Gold Standard. El Gold Standard utiliza 'place_of_service_concept_id = 8717' para una identificación más específica del hospital y la tabla 'condition_era' para asegurar que la hospitalización sea clínicamente relevante para la era de la náusea. La consulta del agente utiliza 'visit_concept_id' que es un enfoque más amplio y no incorpora la lógica de 'condition_era' para una asociación temporal robusta. Además, el Gold Standard ofrece una frecuencia granular por el número de hospitalizaciones, que el agente no proporciona.
+  metricas_por_turno:
+    turno_1:
+      validez_sintactica_y_estructural: 0.88
+      precision_terminologica_vocabulario: 0.25
+      question_improvement: ''
+evaluacion_cualitativa: |-
+  Consulta SQL ejecutable (0.10 pts) sobre tabla(s) condition_occurrence, visit_occurrence generada en el Turno 1 tras la confirmación de los conceptos iniciales ofrecidos por el agente.
+  Similitud SQL evaluada por Gemini (0.78/0.90 pts): La consulta del agente identifica correctamente a los pacientes con náuseas y calcula el porcentaje de aquellos que tuvieron al menos una hospitalización, respondiendo directamente a la pregunta clínica. Sin embargo, la definición de 'hospitalización' y su asociación temporal con la condición de náuseas son menos precisas que en la consulta Gold Standard. El Gold Standard utiliza 'place_of_service_concept_id = 8717' para una identificación más específica del hospital y la tabla 'condition_era' para asegurar que la hospitalización sea clínicamente relevante para la era de la náusea. La consulta del agente utiliza 'visit_concept_id' que es un enfoque más amplio y no incorpora la lógica de 'condition_era' para una asociación temporal robusta. Además, el Gold Standard ofrece una frecuencia granular por el número de hospitalizaciones, que el agente no proporciona.
+  Identificación parcial de conceptos: utilizó [31967] de los requeridos [8717, 31967].
+check_conexion: true

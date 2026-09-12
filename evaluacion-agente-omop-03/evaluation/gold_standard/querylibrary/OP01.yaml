@@ -1,0 +1,11 @@
+id_evaluacion: "querylibrary_OP01"
+nivel_complejidad: "baja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar cuántos pacientes cuentan con al menos un período continuo de observación en la base de datos superior a 365 días.
+sql_base_gold_standard: |
+  SELECT COUNT(DISTINCT person_ID) AS NUM_persons
+  FROM `bio-med-480108.OMOP_54_A.observation_period` op
+  WHERE DATEDIFF(day,op.observation_period_START_DATE,op.observation_period_END_DATE) >= 365;
+concept_ids_gold_standard: ""

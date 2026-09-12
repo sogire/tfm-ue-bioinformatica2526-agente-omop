@@ -1,0 +1,19 @@
+id_evaluacion: "querylibrary_DEX08"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "person, concept"
+pregunta_lenguaje_natural: >-
+  Determinar el número máximo de medicamentos diferentes recibidos por un paciente dentro de una ventana temporal específica.
+sql_base_gold_standard: |
+  select max(drugs) as drugs_count from
+  (SELECT
+  COUNT( DISTINCT drug_concept_id) drugs
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure` JOIN `bio-med-480108.OMOP_54_A.person`
+  ON drug_exposure.person_id = person.person_id
+  WHERE
+  drug_concept_id in (select distinct concept_id from `bio-med-480108.OMOP_54_A.concept`
+                          WHERE domain_id='Drug' and standard_concept='S')
+   AND drug_exposure_start_date >= DATEFROMPARTS(2017, 01, 01)
+  AND drug_exposure_start_date <= DATEFROMPARTS(2017, 12, 31)
+  GROUP BY drug_exposure.person_id) EV;
+concept_ids_gold_standard: ""

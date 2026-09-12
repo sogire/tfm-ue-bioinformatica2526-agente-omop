@@ -1,0 +1,37 @@
+id_evaluacion: "querylibrary_DEX10"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Identificar las medicaciones concomitantes más frecuentemente prescritas a pacientes expuestos a los medicamentos indicados (bortezomib y talidomida en cápsulas de 50 mg) durante un período específico.
+sql_base_gold_standard: |
+  SELECT concept_name AS drug_name,
+    COUNT(1) AS persons
+  FROM (
+    --Other drugs people are taking
+    SELECT DISTINCT cohort.person_id,
+      drug.drug_concept_id
+    FROM (
+      --person with specific drug in time frame
+      SELECT DISTINCT person_id,
+        drug_concept_id,
+        from_date,
+        to_date
+      FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+      INNER JOIN (
+        --date range
+        SELECT DATEFROMPARTS(2008, 01, 01) AS from_date,
+          DATEFROMPARTS(2008, 12, 31) AS to_date
+        ) dates ON drug_exposure_start_date BETWEEN from_date
+          AND to_date
+      WHERE drug_concept_id IN /*bortezomib, Thalidomide 50 mg capsules */ (1336825, 19047763)
+      ) cohort
+    INNER JOIN `bio-med-480108.OMOP_54_A.drug_exposure` drug ON drug.person_id = cohort.person_id
+      AND drug.drug_concept_id != cohort.drug_concept_id
+      AND drug.drug_exposure_start_date >= start_date AND drug.drug_exposure_start_date <= to_date
+    WHERE drug.drug_concept_id != 0 /* unmapped drug */
+    ) events
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept` ON concept_id = drug_concept_id
+  GROUP BY concept_name
+  ORDER BY persons DESC;
+concept_ids_gold_standard: "1336825, 19047763"
