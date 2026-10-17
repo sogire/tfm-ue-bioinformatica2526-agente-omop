@@ -3,7 +3,6 @@
 
 **TRABAJO FIN DE MÁSTER** · Máster Universitario en Bioinformática 2025/2026 · Universidad Europea de Madrid  
 *Autor: Sergio Bermúdez Sánchez* | *Tutor: Isidoro Gutiérrez Álvarez*  
-*Memoria académica de referencia:* `TFM-AgenteOMOP_SergioBermudez_Final.pdf`
 
 El acceso a los datos de salud estandarizados bajo el modelo de datos común OMOP CDM sigue limitado por la necesidad de contar con conocimientos técnicos avanzados en SQL y conocer la estructura y jerarquías de los vocabularios OHDSI. Para resolver esta barrera, en este Trabajo Fin de Máster he desarrollado el Agente Analítico OMOP, una prueba de concepto basada en IA conversacional que permite a profesionales sanitarios e investigadores formular preguntas analíticas de caracterización e incidencia en lenguaje natural.
 
@@ -20,3 +19,15 @@ La arquitectura técnica del sistema se organiza en dos módulos principales int
 * **Marco de Evaluación Experimental ([`evaluacion-agente-omop-03/`](evaluacion-agente-omop-03/README.md)):** Entorno automatizado de pruebas (*benchmark*) diseñado para contrastar el desempeño del agente Text-to-SQL frente a un estándar de oro (*Gold Standard*) de 201 consultas clínicas categorizadas por nivel de complejidad y dominio OMOP. Incluye el protocolo de ejecución multiturno guiado por LLM como juez, extracción de métricas objetivas y análisis estadístico inferencial consolidado. Para más información, consulte [`evaluacion-agente-omop-03/README.md`](evaluacion-agente-omop-03/README.md).
 
 Los resultados de la evaluación experimental confirman la validez de la solución: el agente alcanzó una precisión terminológica del vocabulario del **92.5%** (con un 90.0% de asignaciones conceptuales perfectas), una tasa de ejecutabilidad técnica del **93.5%** y una Validez Sintáctica y Estructural global que progresó desde el **23.9%** en el primer turno (*zero-shot*) hasta el **84.9%** (81.6% de éxito operativo) tras el refinamiento conversacional interactivo.
+
+## Memorias y Anexos del TFM (`tfm-anexos/`)
+
+En el directorio [`tfm-anexos/`](tfm-anexos/) se encuentran disponibles las memorias completas del proyecto y los anexos documentales y experimentales:
+
+* **Memoria del TFM — Versión Original Entregada ([`TFM-AgenteOMOP_SergioBermudez_Version-ProfesionalSolucion.pdf`](tfm-anexos/TFM-AgenteOMOP_SergioBermudez_Version-ProfesionalSolucion.pdf)):** Memoria inicial entregada, orientada a la arquitectura técnica, diseño de la solución e implementación práctica del sistema multiagente.
+* **Anexo A — Vídeo de Demostración ([`Anexo-A_TFM_AgenteOMOP_Video-Demostracion.mp4`](tfm-anexos/Anexo-A_TFM_AgenteOMOP_Video-Demostracion.mp4)):** Demostración multimedia en vídeo del funcionamiento interactivo del Agente Analítico OMOP resolviendo consultas clínicas en lenguaje natural.
+* **Anexo B — Prompts del Sistema ([`Anexo-B_TFM_AgenteOMOP_Prompts-sistema-agente.docx`](tfm-anexos/Anexo-B_TFM_AgenteOMOP_Prompts-sistema-agente.docx)):** Especificación formal de las instrucciones de sistema (*system prompts*) diseñadas para el agente orquestador y cada uno de los subagentes especializados.
+* **Anexo C — Listado de Preguntas y Evaluación Individual ([`Anexo-C_TFM_AgenteOMOP_Listado-preguntas-y-evaluacion-individual.xlsx`](tfm-anexos/Anexo-C_TFM_AgenteOMOP_Listado-preguntas-y-evaluacion-individual.xlsx)):** Banco completo de las 201 consultas clínicas de referencia (*Gold Standard*) junto con el desglose detallado de la evaluación individual por pregunta y turno conversacional.
+* **Anexo D — Resultados de la Evaluación Cuantitativa ([`Anexo-D_AgenteOMOP_Resultados-evaluacion-cuantitativa.xlsx`](tfm-anexos/Anexo-D_AgenteOMOP_Resultados-evaluacion-cuantitativa.xlsx)):** Registros tabulares consolidados y tablas estadísticas descriptivas e inferenciales de la evaluación cuantitativa automatizada.
+* **Memoria del TFM — Versión Académica ([`TFM-AgenteOMOP_SergioBermudez_Version-MemoriaAcademica.pdf`](tfm-anexos/TFM-AgenteOMOP_SergioBermudez_Version-MemoriaAcademica.pdf)):** Documento formal de la memoria académica del Trabajo Fin de Máster estructurado según la normativa universitaria (introducción, hipótesis y objetivos, metodología, resultados estadísticos, discusión y conclusiones).
+
