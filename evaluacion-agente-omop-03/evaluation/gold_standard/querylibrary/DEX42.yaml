@@ -1,0 +1,21 @@
+id_evaluacion: "querylibrary_DEX42"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: "person"
+pregunta_lenguaje_natural: >-
+  Contar la distribución por género (masculino y femenino) de los pacientes que reciben los medicamentos seleccionados (metoclopramida, desmopresina y ciclosporina).
+sql_base_gold_standard: |
+  SELECT
+    gender_concept_id,
+    drug_concept_id,
+    COUNT(1) AS gender_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  INNER JOIN `bio-med-480108.OMOP_54_A.person`
+  ON drug_exposure.person_id = person.person_id
+        -- Filter by input list of drug_concept_id
+  WHERE drug_concept_id IN (906805, 1517070, 19010522)
+        -- Filter by input list of gender_concept_id  
+        AND gender_concept_id IN (8507, 8532)
+  GROUP BY drug_concept_id, gender_concept_id
+  ORDER BY drug_concept_id, gender_concept_id;
+concept_ids_gold_standard: "906805, 1517070, 19010522, 8507, 8532"

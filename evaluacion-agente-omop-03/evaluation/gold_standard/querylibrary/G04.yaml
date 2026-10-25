@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_G04"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: "concept_synonym"
+pregunta_lenguaje_natural: >-
+  Extraer la lista completa de términos sinónimos registrados en el vocabulario para el concepto de hemorragia gastrointestinal.
+sql_base_gold_standard: |
+  SELECT
+    c.concept_id,
+    s.concept_synonym_name
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+    JOIN `bio-med-480108.OMOP_54_A.concept_synonym` AS s ON c.concept_id = s.concept_id
+  WHERE c.concept_id = 192671
+  ;
+concept_ids_gold_standard: "192671"

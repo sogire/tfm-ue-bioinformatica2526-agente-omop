@@ -1,0 +1,29 @@
+id_evaluacion: "querylibrary_DEX15"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "concept_ancestor, observation_period"
+pregunta_lenguaje_natural: >-
+  Contar los pacientes que iniciaron tratamiento con estatinas y cumplen con criterios de elegibilidad de 180 días de observación previa y 365 días de seguimiento posterior.
+sql_base_gold_standard: |
+  WITH statins AS (
+  SELECT descendant_concept_id AS concept_id
+    FROM `bio-med-480108.OMOP_54_A.concept_ancestor`
+   WHERE ancestor_concept_id = 1539403
+  ), statin_users AS (
+  SELECT de.person_id, MIN(de.drug_exposure_start_date) AS index_date
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure` de
+    JOIN statins s
+      ON de.drug_concept_id = s.concept_id
+   GROUP BY de.person_id
+  )    
+  SELECT FLOOR(1.0*DATEDIFF(d,su.index_date,op.observation_period_end_date)/365) AS follow_up_years,
+         COUNT(*) AS persons
+         /* statin users with 180 clean period and at least 1 year follow up period */
+    FROM statin_users su
+    JOIN `bio-med-480108.OMOP_54_A.observation_period` op
+      ON su.person_id  = op.person_id
+   WHERE DATEADD(d,180,op.observation_period_start_date) < su.index_date
+     AND op.observation_period_end_date                  > DATEADD(d,365,su.index_date)
+   GROUP BY FLOOR(1.0*DATEDIFF(d,su.index_date,op.observation_period_end_date)/365)
+   ORDER BY 1;
+concept_ids_gold_standard: "1539403"

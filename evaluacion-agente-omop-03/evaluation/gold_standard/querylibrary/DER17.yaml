@@ -1,0 +1,14 @@
+id_evaluacion: "querylibrary_DER17"
+nivel_complejidad: "intermedia"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar los episodios de tratamiento farmacológico (drug eras) activos agrupados y estratificados por mes de observación.
+sql_base_gold_standard: |
+  SELECT MONTH(er.drug_era_start_date) month_num, COUNT(1) as eras_in_month_count
+  FROM `bio-med-480108.OMOP_54_A.drug_era` er
+  WHERE MONTH(er.drug_era_start_date)
+  IN (3, 5)
+  GROUP BY MONTH(er.drug_era_start_date)
+  ORDER BY 1;
+concept_ids_gold_standard: ""

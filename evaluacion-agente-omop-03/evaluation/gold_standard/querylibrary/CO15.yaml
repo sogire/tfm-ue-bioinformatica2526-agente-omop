@@ -1,0 +1,71 @@
+id_evaluacion: "querylibrary_CO15"
+nivel_complejidad: "compleja"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución estadística (media, desviación típica, cuartiles y valores extremos) del número de diagnósticos clínicos distintos que presenta cada paciente.
+sql_base_gold_standard: |
+  WITH ranked AS 
+    (SELECT
+      num_of_conditions,
+      row_number() over (ORDER BY num_of_conditions ASC) AS rownumasc
+    FROM 
+      (SELECT
+        person_id,
+        COUNT(DISTINCT condition_concept_id) AS num_of_conditions
+       FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+       WHERE person_id!=0
+       GROUP BY person_id
+      ) AS counts_conditions_person_1
+    ),
+    other_stat AS 
+    (SELECT
+      COUNT(num_of_conditions)           AS condition_dist_num_count,
+      MIN(num_of_conditions)             AS condition_dist_num_min,
+      MAX(num_of_conditions)             AS condition_dist_num_max,
+      ROUND(AVG(num_of_conditions), 2)   AS condition_dist_num_average,
+      ROUND(STDEV(num_of_conditions), 2) AS condition_dist_num_stddev
+     FROM 
+      (SELECT
+        person_id,
+        COUNT(DISTINCT condition_concept_id) AS num_of_conditions
+       FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+       WHERE person_id!=0
+       GROUP BY person_id
+      ) AS counts_conditions_person_2
+    )
+
+  SELECT DISTINCT
+    (SELECT 
+      COUNT(DISTINCT person_id) 
+     FROM `bio-med-480108.OMOP_54_A.condition_occurrence` 
+     WHERE condition_occurrence_id IS NULL
+    ) AS condition_null_count,
+    condition_dist_num_count,condition_dist_num_min,condition_dist_num_max,condition_dist_num_average,condition_dist_num_stddev
+  FROM
+    other_stat,
+    (SELECT 
+      DISTINCT num_of_conditions AS condition_dist_num_25pctile
+      FROM
+        (SELECT num_of_conditions, rownumasc,(SELECT COUNT(*) FROM ranked) AS rowno FROM ranked) AS a_1
+      WHERE    (rownumasc = CAST(rowno*0.25 AS INT)   AND floor(rowno*25/100)  = rowno*25/100 )
+            OR (rownumasc = CAST(rowno*0.25 AS INT)   AND floor(rowno*25/100) != rowno*25/100 )
+            OR (rownumasc = CAST(rowno*0.25 AS INT)+1 AND floor(rowno*25/100) != rowno*25/100 )
+    ) condition_end_date_25pctile,
+    (SELECT
+      DISTINCT num_of_conditions AS condition_dist_num_median
+     FROM
+        (SELECT num_of_conditions, rownumasc,(SELECT COUNT(*) FROM ranked) AS rowno FROM ranked) AS a_2
+     WHERE    (rownumasc = CAST(rowno*0.50 AS INT)   AND floor(rowno*50/100)  = rowno*50/100 )
+           OR (rownumasc = CAST(rowno*0.50 AS INT)   AND floor(rowno*50/100) != rowno*50/100 )
+           OR (rownumasc = CAST(rowno*0.50 AS INT)+1 AND floor(rowno*50/100) != rowno*50/100 )
+    ) condition_end_date_median,
+    (SELECT
+      DISTINCT num_of_conditions AS condition_dist_num_75pctile
+     FROM
+        (SELECT num_of_conditions, rownumasc,(SELECT COUNT(*) FROM ranked) AS rowno FROM ranked) AS A_3
+     WHERE    (rownumasc= CAST(rowno*0.75 AS INT)   AND floor(rowno*75/100)  = rowno*75/100 ) 
+           OR (rownumasc= CAST(rowno*0.75 AS INT)   AND floor(rowno*75/100) != rowno*75/100 )
+           OR (rownumasc= CAST(rowno*0.75 AS INT)+1 AND floor(rowno*75/100) != rowno*75/100 )
+    ) condition_end_date_75pctile;
+concept_ids_gold_standard: ""

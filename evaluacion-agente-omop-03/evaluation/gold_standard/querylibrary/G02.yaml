@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_G02"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Buscar en el vocabulario el concepto estándar correspondiente al código fuente '74474003' del vocabulario 'SNOMED' (hemorragia gastrointestinal).
+sql_base_gold_standard: |
+  SELECT
+    c.concept_id,
+    c.concept_name,
+    c.concept_code,
+    c.concept_class_id,
+    c.vocabulary_id
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+  WHERE 
+    c.concept_code = '74474003' AND
+    c.vocabulary_id = 'SNOMED' AND
+    c.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: ""

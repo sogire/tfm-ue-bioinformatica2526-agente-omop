@@ -1,0 +1,41 @@
+id_evaluacion: "querylibrary_OP07"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: "person"
+pregunta_lenguaje_natural: >-
+  Calcular los estadísticos de distribución de la edad de los pacientes (media, desviación típica, cuartiles) al inicio de sus períodos de observación.
+sql_base_gold_standard: |
+  WITH age_distribution AS 
+    ( SELECT 
+        DISTINCT u.person_id, 
+        YEAR(first_observation_date) - year_of_birth AS age
+      FROM -- person, first observation date
+      ( SELECT 
+          person_id,
+          MIN(observation_period_start_date) AS first_observation_date
+        FROM `bio-med-480108.OMOP_54_A.observation_period`
+        GROUP BY person_id
+      ) AS u
+      INNER JOIN `bio-med-480108.OMOP_54_A.person` 
+      ON u.person_id = person.person_id
+      WHERE year_of_birth IS NOT NULL
+    ) 
+  SELECT 
+    COUNT(*)                                                                      AS num_people,
+    min( age )                                                                    AS min_age,
+    max( age )                                                                    AS max_age,
+    round( avg( age ), 2 )                                                        AS avg_age,
+    round( STDEV( age ), 1 )                                                      AS stdev_age,
+      ROUND(STDEV(age), 1)                                                        AS STDEV_value,
+      MIN(CASE WHEN order_nr < .25 * population_size THEN 9999 ELSE age END)      AS percentile_25,
+      MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE age END)      AS median_age,
+      MIN(CASE WHEN order_nr < .75 * population_size THEN 9999 ELSE age END)      AS percentile_75
+
+  FROM 
+   ( SELECT 
+       age                                                     AS age,
+       ROW_NUMBER() OVER (ORDER BY age)                        AS order_nr,
+       (SELECT COUNT(*) FROM age_distribution ) AS population_size
+     FROM age_distribution
+   ) ordered_data;
+concept_ids_gold_standard: ""

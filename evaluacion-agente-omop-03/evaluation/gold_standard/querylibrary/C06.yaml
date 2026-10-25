@@ -1,0 +1,26 @@
+id_evaluacion: "querylibrary_C06"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_relationship"
+pregunta_lenguaje_natural: >-
+  Obtener los códigos de diagnóstico fuente (como ICD-9 o ICD-10) que mapean al concepto estándar de condición para artritis reumatoide.
+sql_base_gold_standard: |
+  SELECT DISTINCT
+    c1.concept_code     AS source_code,
+    c1.concept_name     AS source_name,
+    c1.vocabulary_id    AS source_vocabulary_id,
+    c1.domain_id        AS source_domain_id,
+    c2.concept_id       AS target_concept_id,
+    c2.concept_name     AS target_concept_name,
+    c2.concept_code     AS target_concept_code,
+    c2.concept_class_id AS target_concept_class,
+    c2.vocabulary_id    AS target_concept_vocab_id
+  FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS cr
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS c1 ON cr.concept_id_1 = c1.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS c2 ON cr.concept_id_2 = c2.concept_id
+  WHERE
+    cr.relationship_id = 'Mapped from' AND
+    c1.concept_id = 312327 AND
+    c2.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: "312327"

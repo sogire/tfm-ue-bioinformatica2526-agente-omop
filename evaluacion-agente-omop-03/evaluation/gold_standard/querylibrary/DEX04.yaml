@@ -1,0 +1,23 @@
+id_evaluacion: "querylibrary_DEX04"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "person, concept"
+pregunta_lenguaje_natural: >-
+  Determinar la distribución de género entre los pacientes expuestos a formulaciones de rosuvastatina (comprimidos de 20 mg y 40 mg).
+sql_base_gold_standard: |
+  SELECT drug.concept_name AS drug_name,
+    drug_concept_id,
+    gender.concept_name AS gender,
+    count(DISTINCT de.person_id) AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure` de
+  INNER JOIN `bio-med-480108.OMOP_54_A.person` p ON de.person_id = p.person_id
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept` drug ON drug.concept_id = drug_concept_id
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept` gender ON gender.concept_id = gender_concept_id
+  WHERE drug_concept_id IN (40165254, 40165258)
+  GROUP BY drug.concept_name,
+    drug_concept_id,
+    gender.concept_name
+  ORDER BY drug_name,
+    drug_concept_id,
+    gender;
+concept_ids_gold_standard: "40165254, 40165258"

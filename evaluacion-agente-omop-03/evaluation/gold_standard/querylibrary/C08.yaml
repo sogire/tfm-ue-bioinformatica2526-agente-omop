@@ -1,0 +1,22 @@
+id_evaluacion: "querylibrary_C08"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Buscar agentes etiológicos o causales de enfermedad en el vocabulario que coincidan con la palabra clave 'benzene'.
+sql_base_gold_standard: |
+  SELECT
+    c.concept_id       AS agent_concept_id,
+    c.concept_name     AS agent_concept_name,
+    c.concept_code     AS agent_concept_code,
+    c.concept_class_id AS agent_concept_class,
+    c.standard_concept AS agent_standard_concept,
+    c.vocabulary_id    AS agent_concept_vocab_id
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+  WHERE
+    lower(c.concept_class_id) IN ('pharmaceutical / biologic product', 'physical object',
+                                  'special concept', 'event', 'physical force', 'substance') AND
+    lower(c.concept_name) LIKE '%radiation%' AND
+    c.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: ""

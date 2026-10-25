@@ -1,0 +1,32 @@
+id_evaluacion: "querylibrary_OP11"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular estadísticas descriptivas (fecha media y percentiles) de las fechas de finalización de los períodos de observación.
+sql_base_gold_standard: |
+  WITH op AS
+    (SELECT
+        DATEDIFF(day,DATEFROMPARTS(1900,1,1),observation_period_end_date) diffs,
+        CAST(CONVERT(VARCHAR, observation_period_end_date, 112) AS INTEGER) AS end_date,
+      COUNT(*)OVER() AS population_size
+     FROM `bio-med-480108.OMOP_54_A.observation_period`
+    )
+  SELECT
+    CONVERT(DATE, CAST( min(end_date) AS VARCHAR ))                                                                    AS min_end_date,
+    CONVERT(DATE, CAST( max(end_date) AS VARCHAR ))                                                                    AS max_end_date,
+    DATEADD(day, ROUND(AVG(CAST(diffs AS BIGINT)),1), DATEFROMPARTS(1900,1,1)) AS avg_end_date,
+    round( STDEV( end_date ), 1 )                                                                                      AS STDEV_days ,
+    CONVERT(DATE, CAST(MIN(CASE WHEN order_nr < .25 * population_size THEN 9999999999 ELSE end_date END) AS VARCHAR))  AS percentile_25,
+    CONVERT(DATE, CAST(MIN(CASE WHEN order_nr < .50 * population_size THEN 9999999999 ELSE end_date END) AS VARCHAR))  AS median,
+    CONVERT(DATE, CAST(MIN(CASE WHEN order_nr < .75 * population_size THEN 9999999999 ELSE end_date END) AS VARCHAR))  AS percentile_75
+
+  FROM
+   ( SELECT
+       diffs,
+     end_date                                                     AS end_date,
+       ROW_NUMBER() OVER (ORDER BY end_date)                        AS order_nr,
+       population_size
+     FROM op
+   ) ordered_data;
+concept_ids_gold_standard: ""

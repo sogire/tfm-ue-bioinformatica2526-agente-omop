@@ -1,0 +1,22 @@
+id_evaluacion: "querylibrary_DEX05"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Contar el número total de registros de dispensación o exposición para formulaciones de rosuvastatina (comprimidos de 20 mg y 40 mg).
+sql_base_gold_standard: |
+  SELECT
+    concept_name      AS drug_name,
+    drug_concept_id,
+    COUNT(*)          AS num_records
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept`
+  ON concept_id = drug_concept_id
+  WHERE LOWER(domain_id)='drug'
+        AND vocabulary_id='RxNorm'
+        -- Retrieve standard concepts
+        AND standard_concept='S'
+        -- List of input drug_concept_id
+        AND drug_concept_id IN (40165254,40165258)
+  GROUP BY concept_name, drug_concept_id;
+concept_ids_gold_standard: "40165254, 40165258"

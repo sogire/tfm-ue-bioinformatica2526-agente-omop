@@ -1,0 +1,25 @@
+id_evaluacion: "querylibrary_G05"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_relationship"
+pregunta_lenguaje_natural: >-
+  Mapear un código fuente (por ejemplo '070.30') a sus conceptos estándar correspondientes en el vocabulario estandarizado.
+sql_base_gold_standard: |
+  SELECT DISTINCT
+    c1.domain_id        AS source_domain_id,
+    c2.concept_id       AS concept_id,
+    c2.concept_name     AS concept_name,
+    c2.concept_code     AS concept_code,
+    c2.concept_class_id AS concept_class_id,
+    c2.vocabulary_id    AS concept_vocabulary_id,
+    c2.domain_id        AS concept_domain_id
+  FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS cr
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS c1 ON c1.concept_id = cr.concept_id_1
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS c2 ON c2.concept_id = cr.concept_id_2
+  WHERE
+    cr.relationship_id = 'Maps to' AND
+    c1.concept_code IN ('070.0') AND
+    c1.vocabulary_id = 'ICD9CM' AND
+    cr.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: ""

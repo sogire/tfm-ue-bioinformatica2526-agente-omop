@@ -1,0 +1,21 @@
+id_evaluacion: "querylibrary_D09"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Identificar todos los medicamentos pertenecientes a la clase terapéutica de inhibidores de la ECA y combinaciones.
+sql_base_gold_standard: |
+  SELECT  c.concept_id       AS drug_concept_id,
+          c.concept_name     AS drug_concept_name,
+          c.concept_class_id AS drug_concept_class,
+          c.concept_code     AS drug_concept_code
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` AS ca
+      ON c.concept_id = ca.descendant_concept_id
+  WHERE ca.ancestor_concept_id = 21506108
+        AND c.domain_id = 'Drug'
+        AND c.standard_concept = 'S'
+        AND getdate() >= c.valid_start_date
+        AND getdate() <= c.valid_end_date
+  ;
+concept_ids_gold_standard: "21506108"

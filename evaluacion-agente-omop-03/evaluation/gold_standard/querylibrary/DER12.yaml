@@ -1,0 +1,11 @@
+id_evaluacion: "querylibrary_DER12"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar el número de episodios de tratamiento farmacológico clasificados según el tipo o fuente de dispensación.
+sql_base_gold_standard: |
+  select count(1) as cntRecs, r.drug_type_concept_id
+  from `bio-med-480108.OMOP_54_A.drug_exposure` r
+  group by r.drug_type_concept_id;
+concept_ids_gold_standard: ""

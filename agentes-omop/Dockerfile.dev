@@ -1,0 +1,21 @@
+# Usar una imagen base de Python
+FROM python:3.11-slim
+
+# Directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Copiar los requerimientos e instalarlos desde la carpeta 'dev'
+COPY agents-dev/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar todo el contenido de la carpeta de agentes 'dev' al contenedor
+COPY agents-dev /app/agents
+
+# Exponer el puerto que usa Cloud Run (8080 por defecto)
+EXPOSE 8080
+
+# Definir el PYTHONPATH para que las rutas relativas funcionen
+ENV PYTHONPATH="/app"
+
+# Ejecutar el servidor apuntando a la carpeta de agentes
+ENTRYPOINT ["adk", "web", "--host", "0.0.0.0", "--port", "8080", "/app/agents"]

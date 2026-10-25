@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_G15"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener un resumen estadístico del recuento de conceptos clasificados por vocabulario, dominio y clase de concepto.
+sql_base_gold_standard: |
+  SELECT
+    vocabulary_id    AS vocabulary_id,
+    concept_class_id AS concept_class_id,
+    standard_concept AS standard_concept,
+    COUNT(*)         AS num_records
+  FROM `bio-med-480108.OMOP_54_A.concept`
+  GROUP BY
+    vocabulary_id,
+    concept_class_id,
+    standard_concept
+  ORDER BY vocabulary_id, concept_class_id, standard_concept
+  ;
+concept_ids_gold_standard: ""

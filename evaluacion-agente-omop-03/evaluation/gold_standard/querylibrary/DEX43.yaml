@@ -1,0 +1,17 @@
+id_evaluacion: "querylibrary_DEX43"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Determinar el número de registros de dispensación por paciente, estratificado para cada uno de los fármacos seleccionados.
+sql_base_gold_standard: |
+  SELECT
+    drug_concept_id,
+    person_id,
+    COUNT(1) AS drug_exposure_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+        -- Filter by input list of drug_concept_id
+  WHERE drug_concept_id in (906805, 1517070, 19010522)
+  GROUP BY person_id, drug_concept_id
+  ORDER BY drug_concept_id, person_id;
+concept_ids_gold_standard: "906805, 1517070, 19010522"

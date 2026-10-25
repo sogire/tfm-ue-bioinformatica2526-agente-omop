@@ -1,0 +1,33 @@
+id_evaluacion: "querylibrary_DEX02"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "person, concept"
+pregunta_lenguaje_natural: >-
+  Contar los pacientes expuestos a formulaciones de rosuvastatina (comprimidos de 20 mg y 40 mg), estratificando por edad, género y año de dispensación.
+sql_base_gold_standard: |
+  SELECT concept_name AS drug_name,
+    year_of_exposure,
+    age,
+    gender,
+    count(*) AS num_persons
+  FROM (
+    SELECT DISTINCT drug.concept_name,
+      de.person_id,
+      gender.concept_name AS gender,
+      YEAR(drug_exposure_start_date) AS year_of_exposure,
+      YEAR(drug_exposure_start_date) - year_of_birth AS age
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure` de
+    INNER JOIN `bio-med-480108.OMOP_54_A.person` p ON de.person_id = p.person_id
+    INNER JOIN `bio-med-480108.OMOP_54_A.concept` drug ON drug.concept_id = drug_concept_id
+    INNER JOIN `bio-med-480108.OMOP_54_A.concept` gender ON gender.concept_id = gender_concept_id
+    WHERE drug_concept_id IN (40165254, 40165258)
+    ) EV
+  GROUP BY concept_name,
+    gender,
+    year_of_exposure,
+    age
+  ORDER BY concept_name,
+    year_of_exposure,
+    age,
+    gender;
+concept_ids_gold_standard: "40165254, 40165258"

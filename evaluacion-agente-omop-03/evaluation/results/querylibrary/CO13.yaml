@@ -1,0 +1,30 @@
+id_evaluacion: querylibrary_CO13
+session_id: 057f266f-2796-40fb-a3f9-2986b49b9e79
+session_file: results/querylibrary/sessions/CO13.json
+turnos_ejecutados: 1
+sql_generada_agente: |-
+  SELECT date_from_unix_date(cast(avg(unix_date(condition_start_date)) AS int64)) AS mean_start_date,
+         stddev(unix_date(condition_start_date)) AS stddev_days_from_epoch, -- Standard deviation is in days relative to epoch
+   date_from_unix_date(cast(approx_quantiles(unix_date(condition_start_date), 100)[offset(25)] AS int64)) AS p25_start_date,
+   date_from_unix_date(cast(approx_quantiles(unix_date(condition_start_date), 100)[offset(50)] AS int64)) AS p50_median_start_date,
+   date_from_unix_date(cast(approx_quantiles(unix_date(condition_start_date), 100)[offset(75)] AS int64)) AS p75_start_date
+  FROM `condition_occurrence`
+concept_ids_identificados_agente: []
+metricas_evaluacion:
+  validez_sintactica_y_estructural: 0.88
+  precision_terminologica_vocabulario: 1.0
+  detalle_validez_sintactica:
+    criterio_1_1_ejecucion: 0.1
+    criterio_1_2_similitud_sql_gemini: 0.78
+    justificacion_gemini: |-
+      La consulta generada implementa correctamente el cálculo de la media, desviación estándar y percentiles de las fechas de inicio de la condición utilizando funciones idiomáticas de BigQuery (`UNIX_DATE`, `DATE_FROM_UNIX_DATE`, `APPROX_QUANTILES`). Sin embargo, no incluye otras estadísticas descriptivas clave presentes en la consulta de referencia (Gold Standard), como el recuento total, el valor mínimo, el valor máximo y el recuento de valores nulos, lo que reduce su exhaustividad en el contexto de 'estadísticas descriptivas'.
+  metricas_por_turno:
+    turno_1:
+      validez_sintactica_y_estructural: 0.88
+      precision_terminologica_vocabulario: 1.0
+      question_improvement: ''
+evaluacion_cualitativa: |-
+  Consulta SQL ejecutable (0.10 pts) sobre tabla(s) condition_occurrence generada directamente en un único turno con validación exitosa en BigQuery.
+  Similitud SQL evaluada por Gemini (0.78/0.90 pts): La consulta generada implementa correctamente el cálculo de la media, desviación estándar y percentiles de las fechas de inicio de la condición utilizando funciones idiomáticas de BigQuery (`UNIX_DATE`, `DATE_FROM_UNIX_DATE`, `APPROX_QUANTILES`). Sin embargo, no incluye otras estadísticas descriptivas clave presentes en la consulta de referencia (Gold Standard), como el recuento total, el valor mínimo, el valor máximo y el recuento de valores nulos, lo que reduce su exhaustividad en el contexto de 'estadísticas descriptivas'.
+  Consulta exploratoria sin conceptos fijos requeridos en el estándar; el agente identificó 0 concepto(s) candidatos pertinentes en el vocabulario.
+check_conexion: true

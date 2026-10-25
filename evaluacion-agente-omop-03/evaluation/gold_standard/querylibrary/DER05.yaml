@@ -1,0 +1,24 @@
+id_evaluacion: "querylibrary_DER05"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: "concept, concept_relationship, concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Para la indicación clínica de síntomas de resfriado común, calcular la proporción de pacientes tratados que reciben cada uno de los medicamentos indicados.
+sql_base_gold_standard: |
+  SELECT tt.concept_id, tt.concept_name, 100*(tt.cntPersons*1.0/tt.total*1.0) AS proportion FROM (
+  SELECT c.concept_id, c.concept_name, t.cntPersons, sum(cntPersons) over() AS total
+  FROM `bio-med-480108.OMOP_54_A.concept` c,
+  (SELECT er.drug_concept_id, count(DISTINCT er.person_id) AS cntPersons
+  FROM  `bio-med-480108.OMOP_54_A.concept_relationship` cr,
+           `bio-med-480108.OMOP_54_A.concept_ancestor` ca,
+        `bio-med-480108.OMOP_54_A.drug_era` er
+  WHERE cr.concept_id_1 = ca.descendant_concept_id
+    and er.drug_concept_id = ca.ancestor_concept_id
+    and cr.concept_id_2 = 21001738--&era_id -- &Indication_id
+    -- allow only indication relationships
+    and cr.relationship_id IN ('Has FDA-appr ind', 'Has off-label ind', 'May treat', 'May prevent', 'CI by', 'Is off-label ind of', 'Is FDA-appr ind of', 'May be treated by')
+  GROUP BY er.drug_concept_id, cr.concept_id_2
+  ) t
+  WHERE t.drug_concept_id = c.concept_id
+  ) tt
+concept_ids_gold_standard: "21001738"

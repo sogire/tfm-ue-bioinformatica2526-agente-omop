@@ -1,0 +1,17 @@
+id_evaluacion: "querylibrary_DRC03"
+nivel_complejidad: "intermedia"
+domain_main: "cost"
+domain_others: "drug_exposure"
+pregunta_lenguaje_natural: >-
+  Determinar los costos directos de bolsillo pagados por el paciente (gasto desembolsado sin incluir copagos) para los fármacos seleccionados (metoclopramida, desmopresina y ciclosporina).
+sql_base_gold_standard: |
+  SELECT d.drug_concept_id, avg(c.paid_by_patient - c.paid_patient_copay) AS avg_out_pocket_cost
+  FROM `bio-med-480108.OMOP_54_A.cost` c
+  JOIN `bio-med-480108.OMOP_54_A.drug_exposure` d
+    ON d.drug_exposure_id = c.cost_event_id
+  WHERE d.drug_exposure_id = c.cost_event_id
+    AND (c.paid_by_patient - c.paid_patient_copay) > 0
+    AND d.drug_concept_id
+      IN (906805, 1517070, 19010522)
+  GROUP BY d.drug_concept_id;
+concept_ids_gold_standard: "906805, 1517070, 19010522"

@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_DEX35"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar la frecuencia de prescripción según las diferentes cantidades de unidades de medicamento dispensadas en cada evento.
+sql_base_gold_standard: |
+  SELECT
+    COUNT(1) AS drug_quantity_count,
+    quantity
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  -- List of input numbers
+  WHERE quantity in (10, 20)
+  GROUP BY quantity;
+concept_ids_gold_standard: ""

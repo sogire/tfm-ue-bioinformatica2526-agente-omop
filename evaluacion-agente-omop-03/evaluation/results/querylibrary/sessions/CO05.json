@@ -1,0 +1,820 @@
+{
+  "id": "364742fc-fbb2-4e93-8e7c-962c097b3d0e",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Desglosar el número de pacientes diagnosticados con náuseas según su género y rango de edad. Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c470c94e-5f51-4a3e-84cf-e99122408abe",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "de1caed3-1d0f-40e3-9dd9-70147b934058",
+      "timestamp": 1788682897.5713222
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-967355d5-a2d3-4988-b837-b88bf15aaba9",
+              "args": {
+                "domain_id": "Condition",
+                "query": "Náuseas"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CsgDAY89a1_7LXEQjlE7ZHSSGLjN9qkoGpipR3zhi625w2dR8hMD6ZmrOo6QaPRPELOvY9hl4AOgwEU4DM7C-2PsnntP3UuNvOPTbZ-UolYPHd5arCk1s5Xh3u10fzB4YqIJtdyyQGYBGJ0HPzdWMcxAAH-elGIM2T50no1pFEQ6qdgaTBYadW0n2XQ3ZPKkXlfLHM08-kyPntjvBr4jogdv5TXrEv0sS3fASnkjcevsD6bd9nDn1xthxYrUMXxKVUDrTZ7QwsxKGGgWsSQkQkM3nEFgu0Ig2gpezkxtw-3kQ_fa12jREpLgL__DwQkcWIJP6vq96RmNNgfBv5Lgw44Rt4ZPHXeDpBfiyDohxmbHnG5zi3IgYCtuHb0N-b70HL_uudWaf3WBnqJwqr97G5WeynsukIILsEmsXY6RBaLfXqUZgjvkgFFaEWDmAgEtzAW3J_IzrTxIsNobgfUisS5p4Cczyz2pn27N65pDWCxRfuKkknMn__OYj0JkgHtkuAfusbV8LngIJv6c6WybDxYRu1DYTxWqbdJ5rCAnvOgTyKpIcBKd75ZWdJUQO_d1Zt7DQK3nCQ2R-cMuIpuNM48Kra32pnDgCmRb"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 16,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 16
+          }
+        ],
+        "promptTokenCount": 1251,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1251
+          }
+        ],
+        "thoughtsTokenCount": 108,
+        "totalTokenCount": 1375,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.2596497535705566,
+      "invocationId": "e-c470c94e-5f51-4a3e-84cf-e99122408abe",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "8759e7ba-794b-494d-afcc-173905fcab7f",
+      "timestamp": 1788682897.5726082
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-967355d5-a2d3-4988-b837-b88bf15aaba9",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c470c94e-5f51-4a3e-84cf-e99122408abe",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "775e1df2-cbd6-4ff5-8b30-8c26e99bcedd",
+      "timestamp": 1788682899.174624
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-d7956c2d-f059-4cda-8147-42b12c2c127b",
+              "args": {
+                "query": "Nausea",
+                "domain_id": "Condition"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CvoEAY89a1_F33uUB0RHg1PkPLIe167G78CAfHEGh7q94kbtVcthkhwT1JBG-4yAV6JMaQEYLU5z1YxbCsnkvUm_lfMPaCgvN30JzYGN4d5Q3vUEoXxqyxoDIs1crhtQfrKbjZX5HlDtkxNDO0np1eWJy55zwTH00S2mdYJ4c1mlSa6GZvfFo8ouaATa0Z0tVVWVfxBNZ1UXSsXG5MHmtfyGGfjPGBYhYSf6JgVYJBuLDtFFX4f3jzk83bKUodYovREk2wLR_jqeD5tHt5cGUhOWU8VYW4U28fu4h_xn0cmORCb8oqqx0t9Nnciuua_6jtC0vKH8NwiEpbwf94KxiVz7aQ2Nxu85rIDv_Etxxz0MbQmUO3z54-CW_dmuym3L5SUYqRaA2aCVhWm7gANfA_F9rBA8V3RaYOrxmkSvEMvF7Ah5cEn8_PIBKHTU9H69GN2vzzd4qfeXTytTepvgIfj1NZyyUndvVfzZBjdAGhXSY0PuMLHVpc2rj7MnHnPVsP_v7_B4G_zfFrJgsejostKNtVVRuuhAATbRBgDrO_Q7wASzXe_krKBA4RKnT9nXxeHiz2q13OGEhY051YQqJjqhj_m8IqYB3eD8zykgPKH-GLSK1wi2Y6s7pDA_2KPOh2lEWIimOktXn6cmVeCSZtu82yBQxPXoOdf9J_uThAmr9YwKLsxhDgwp8HuiSQfVROkq8RbPtD3W7nZlV-kH_2AF0N3VGyL45uJBFMZmHXRlZzgFH1vS5fxpDV2YEEIY907iutjvM9Eq4jZogsnh5vMbnQoClv-J1-cuDOpjQ-nP429vtp078MQAJYsze5ZXE3VyKtDRkoVgSu_vHA=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 15,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "promptTokenCount": 1502,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1502
+          }
+        ],
+        "thoughtsTokenCount": 147,
+        "totalTokenCount": 1664,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -4.925820922851562,
+      "invocationId": "e-c470c94e-5f51-4a3e-84cf-e99122408abe",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "d6eeceed-d216-498b-883d-5a336339caba",
+      "timestamp": 1788682899.1773658
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-d7956c2d-f059-4cda-8147-42b12c2c127b",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 17,
+                "concepts": [
+                  {
+                    "concept_id": 31967,
+                    "concept_name": "Nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 44806510,
+                    "concept_name": "Minimal nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 42539349,
+                    "concept_name": "Functional nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 27674,
+                    "concept_name": "Nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4274029,
+                    "concept_name": "Postoperative nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 45757468,
+                    "concept_name": "Vomiting without nausea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4247894,
+                    "concept_name": "Increased nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4143327,
+                    "concept_name": "Decreased nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4104544,
+                    "concept_name": "Nausea, vomiting and diarrhea",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4188573,
+                    "concept_name": "Tendency to nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 44783646,
+                    "concept_name": "Intractable nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 1245082,
+                    "concept_name": "Nausea and vomiting in pregnancy",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4032472,
+                    "concept_name": "Postoperative nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4170402,
+                    "concept_name": "Nausea and vomiting caused by drug",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4239207,
+                    "concept_name": "Nausea and vomiting caused by radiation",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 40385744,
+                    "concept_name": "Chemotherapy-induced nausea and vomiting",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37109979,
+                    "concept_name": "Nausea and vomiting following administration of anesthetic agent",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  }
+                ],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c470c94e-5f51-4a3e-84cf-e99122408abe",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "0f55441c-ce7b-465a-89c8-e419b213f53f",
+      "timestamp": 1788682900.979807
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "He encontrado los siguientes conceptos relacionados con 'Nausea' en el dominio 'Condition':\n\n| Concept ID | Concept Name           | Domain ID |\n|------------|------------------------|-----------|\n| 31967      | Nausea                 | Condition |\n| 44806510   | Minimal nausea         | Condition |\n| 42539349   | Functional nausea      | Condition |\n| 27674      | Nausea and vomiting    | Condition |\n| 4274029    | Postoperative nausea   | Condition |\n\n¿Cuál de estos conceptos representa mejor su variable de estudio para 'náuseas'?",
+            "thoughtSignature": "CvoDAY89a1_Bs-DZkPc3jcyBL1VoG3biU1z42bXsvOzhOn-2SONsQ6YYdpsmzMKStTZWeCYHnRf0dMzjlxNOQkk2uEGBzKQCSY2aSvYl3GX56SSaiAoopQ6iqJPXwbiZYcqsRL4PepbI3TFecFXr-gsTcbla6UA7UCn40UuwCesdmYiAKrBO2PqMq0qz5RbjPfFd-FF4DEjDe_Zl2lm_WWUp5l_V9jeWh0xTSpsPmXk61wwpgyBwiICf_wiaI_yfeEb60Ov0C6co4QAZwQ2qVrLAHw3dGQFfrVaUQ7mvmhkoxMi0JZg-FnQyOjAVRmPcbkM6c98Kj6M4VuQ1Tkb4C3vOHosCqyCaYBF8ktkGO_dVDh-ujiByts2vz2etJNplom8hUwxnSMR68mYe-hUXf1jDZ2q3fuaahD71p9ccRjz26DNmz958e9McWdfr0Y9VLrJsUGLdq09j23YGn0CR-LWK5oJfwa3RufjQgeDMLpY5gHaZXhhZ7Rr2ffLI5nNxuIQwwjP-IfC8bMuAwSXckkv3gBIAkvDjMJW6HZyA9IBFkqAzgD5YnO91baPUMWW8YcivOpxO-W4z1wPBKWysI9YzA9hpn9mF2sQ0PsISWmyFS3MasqhPUnIGe2Ff9nkgi3R848vJd_zJP0SwXUvqTlV4cC3qrtM3xDoTNXo="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 147,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 147
+          }
+        ],
+        "promptTokenCount": 2166,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2166
+          }
+        ],
+        "thoughtsTokenCount": 144,
+        "totalTokenCount": 2457,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.24609520321800596,
+      "invocationId": "e-c470c94e-5f51-4a3e-84cf-e99122408abe",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "49136252-3cf2-4d75-a713-e5a3523070e0",
+      "timestamp": 1788682900.9829006
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 31967. Por favor genera la consulta SQL SELECT para BigQuery consultando las tablas del vocabulario y modelo OMOP (condition_occurrence, person, concept) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-493210da-5248-4cfd-a1e3-4812f93a3e03",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "efd3fa45-fdec-47b2-9dc0-728bbdf28f1a",
+      "timestamp": 1788682903.2224834
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-485404fc-ab26-471f-be61-3855336e815c",
+              "args": {
+                "sql_query": "\nSELECT\n    gc.concept_name AS gender,\n    CASE\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) < 18 THEN '0-17'\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34'\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) BETWEEN 35 AND 54 THEN '35-54'\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) BETWEEN 55 AND 74 THEN '55-74'\n        ELSE '75+'\n    END AS age_group,\n    COUNT(DISTINCT p.person_id) AS patient_count\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS gc\nON\n    p.gender_concept_id = gc.concept_id\nWHERE\n    co.condition_concept_id = 31967\nGROUP BY\n    gender,\n    age_group\nORDER BY\n    gender,\n    age_group\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CskHAY89a19YsDE6tSHbVIZ_ysibLa1XkSPLFx7j1bDmJW6M3aDTsfqCyIr4JeAbmAJW3wFOQ4BaBxRJdU521DVCgb2s_XoZMmdpHi4M1u_pQJLO5n56S3Zt4j8Lsm7mdWXQv24byfciz2suK_XUbUw3MYfS89A3XO59eCqi6QKFKWCAqHFE81hRhWrf8GMbW4tUo4CXDG4kldX88oEcK6ZxBF66n1w_fXNqFoR-HE30lgV8-WKm_ugSfDTIwKR3PsK10zPyRhK_0Nl1_mgFmsfuiJV9WJwC1nJ4BYTZpltx-CTwnjcQqI4J__k3TE99WudWq8SgT1T2Nx5b3kiqm7rqexWp2lbT2YMioZx43j1_FtOcZOcyBZWNbAAts-w3V6J9SDE0Tr2vQeeygET--ZLM4JpSvfU6lAPCpEW1Ieaet_92u2-k0JHjYyLbUu_Fish4ewYFzXtSK6TY87bH3xDX1q08-uRNUi2KB4AtAzTfPFk1snWjSXWY8brsuWvBS_dXW5KgI8P5jRjx3yA7zow6CLVsLrdqnICcBHh1rEKzSNL2sHtc5HEO6XxobcKRhrP2L2437yqLWh0wXjd1mPY9q3vFJJnFGiXUcy0fthoKI5gib7qBYNOEcAAmDuEArs6zeaapjr72lD7Y61-sgw_rt19i3uye1XA2vfuYbUXFNoLox0zPhVUyH6Nc3rmk9nQaqjD67oBfQ3G3HxMvw4opX1WfAHUuPI2KjNTqcIRn43UJZKRLXSuzJ3j5Nx7P4ss5Lk0ujCHxQQwv79HpF2W_-H_1wklORaQkgl7z9x8RUzIfSIO2BO3S50gKnOPhvb0ujaq7zoRqyvKjlOBlST9V3lPhJO7jNX918wkj2y34-pFHPOE_udYe8hPz4ryI826tqesr8pk1Qtbf9YY3HVY_5-n9Z78NUdJjfLTRmTfoup2NJx0o_1mzcSu7Y551On1E8BsLlFqWbxOfZtQpDUrYlvjVujR23SitRv62iO4ipo3WucJ0YonSl4PkjSSYK_pQfo-SwayTsD0Dqk5DBTHkLvjvxrLLWkX7Jemwyj-rdpQ6AGTk7-_Dgjws5gW-K7nTgU48t7BFdeh8sE2_M8MZzmtxOoauNvMRtTeYEUd4vqMzBzAnTYSgjGX5SPH8_sxTYHmEPpFJ1EEKaqLxq1bmJJ3mheBMPVxlRiz2nvuk1ILfIfZGqURBJC-U1sL5YnNXS4DTrCqV2Iu5jAN6gJbgHzwRpWVFVNAdYzqdRtkU3Jl72kItHki7ELvQPSUm4Puzme0b-l0L4Eai"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2186
+          }
+        ],
+        "cachedContentTokenCount": 2186,
+        "candidatesTokenCount": 306,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 306
+          }
+        ],
+        "promptTokenCount": 2507,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2507
+          }
+        ],
+        "thoughtsTokenCount": 310,
+        "totalTokenCount": 3123,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.18350344389871834,
+      "invocationId": "e-493210da-5248-4cfd-a1e3-4812f93a3e03",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "0657454f-bc60-4cef-aad2-b1391ab594e2",
+      "timestamp": 1788682903.224268
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-485404fc-ab26-471f-be61-3855336e815c",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.person",
+                  "bio-med-480108.OMOP_54_A.condition_occurrence",
+                  "bio-med-480108.OMOP_54_A.concept"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-493210da-5248-4cfd-a1e3-4812f93a3e03",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "a3cc2368-ba2c-438a-aa9e-6e998bf977fc",
+      "timestamp": 1788682906.1372972
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "La consulta SQL SELECT para BigQuery que desglosa el número de pacientes diagnosticados con náuseas (Concept ID 31967) según su género y rango de edad es la siguiente:\n\n```sql\nSELECT\n    gc.concept_name AS gender,\n    CASE\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) < 18 THEN '0-17'\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34'\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) BETWEEN 35 AND 54 THEN '35-54'\n        WHEN (EXTRACT(YEAR FROM CURRENT_DATE()) - p.year_of_birth) BETWEEN 55 AND 74 THEN '55-74'\n        ELSE '75+'\n    END AS age_group,\n    COUNT(DISTINCT p.person_id) AS patient_count\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS gc\nON\n    p.gender_concept_id = gc.concept_id\nWHERE\n    co.condition_concept_id = 31967\nGROUP BY\n    gender,\n    age_group\nORDER BY\n    gender,\n    age_group\n```",
+            "thoughtSignature": "CrIBAY89a1-9Lb1JCNf_M5hXyR52xP6E5K_sIXGzsF1OSeQtPA2ba3rDrLlG7-tmcOG38VwjqeyU5E7Zx8Y4jXunsWw0N1niBHrqnP38WcbQm4fsrv1ola_kYRNzGOZhbpRtgbeKmXhuNL6AxNjox9xfyqAUNKhO6np_EjtlQkdyAur4CSNwVNT6pmhs5Tb2qXpue3OlB9l0EGbylCEn-2xVTEByy_OHUPeto1FEh4c6b7wD3Q=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2292
+          }
+        ],
+        "cachedContentTokenCount": 2292,
+        "candidatesTokenCount": 343,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 343
+          }
+        ],
+        "promptTokenCount": 3231,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3231
+          }
+        ],
+        "thoughtsTokenCount": 35,
+        "totalTokenCount": 3609,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.049059664890300426,
+      "invocationId": "e-493210da-5248-4cfd-a1e3-4812f93a3e03",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "47dd0cce-1da5-44e1-aea5-5158c3f5136c",
+      "timestamp": 1788682906.1409044
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y mejora la consulta SQL para BigQuery OMOP CDM 5.4 teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nLa consulta generada cuenta correctamente los pacientes únicos (`COUNT(DISTINCT person_id)`) y agrupa explícitamente por rangos de edad, alineándose mejor con 'número de pacientes' y 'rango de edad'. Sin embargo, calcula la edad utilizando la fecha actual en lugar de la edad en el momento del diagnóstico, lo cual es una inexactitud clínica clave. La consulta de referencia calcula la edad en el momento del diagnóstico (clínicamente superior) pero cuenta las ocurrencias de la condición en lugar de los pacientes únicos (`COUNT(1)`).\n\nGenera directamente la consulta SQL SELECT corregida y ejecutable."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-a9f89753-665f-41be-8bda-dd97efad5664",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "67b38c1c-1d78-4c48-a170-67f3e1644817",
+      "timestamp": 1788682926.246238
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-8c59f6aa-2200-4cda-9202-d3dbe1e0c199",
+              "args": {
+                "sql_query": "\nSELECT\n    gc.concept_name AS gender,\n    CASE\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) < 18 THEN '0-17'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 35 AND 54 THEN '35-54'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 55 AND 74 THEN '55-74'\n        ELSE '75+'\n    END AS age_group,\n    COUNT(DISTINCT p.person_id) AS patient_count\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS gc\nON\n    p.gender_concept_id = gc.concept_id\nWHERE\n    co.condition_concept_id = 31967\nGROUP BY\n    gender,\n    age_group\nORDER BY\n    gender,\n    age_group\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CpsHAY89a19YirhD7io0OkbauhKvwaet6VZ_DcL4s6K3TOrGu-17pXPWKwZpqBrj6wrdaN3PE5brkPgTEL2x4oslW-zqUsSsULlmctsmKkBIsa9Bda3pGxBO14nPBRcVn5Yz-O_LkPnPBmqx1HfvBblzYP_mlITLijEQinuuK0S2lS5ZDi1lhIadm0q9XoKlYnZJNYZ1hbtyRVHxfksUMPzz5cQmScPeKturNEpvWkwW-mbfZC1WnL71U2aBOYIIy4RoX4fHIy8nctu5vyRk5r9YEZAZhzCKcfn729-E6ff3NK5p5glQVz6nGsyfMcEI9ky2jiH9RVUgldtrDxossCMnesQYdO3hcW06xod2qoz-ILBT02aeGBs1b6_a7NsSR8UfA1VTR7GuO1XNy63rM4psgdZUa3JVzkftFX2lXj87xQs8C7sMmDzODJlQqX1ts4481dd1-DPtkWrEeFoAcdQBBicHkoIrBIdK6VMxUzAQKQT1IX_qZ4BA0zcWFKZ8QC67EX49nkaZNVPxy2aci4qd1hYRnkbWkz_ROmzxGL_Zqqznn5KErZwB4cCJ7cbQqIb0ChYHZ4PhmZ8431sla6PjKfaWSK-nN4MykLllqdF420-5f54AkZLJZXAEk61h8iTQAF-TrZdCB4I5JwS6nKoIKF2C3tMNuqELd5APds8ZQpEvTsFCuHJfQx4nI2Dr1B_KxevIjz_rcwQ_MZPBh5oXNHj1P3FCglhjPEwZcOOzq3jWACZ1j3M8f78pgFNlzx2wetruRx-a7pjdV1-l1j4fJSwQvlIMeddb-PoUjWa3lW6NWIv95UL4oVE32kGyf8nA9ve9HfN_Zmj3Fie1-pAORvNtz4nDhMnPOqERhYbe393mzrxWDkrcwJQDWzzKIMgStlLZmB76P5iZ4fYmIg9C2FtxBwyeSvlXq6TMHVREqnqOC4BtG2tTWRsTJKV8pOkdF3-pkwBGjFXH3VnPIBleynCsV15R9qh8YPcGO92vDpsTXIzsZeMgvDoByHTT6InrDp7WWYboLxRR6QrUz_uztjP0cHh4f75HXQ27vXrhSTFqxubtwZMwMFDfFaP_qsj44Ne5maKe-girdpp_a8s70SoxrtaAQC-FRo5JGg5BmXKEZAK0khS7vlFfzcfIEfqZO4pU3YcnNAUiM0Dnwo97jgMD1EdQclN7g-mn0jWHnHS0nMeubAtnYtjre21TWW3KjrmEf1j4gyTchik="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3164
+          }
+        ],
+        "cachedContentTokenCount": 3164,
+        "candidatesTokenCount": 322,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 322
+          }
+        ],
+        "promptTokenCount": 3776,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3776
+          }
+        ],
+        "thoughtsTokenCount": 223,
+        "totalTokenCount": 4321,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.13939632392077714,
+      "invocationId": "e-a9f89753-665f-41be-8bda-dd97efad5664",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "e9d70ca4-ece9-4a52-bc10-114b19d14265",
+      "timestamp": 1788682926.247977
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-8c59f6aa-2200-4cda-9202-d3dbe1e0c199",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.condition_occurrence",
+                  "bio-med-480108.OMOP_54_A.person"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-a9f89753-665f-41be-8bda-dd97efad5664",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "9ca72c07-478e-4ba4-9ba3-4bc77bb889b0",
+      "timestamp": 1788682928.9693415
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "He revisado y mejorado la consulta SQL para BigQuery OMOP CDM 5.4, calculando la edad del paciente en el momento del diagnóstico (usando `condition_start_date`) para mayor precisión clínica. La consulta sigue contando pacientes únicos (`COUNT(DISTINCT person_id)`).\n\nAquí está la consulta SQL corregida y ejecutable:\n\n```sql\nSELECT\n    gc.concept_name AS gender,\n    CASE\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) < 18 THEN '0-17'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 35 AND 54 THEN '35-54'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 55 AND 74 THEN '55-74'\n        ELSE '75+'\n    END AS age_group,\n    COUNT(DISTINCT p.person_id) AS patient_count\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS gc\nON\n    p.gender_concept_id = gc.concept_id\nWHERE\n    co.condition_concept_id = 31967\nGROUP BY\n    gender,\n    age_group\nORDER BY\n    gender,\n    age_group\n```",
+            "thoughtSignature": "CpACAY89a19v-ur5918Lsp2jabuBqb2lqHbNy9RtDY7qpfBit4wLBbSRYNtASWGDzEF0Us-K6u55GWi1CRIFisZ5tRjfk8KlX1hihMGuzliB1z2TBE4avpZBrqjdZ1nNYL2xSjDtvlrZr3XynR_TNoi6c2PUn1b-ghqMqvmomCRr3plERvXbXL4ofRIt4MQBetv4moYgdfWP4-S28PozmKMh-6VFqnZ2xuvy34-WqMKCLiBoWbFXBcLqBnQZ6ydyZcY3-DMuCixf4bY-Tp1mtGKEFp4CXTKQhGcaqwwh1nD-gv-zBpTTOOaPb-8-naZ-0AplPT9bkfW06lJGuPnj8naC4FKIQ930AsppVIOrz5O0qfI="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 391,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 391
+          }
+        ],
+        "promptTokenCount": 4429,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4429
+          }
+        ],
+        "thoughtsTokenCount": 45,
+        "totalTokenCount": 4865,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.07317280098605339,
+      "invocationId": "e-a9f89753-665f-41be-8bda-dd97efad5664",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "ae3a32f8-5c8b-4631-b36e-ca93f36d57f8",
+      "timestamp": 1788682928.9751256
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y optimiza la consulta SQL para BigQuery OMOP CDM 5.4 resolviendo las siguientes observaciones técnicas y clínicas del evaluador:\n\nLa consulta del agente diverge del Gold Standard en la desagregación de la edad, transformando la edad numérica en rangos categóricos ('age_group'), lo cual se alinea mejor con la solicitud de 'rango de edad' de la pregunta clínica, pero difiere del Gold Standard que muestra la edad específica. Además, el agente utiliza 'COUNT(DISTINCT p.person_id)' para 'número de pacientes', que es una interpretación más precisa que el 'COUNT(1)' del Gold Standard para el conteo de pacientes únicos. Aunque el agente mejora la respuesta a la intención clínica, estas diferencias en la estructura de la salida y la métrica de conteo reducen la similitud directa con el Gold Standard.\n\nEmite directamente la sentencia SQL SELECT ejecutable final, sin explicaciones adicionales ni pasos intermedios."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-8324ccce-d6cc-480e-b11b-34608a9fbe91",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "0acce77d-551b-4cdd-a08d-346066dd1859",
+      "timestamp": 1788682947.4801705
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-10e09030-3878-4917-8d9f-9192a0bf4e55",
+              "args": {
+                "sql_query": "\nSELECT\n    gc.concept_name AS gender,\n    CASE\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) < 18 THEN '0-17'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 35 AND 54 THEN '35-54'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 55 AND 74 THEN '55-74'\n        ELSE '75+'\n    END AS age_group,\n    COUNT(DISTINCT p.person_id) AS patient_count\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS gc\nON\n    p.gender_concept_id = gc.concept_id\nWHERE\n    co.condition_concept_id = 31967\nGROUP BY\n    gender,\n    age_group\nORDER BY\n    gender,\n    age_group\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CrsKAY89a1-8KG8VcEVBIy01SXtrmEhB7E6xsy5m9NJxaCXh067tHg44hnUET9cNo6GteF2f9_MNWpRkQzEKbomjbJhER51aboU8VFK99w4rT_PrpeqK3fZeNYtqqouzSWI7y5xwiFFrQRHd6J4xfrwgQjC07flH9WcPzR3aVI3WFmufSJZkERoHPqFTwWT1ZZIYw6SCXgvm4vzCen_C7c11djRlR7ISkG33V3Ke9U3vJVi-7_zJPmFmCXitARdWtsf074CzgiH314zTasMAzJpem8dHHAaJOUTd5Iy4vCRSyvkWa6QUMVloNmazkrA6C8RZRsuOuA9nljzbCk5ESrNiLvNyJa273X7wOIO8hbgnOmGPRWboObNLK0NxU_sSdGqn4tEsSuzyMWFqAnomRN1a1tFon7wYdPaLgBmuUsnFdScXuUSAVjaGaCuJsrcTAaDLSmkXSwBdCv6jsBLosEBMOQJ_jx_cr_oBcVDkS1KkGkwio4OQ8jkFTa7WjNjWktiCMFb1g2DCTsI5nx69iqYpNhWMqxl9fsN0otngkBfaOazgE53vdzHprVismuteCTeNhFTM2tSv6TEEBo9TRKCjCKDVNbqEL7KhAM2KSlM3QvVNU6KjneEQDCCXjRp2GJK2Rkl9yU62deJNcG32ww99CN3EKKdB6RxnfuCKQmAl2whT1XuN1pmlSrAWmZW4yQqKC9WeddhvYI0N6e576ZVutjsyVD3e6rUhy8b8VwM-LJmqW3WzCJ1B6HD6SF0ys0yUs0NWYr6jC-15A9lwhozF0El0g2lQsg9MMpLururnNUIBRnOPwFGHY6Ze8cK7XCQSonP6EZgBws2PABu2L40wI_V64zsxszVwLpmpTcUSAdbex78jt1AtDfeWu4EKD8Gb3hkymSfdnjE7LrQxZyKho5JYjYTXWAI6VU5Q1WQx4VoGQ6ejpHwizkyHUyT8gKiDejye7vydtenxpH8MpLi1qhfowr4Rda9SbAB7dSUAncd-HdXHestNOgT9xbYFhj0SPg5e3lLJ1TjrcUiM-FewVYqKcUUdk7o6SH0jbq8UoqSbt8bSiu9ZNtxKTx1pLi-za6GqvoqQK0GBaBYa5DhY9wIikLhv_oG-uYxpXzlkKZOQ4HUx3LxKvXw7AoOrZPXmChrwmzbVCi5ULKelRWlpl8johodpyvgnBHMj-3oMgIZh9k0A5NwoT-GmDwrBVzMdpMTDGXHFEEE046qGhsIizpGLf5vssx_YlhRofLzA8jzw4G_oe8NjfqyDiqNoEpj03CEbn36emSizjcFIsJ3MCpKK7dpYSqVMPnbZN3ISTasc5JHHgGEfm2QgKfeAhPyCRaBhJTOPQVQXQzWrqYJGxlAMZonQtjFfea0KQV63tZvuVGU4kZESPmFBZugoWTjSuGJ4Pv2AEXD8q5TN7350E0Edlw0wYwZ10Z3qAr4wKBDN8i05eUN17fxCNhVm5DFLraHnDlvMUq8uThLmSV9da447IeYf-JTbYdX-v2VNLunaD7ts2Xjhg9Zk3ClvskmrvyP6uXO6-kPlgqbpI7PzeLqfl5X8BOB2PjrgSrH3qlx-h9AeHRtOURDVxiDm3xy03KoYVerXxS2EvYrYoMgl3fa3GEC-fJ_lOFSPBfRNLR0UQqnkZJ6IcW9usjQJTFaas4TvqPYn_dBpHwZThSffOrdvfnneV16u7nSP0CB-92SAEnvMe7jZ6PIB0kzZldWXekrXjtFK8aKDmKkBbA7FiY1u_-iSQ9us-6JppGX1q0KgnEUxaXEdnDJpfA=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3307
+          }
+        ],
+        "cachedContentTokenCount": 3307,
+        "candidatesTokenCount": 322,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 322
+          }
+        ],
+        "promptTokenCount": 5070,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5070
+          }
+        ],
+        "thoughtsTokenCount": 285,
+        "totalTokenCount": 5677,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.45127205226732336,
+      "invocationId": "e-8324ccce-d6cc-480e-b11b-34608a9fbe91",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "151e3d0b-bbbc-4af7-98e6-b03f75940483",
+      "timestamp": 1788682947.4843674
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-10e09030-3878-4917-8d9f-9192a0bf4e55",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.person",
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.condition_occurrence"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-8324ccce-d6cc-480e-b11b-34608a9fbe91",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "f9197783-e8f8-48e7-9df6-49fa6dcc7b23",
+      "timestamp": 1788682950.7726593
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "```sql\nSELECT\n    gc.concept_name AS gender,\n    CASE\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) < 18 THEN '0-17'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 35 AND 54 THEN '35-54'\n        WHEN (EXTRACT(YEAR FROM co.condition_start_date) - p.year_of_birth) BETWEEN 55 AND 74 THEN '55-74'\n        ELSE '75+'\n    END AS age_group,\n    COUNT(DISTINCT p.person_id) AS patient_count\nFROM\n    `condition_occurrence` AS co\nJOIN\n    `person` AS p\nON\n    co.person_id = p.person_id\nJOIN\n    `concept` AS gc\nON\n    p.gender_concept_id = gc.concept_id\nWHERE\n    co.condition_concept_id = 31967\nGROUP BY\n    gender,\n    age_group\nORDER BY\n    gender,\n    age_group\n```"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5022
+          }
+        ],
+        "cachedContentTokenCount": 5022,
+        "candidatesTokenCount": 316,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 316
+          }
+        ],
+        "promptTokenCount": 5785,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5785
+          }
+        ],
+        "totalTokenCount": 6101,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.0004295573770245419,
+      "invocationId": "e-8324ccce-d6cc-480e-b11b-34608a9fbe91",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "4ecabadd-b7e0-4f1f-97d1-7fee932dc638",
+      "timestamp": 1788682950.7761922
+    }
+  ],
+  "lastUpdateTime": 1788682950.7761922
+}

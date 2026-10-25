@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_CS02"
+nivel_complejidad: "intermedia"
+domain_main: "care_site"
+domain_others: "person"
+pregunta_lenguaje_natural: >-
+  Determinar el número total de pacientes atendidos por cada centro de atención médica, estratificando los resultados según la clasificación del lugar de servicio.
+sql_base_gold_standard: |
+  SELECT
+      cs.place_of_service_concept_id,
+      COUNT(*) AS num_patients
+  FROM `bio-med-480108.OMOP_54_A.care_site` AS cs
+      JOIN `bio-med-480108.OMOP_54_A.person` AS p ON p.care_site_id = cs.care_site_id
+  GROUP BY cs.place_of_service_concept_id
+  ORDER BY cs.place_of_service_concept_id
+  ;
+concept_ids_gold_standard: ""

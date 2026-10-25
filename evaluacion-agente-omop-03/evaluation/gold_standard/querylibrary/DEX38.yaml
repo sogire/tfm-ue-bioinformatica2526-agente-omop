@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_DEX38"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener el recuento de las diferentes razones documentadas para la finalización o interrupción de los tratamientos farmacológicos.
+sql_base_gold_standard: |
+  SELECT
+    COUNT(1) AS totExp,
+    stop_reason
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  -- Filter by input list of stop reasons
+  WHERE stop_reason IN ('INVALID')
+  GROUP BY stop_reason;
+concept_ids_gold_standard: ""

@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_CS01"
+nivel_complejidad: "intermedia"
+domain_main: "care_site"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener el recuento total de centros de atención médica (care sites) registrados en la base de datos, agrupados según el tipo o concepto de lugar de servicio (place of service).
+sql_base_gold_standard: |
+  SELECT
+      cs.place_of_service_concept_id,
+      COUNT(*) AS places_of_service_count
+  FROM `bio-med-480108.OMOP_54_A.care_site` AS cs
+  GROUP BY cs.place_of_service_concept_id
+  ORDER BY cs.place_of_service_concept_id
+  ;
+concept_ids_gold_standard: ""

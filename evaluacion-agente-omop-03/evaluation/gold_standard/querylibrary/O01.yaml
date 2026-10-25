@@ -1,0 +1,25 @@
+id_evaluacion: "querylibrary_O01"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_synonym"
+pregunta_lenguaje_natural: >-
+  Buscar conceptos estándar pertenecientes al dominio de observación (como códigos LOINC y UCUM) que contengan en su descripción la palabra clave 'LDL'.
+sql_base_gold_standard: |
+  SELECT DISTINCT     
+    C.concept_id             AS Entity_Concept_Id,
+    C.concept_name           AS Entity_Name,
+    C.concept_code           AS Entity_Code,
+    'Concept'                AS Entity_Type,
+    C.concept_class_id       AS Entity_concept_class_id,
+    C.vocabulary_id          AS Entity_vocabulary_id
+  FROM `bio-med-480108.OMOP_54_A.concept` C
+  LEFT JOIN `bio-med-480108.OMOP_54_A.concept_synonym` S
+  ON C.concept_id = S.concept_id
+  WHERE  C.vocabulary_id IN ('LOINC', 'UCUM')
+         AND C.concept_class_id IS NOT NULL
+         AND C.standard_concept = 'S'
+         -- regular expression containing the input pattern
+         AND LOWER(C.concept_name) LIKE LOWER('%Ability to%')
+         -- Retrieve only valid concepts
+         AND getdate() >= C.valid_start_date AND my_date <= C.valid_end_date;
+concept_ids_gold_standard: ""

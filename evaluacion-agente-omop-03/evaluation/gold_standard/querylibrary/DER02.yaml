@@ -1,0 +1,25 @@
+id_evaluacion: "querylibrary_DER02"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: "drug_exposure, cost, concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Calcular el costo económico total de un episodio de tratamiento farmacológico (drug_era) agregando los costos de las dispensaciones que lo integran.
+sql_base_gold_standard: |
+  SELECT        sum(ISNULL(c.total_paid, 0)) as total_cost4era
+  FROM        `bio-med-480108.OMOP_54_A.drug_exposure` e,
+              `bio-med-480108.OMOP_54_A.cost` c
+  WHERE
+          exists
+                  (
+                  select        1
+                  from        `bio-med-480108.OMOP_54_A.drug_era` r,
+                              `bio-med-480108.OMOP_54_A.concept_ancestor` m
+                  where
+                          r.drug_era_id = 20--&era_id
+                          and r.person_id = e.person_id
+                          and r.drug_concept_id = m.ancestor_concept_id
+                          and e.drug_concept_id = m.descendant_concept_id
+                          and (e.drug_exposure_start_date >= r.drug_era_start_date) AND (e.drug_exposure_start_date <= r.drug_era_end_date)
+                  )
+  AND e. drug_exposure_id = c.cost_event_id
+concept_ids_gold_standard: ""

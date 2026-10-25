@@ -1,0 +1,24 @@
+id_evaluacion: "querylibrary_DEX07"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "person, concept"
+pregunta_lenguaje_natural: >-
+  Determinar el número máximo de eventos de dispensación o exposición farmacológica experimentados por un paciente en un período de tiempo dado.
+sql_base_gold_standard: |
+  SELECT max(exposures) AS exposures_count
+  FROM (
+    SELECT drug_exposure.person_id,
+      COUNT(*) exposures
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+    INNER JOIN `bio-med-480108.OMOP_54_A.person` ON drug_exposure.person_id = person.person_id
+    WHERE drug_concept_id IN (
+        SELECT DISTINCT concept_id
+        FROM `bio-med-480108.OMOP_54_A.concept`
+        WHERE domain_id = 'Drug'
+          AND standard_concept = 'S'
+        )
+      AND drug_exposure_start_date >= DATEFROMPARTS(2017, 01, 01)
+      AND drug_exposure_start_date <= DATEFROMPARTS(2017, 12, 31)
+    GROUP BY drug_exposure.person_id
+    ) EV;
+concept_ids_gold_standard: ""

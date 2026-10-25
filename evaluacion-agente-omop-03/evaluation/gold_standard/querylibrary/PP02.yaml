@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_PP02"
+nivel_complejidad: "compleja"
+domain_main: "payer_plan_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución y el recuento total de pacientes según el tipo de plan de seguro médico o cobertura de salud registrada.
+sql_base_gold_standard: |
+  SELECT
+    t.plan_source_value,
+    t.pat_cnt AS num_patients,
+    100.00*t.pat_cnt/ (sum(t.pat_cnt) over()) perc_of_total_count
+  FROM 
+    (SELECT 
+      p.plan_source_value, 
+      count(1) AS pat_cnt
+     FROM `bio-med-480108.OMOP_54_A.payer_plan_period` p
+     GROUP BY p.plan_source_value
+    ) AS t
+  ORDER BY t.plan_source_value;
+concept_ids_gold_standard: ""

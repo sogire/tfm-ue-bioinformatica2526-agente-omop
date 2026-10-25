@@ -1,0 +1,14 @@
+id_evaluacion: "querylibrary_PP01"
+nivel_complejidad: "intermedia"
+domain_main: "payer_plan_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener el recuento de pacientes que mantienen una cobertura continua en su plan de seguro médico (payer plan) durante al menos un año consecutivo.
+sql_base_gold_standard: |
+  SELECT
+    FLOOR(DATEDIFF(day,payer_plan_period_start_date,payer_plan_period_end_date)/365) AS year_int,
+    COUNT(1)                                                                         AS num_patients
+  FROM `bio-med-480108.OMOP_54_A.payer_plan_period`
+  GROUP BY floor( DATEDIFF(day,payer_plan_period_start_date, payer_plan_period_end_date) /365)
+  ORDER BY 1;
+concept_ids_gold_standard: ""

@@ -1,0 +1,13 @@
+id_evaluacion: "querylibrary_CO11"
+nivel_complejidad: "baja"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar el número de pacientes únicos que tienen al menos un diagnóstico registrado de náuseas.
+sql_base_gold_standard: |
+  SELECT
+    COUNT(DISTINCT person_id) AS persons_with_condition_count
+  FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+  WHERE condition_concept_id = 31967
+        AND person_id IS NOT NULL;
+concept_ids_gold_standard: "31967"

@@ -1,0 +1,23 @@
+id_evaluacion: "querylibrary_OP02"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución de la duración en meses del primer período de observación médica de los pacientes en la población.
+sql_base_gold_standard: |
+  SELECT
+    FLOOR(DATEDIFF(day, observation_period_start_date, observation_period_end_date)/30) AS num_months,
+    COUNT(DISTINCT person_id) AS num_persons
+  FROM
+    ( SELECT
+        person_ID,
+        observation_period_START_DATE,
+        observation_period_END_DATE,
+        rank() OVER (PARTITION BY person_ID ORDER BY observation_period_START_DATE ASC) AS OP_NUMBER
+      FROM `bio-med-480108.OMOP_54_A.observation_period`
+    ) AS OP1
+  WHERE op_number = 1
+  GROUP BY FLOOR(DATEDIFF(day,observation_period_START_DATE, observation_period_END_DATE)/30)
+  ORDER BY FLOOR(DATEDIFF(day,observation_period_START_DATE, observation_period_END_DATE)/30) ASC
+  ;
+concept_ids_gold_standard: ""

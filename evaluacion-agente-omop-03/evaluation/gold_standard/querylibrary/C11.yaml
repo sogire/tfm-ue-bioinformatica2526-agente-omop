@@ -1,0 +1,27 @@
+id_evaluacion: "querylibrary_C11"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_relationship"
+pregunta_lenguaje_natural: >-
+  Listar todas las condiciones y enfermedades clínicas cuya localización anatómica corresponda a la articulación de la rodilla.
+sql_base_gold_standard: |
+  SELECT
+    a.concept_id       AS condition_id,
+    a.concept_name     AS condition_name,
+    a.concept_code     AS condition_code,
+    a.concept_class_id AS condition_class,
+    a.vocabulary_id    AS condition_vocab_id,
+    d.concept_id       AS anatomical_site_id,
+    d.concept_name     AS anatomical_site_name,
+    d.concept_code     AS anatomical_site_code,
+    d.concept_class_id AS anatomical_site_class,
+    d.vocabulary_id    AS anatomical_site_vocab_id
+  FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS cr
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS a ON cr.concept_id_1 = a.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS d ON cr.concept_id_2 = d.concept_id
+  WHERE
+    cr.relationship_id = 'Has finding site' AND
+    d.concept_id = 4103720 AND
+    cr.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: "4103720"

@@ -1,0 +1,29 @@
+id_evaluacion: "querylibrary_C01"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Obtener la información detallada del concepto de condición clínica asociado a hemorragia gastrointestinal, incluyendo nombre, código fuente, clase de concepto, vocabulario y un indicador de si es un concepto de enfermedad válido.
+sql_base_gold_standard: |
+  SELECT
+    c.concept_id       AS condition_concept_id,
+    c.concept_name     AS condition_concept_name,
+    c.concept_code     AS condition_concept_code,
+    c.concept_class_id AS condition_concept_class,
+    c.vocabulary_id    AS condition_concept_vocab_id,
+    CASE c.vocabulary_id
+    WHEN 'SNOMED'
+      THEN CASE lower(c.concept_class_id)
+           WHEN 'clinical finding'
+             THEN 'Yes'
+           ELSE 'No' END
+    WHEN 'MedDRA'
+      THEN 'Yes'
+    ELSE 'No'
+    END                AS is_disease_concept_flag
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+  WHERE
+    c.concept_id = 192671 AND 
+    c.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: "192671"

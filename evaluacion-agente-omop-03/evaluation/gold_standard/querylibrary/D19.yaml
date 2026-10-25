@@ -1,0 +1,38 @@
+id_evaluacion: "querylibrary_D19"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_relationship, concept_ancestor, relationship"
+pregunta_lenguaje_natural: >-
+  Obtener los principios activos indicados para vómitos clasificados según el tipo de indicación médica.
+sql_base_gold_standard: |
+  SELECT DISTINCT
+    ingredient.concept_id as ingredient_concept_id,
+    ingredient.concept_name as ingredient_concept_name,
+    ingredient.concept_code as ingredient_concept_code,
+    rn.relationship_name as indication_type,
+    indication_relation.relationship_id
+  FROM
+    `bio-med-480108.OMOP_54_A.concept_relationship` indication_relation
+  INNER JOIN
+    `bio-med-480108.OMOP_54_A.concept_ancestor` a ON a.ancestor_concept_id=indication_relation.concept_id_2
+  INNER JOIN
+    `bio-med-480108.OMOP_54_A.concept` ingredient ON ingredient.concept_id=a.descendant_concept_id
+  INNER JOIN
+    `bio-med-480108.OMOP_54_A.relationship` rn ON rn.relationship_id = indication_relation.relationship_id
+  WHERE
+    indication_relation.concept_id_1 = 4345991 AND
+    ingredient.domain_id = 'Drug' AND
+    ingredient.standard_concept = 'S' AND
+    indication_relation.relationship_id IN (
+           'May treat',
+           'May prevent',
+           'May be treated by',
+           'May be prevented by',
+           'Has FDA-appr ind',
+           'Has off-label ind',
+           'Is FDA-appr ind of',
+           'Is off-label ind of',
+           'Inferred class of',
+           'Has inferred class') AND
+    (getdate() >= ingredient.valid_start_date) AND (getdate() <= ingredient.valid_end_date);
+concept_ids_gold_standard: "4345991"

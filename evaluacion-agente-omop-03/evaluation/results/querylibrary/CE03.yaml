@@ -1,0 +1,70 @@
+id_evaluacion: querylibrary_CE03
+session_id: 4df62efc-4ce1-4c8d-a0af-bc4ead60fa54
+session_file: results/querylibrary/sessions/CE03.json
+turnos_ejecutados: 2
+sql_generada_agente: |-
+  SELECT CASE
+             WHEN (extract(YEAR
+                           FROM ce.condition_era_start_date) - p.year_of_birth) < 18 THEN '0-17'
+             WHEN (extract(YEAR
+                           FROM ce.condition_era_start_date) - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34'
+             WHEN (extract(YEAR
+                           FROM ce.condition_era_start_date) - p.year_of_birth) BETWEEN 35 AND 49 THEN '35-49'
+             WHEN (extract(YEAR
+                           FROM ce.condition_era_start_date) - p.year_of_birth) BETWEEN 50 AND 64 THEN '50-64'
+             ELSE '65+'
+         END AS age_group,
+         c_gender.concept_name AS gender,
+         min(date_diff(ce.condition_era_end_date, ce.condition_era_start_date, DAY) + 1) AS min_duration_days,
+         max(date_diff(ce.condition_era_end_date, ce.condition_era_start_date, DAY) + 1) AS max_duration_days,
+         avg(cast(date_diff(ce.condition_era_end_date, ce.condition_era_start_date, DAY) + 1 AS float64)) AS avg_duration_days
+  FROM `condition_era` AS ce
+  JOIN `person` AS p ON ce.person_id = p.person_id
+  JOIN `concept` AS c_gender ON p.gender_concept_id = c_gender.concept_id
+  JOIN `concept_ancestor` AS ca ON ce.condition_concept_id = ca.descendant_concept_id
+  WHERE ca.ancestor_concept_id = 359817006 -- Concept ID for 'Fracture of hip' or its broader equivalent
+  GROUP BY age_group,
+           gender
+  ORDER BY age_group,
+           gender;
+concept_ids_identificados_agente:
+- 359817006
+metricas_evaluacion:
+  validez_sintactica_y_estructural: 0.98
+  precision_terminologica_vocabulario: 1.0
+  detalle_validez_sintactica:
+    criterio_1_1_ejecucion: 0.1
+    criterio_1_2_similitud_sql_gemini: 0.88
+    justificacion_gemini: |-
+      La consulta generada implementa correctamente la lógica clínica para calcular la duración de las eras de condición de fractura de cadera, estratificando por género y grupos de edad. Utiliza las tablas OMOP adecuadas (`condition_era`, `person`, `concept`, `concept_ancestor`) y realiza los `JOINs` y filtros correctos para las fracturas de cadera. La principal diferencia con el Gold Standard es la granularidad específica de los grupos de edad definidos, aunque la estratificación por edad se cumple. Además, la consulta generada utiliza la sintaxis optimizada para BigQuery (`DATE_DIFF`, `EXTRACT`, `FLOAT64`) y nombres de tabla relativos, lo cual es preferible y se ajusta a las directrices.
+  metricas_por_turno:
+    turno_1:
+      validez_sintactica_y_estructural: 0.7
+      precision_terminologica_vocabulario: 1.0
+      question_improvement: ''
+    turno_2:
+      validez_sintactica_y_estructural: 0.98
+      precision_terminologica_vocabulario: 1.0
+      question_improvement: 'Por favor, revisa y mejora la consulta SQL para BigQuery
+        OMOP CDM 5.4 teniendo en cuenta las siguientes observaciones del evaluador
+        clínico/técnico:
+
+
+        La principal discrepancia clínica radica en la identificación de la ''fractura
+        de cadera''. La consulta generada por el agente utiliza una lista fija de
+        `concept_id` (760688, 760691, 760692, 760694) para filtrar las condiciones,
+        lo cual es menos robusto y potencialmente incompleto. La consulta de referencia,
+        en cambio, emplea `concept_ancestor` partiendo de un `concept_code` (''359817006''),
+        asegurando una definición más exhaustiva y clínicamente precisa de todas las
+        fracturas de cadera relevantes al incluir sus descendientes. Además, las estratificaciones
+        por grupo de edad difieren, y la consulta de referencia incluye el día final
+        en el cálculo de duración (+1 en DATEDIFF), mientras que la generada no, lo
+        que podría resultar en una duración ligeramente subestimada.
+
+
+        Genera directamente la consulta SQL SELECT corregida y ejecutable.'
+evaluacion_cualitativa: |-
+  Consulta SQL ejecutable (0.10 pts) sobre tabla(s) concept, concept_ancestor, condition_era, condition_era_start_date, person generada en el Turno 2 tras mejora guiada por el juez LLM.
+  Similitud SQL evaluada por Gemini (0.88/0.90 pts): La consulta generada implementa correctamente la lógica clínica para calcular la duración de las eras de condición de fractura de cadera, estratificando por género y grupos de edad. Utiliza las tablas OMOP adecuadas (`condition_era`, `person`, `concept`, `concept_ancestor`) y realiza los `JOINs` y filtros correctos para las fracturas de cadera. La principal diferencia con el Gold Standard es la granularidad específica de los grupos de edad definidos, aunque la estratificación por edad se cumple. Además, la consulta generada utiliza la sintaxis optimizada para BigQuery (`DATE_DIFF`, `EXTRACT`, `FLOAT64`) y nombres de tabla relativos, lo cual es preferible y se ajusta a las directrices.
+  Consulta exploratoria sin conceptos fijos requeridos en el estándar; el agente identificó 1 concepto(s) candidatos pertinentes en el vocabulario.
+check_conexion: true

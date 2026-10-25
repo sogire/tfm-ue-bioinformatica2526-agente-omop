@@ -1,0 +1,19 @@
+id_evaluacion: "querylibrary_CO01"
+nivel_complejidad: "intermedia"
+domain_main: "condition_era"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Calcular la duración en días de cada ocurrencia o diagnóstico de condición clínica para dolor abdominal.
+sql_base_gold_standard: |
+  SELECT
+    DATEDIFF(day,ca.condition_era_start_date, ca.condition_era_end_date) + 1 AS num_condition_duration_days,
+    count(*)                                                                 AS condition_duration_freq_count
+  FROM `bio-med-480108.OMOP_54_A.condition_era` ca
+  INNER JOIN `bio-med-480108.OMOP_54_A.concept` c
+  ON ca.condition_concept_id = c.concept_id
+  WHERE c.concept_id = 200219
+  GROUP BY  c.concept_id,
+            c.concept_name,
+            DATEDIFF(day,condition_era_start_date, ca.condition_era_end_date)
+  ORDER BY 1;
+concept_ids_gold_standard: "200219"

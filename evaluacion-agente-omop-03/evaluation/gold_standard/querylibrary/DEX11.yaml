@@ -1,0 +1,34 @@
+id_evaluacion: "querylibrary_DEX11"
+nivel_complejidad: "compleja"
+domain_main: "drug_exposure"
+domain_others: "concept, concept_relationship"
+pregunta_lenguaje_natural: >-
+  Evaluar la distribución y frecuencia de uso de las distintas marcas comerciales para el fármaco genérico metilprednisolona.
+sql_base_gold_standard: |
+  SELECT drug_name,
+         brand_name,
+         100.00*cn_3_02/SUM(cn_3_02) OVER() AS perc_brand_count
+    FROM (
+  SELECT A.concept_name  AS drug_name,
+         D.concept_name  AS brand_name,
+         COUNT(*)        AS cn_3_02
+    FROM `bio-med-480108.OMOP_54_A.concept` AS A
+    JOIN `bio-med-480108.OMOP_54_A.concept_relationship` AS CR003
+      ON CR003.concept_id_1        = A.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept_relationship` AS CR007
+      ON CR007.concept_id_2        = CR003.concept_id_2
+    JOIN `bio-med-480108.OMOP_54_A.concept_relationship` AS CR006
+      ON CR007.concept_id_1        = CR006.concept_id_1
+    JOIN `bio-med-480108.OMOP_54_A.concept` D
+      ON CR006.concept_id_2        = D.concept_id
+    LEFT JOIN `bio-med-480108.OMOP_54_A.drug_exposure` de
+      ON de.drug_concept_id        = cr003.concept_id_2
+   WHERE CR003.relationship_ID     = 'Has tradename'
+     AND A.concept_class_id        = 'Clinical Drug'
+     AND CR007.relationship_ID     = 'Constitutes'
+     AND CR006.relationship_ID     = 'Has brand name'
+     AND D.concept_class_id        = 'Brand Name'
+     AND A.concept_id              = 35606533
+   GROUP BY A.concept_name, D.concept_name
+         ) TMP;
+concept_ids_gold_standard: "35606533"

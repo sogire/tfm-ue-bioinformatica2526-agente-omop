@@ -1,0 +1,45 @@
+id_evaluacion: querylibrary_CE16
+session_id: 983464c1-b9fd-469f-929e-d100cc5c3895
+session_file: results/querylibrary/sessions/CE16.json
+turnos_ejecutados: 1
+sql_generada_agente: |-
+  SELECT co.condition_concept_id,
+         cc.concept_name AS condition_concept_name,
+         co.condition_type_concept_id,
+         ctc.concept_name AS condition_type_concept_name,
+         count(co.condition_occurrence_id) AS number_of_episodes,
+         avg(cast(date_diff(co.condition_end_date, co.condition_start_date, DAY) AS BIGNUMERIC)) AS average_duration_days,
+         min(date_diff(co.condition_end_date, co.condition_start_date, DAY)) AS min_duration_days,
+         max(date_diff(co.condition_end_date, co.condition_start_date, DAY)) AS max_duration_days,
+         approx_quantiles(cast(date_diff(co.condition_end_date, co.condition_start_date, DAY) AS BIGNUMERIC), 4)[offset(1)] AS percentile_25_duration_days,
+         approx_quantiles(cast(date_diff(co.condition_end_date, co.condition_start_date, DAY) AS BIGNUMERIC), 4)[offset(2)] AS percentile_50_duration_days,
+         approx_quantiles(cast(date_diff(co.condition_end_date, co.condition_start_date, DAY) AS BIGNUMERIC), 4)[offset(3)] AS percentile_75_duration_days
+  FROM `condition_occurrence` AS co
+  JOIN `concept` AS cc ON co.condition_concept_id = cc.concept_id
+  JOIN `concept` AS ctc ON co.condition_type_concept_id = ctc.concept_id
+  WHERE co.condition_end_date IS NOT NULL
+    AND co.condition_start_date IS NOT NULL
+  GROUP BY co.condition_concept_id,
+           cc.concept_name,
+           co.condition_type_concept_id,
+           ctc.concept_name
+  ORDER BY number_of_episodes DESC;
+concept_ids_identificados_agente: []
+metricas_evaluacion:
+  validez_sintactica_y_estructural: 0.95
+  precision_terminologica_vocabulario: 0.0
+  detalle_validez_sintactica:
+    criterio_1_1_ejecucion: 0.1
+    criterio_1_2_similitud_sql_gemini: 0.85
+    justificacion_gemini: |-
+      La consulta SQL generada por el agente aborda con precisión la pregunta clínica al calcular la distribución y los percentiles de la *duración en días* de los episodios de condición, utilizando `DATE_DIFF` y `APPROX_QUANTILES` sobre la tabla `condition_occurrence`. Estratifica correctamente los resultados por concepto de condición y tipo de condición. La consulta Gold Standard, por otro lado, calcula la distribución y los percentiles del *recuento de ocurrencias de condición*, en lugar de la duración real, lo que representa una diferencia fundamental con la intención clínica explícita. La aproximación de la consulta generada es superior en su adecuación a la necesidad clínica planteada.
+  metricas_por_turno:
+    turno_1:
+      validez_sintactica_y_estructural: 0.95
+      precision_terminologica_vocabulario: 0.0
+      question_improvement: ''
+evaluacion_cualitativa: |-
+  Consulta SQL ejecutable (0.10 pts) sobre tabla(s) concept, condition_occurrence generada directamente en un único turno con validación exitosa en BigQuery.
+  Similitud SQL evaluada por Gemini (0.85/0.90 pts): La consulta SQL generada por el agente aborda con precisión la pregunta clínica al calcular la distribución y los percentiles de la *duración en días* de los episodios de condición, utilizando `DATE_DIFF` y `APPROX_QUANTILES` sobre la tabla `condition_occurrence`. Estratifica correctamente los resultados por concepto de condición y tipo de condición. La consulta Gold Standard, por otro lado, calcula la distribución y los percentiles del *recuento de ocurrencias de condición*, en lugar de la duración real, lo que representa una diferencia fundamental con la intención clínica explícita. La aproximación de la consulta generada es superior en su adecuación a la necesidad clínica planteada.
+  No se detectaron los conceptos esperados ([256723, 372906, 435371, 440377, 441202]) en la consulta.
+check_conexion: true

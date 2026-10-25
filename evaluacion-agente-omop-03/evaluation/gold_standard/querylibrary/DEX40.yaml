@@ -1,0 +1,21 @@
+id_evaluacion: "querylibrary_DEX40"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: "condition_occurrence"
+pregunta_lenguaje_natural: >-
+  Contar las dispensaciones de los fármacos seleccionados (metoclopramida, desmopresina y ciclosporina) en pacientes diagnosticados concurrentemente con condiciones clínicas específicas de interés.
+sql_base_gold_standard: |
+  SELECT
+    drug_concept_id,
+    condition_concept_id  AS relevant_condition_concept_id,
+    COUNT(1)              AS drugs_count
+  FROM `bio-med-480108.OMOP_54_A.drug_exposure`
+  INNER JOIN `bio-med-480108.OMOP_54_A.condition_occurrence`
+  ON drug_exposure.visit_occurrence_id = condition_occurrence.visit_occurrence_id
+     AND       drug_exposure.person_id = condition_occurrence.person_id
+        -- Filter by input drug_concept_id
+  WHERE drug_concept_id in (906805, 1517070, 19010522)
+        -- filter by input condition_concept_id
+        AND condition_concept_id in (26052, 258375)
+  GROUP BY condition_concept_id, drug_concept_id;
+concept_ids_gold_standard: "906805, 1517070, 19010522, 26052, 258375"

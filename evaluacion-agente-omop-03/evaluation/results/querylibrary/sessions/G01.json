@@ -1,0 +1,497 @@
+{
+  "id": "7da48f60-33ee-4ae6-8063-c7c00b411a02",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Obtener la información y atributos detallados en el vocabulario para el concepto de hemorragia gastrointestinal. Genera directamente la consulta SQL para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c3198e75-15e0-4dd5-be9c-07b4eb17daef",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "8309c820-a618-48c7-b398-ca142cc10574",
+      "timestamp": 1788693172.0832295
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-bab912fd-57ae-4d99-8188-108115bd4e84",
+              "args": {
+                "query": "hemorragia gastrointestinal",
+                "domain_id": "Condition"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CroEAY89a19EB00fG95R9OZNbvP4bJsVGTt4yvuLo5fmYOdyo0rCxegv6RaJTt1mcO8pVChzH7scBSJdk3dUTkhJHBDK6-GC3bmDG6BMjAyexIVW8bkpkCNE2myv3s9z8mLvit9qVZUl7NIVJt9vOiIMxom9p00WH2Xea4kFWfDI-sQbqANapKOHOTCjSWDRriH05AnGEo3WPrF7JOus22U8Incv44aXBYi9F2PfxQ71tLCZ1lf74vnfZraWtgbAf7xFXL5VNrlfoBilKBS1hn39XNihsnCdM0uuJ3z70ubR7hfwulHlwoQdVqSA8Fgg4xaHPVowbaK69eY6qCOHdEWxxV--Ad6WKwHduTxmCRvb6hzY_cnzKb4WBNcHXqK1-zEgzGUKuqfId1T-TQ-p7BqEJoIIkSVGmy2udWN7Kt1517hg74Fxl2V18E2LU1M9yxuq0B4E-Dgu7jwix_ImzHmnpGzvYZ1PBUFyBsX_Ifhs5BnyJqt7xxVmlQfey27b1rxKTlbxybaftPW9H3QwCr3MgEd2elXZnMTM-dXfGlX1XmlPPIaua-YMCpGPq3Z-9Re9Xv0qGSbUVat6s5hhjqjhVOKqVb1pZ6WvOvq4KjE_JByf19sVxhoF8QmyPlgEKvvWRTtG_YBAVNwI6i3KtfqdTEm8iuPCQdJxEZbBBqwHszizUveFCESqXclO2w1qyBjK3nh697to85Zy_rfFfpNvUJboqlFbOemoeKw9_ch_bJYzURzYUlnb78Ny"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 18,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 18
+          }
+        ],
+        "promptTokenCount": 1251,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1251
+          }
+        ],
+        "thoughtsTokenCount": 130,
+        "totalTokenCount": 1399,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.1631170908610025,
+      "invocationId": "e-c3198e75-15e0-4dd5-be9c-07b4eb17daef",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "adc02478-d96b-4f12-b119-c850ba729f7d",
+      "timestamp": 1788693172.0883527
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-bab912fd-57ae-4d99-8188-108115bd4e84",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c3198e75-15e0-4dd5-be9c-07b4eb17daef",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "650fee99-87a9-4a6a-8af3-b9b048456fbb",
+      "timestamp": 1788693174.084865
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-42dfec40-86a8-4cda-82eb-9c0416d69a6a",
+              "args": {
+                "domain_id": "Condition",
+                "query": "gastrointestinal hemorrhage"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CqIDAY89a1_76tUu8SamnLhV2IUgjDJPCsEGol2a_708GOgNS54hQxAwYi94wc5V-nMKJ7SmXJaMjxJnaVDDfH41l0B0u2J3PhCq9nxRRvdMCoV9lZxRDiCeIcc0gUu1aN-uOVBZUGq8yHdNxlU1SOj9IdPKSW15poON2cNlR7TBXWMWj3P4waLNBGpf07Y2fdzrCZqu-cXtbMKiL_eTL8u8Q3p0PDL5DQjdBkLobXNzek2blEKU1KH1oamPw8Ez0uafdvjg3ATNyvPq3NArRorzGB7bJ7uIUxLYKR3YWndzAwCvhhs3RwrTjKuZu0coPtayfmzIZwOFEka7pN0bCBN80L610W2oGY_1-Ya4KlXPr9o5pjLFgh7C_248O1iEWs7XkmFXeULBYgEUQKW8KgJvlUTEG_fsVvb4WeY4sJ3ziXw1mnKjyYVKfWUSjsfHl5C-drru3N3cBw92QUrSf43El_eEdbrDf46G3Wo3z7U4K19j1jOTwrKtSQo42dR4-l4PEwZf8H2xQ1ch7f1WkModCYroI_dzVPxWySryG10-DdyiXQ=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 17,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 17
+          }
+        ],
+        "promptTokenCount": 1526,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1526
+          }
+        ],
+        "thoughtsTokenCount": 88,
+        "totalTokenCount": 1631,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.2499791313620174,
+      "invocationId": "e-c3198e75-15e0-4dd5-be9c-07b4eb17daef",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "4e082431-8795-4972-91c8-93b83c8ac183",
+      "timestamp": 1788693174.0879617
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-42dfec40-86a8-4cda-82eb-9c0416d69a6a",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 16,
+                "concepts": [
+                  {
+                    "concept_id": 192671,
+                    "concept_name": "Gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4100660,
+                    "concept_name": "Acute gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4338544,
+                    "concept_name": "Lower gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4307661,
+                    "concept_name": "Chronic gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 36717237,
+                    "concept_name": "Obscure gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37109016,
+                    "concept_name": "Neonatal gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 194158,
+                    "concept_name": "Perinatal gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4342904,
+                    "concept_name": "Gastrointestinal anastomotic hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4310668,
+                    "concept_name": "Acute lower gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4308202,
+                    "concept_name": "Acute upper gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 37163132,
+                    "concept_name": "Gastrointestinal hemorrhage with sepsis",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 193809,
+                    "concept_name": "Melena due to gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4103011,
+                    "concept_name": "Chronic upper gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4195068,
+                    "concept_name": "Chronic lower gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 36684448,
+                    "concept_name": "Gastritis with upper gastrointestinal hemorrhage",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  },
+                  {
+                    "concept_id": 4332645,
+                    "concept_name": "Upper gastrointestinal hemorrhage associated with hypercoagulability state",
+                    "domain_id": "Condition",
+                    "vocabulary_id": "SNOMED"
+                  }
+                ],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Condition"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-c3198e75-15e0-4dd5-be9c-07b4eb17daef",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "8619c5d1-a1be-4dc6-8a9a-5442fc7bbac7",
+      "timestamp": 1788693175.671695
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "He encontrado varios conceptos relacionados con \"gastrointestinal hemorrhage\" en inglés.\n\nAquí están los 5 principales conceptos estándar:\n\n| Concept ID | Concept Name                         | Domain    |\n|------------|--------------------------------------|-----------|\n| 192671     | Gastrointestinal hemorrhage          | Condition |\n| 4100660    | Acute gastrointestinal hemorrhage    | Condition |\n| 4338544    | Lower gastrointestinal hemorrhage    | Condition |\n| 4307661    | Chronic gastrointestinal hemorrhage  | Condition |\n| 36717237   | Obscure gastrointestinal hemorrhage  | Condition |\n\n¿Cuál de estos conceptos representa mejor su variable de estudio?",
+            "thoughtSignature": "CqoGAY89a1-U9RGzMs-I0Rpk8qLVap6jf8MYJ-cikFWTe-zdmMlakCref401VQlwBNXA7TcOjfiaQgNyexDsPjA6nsxTUiZEunImbosfpfJPEQndK4EcRDxN1OAXF9IqL_92XPQy5OZSs-4FdJr2wFnFqHn9Sod2pKYF38OmoRG5W6Mn4CeDeCzo6PtmIbuSt5Q5v6ogkNqs39mjD652YYHb01kUNS-xaNZeyVlvdfjLtl3nF6dYnBv5laqUra6XTtqdiNQtxYHhw0h76h5mMz-zFHinqr1Lk9E-eT3Od_3IZAPBCmB24cnrLls_35-tFX2dPxla_8bqR90XABrnA7RbGDQj1EhBnWZZ1qssp-yRVVefkRDiSN1UPjJOZ2acogQ5as1tmjQ9_kXmRm4XDwTTaq7qRkzBCSaHl0Dlkvi-vc_PM-Ii4renYsnclnUux1t3N8j7-vvLFvF8YdWTkzR661tza8UDfX88fhT1epPTIv7v7doolZ2hXIQyEVy1i0Wzk2c8XODgvcDqf3-I685gCvPGgEtZ38kKRj9DGrE5gy-1wrzJRL_Qg4bZqksfaCIeSf_bCeZZbSsm8GmYsOhrsiVNIQfzgiR63aUiQlvbazvBMVyOb1ZtyiY7KvVV-0Vt0mwONhYkjQROiddBhaeXpbkxgQ_kBYyAAb_iyIx0AEOR2zny41kby7jYkQEiETDFMAch1_X6XOkyVByGmEzceaNpT7AfrnR6uNrLQ8t_dl0iY4K85B1yDZ9QwPrYsnKrDXukoRoWShIQ34VV2DN-ZyLvvriSmp2RCFksQSQo2s4GuPI4TIHK5oL_BnvNjo4idiOcvLEUCq66xqMATMvuISoU6_Vg7-IYvvTDnS1WLfKQ6DkD9UMHcSD62ffhoS2ZAQu3cpPuk9aNhqOqX2zBFqee6iMY9QCREOYnPcz3P3TsHcWocOiXsBiHsw16jdQjYOUsZUz4whHExBLV-ygUeBxvapuw6vyXfwrCDPibsn_TwVXVdaPhMbBp0ghfTnzg_jBOKdR84e3I9XGPMukR8xC0YbJ-8gZRPrfEFoCDDSsdkREgi3bRBFT7"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 161,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 161
+          }
+        ],
+        "promptTokenCount": 2120,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2120
+          }
+        ],
+        "thoughtsTokenCount": 191,
+        "totalTokenCount": 2472,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.17813310563934515,
+      "invocationId": "e-c3198e75-15e0-4dd5-be9c-07b4eb17daef",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "e917d817-cb77-44d8-82a5-0bad9ae90a2a",
+      "timestamp": 1788693175.6747875
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 192671. Por favor genera la consulta SQL para BigQuery consultando las tablas del vocabulario y modelo OMOP (concept) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-0a6f28eb-662c-47f1-808f-6b8d355243a0",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "bddc65ce-2994-4c1f-8813-cefbea2c12dd",
+      "timestamp": 1788693178.6911273
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-39527f4f-df78-4d2c-bced-bf772ece398a",
+              "args": {
+                "sql_query": "\nSELECT\n    c.*\nFROM\n    `concept` AS c\nWHERE\n    c.concept_id = 192671\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CuYGAY89a1837hNDCY3-FHMu3nPcVKobjtX_1DUFUIDfKQzpbzpxRkD9AyzzeNkniFDOycvYXLEjUESvxUmlqIxmmn2iCHlzcghYe0rpoRwhD3QaCcxD17PBh5IIlrZ1YyDebZBf5O74rMdI5K5IQKScv1zVwO2I8bRYJynoPqRo4dLlA_o_TFMHk7K6rM-kOX1au-gF3eoUeqjzJ03QQKLhKr0WjxT7geWypaCQvjLuhVGK2sykflcfMKjxxtYTxfiIEug8bBuMf2q7Endj_iIN1QK6T0gK2D90e8eAmgi1DRmsEMWnL_H1njDNPEZlGDye30lOOPjRYDMUgj6XYighu24nTj9kDoU9sozcT_lXWJm1DmOdfJnU7CyMJHQ3XGIhVEXPL5uqzjtr0hCJkKluUOnO0aWawgO-CIDAMPRbj8Xvre-mul50wbSUSN_XZ4S1OHxCTPryh8DKl1dhWoGwHOtNy1qTPhksMLKY2Nx7o-kqufnjUrgPt1j8cBYh4i_Z8A9xDqoi_87FoXyZQnhGJndT5C22qU5PgTO9PC8Ojrql3Ur5ek92V1Wg3D8m1H0PDIbtBIz4qFWY-4zlk9RDwos3wAvbSNkpF60x5uAjWlmedo2irJcPSEz3_EBXYHq2G42QOFujaxdcEzznAd95gH2pGXcdXG2uJE0HssmTPxdMmx2_ZLMRRvTl__FnpXVy_8vTmho39e7auo8y7fNvC4LcxdPqu6NlNsLKJSv2lVZu6Dxmc3Aou7biTQqSgcMKW8Wq_z1ctmp8H9WNUsR-QtSR8m9tTJSWpaa6jsyISNqMFDnRpYFp7wt3Gv2Ep9xEgTZYcQ3fp0qNLmjgPITxmmM_dn6HlOhPgHiecKRVEgfqSzcI2nP1Xh7eJS7VO9eETtjxBBTRw1-yzkBvJTPsEcdsOpISpEwf9lnnFuFj5u2BIVinAsN5Mkeiz2lXD0m6E1_QdvKn-SvKeTjsiNRDB-SsbcU55wgJ53uMoZWJFD2vgXMhfRufcn97dP1KkEY_WjvfmSWu9qrjbsfyZSvLQwryisOVgMuAh5J2W18q_ggBtWVrxnts4HdZPImJydEx8gUsmcQKJMjuav77vUo_vEosl_0bCmYs0ubyYygE5HeH45IPQXsn9Pr7r83uYotoCRNTxWxk"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1468
+          }
+        ],
+        "cachedContentTokenCount": 1468,
+        "candidatesTokenCount": 42,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 42
+          }
+        ],
+        "promptTokenCount": 2516,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2516
+          }
+        ],
+        "thoughtsTokenCount": 198,
+        "totalTokenCount": 2756,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.3255623408726283,
+      "invocationId": "e-0a6f28eb-662c-47f1-808f-6b8d355243a0",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "20365490-26cf-451b-9c81-6439c6feb36f",
+      "timestamp": 1788693178.6926997
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-39527f4f-df78-4d2c-bced-bf772ece398a",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-0a6f28eb-662c-47f1-808f-6b8d355243a0",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "32900db9-e1f3-4dce-905b-aff15637b8e1",
+      "timestamp": 1788693180.7229235
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Aquí está la consulta SQL para BigQuery que recupera los atributos detallados para el concepto con `concept_id = 192671`:\n\n```sql\nSELECT\n    c.*\nFROM\n    `concept` AS c\nWHERE\n    c.concept_id = 192671\n```",
+            "thoughtSignature": "CnwBjz1rX0O0z0gu0Jwvr47zvPEUV9CqIYO1fzJtinFj2tYI-yu0U33LqG4iFYGxNnU9Fktb-O7IJchm-LMMThmd1yIeZ8GjawqfiQOGs638g71fi3DxSGKZT-iYDZ26V-DbMXwjGD94dUzvnRVkW3rl7q4OYCbKV_k3gDdZ"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2237
+          }
+        ],
+        "cachedContentTokenCount": 2237,
+        "candidatesTokenCount": 69,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 69
+          }
+        ],
+        "promptTokenCount": 2822,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2822
+          }
+        ],
+        "thoughtsTokenCount": 19,
+        "totalTokenCount": 2910,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.1285487327022829,
+      "invocationId": "e-0a6f28eb-662c-47f1-808f-6b8d355243a0",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "41e55e1b-e035-4ef0-b02a-c72066bde573",
+      "timestamp": 1788693180.726033
+    }
+  ],
+  "lastUpdateTime": 1788693180.726033
+}

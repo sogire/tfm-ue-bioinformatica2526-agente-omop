@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_OP04"
+nivel_complejidad: "intermedia"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Identificar cuántos pacientes presentan interrupciones en su cobertura médica, teniendo dos o más períodos de observación independientes.
+sql_base_gold_standard: |
+  SELECT COUNT_BIG(person_id) AS num_persons
+  FROM -- more than one observation period
+    (SELECT
+      person_id
+     FROM `bio-med-480108.OMOP_54_A.observation_period`
+     GROUP BY person_id
+     HAVING COUNT_BIG( person_id ) > 1
+    ) AS t;
+concept_ids_gold_standard: ""

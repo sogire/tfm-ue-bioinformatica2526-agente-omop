@@ -1,0 +1,23 @@
+id_evaluacion: "querylibrary_DRC07"
+nivel_complejidad: "compleja"
+domain_main: "cost"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución estadística (media, desviación estándar, valor mínimo, cuartiles y valor máximo) de los costos reembolsados o asumidos por el pagador en las dispensaciones de medicamentos.
+sql_base_gold_standard: |
+  WITH tt AS (
+      SELECT c1.paid_patient_coinsurance                                         AS stat_value,
+             ROW_NUMBER() OVER (ORDER BY c1.paid_patient_coinsurance)            AS order_nr,
+             (SELECT COUNT(*) FROM `bio-med-480108.OMOP_54_A.cost` WHERE paid_patient_coinsurance > 0) AS population_size
+      FROM `bio-med-480108.OMOP_54_A.cost` c1
+      WHERE c1.paid_patient_coinsurance > 0
+  )
+  SELECT MIN(tt.stat_value)                                                            AS min_value,
+         MAX(tt.stat_value)                                                            AS max_value,
+         AVG(tt.stat_value)                                                            AS avg_value,
+         (ROUND(STDEV(tt.stat_value), 0))                                              AS STDEV_value,
+         MIN(CASE WHEN order_nr < .25 * population_size THEN 9999 ELSE stat_value END) AS percentile_25,
+         MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE stat_value END) AS median_value,
+         MIN(CASE WHEN order_nr < .75 * population_size THEN 9999 ELSE stat_value END) AS percentile_75
+  FROM tt;
+concept_ids_gold_standard: ""

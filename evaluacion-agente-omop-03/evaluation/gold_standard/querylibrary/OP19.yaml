@@ -1,0 +1,62 @@
+id_evaluacion: "querylibrary_OP19"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: "person"
+pregunta_lenguaje_natural: >-
+  Calcular la distribución estadística de la duración de los períodos de observación médica estratificada por grupos de edad.
+sql_base_gold_standard: |
+  WITH w AS
+    ( SELECT
+        w_0.person_id,
+        age,
+        period_length
+      FROM
+         /* person, age */
+        (SELECT
+          person.person_id,
+          YEAR(first_observation_date ) - year_of_birth AS age
+         FROM
+          ( SELECT
+              person_id ,
+              MIN( observation_period_start_date ) AS first_observation_date
+            FROM `bio-med-480108.OMOP_54_A.observation_period`
+            GROUP BY person_id
+          ) AS person_first_od
+          INNER JOIN `bio-med-480108.OMOP_54_A.person` person
+          ON person_first_od.person_id = person.person_id
+          WHERE year_of_birth IS NOT NULL
+        ) AS w_0
+      INNER JOIN  
+       /* person, period_length */
+        (SELECT
+          person_id,
+          DATEDIFF(day,DATEADD(DAY,1,observation_period_start_date), observation_period_end_date) AS period_length
+         FROM `bio-med-480108.OMOP_54_A.observation_period`
+        ) AS person_date_diff  
+      ON w_0.person_id = person_date_diff.person_id  
+    )
+  SELECT
+    ordered_data.age,
+    COUNT(*)                                                                         AS observation_periods_cnt,
+    MIN(period_length)                                                               AS min_period,
+    MAX(period_length)                                                               AS max_period,
+    ROUND(AVG( period_length ), 2)                                                   AS avg_period,
+    ROUND(STDEV( period_length ), 1)                                                 AS STDEV_period,
+    MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE period_length END) AS percentile_25,
+    MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE period_length END) AS median,
+    MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE period_length END) AS percentile_75
+  FROM
+   ( SELECT age,
+      period_length,
+      ROW_NUMBER() OVER (PARTITION BY age ORDER BY period_length) AS  order_nr
+    FROM w
+  ) AS ordered_data
+  INNER JOIN
+   ( SELECT age,
+      COUNT(*) AS population_size
+     FROM w
+     GROUP BY age
+  ) AS population_sizes
+   ON ordered_data.age = population_sizes.age
+  GROUP BY ordered_data.age;
+concept_ids_gold_standard: ""

@@ -1,0 +1,28 @@
+id_evaluacion: "querylibrary_C04"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_relationship, relationship"
+pregunta_lenguaje_natural: >-
+  Traducir el concepto MedDRA de infarto agudo de miocardio a sus conceptos estándar equivalentes en la terminología SNOMED-CT dentro del dominio de condiciones clínicas.
+sql_base_gold_standard: |
+  SELECT
+    d.concept_id         AS meddra_concept_id,
+    d.concept_name       AS meddra_concept_name,
+    d.concept_code       AS meddra_concept_code,
+    d.concept_class_id   AS meddra_concept_class,
+    cr.relationship_id   AS relationship_id,
+    r.relationship_name  AS relationship_name,
+    a.concept_id         AS snomed_concept_id,
+    a.concept_name       AS snomed_concept_name,
+    a.concept_code       AS snomed_concept_code,
+    a.concept_class_id   AS snomed_concept_class
+  FROM `bio-med-480108.OMOP_54_A.concept_relationship` AS cr
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS d ON cr.concept_id_1 = d.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` AS a ON cr.concept_id_2 = a.concept_id
+    JOIN `bio-med-480108.OMOP_54_A.relationship` AS r ON cr.relationship_id = r.relationship_id
+  WHERE
+    cr.relationship_id = 'MedDRA - SNOMED eq' AND
+    cr.concept_id_1 = 35205180 AND
+    cr.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: "35205180"

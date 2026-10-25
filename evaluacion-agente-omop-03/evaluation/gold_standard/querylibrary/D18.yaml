@@ -1,0 +1,29 @@
+id_evaluacion: "querylibrary_D18"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_ancestor, concept_relationship"
+pregunta_lenguaje_natural: >-
+  Identificar los ingredientes farmacéuticos activos indicados para el tratamiento de tuberculosis pulmonar.
+sql_base_gold_standard: |
+  SELECT DISTINCT
+    ingredient.concept_id as ingredient_concept_id,
+    ingredient.concept_name as ingredient_concept_name,
+    ingredient.concept_code as ingredient_concept_code
+  FROM
+    `bio-med-480108.OMOP_54_A.concept` ingredient,
+    `bio-med-480108.OMOP_54_A.concept_ancestor` snomed,
+    `bio-med-480108.OMOP_54_A.concept_ancestor` ind,
+    `bio-med-480108.OMOP_54_A.concept_relationship` r
+  WHERE
+    snomed.ancestor_concept_id = 253954 AND
+    snomed.descendant_concept_id = r.concept_id_1 AND
+    concept_id_2 = ind.ancestor_concept_id AND
+    -- r.relationship_id in (247, 248) AND
+    --r.relationship_id in (
+    --     'Ind/CI - SNOMED',
+    --     'SNOMED - ind/CI') AND
+    ind.descendant_concept_id = ingredient.concept_id AND
+    --ingredient.concept_level = 2 AND
+    --ingredient.vocabulary_id = 'RxNorm' AND
+    (getdate() >= ingredient.valid_start_date) AND (getdate() <= ingredient.valid_end_date);
+concept_ids_gold_standard: "253954"

@@ -1,0 +1,17 @@
+id_evaluacion: "querylibrary_PE08"
+nivel_complejidad: "intermedia"
+domain_main: "person"
+domain_others: "location"
+pregunta_lenguaje_natural: >-
+  Obtener la distribución de pacientes registrados en la base de datos clasificados según el código postal de su lugar de residencia.
+sql_base_gold_standard: |
+  SELECT
+    state,
+    zip,
+    COUNT(*) AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.person`
+    LEFT JOIN `bio-med-480108.OMOP_54_A.location` ON person.location_id = location.location_id
+  GROUP BY state, zip
+  ORDER BY state, zip
+  ;
+concept_ids_gold_standard: ""

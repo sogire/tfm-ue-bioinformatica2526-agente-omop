@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_CO25"
+nivel_complejidad: "intermedia"
+domain_main: "condition_occurrence"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar la cantidad de registros diagnósticos por paciente para dolor abdominal.
+sql_base_gold_standard: |
+  SELECT condition_concept_id, 
+         num_of_occurrences,
+         count(*) num_of_patients
+  FROM 
+    (SELECT condition_concept_id, 
+            person_id, 
+            count(*) num_of_occurrences
+      FROM `bio-med-480108.OMOP_54_A.condition_occurrence` condition
+      WHERE condition.condition_concept_id = 200219 -- Input condition
+      GROUP BY person_id, condition_concept_id
+    ) AS counts_condition_person
+  GROUP BY condition_concept_id, num_of_occurrences;
+concept_ids_gold_standard: "200219"

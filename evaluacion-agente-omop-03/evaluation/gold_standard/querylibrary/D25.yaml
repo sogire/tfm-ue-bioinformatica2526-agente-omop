@@ -1,0 +1,19 @@
+id_evaluacion: "querylibrary_D25"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Filtrar y obtener las formulaciones genéricas estándar correspondientes a una lista de conceptos de medicamentos de referencia.
+sql_base_gold_standard: |
+  SELECT C.concept_id       AS drug_concept_id,
+         C.concept_name     AS drug_name,
+         C.concept_code     AS drug_concept_code,
+         C.concept_class_id AS drug_concept_class,
+         C.standard_concept AS drug_standard_concept,
+         C.vocabulary_id    AS drug_vocabulary_id
+  FROM `bio-med-480108.OMOP_54_A.concept` AS C
+  WHERE C.domain_id = 'Drug'
+        AND C.concept_id IN (1396833, 19060643)
+        AND C.concept_class_id = 'Clinical Drug'
+        AND (getdate() >= C.valid_start_date) AND (getdate() <= C.valid_end_date)
+concept_ids_gold_standard: "1396833, 19060643"

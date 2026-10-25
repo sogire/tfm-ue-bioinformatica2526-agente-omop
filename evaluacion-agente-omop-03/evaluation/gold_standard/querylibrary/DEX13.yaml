@@ -1,0 +1,20 @@
+id_evaluacion: "querylibrary_DEX13"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: "provider, concept"
+pregunta_lenguaje_natural: >-
+  Analizar la distribución de especialidades médicas de los profesionales prescriptores de la vacuna contra el virus de la influenza.
+sql_base_gold_standard: |
+  SELECT c.concept_name AS specialty,
+         COUNT(*)       AS prescriptions_count
+    FROM `bio-med-480108.OMOP_54_A.drug_exposure` drug
+    JOIN `bio-med-480108.OMOP_54_A.provider` p
+      ON p.provider_id = drug.provider_id
+    JOIN `bio-med-480108.OMOP_54_A.concept` c
+      ON c.concept_id  = p.specialty_concept_id
+   WHERE c.vocabulary_id           = 'Specialty'
+     AND drug.drug_concept_id      = 2213473  /* Influenza virus vaccine */
+     AND c.standard_concept  = 'S'
+   GROUP BY c.concept_name
+   ORDER BY prescriptions_count desc;
+concept_ids_gold_standard: "2213473"

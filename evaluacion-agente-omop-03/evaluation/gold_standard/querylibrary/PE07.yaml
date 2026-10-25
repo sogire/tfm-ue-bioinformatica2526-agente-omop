@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_PE07"
+nivel_complejidad: "intermedia"
+domain_main: "person"
+domain_others: "location"
+pregunta_lenguaje_natural: >-
+  Contar el número de pacientes registrados en la base de datos agrupados por el identificador de ubicación correspondiente a su estado de residencia.
+sql_base_gold_standard: |
+  SELECT
+    state    AS state_abbr,
+    COUNT(*) AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.person`
+    LEFT JOIN `bio-med-480108.OMOP_54_A.location` ON person.location_id = location.location_id
+  GROUP BY state
+  ORDER BY state
+  ;
+concept_ids_gold_standard: ""

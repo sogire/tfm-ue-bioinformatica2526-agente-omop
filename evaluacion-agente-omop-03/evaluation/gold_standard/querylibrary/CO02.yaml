@@ -1,0 +1,16 @@
+id_evaluacion: "querylibrary_CO02"
+nivel_complejidad: "intermedia"
+domain_main: "condition_occurrence"
+domain_others: "observation_period"
+pregunta_lenguaje_natural: >-
+  Determinar la primera aparición o diagnóstico inicial de anemia hemolítica por trastorno del metabolismo del glutatión, exigiendo al menos 6 meses de observación previa continua.
+sql_base_gold_standard: |
+  SELECT
+    MIN(condition_start_date) AS onset_condition_date
+  FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+  WHERE condition_concept_id = 23988 
+        AND   EXISTS (SELECT 1 FROM `bio-med-480108.OMOP_54_A.observation_period` op 
+                      WHERE op.person_id = condition_occurrence.person_id
+                            AND  DATEADD(month,6,op.observation_period_start_date) < condition_occurrence.condition_start_date)
+  ;
+concept_ids_gold_standard: "23988"

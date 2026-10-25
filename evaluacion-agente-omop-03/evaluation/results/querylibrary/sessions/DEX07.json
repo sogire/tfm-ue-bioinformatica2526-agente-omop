@@ -1,0 +1,316 @@
+{
+  "id": "edca7585-2b17-4680-8bd9-4c13f9216592",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Determinar el número máximo de eventos de dispensación o exposición farmacológica experimentados por un paciente en un período de tiempo dado. Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-ac869aff-4c64-4e95-a616-cb4e6720e059",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "ea5d9da7-0095-49c5-863a-02dc9deec9d0",
+      "timestamp": 1788687336.1583014
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-f137a9fc-abc5-43c2-a25a-a88ea92280ae",
+              "args": {
+                "sql_query": "\nSELECT\n    person_id,\n    COUNT(drug_exposure_id) AS drug_exposure_count\nFROM\n    drug_exposure\nGROUP BY\n    person_id\nORDER BY\n    drug_exposure_count DESC\nLIMIT 1\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CqMNAY89a1_HiqpCnpkvcCuymUDxmp2U8nyz33mvC8wtU6Qy8g05pU-xMmvxt8wY0qU5B1Ve7dznEBG1Bav-LRd27HPtqeYz7fWts1nZQkefsPMQSFDnSl9cLp93EPR3j0pPazmkpMTE3SoGX1-IY0BQMrnAZlhjX-2FaRR7m4peGCuB7iyqxMwchkAa2pXjuBZ6o4pZJ_Yc5lh2a5HTZH6Xqt8GB6l33afjBj1XTO3CZVCu2JdX-qlyYAgFZTLt-5GeK5iL2vpjdLz7SN2vN6N_OrugaDOQZJ23WrL3ezS4giuYraOSrGG0YBu6NWWQhtfvgTx2PZRsorEhakwi9-t7MyKkZ2NUOt8GhVdbqD6S-oMNQKsAU3HGf7OCIXjc9FL9zhzoMOrF6dETwcG6X9sys5Q-oNcI_2wgMPMobC7n-bqnXNblKdjSG2b9yA5QeApdDIVqcBx3XAT1Kr0yW31VyvujS_eWBPK6-A0gr2rpmj7WvisYmGtzt7VeB3fUaWbZ8fN6wwY3-hxquJ5-qcOrFZqpHOZrhV1Jy2FDZMJThJyPogKvTqH8kJIgt2YYswg8O9sB3q2m3on1co5p5gNcDVo5Iz9epp_15F1yEK0DSJ-wb7eBNI8qyJMojEl50iG9wri0xagEf9UlGkka8ooswo6dEIvxDSmX8o5yJYXqjLevYKsgfCFZ6MRpksZEjwIIC28V6J9elyMYso-H80d_2NpySo72oziUgi89091k_HQq886HgH-i28n9QHbM00Fp8Ukdcsz6A-DNmS0taMl-h-0Dt54PwmZpHkW-M9CXnMxNK9JsVKo1IZS6HcgirDibrMGVPZzjgHKN4UzlOvRz4mpo2ZyQyH3OCpNhQPzrmbUDjACczM4g_XmdHBuwqmLrA8Yer_OHAmZtzu95MUqgMyXRjhJFiau0u2VAAqsDER7TXYoy35lFthyvXrvVpdEQNJH1YbCsBdKYj3S0MRPrr3TeeW6vtJy6df-huXbPnzLYFghdUzhWxh83gqCAlccPp96fQzm0hF8g73234PrVGP9ljp_nlJar8pSaiv3Ohzp8fstrc-wk4sFxIAf2_Lz88s8NWIrrJv7WrxieLaqaTm8x0pNiKoOIPpVvg8OYbuOAP7xC1teMHwPsQ2buo0FgjRkvJTYsfZ9maFJl5neNab-VkHnwbyNjKeiK0zlItThGJx584Sarmirydlng4Ra6tWVfr0Eq0ukuPsy6oCSZsm2MY414PiyR3yOEJKM4yBnXT1g0uDjawkAEL9-D13B0kASmNzXaXQOdV9zE-d7BxoeT28LohxIIzzCsB4ZWDWt7jBGC0jHc1G9B2lMjaJw4HI2kjP-ZbaKHKX8o9Sw-oco-hB_Bxk4VDQsq9gCaiUSXLJ9XN45u4xUh5hA1K02oIdjJCRSx86dFGKN05bU2hRfNh3UamEdwO9d8J-CSMJxy4sWofKZ2GspgM13pA-StAzR5fzhIe2P_OVYKt8y0bRfiibZMO_czQMqgjFAWb_5AY3iRp4zvSeJ0wmZXnvcsids7M_SAz0mfdDJnsJQpHYUlT4X0m0cZ39vdLwl1PTgnSXH6xCe2fqkS0TznN4wsrLU7t0N1NMGG2R4MsJeAPiLZESNzPqBbheGB0qEI0HFW6fqfY1yMTyy2saZpP8JIvsXNb9monMqcNw24tK3UNENGVGiK1CO_yXmzO3ozPA8eVMQ0upTvHmLh4NOk5S6HsJlBmoqiXytfkCybRCUFYz4As3SQZVCnSlcRNcsKoYhRcOhxojEL2B6-7yiKex5l0mUUOUBvgdLGp9tRseEAGYsz7eVHaDedW21DOMPCVv5QjZGismvu3Y6pQMiBeCkRoEzWyRlXLaYd0rdX6VcclrpwMmoDVzJTy54_M-8A-zKNLlsdTXFEA5JNIaAyQzooIxm2U9Z7IWncyEVbOJsvizqS15MObxCYtnhbBqA8d1j9PKkG6bVEpYOgp6OYVCNXXAU0QN2byXWg2blgjPeOs_6CxwDv5UzGMgJnNSI6iAPMQQo4AiJAHu4NYqxBe7QQNCkP2BEqydBJ7Fn3NKEqlhivy5eH4KaTZjR6OpOCgqE0OW5raJCy5E3zit5XmgEK50CmEubvBps_Rn-GOSigCKhfo9V_Wmih7KQPM0yLKDw06xa2WnzV5WPceYmsUmkL2nLB0-7Q1rtY5mRbVG1VU8L_3JASxSXfVNlu3uQfG9NSgrYP4EZfxRbT4P91KIEf54VSlqeoUndMvFj16mIHCbKjzg=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 64,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 64
+          }
+        ],
+        "promptTokenCount": 1256,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1256
+          }
+        ],
+        "thoughtsTokenCount": 391,
+        "totalTokenCount": 1711,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.261737585067749,
+      "invocationId": "e-ac869aff-4c64-4e95-a616-cb4e6720e059",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "db3bdfb4-0f79-4499-b627-7ecd438b611e",
+      "timestamp": 1788687336.1595354
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-f137a9fc-abc5-43c2-a25a-a88ea92280ae",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.drug_exposure"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-ac869aff-4c64-4e95-a616-cb4e6720e059",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "d4927b4c-3be2-4099-918f-6cf9e6763110",
+      "timestamp": 1788687339.1649487
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Aquí tienes la consulta SQL SELECT para BigQuery que determina el número máximo de eventos de exposición farmacológica experimentados por un paciente:\n\n```sql\nSELECT\n    person_id,\n    COUNT(drug_exposure_id) AS drug_exposure_count\nFROM\n    drug_exposure\nGROUP BY\n    person_id\nORDER BY\n    drug_exposure_count DESC\nLIMIT 1\n```\n\nEsta consulta te devolverá el `person_id` del paciente con el mayor número de eventos de exposición a fármacos y ese recuento máximo.\n\nSi necesitas aplicar un \"período de tiempo dado\", puedes añadir una cláusula `WHERE` a la tabla `drug_exposure`, por ejemplo:\n\n```sql\nSELECT\n    person_id,\n    COUNT(drug_exposure_id) AS drug_exposure_count\nFROM\n    drug_exposure\nWHERE\n    drug_exposure_start_date >= 'YYYY-MM-DD' AND drug_exposure_start_date <= 'YYYY-MM-DD'\nGROUP BY\n    person_id\nORDER BY\n    drug_exposure_count DESC\nLIMIT 1\n```\n\nSustituye `'YYYY-MM-DD'` por las fechas de inicio y fin que te interesen.",
+            "thoughtSignature": "CooEAY89a1_hJBl1YD4-IXEkVw2l4MwiILgL_MO315SEfWMUk3IXRaC2vFP_WRQ2lD-iXrGSF5hTxwFdn_Z3jeXLrJDz7Z--Rx2u-3r1RhktVY6wAfSEzJa3TACS1O-OdLg9zJGi1ivJbU6oOV0jQFAkTU-hZOSHmOpQdPhwzBXbbaMFInAKkemT70wYW3RosqnHRw3ZKcN0vl6uQn_7Lq0kkeQZctXINzhNm__BXKBv5TxK4Ubex3MGCIyr5D8hqxCAshBisfa8lmifFcJvSNOnMDgoiKwxIZnsSI6luoD-tSqbaILvhN2UEubkbsIUqMMQHWmPzHrQCfhH7ef_mGuOFQI43ko5RlsqyXKIXAsFg9V-E1vWQv9RC63rqDi7Yelec7AXDn5f7gMYIKDR8O2WG4hW73vVU4zft2nOD2lFPGxPD5LZSFOK9jr6qmjCXMbFO2x01rSa7efkDRdxLoe32aPtN1JYJWLHjzEuVGugl_wZVWO-xN4QmGjYSNcSHpg0zDaUj7YI6bZr3T1EsoBltGdmy9Gm4MVBVU5VD6bfSeSMJmp3n8eQRAaAGMBbbiVI9AeRDU8qn9CMSGVw0JM7ohUGbhOxRVTI3i0V4pCfwYmi6p7851Rd0uHBCGUDi1tN1cX-0F1bC1ePARPwIGpLlOm94cr_7maJ00fsYZW4jL5Gd2-PZPH2PVTe"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 266,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 266
+          }
+        ],
+        "promptTokenCount": 1779,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1779
+          }
+        ],
+        "thoughtsTokenCount": 103,
+        "totalTokenCount": 2148,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.2435413159822163,
+      "invocationId": "e-ac869aff-4c64-4e95-a616-cb4e6720e059",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "ab8c905e-2465-43f6-8043-ce72304bdb21",
+      "timestamp": 1788687339.1679943
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y mejora la consulta SQL para BigQuery OMOP CDM 5.4 teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nLa consulta generada omite dos filtros clínicos cruciales presentes en la consulta de referencia: la restricción a `drug_concept_id` que son conceptos estándar de tipo 'Drug' y el filtrado por un rango de fechas específico. Estas omisiones comprometen significativamente la validez clínica y la adecuación a la intención de 'un período de tiempo dado' y 'eventos farmacológicos válidos'.\n\nGenera directamente la consulta SQL SELECT corregida y ejecutable."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-4f768717-3e83-47c4-89cf-5d0140a3f6f6",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "66e167cf-eac6-4ecc-a4e8-1177a73b758f",
+      "timestamp": 1788687351.996983
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-6866e484-8b79-45eb-ab7e-c57c0799e3e5",
+              "args": {
+                "sql_query": "\nSELECT\n    de.person_id,\n    COUNT(de.drug_exposure_id) AS drug_exposure_count\nFROM\n    drug_exposure AS de\nJOIN\n    concept AS c\n    ON de.drug_concept_id = c.concept_id\nWHERE\n    c.domain_id = 'Drug' AND c.standard_concept = 'S'\n    AND de.drug_exposure_start_date >= '2000-01-01'\n    AND de.drug_exposure_start_date <= '2023-12-31' -- Reemplazar con el rango de fechas deseado\nGROUP BY\n    de.person_id\nORDER BY\n    drug_exposure_count DESC\nLIMIT 1\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CpIIAY89a19PwZYhj5NdwTymZfu_5TQG7k7QB1_TKCUYp5cFYY1sT38x-lUQCM-_qUCVzmvmhTWzB9qKEO4MaYHl5ULSVc3lRtlQTorseQ7lidjNbB-p76DRwUH0_4T2tzVH6TfAgkxudNKdZjUhABnjap3xdDg4jatSKWPNl5u5RXtWHnscV-PJFS2530je-Ot4_ypQtGd0ZrRpYtIYvtj9N3UqdqTbc5Hh45vGRQe84wbUVfvi6tfis_mRG0TetnwB9Py7n3XbdE-OLMxZy8zNIpGF7yguWF8jwHtE1vqzcXq1DqNYbHPzjvv3NMl1yixEDzlj8a-UufxXFso6SJ39dJDIzt63AIdkuXuJea1JMLDRe3v3jQfZLSwkmjwoJVSpkLtaq_T8ep_3kTcQ4P7bbk5aLLJJqRfPD5hXqPeZ7i_kc_AGdwv6HLtT-ABWIWBMveoOHXeDQg8LpPBJKDshy6yWP5a-oqN2m7pxqXQHCNcsOvQ4v_xeZGS-KIGmUFzUamOc3HiQg_sQcMewLNZHiJtMMB4sBwwVoChboEyQ4LoUEVOFix-iJetsiOXlfUcjJi_XkupsDLl-i7R9NqTrn7zg5jda17Gn4ARKdDMHXwug_5sUcOQXjVbwv8czXqYl-q5pcUMTSrluXVgfpuJ9EWzGb_mv-rPsj-N8NegFbCeAzORzk18fpVpoP7JKDn7U9q6L_R-yrt3hsVs0yvoutr4lK4AgvnpBUQHAmlYpOAglRk7-u7fEmc6VAKjd5MOJjBFm7XiSUxs7s_DC2mSA6vH9-fbUACEwZv0f4XgKeGn2cZlpAmElSV05lC8Cde7vfmHXuuUoPNL5sj7z1EInaPR0f_OkUGGObfYR7b4sM4UB6PBphuDsDKDE1ZrjdtrKvrnkcvk4dBEtoN-IPCjebNY2XRLFJ2eT4I33b90Lq5XXZ3Kem9D41ErpzFBfH9q9nTp_SQ5SY-0TknjJ9uyo-BHQh_Cuo-lHZagMJ67n08D6HHPjuzBGTeMu1-QMoZn0AQ7uVEB9Lrca2qWURzBBnxtmITdN95L5zYK7ZLpmsrWlKHzfSFFhUBZ6WFslvrqJj6YZ632bTFWclWWWDdaEgG9AwnnvadHyUgoOZBTSK5Y5kUuJtb-3merg2wVbCLmkGb6Db1pUxV3EVHVOIrImCaWmlYbxMam2iULhtD-SXAstZZ9MngruFNVxgwvDvcfmQACs07TM9A0mnvLxufOYpXTIPdvngy_wtQaSFlk6_g3Q8H_IaYnjNpU63HT782S1dqO2aQpujt6EScio2CbyJXE4Otw60zt8X0bAm8m4QUBIBh_utnQ07vafpAaD38lOUk7MhHt4rU_hO8F8u2sai3YNoPXQa34nxXi2OXmwqP8pkA=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1636
+          }
+        ],
+        "cachedContentTokenCount": 1636,
+        "candidatesTokenCount": 179,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 179
+          }
+        ],
+        "promptTokenCount": 2281,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2281
+          }
+        ],
+        "thoughtsTokenCount": 274,
+        "totalTokenCount": 2734,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.38407591068544866,
+      "invocationId": "e-4f768717-3e83-47c4-89cf-5d0140a3f6f6",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "b5bf5fec-4f6f-41ff-a5e0-62aa0c0ade2e",
+      "timestamp": 1788687351.99839
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-6866e484-8b79-45eb-ab7e-c57c0799e3e5",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.drug_exposure"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-4f768717-3e83-47c4-89cf-5d0140a3f6f6",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "4eb30415-fa83-4d77-82ab-df212acb9b56",
+      "timestamp": 1788687356.1404223
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Gracias por la retroalimentación del evaluador. Entiendo las omisiones cruciales y he revisado la consulta SQL para incluir los filtros necesarios.\n\nAquí tienes la consulta SQL SELECT corregida para BigQuery que aborda las observaciones del evaluador clínico/técnico:\n\n```sql\nSELECT\n    de.person_id,\n    COUNT(de.drug_exposure_id) AS drug_exposure_count\nFROM\n    drug_exposure AS de\nJOIN\n    concept AS c\n    ON de.drug_concept_id = c.concept_id\nWHERE\n    c.domain_id = 'Drug' AND c.standard_concept = 'S'\n    AND de.drug_exposure_start_date >= '2000-01-01' -- Reemplazar con la fecha de inicio deseada\n    AND de.drug_exposure_start_date <= '2023-12-31' -- Reemplazar con la fecha de fin deseada\nGROUP BY\n    de.person_id\nORDER BY\n    drug_exposure_count DESC\nLIMIT 1\n```\n\n**Cambios realizados:**\n\n1.  **Filtrado por conceptos estándar de tipo 'Drug'**:\n    *   Se añadió un `JOIN` con la tabla `concept` (`c`) usando `de.drug_concept_id = c.concept_id`.\n    *   Se incluyeron las condiciones `c.domain_id = 'Drug'` y `c.standard_concept = 'S'` en la cláusula `WHERE` para asegurar que solo se consideren conceptos de fármacos estándar.\n2.  **Filtrado por rango de fechas**:\n    *   Se añadió un rango de fechas a la cláusula `WHERE` utilizando `de.drug_exposure_start_date`. He usado `'2000-01-01'` y `'2023-12-31'` como ejemplos. **Deberás reemplazarlos con el rango de fechas específico de tu estudio.**\n\nEsta consulta ahora debería reflejar con mayor precisión los \"eventos farmacológicos válidos\" dentro de \"un período de tiempo dado\", como lo solicitó el evaluador.",
+            "thoughtSignature": "CtoBAY89a19z-T6WPnsudphq968n0iGmxmH-aQjk-DN2XHwJ3mNWHSvIi1PwUWF27z_RWl37mA_y2fEzXRfJAsoKasdgmr8oeGcufLv56KhstZ5aEKmaZh5x7woRFYkWupkKei0Iog63XlFV39gThonTNcxcqtm37lp-UCYEkJWgpEPC0tfSURPm9yQ9Jol4g7f5FkxYbP1lDpwXsx0cMdIIqxd1R4vu6d_8OF4CEbH0eo251yKorc0AdNX9n2P1rY0tKg-zeCcXdIj2HeZSm35OXY6HVNQJrfglg6s="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1666
+          }
+        ],
+        "cachedContentTokenCount": 1666,
+        "candidatesTokenCount": 473,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 473
+          }
+        ],
+        "promptTokenCount": 2822,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2822
+          }
+        ],
+        "thoughtsTokenCount": 36,
+        "totalTokenCount": 3331,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.15088159992629327,
+      "invocationId": "e-4f768717-3e83-47c4-89cf-5d0140a3f6f6",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "8d8762ee-3fa8-4f1d-b251-619889ba1642",
+      "timestamp": 1788687356.1440134
+    }
+  ],
+  "lastUpdateTime": 1788687356.1440134
+}

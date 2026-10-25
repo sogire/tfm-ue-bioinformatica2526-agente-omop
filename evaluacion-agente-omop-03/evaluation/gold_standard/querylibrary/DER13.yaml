@@ -1,0 +1,24 @@
+id_evaluacion: "querylibrary_DER13"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular parámetros estadísticos de distribución (media, percentiles, mínimo y máximo) sobre la cantidad de medicamentos distintos que toma cada paciente.
+sql_base_gold_standard: |
+  WITH tt AS (
+    SELECT COUNT(DISTINCT t.drug_concept_id) AS stat_value
+    ,      ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT t.drug_concept_id)) order_nr
+    ,      (SELECT COUNT(DISTINCT person_id) FROM `bio-med-480108.OMOP_54_A.drug_era`) AS population_size
+    FROM `bio-med-480108.OMOP_54_A.drug_era` t
+    WHERE ISNULL(t.drug_concept_id, 0) > 0
+    GROUP BY t.person_id
+  )
+  SELECT MIN(tt.stat_value) AS min_value
+  ,      MAX(tt.stat_value) AS max_value
+  ,      AVG(tt.stat_value) AS avg_value
+  ,      ROUND(STDEV(tt.stat_value), 0) AS STDEV_value
+  ,      MIN(CASE WHEN order_nr < .25 * population_size THEN 9999 ELSE stat_value END) AS percentile_25
+  ,      MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE stat_value END) AS median_value
+  ,      MIN(CASE WHEN order_nr < .75 * population_size THEN 9999 ELSE stat_value END) AS percentile_75
+  FROM tt;
+concept_ids_gold_standard: ""

@@ -1,0 +1,21 @@
+id_evaluacion: "querylibrary_C10"
+nivel_complejidad: "baja"
+domain_main: "concept"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Localizar conceptos estándar de estructuras o regiones anatómicas en el vocabulario que coincidan con la palabra clave 'Heart'.
+sql_base_gold_standard: |
+  SELECT
+    c.concept_id       AS anatomical_site_id,
+    c.concept_name     AS anatomical_site_name,
+    c.concept_code     AS anatomical_site_code,
+    c.concept_class_id AS anatomical_site_class,
+    c.standard_concept AS anatomical_standard_concept,
+    c.vocabulary_id    AS anatomical_site_vocab_id
+  FROM `bio-med-480108.OMOP_54_A.concept` AS c
+  WHERE
+    lower(c.concept_class_id) = 'body structure' AND
+    lower(c.concept_name) LIKE '%epiglottis%' AND
+    c.invalid_reason IS NULL
+  ;
+concept_ids_gold_standard: ""

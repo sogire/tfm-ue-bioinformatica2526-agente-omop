@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_PE11"
+nivel_complejidad: "intermedia"
+domain_main: "person"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Determinar la cantidad de pacientes registrados en la base de datos agrupados según su mes de nacimiento.
+sql_base_gold_standard: |
+  SELECT
+    month_of_birth AS month_of_year,
+    count(*)       AS num_persons
+  FROM `bio-med-480108.OMOP_54_A.person`
+  GROUP BY month_of_birth
+  ORDER BY month_of_birth
+  ;
+concept_ids_gold_standard: ""

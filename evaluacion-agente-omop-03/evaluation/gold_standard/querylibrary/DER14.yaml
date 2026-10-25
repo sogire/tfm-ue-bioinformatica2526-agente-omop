@@ -1,0 +1,15 @@
+id_evaluacion: "querylibrary_DER14"
+nivel_complejidad: "intermedia"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Contar la cantidad de pacientes que toman un número determinado de medicamentos o principios activos distintos a lo largo de su seguimiento.
+sql_base_gold_standard: |
+  SELECT count(
+  distinct t.drug_concept_id) AS drug_count, t.person_id
+  FROM `bio-med-480108.OMOP_54_A.drug_era` t
+  group by t.person_id
+  having count(
+  distinct t.drug_concept_id)
+  in (3, 4);
+concept_ids_gold_standard: ""

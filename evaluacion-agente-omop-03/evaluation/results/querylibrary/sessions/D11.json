@@ -1,0 +1,1189 @@
+{
+  "id": "9e21f9d1-f9b9-4e64-b4fb-e95b7f299e09",
+  "appName": "omop_03_concepts_and_sql",
+  "userId": "cli-user",
+  "state": {},
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Obtener los códigos de medicamentos fuente (como códigos NDC) asociados a los fármacos incluidos en la clase terapéutica de inhibidores de la ECA y combinaciones. Genera directamente la consulta SQL SELECT para BigQuery."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "628f761f-fa41-47e0-90e1-8573473e98b3",
+      "timestamp": 1788684718.0228777
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-2832cc10-72f7-4579-83ab-a524bd6f9788",
+              "args": {
+                "domain_id": "Drug",
+                "query": "ACE inhibitors and combinations"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CpkEAY89a1_L7yCH_YLaPHDOQj1q0rd1Np98phLUyq1c1pjjagfShzL_pKyLaHwxtVEhQtixp8j_dazGCoEHwegNwfuXcK5IMW_GeU5qpqaYPD7n7xGjavEajVeSsDQ7et5nmlSAiNVaDmW8ASt24bBkjEoEy1gtj-3dmuBFOuk6LbSZ8Djp2No5THrwyAs0rnsLQD_3fFFzs5aIcRQhmoTtk8RgS3IJuluVOk7IqT_ynIeLopF0hgbwxMG9rx4szL07naf0EEc33Up-QsCvOXmflsTiMHQKZFX84p6V1AisdSlm_XymqWbbm-eVdZ-VmLfqg2RPUMwMEp0NmtZ6PUE0O0CcAIpP77NfjsV7Lzl0q79kOUAYqRXjuAfEofN273Ks7z5hspRPliqTF0wdLWumRts6HSFaRAR3V9xmmc1XYk4onxYdrhNXrZVW31fo7cUv3WkNi2zrTxe-ml9juFZADUtOvtYHdHMT8SjUPyuRZ-BxROtJRm8CYqMxJbP4m3S-kSoviWshD4zS0wFon7cfqmKI80AZbpz8QGKyvHdgFeHMa25t4ODTsIoxXG84TD51O8VJs2V4ibLsnHq_5jK_JAFCBhxlomQitH7K2RtpmLOHSf3KnOfaJWkbZviFMmiL9qnREHY4kR5P6mw_wNTGArzVtvhPQDENUZu8J7oS7WTaPyUJuYm249aKMzy-JQbZLdQGd31hujvt"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 735
+          }
+        ],
+        "cachedContentTokenCount": 735,
+        "candidatesTokenCount": 17,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 17
+          }
+        ],
+        "promptTokenCount": 1263,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1263
+          }
+        ],
+        "thoughtsTokenCount": 123,
+        "totalTokenCount": 1403,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.9051156885483687,
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "6dd3b3a6-1e07-4513-8549-81911aa19343",
+      "timestamp": 1788684718.024335
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-2832cc10-72f7-4579-83ab-a524bd6f9788",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": "SNOMED",
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "d738dc62-e4d3-4872-b29a-a140598c1463",
+      "timestamp": 1788684720.1082375
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-d8ced40a-4116-4a5c-8a50-190a11da07e8",
+              "args": {
+                "domain_id": "Drug",
+                "query": "ACE inhibitors and combinations",
+                "vocabulary_id": null
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "Cu8EAY89a1_b5xqUg4bwbM3Ro-2Kf8l0OZr-nBu_ZDcNPxchDu0j07job6ediZmqjt-WF-5bE-YUhqVuJ5Ka9Z5yGpFOQRhI7hGQ15BcTfcxfKraIl6thKphguFYCU08N-WSzjLBj1gvB_q8peWGFNMj9JbvcwLaDuFyi2o8Cn9HseazIJs4k3RN8WfiCIVcPOBpu5bdva-SH30E9awvNREPz3T0BwtJT0AGksFfQkHS-NKs6ULiuXtshAINUC2C9AkFxd8YXXgtTRTqLhriTc6t9-C_Kuyx81vRB-08jwfH4YzoAjl4qm3ygZmQOs-hBfs5yyoX53V9Io8FsvqPHFBbose2G2-kcEWBgv25_qG9VohXMbU2w4emzns1S8roueNx0CzMKt3LvKeyuCKERMy5dLRGG_Pnc_r_GhyoAHZrZWvu6NkgTDEN-lkT098WRgJcsaz9oHAP36mHCrAbQePU59AIy89xR99ZFBID6klOxQ5azA_9f-edc38UtlgT7Uqr3lNX9-LSLa5MXe0zy5vz32vbfqFzJ1qEHzYyUD0m9fk3qD_Ll2V44GThLauZ4yLQNhx9nVPMEOpXX4WwV-Md_Z_F7BFg7x2WrlfYQvjDFBtCwci4WKwPej8UtB0GQMNRwK-PBU2X4VNUAZF7S10n0AQ9BCi_bV-wzg7m7NsdPbLoSfMrp4K5xV831MHu8UXFJOTjR-T2RTqAH4X5ruNE8-fqLMRPmpkzPFQDKfgaYXxkTYaUM1L-FDPxotRqmxcacdxSBtk7C1GVladIpwPxa0Ipp-PGi9l4JxBLlBMm1JMcRzc_mwyBQtoUSASPJe8="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 21,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 21
+          }
+        ],
+        "promptTokenCount": 1530,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1530
+          }
+        ],
+        "thoughtsTokenCount": 131,
+        "totalTokenCount": 1682,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.932939983549572,
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "359e04fb-7deb-4776-9c0d-04b15ca0b8c8",
+      "timestamp": 1788684720.1111722
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-d8ced40a-4116-4a5c-8a50-190a11da07e8",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": null,
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "4a8f118c-ad3f-4fef-b0b3-ce8eacb014a8",
+      "timestamp": 1788684722.1091483
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-5714d17c-0694-47a1-af5b-edeaf23ba86a",
+              "args": {
+                "vocabulary_id": null,
+                "domain_id": "Drug",
+                "query": "ACE inhibitor"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CpwEAY89a1_lIIQPiQz_ZmLdeJhtWRThQkd3Kfe3Hf3JhKWf4stPpcaXN7q8ZxeM3hfJ1xXAT4UepB0HIhAw0UyyNhU-wWzpv4XnA4xniVGGHpykIDkucN7c-9LfCYjR8oYA3QKZ7s25J0J3RlLPTr8sZ3tsDbrbOKuJW2Zr5b7eFj7sSQak98apXK-XNaJMmmIKaZ9M0f5xFoBDba3eB_PWFllAkxEEtFGSqlbtv4uoBRbFAON-JrmuU2p-sVt5ag0wqpBbD9aogg3wGPSWhSuMy5WAFmzoWcTQIjuVirjJSjDUjaP5ccN_T7l5SPbA_UHVPOvVUlN8vqT_n__r2_2mnWXNyxXaHx88yjqc-h9xvrHx7bE9s8gDEnTXKhrkPCkrRJc0-wSHK7RsXBgtI4WYlUkCL5IyETo2eqVWRc33vr1kc_cMR2jifsPtYSPV4ap1DPhjGJDPEQV_P8l9xBE3P5FLfnStvE_6xui1hn3s-VqGfT-tG6hxLRfguzWcTtYlnkS_14JB5MKkADtEC7LFAGNGBeAK_hZtWdfrmzwIMLizX_x7HgXw0voBpbH6Jp9cz47_gxB8ffUTyU6DaUfbwdkfjPHDmSe2jwVaFDwQsjTL8CK50aNO6lHIT7kH6gz2yjb-aUU9_XG7uR6eZJsq4XwTNJDsLk0y1rle4a9LLiNskpjUQjjykbh_A-lq0_sWGdnR7BTfMxkhyhiE"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1520
+          }
+        ],
+        "cachedContentTokenCount": 1520,
+        "candidatesTokenCount": 19,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 19
+          }
+        ],
+        "promptTokenCount": 1800,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1800
+          }
+        ],
+        "thoughtsTokenCount": 101,
+        "totalTokenCount": 1920,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.747285340961657,
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "46cba2e2-e78c-4860-b9cf-74339ca856de",
+      "timestamp": 1788684722.1119194
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-5714d17c-0694-47a1-af5b-edeaf23ba86a",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": null,
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "9bde40c2-db20-47ad-ac8d-6f3112d5ea60",
+      "timestamp": 1788684724.0591805
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-a11b6b75-cbbd-4db2-8358-26a439bc6996",
+              "args": {
+                "vocabulary_id": "RxNorm",
+                "domain_id": "Drug",
+                "query": "Lisinopril"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "Co0JAY89a19ERvesF3GP89ZluqFn4LityiqmQMBQH5ouHhy5OINaSUaRszcXaPDG2FEDK1pRYxoCJHCI57Niue_S3NXrQiknwtyfyRzB_hdP8V5A8xhuPAkrKSIFpe8VLlTwv5SWFVflH7TGohJ3rQNkKgS67DWhFefhYPAKLn6CycS9U-lKsz-NoIY2fW8k6PGT1BeOLuSd4PeCKMIaBQll9bUbSW1cr6qCIaEqVQwgYtuL4ANe8Pd7lAsl_RkJbflt6-xYZa8dJIvp7h5-AnTM0Zcn-e7wwZ--CV6mSAPz8IdA3P1jLK7FUoM9lkFEZkdImRSAd1rvzExSi47Yw03S3ytPFPoPx6-FFazIj6vSU9hwDqf6r2az9lnxRQPvpyneYemfkUL7lWtrZtoR7ncy3c2LvmSc58tRFLbtSA1fbYsIueDPYwrU9xbsBL0u7z02Wf1HxIW1ztrtdMcm1F-2EWR49j_C-q7IfIYMtEwBLMeyJ14UgPBZnjDKI-gZbqZ9a4Wh___zW-jaf7sTr2A4d4R8zCKCqAfeb7VKlz5jkcXVUv94t4jGYlbKApcKhlVoastVCSxZLuRC9jjZsqMb8Hp7OVEY4UcGtDRhBzjEZlz0v0fTzSc-iiBMGCXfiZj4fFDYvk990fHSyuKp8tKcERQEjiuI6cl05XJlBdt5UuzL-4EJQErqfrtp_DJfYB2Y963Mgv0mJ4nnrbRS49Qa0o370bIFl9MPCNNcASh_JAQznSUE-XFNo1vQ4Bui0UAdckn34OJ5K89ksGydlcxkXDEFTG_WoiClbQCf0-927TJNej9Dmw9YYVAYMV7Ss9uCb5GQQWTutJ5haZsax1uLrMXueA0dh82GwqLpDd1qcRZDSuNiiYP0dAEwLJBS9k0d0oOd8iehwV7TwoC-VQjcT9O0sCrReGn4AYGtKX-nG7pp8_vD_H6yfdkYqllCjW2lY_8dfq1KAjN5L_erbflnc9ZTwMVuCT0EHjjBoOrnU1cJ_PAMV436iDx8oZBjCbUYDnFFEDHwfedRVQfUk2SAuNy7pJDdiV4b2fovME88zh04f6mUlWFKkL9lopzoKkOdZCGa3EfU3l-GKzQIVRdMdChGdF8WNgQpl21UZly7HBm-elg3PvsVf-96dS6c60wIGyKWGxVULedRQPR-pbEpWSC7eUrr_s40CWpaTlTCR02IT0wNA5ZuyCaf5ZM9oQSG-7hVUL9qBB9HdJI74bnYtwZWu67XAhQ4gQTjeqft00VmYXFasHHtVwJietbZqBC-SWhYDzysNBo5pBmhxVqF8ihUp8JgXZwPSafCRFpCoz5kKeo57rBX5J-Hc0XMC-v_NRhV81JSxiPQqKRQR98FQKz_ND8WlV4ERWLnjaj18bQHNiyej9TE17fiElm2Y8xDHQucHkbpM-O08Nve3V7YyBImFBYTxYoBhCUcfSTVncvtBAsqZBu4xW9ctMIGHb_FssRCkbsl6TPN7rrHovZBqCJC2YJRgirUYLL9jeSGmYAxHGEn2JOFjw5Oa5SUDVt26D_ByWDCSdV1ZJKxtQ=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1529
+          }
+        ],
+        "cachedContentTokenCount": 1529,
+        "candidatesTokenCount": 22,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 22
+          }
+        ],
+        "promptTokenCount": 2038,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2038
+          }
+        ],
+        "thoughtsTokenCount": 250,
+        "totalTokenCount": 2310,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -6.2138283469460225,
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "5ecc356a-0030-4e2d-83b4-a3ae7ac33dfc",
+      "timestamp": 1788684724.0622318
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-a11b6b75-cbbd-4db2-8358-26a439bc6996",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 40,
+                "concepts": [
+                  {
+                    "concept_id": 1308216,
+                    "concept_name": "lisinopril",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308309,
+                    "concept_name": "lisinopril 5 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308306,
+                    "concept_name": "lisinopril 20 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308307,
+                    "concept_name": "lisinopril 30 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308308,
+                    "concept_name": "lisinopril 40 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308304,
+                    "concept_name": "lisinopril 10 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308305,
+                    "concept_name": "lisinopril 2.5 MG",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40221240,
+                    "concept_name": "lisinopril 1 MG/ML",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40000499,
+                    "concept_name": "lisinopril Oral Tablet",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40221242,
+                    "concept_name": "lisinopril Oral Solution",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19117560,
+                    "concept_name": "lisinopril 5 MG [Carace]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19117561,
+                    "concept_name": "lisinopril 10 MG [Carace]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19115847,
+                    "concept_name": "lisinopril 5 MG [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19117562,
+                    "concept_name": "lisinopril 20 MG [Carace]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19038726,
+                    "concept_name": "lisinopril 10 MG [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19120321,
+                    "concept_name": "lisinopril 30 MG [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19117559,
+                    "concept_name": "lisinopril 2.5 MG [Carace]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19047474,
+                    "concept_name": "lisinopril 5 MG [Prinivil]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19038728,
+                    "concept_name": "lisinopril 40 MG [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19038727,
+                    "concept_name": "lisinopril 20 MG [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19047476,
+                    "concept_name": "lisinopril 20 MG [Prinivil]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19047477,
+                    "concept_name": "lisinopril 40 MG [Prinivil]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19115846,
+                    "concept_name": "lisinopril 2.5 MG [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19047475,
+                    "concept_name": "lisinopril 10 MG [Prinivil]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308251,
+                    "concept_name": "lisinopril 5 MG Oral Tablet",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19047473,
+                    "concept_name": "lisinopril 2.5 MG [Prinivil]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308221,
+                    "concept_name": "lisinopril 40 MG Oral Tablet",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19029027,
+                    "concept_name": "lisinopril 30 MG Oral Tablet",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40221245,
+                    "concept_name": "lisinopril 1 MG/ML [Qbrelis]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19080128,
+                    "concept_name": "lisinopril 10 MG Oral Tablet",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19080129,
+                    "concept_name": "lisinopril 20 MG Oral Tablet",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 1308250,
+                    "concept_name": "lisinopril 2.5 MG Oral Tablet",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40000500,
+                    "concept_name": "lisinopril Oral Tablet [Carace]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40221243,
+                    "concept_name": "lisinopril 1 MG/ML Oral Solution",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40000502,
+                    "concept_name": "lisinopril Oral Tablet [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40000501,
+                    "concept_name": "lisinopril Oral Tablet [Prinivil]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 40221246,
+                    "concept_name": "lisinopril Oral Solution [Qbrelis]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19025233,
+                    "concept_name": "lisinopril 5 MG Oral Tablet [Carace]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19025235,
+                    "concept_name": "lisinopril 20 MG Oral Tablet [Carace]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  },
+                  {
+                    "concept_id": 19003830,
+                    "concept_name": "lisinopril 5 MG Oral Tablet [Zestril]",
+                    "domain_id": "Drug",
+                    "vocabulary_id": "RxNorm"
+                  }
+                ],
+                "filters": {
+                  "vocab": "RxNorm",
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "5a0219e7-5dde-4b8a-85aa-bf22f6fa578b",
+      "timestamp": 1788684726.8619466
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-d3328e85-5f45-46f9-83c2-a9362bee129d",
+              "args": {
+                "vocabulary_id": "ATC",
+                "domain_id": "Drug",
+                "query": "ACE inhibitors"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CrcJAY89a1-Lwmc4SzeV8V47ZKdIG0V1XmmZinwgT0QTQt3WNneFtBChHNUZFRUijiFLnzvqS6SnLyJL7ubBHpPkb9gDZDkDB1t2Gf8N7SHQc6H1NXWbXCA2p8HRD73C1OjXje5ZmS8VruknJIBRsRzsYYiswVD-nROGP9hJUMkTc0JjktCP6F1fj5iKoeGtTcGyoOBDB8NvDdNBE3zXaeBaUZluQqDnj4JhIq71wxULAUXspHUWZgI7gvVVdmmnvznODn0XiBZzB6sM9Rj4ukurKOq84Tsea6NVlG5fgGzLfxZseiFFjhWLPqfAtWlTEBtwyoaB3WnUsCDvQZooeDyud_GL6jvMiuroeTrLrLX_GpFORHp3Dnhc-YANdjEYTzo9TURPmNS5vZBNSRQWTip5SvpWG-SdYvqq3c-r6BpOa4x7uChxrfBxMlIO5-V6JCrSlLwEhlsBWsCCK8gWJCqp2RsMiu3BzZnhyQ0Nl2xAgFszdWEvL-LediPm3WS5eUEuPzQtThhjvAXqIruGaA_KIN5Ow2fUW1Cs4Sbx9ZAUeqT8P72tE08ETDt4RO92llTUduYHOM-Gpar7B_ozdl8KZ3m4L7upFRl2pwh3-aHAj8T3Y109fUWqHzYcUjIGRFbi07n6Z9rKlwkaDCDDdiDUZBOv1huXZupiYHFM2SUL_BRhf1vekSs5IFlvgkxUXI-Zpjh_phqaT8aSircjCaQyfUB8BJU8oiBzJvQ1DzDj1leu3rfYGP2U6M5ra27cWfmeFW82hv7Db2H8ZUHYoAxEyf6NL1I7u3xKiTWy2VXEJlb7lc7mpaeVOkDzvof-oGeeDN2qGx7vx9GfEgan4FV7oJLLBy1oKoPuwnV7aT9t9JUfnSsUEmz5mjYViIrZUA9tRr4XcBZ6pXB8NUYKSTzd37-lc2ewLS06ioOTNDYmwcKmwl_37Yt04q-btDAdAJ6RP1oE3nJRTUg2C8fM8WhH22kDw5Ian9QjHwSvTClRPisVTumxmr4T8uoeEiOpbS4yf0GC9xdNc54ENEpkY4OkFZ-UiCB_cXrnVY2febs22xwV53ieTw3oGnFD0NWosxD1wsQCp4KEfdfY-Va1_OXO3gXfcrXgJ0dX9DWKJXNeM1G70GzMZd2jj6ncXqTKaTzd-XSvfJe6UsRQL8gPtfNbnirU6ZfKv7XKQZ1VFMNxnLlSmdYdQg5VWhPRqKuAA_cXmRS1cFJq7ON0AJbdo1SqAiNRZfLG0QiW634oZZSnRgu0mo-q8tTuoGcDFU7cYYuVAC2G3HDZHe91KpqiaZX7BUychtNjeIClq3Yf91awmGeyxcxM1O1P920oAmuhMe_uJW8OyzA8gm_AaazVQ1jwilRTEqPAJLCpBjQua-CU4WdmjwtvuHSO87My-ngDtmWaH1XEwttvoDLyjj46oTc_qBU2bsjgDgHU-3KrgSY0OiELjEyH-HsMxJIXEGJgUq68MK525ncH8qnZM20oI-_SsxlwiYO4GNnOaM2nYl9yz3mjXHkKXrsv5Hu7BB5pookn8oUEK-QSj6qNhV955BdcammJ5sECWSmQ92clWM0WPKncMn85uz3aePxFu9rXLSobcx9nJ8sUgg=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1393
+          }
+        ],
+        "cachedContentTokenCount": 1393,
+        "candidatesTokenCount": 19,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 19
+          }
+        ],
+        "promptTokenCount": 3503,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3503
+          }
+        ],
+        "thoughtsTokenCount": 251,
+        "totalTokenCount": 3773,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -7.024669446443257,
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "3a2d3687-75ee-4df4-ae7c-3ad6fc378f97",
+      "timestamp": 1788684726.8649995
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-d3328e85-5f45-46f9-83c2-a9362bee129d",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": "ATC",
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND vocabulary_id = @vocab AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "bfe3c9b2-851c-4da4-9a32-bb2da225f286",
+      "timestamp": 1788684730.1762214
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-cc504bb6-3d80-46e1-9556-261ead728324",
+              "args": {
+                "vocabulary_id": null,
+                "domain_id": "Drug",
+                "query": "angiotensin converting enzyme inhibitor"
+              },
+              "name": "search_omop_official_concepts"
+            },
+            "thoughtSignature": "CrEHAY89a1_lc5B3afGYZA5rYfeVibqEtUCfpPxpcf45EMNXGAPCy4LAWWdAUeNtfrevox07lenieFQl50-LlGWpx2y0L4_SpQDdOYkbyj2JWBur_yZd3XBOfyS4yVHMmjD3_d3bI4GgRTqOuSL0SlEFvwKTO4CnBCDMnGkKCbx8ykktLKgwWM6K-L1PnXXKvhYJU8ligQNe0QrUMvNF7-J-1FspQGV0kAad9lXadZ_Hvk-W2gLFMf9kUWV6onjHIFczQPeCYBt9qU6Y5YclZ48wZgyGbuuCNZN7WMgNOrTRWjdM5IqkDAChzm7Xdx8USfz7ycLIP28-kg029tp05HJrPaqWVGsd_DEL3uiG79UqH98N54w7RP50kXWD7ZDBcWhFWj6MWJbfwumZ76zXcOSKR_EXWHdD2_RJwJidRgj4PyPBo88kSS22MXHzeEFCCJB2QExBMeSBXVDzLfq8_SYwZ6iu7WAnVq5bsiDhYkB82Yl0-tVyHy8RrybuWWD8OZvT2_otMIfJ6d3TygRSqYgT2OhOZXpeWV0MxZyI8M4ry7--6Om3tfqKlV2UMr-oY-8pjZtVJhqXfUTkp-UREjg7D_ivBAqayfcZOpxwN-6hd27zWRXAN6x1qD2reKyUOsWMAKXZkejzYtot5E8UFZrYWx_-gn31ruNCZvr0XXINYPlWrrTk73vSJBRdD2bsqAZojT5BxuukFMwidXcXuEn8-4DEe0RkKZ0lWDezt7xDEVsyPclJXe-Ezk7MMC5XDe09hx6TAU9QkMCn6KAoo7URt44VEWXuCtZGHLwDNh1ocj0jMrzBCOvWvMbtyhN-O0q-bmQChKEI1Vj1NXaEU5RETEIv9ClFaSFWiyAwDUUQtJkGkRPXMxM-MH-Wtq6XeEazctmenQekkPG1hB4IN5dw5w7w4jJE3I7qQzuYVef1nzB--KrONTdN6iCyiQfdPRI98vSZYd_kAhU2DTJO4gtD5Mt5Oc-65IlYaiCDApvu8NNmSI0dJAmUWJ3vmyEAh_W7PN-ivnKSrjacBIa6dwxeoOtjRqLPmrb3O9BMjMEH_KtD3oFvxQXUtPD9mU3SL1w1mVEY7wiuTBjIIAfjP5GvJaWeHDqPA8YkfPHpcNsnwkS65bsgYD1XjUHsuzaf2cVpL2zaL_2GCZK29nDS3LVFJVQAbAL9yWYSXK7iKxc7BEmwTjHWGPfLZgTbtDwWB5kcvjAOLv3PO9F0D5CO6_MNkaHCJnPu43JCQFn_gejMkhay"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3557
+          }
+        ],
+        "cachedContentTokenCount": 3557,
+        "candidatesTokenCount": 22,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 22
+          }
+        ],
+        "promptTokenCount": 3898,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3898
+          }
+        ],
+        "thoughtsTokenCount": 187,
+        "totalTokenCount": 4107,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -6.019835038618608,
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "46dd199e-f312-4de2-9f47-a7471f45a726",
+      "timestamp": 1788684730.179209
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-cc504bb6-3d80-46e1-9556-261ead728324",
+              "name": "search_omop_official_concepts",
+              "response": {
+                "status": "success",
+                "count": 0,
+                "concepts": [],
+                "filters": {
+                  "vocab": null,
+                  "domain": "Drug"
+                },
+                "debug_sql": "SELECT concept_id, concept_name, domain_id, vocabulary_id\n        FROM `bio-med-480108.OMOP_CONCEPTS_ATHENA.concept`\n        WHERE invalid_reason IS NULL\n        AND standard_concept = 'S'\n     AND (LOWER(concept_name) LIKE LOWER(@query)) AND domain_id = @domain ORDER BY LENGTH(concept_name) ASC LIMIT 40"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "d22e4af6-4dc7-4451-a535-acf393768f41",
+      "timestamp": 1788684733.0009902
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "No he podido encontrar un concepto estándar único en OMOP que represente directamente la clase terapéutica \"inhibidores de la ECA y combinaciones\". A menudo, las clases terapéuticas amplias no se representan con un solo concepto estándar de la misma manera que los fármacos individuales.\n\nPara poder obtener los códigos de medicamentos fuente (como los códigos NDC), necesitaría los Concept IDs de los fármacos individuales que componen esta clase.\n\n¿Podrías proporcionar una lista de nombres de fármacos específicos (por ejemplo, Lisinopril, Enalapril) que te gustaría incluir en esta clase terapéutica? Con esos nombres, puedo buscar los Concept IDs de los fármacos individuales y luego generar la consulta SQL para obtener sus códigos fuente.",
+            "thoughtSignature": "CtIJAY89a1_WSVpDa1RRC9abDyl7CdQtl-sGFTyXrHR05_CRECITOlE2xNHzD76dfaA9SA6nNzz7-XqlRffO5Ein7Ot-q-mbB1PpU6255RP8fCTydiE9-jU9_kjrbngMQuts2ARbjWhT7SIKKBZrBMWpIK0W4eCVU43i2BKqohPofJSzM5W6YEyen33-SjUtae1t1q00v_00uADKjs25hFTlnpYmdjGcejCCjUmgbhFPhgNyLBgENXRH96cd6ux4Vm_junO0WFhg8bf9IoAzd9yydJVj0d7pijMcNK0NhDyn5qQQsw3acQbmHY_RBFZOIanQbRPKcrWdgp5eLEqiDVuJb7SNrnfKTjKDKGgz37wkqLNGifeE2_xUfrZmkdFnd30PlhWXH8-FcvaZNb3lZIk6rrxx1o86LCz4GHVrdsnv9CzVKsbsDTDUMlLanOC5hT1PpC2LELIEXPYJtSFQdOlupU1TC5O9hRsdY8rsl9AlZG57wBHEwS7zSyVNZSJCpsBUWK_oKuMISlr0UyfW7OM6QMBl_QZfx6GAE81d1WRHmnwQ2AervvcjYHyXzkgp8iWq6SvrQscCbq0f03sVKjmtBHmdPi9htMUweHphdlhWr1DspASy78ah_XZEesi49pux2ZTHbB2tlAKYyRMllycGnwDZJPsjxy7uncgDu92fkpx0cX4Z-hQn9s_XYm6pYOSjhIvSkM97Lj1qucMWetvS8nLYoANeglQtrHqUjd4cl7mtF_NOK7CQofy8yGN904a1J5Q4I6yu1Hv356uLAylI-ZW7BSTww8BWbxUUPPmzUuxegufdnRz_fpcYACYuIc5TAHlU_1QluqU2-zUG-LdZ6IJIPMsiqrJkzsxoh-C7Vr-R4i92YcLhX4FLStKQJiayZCVN9Z_BiV_-JTlaJWqBDfR13d4sE_69h1HKbEt9Obg2Oey65Qq_EGyGkV_m0DDNR21UiQMJRAlYLPIqd0RuEo6PB2Ts3sbmkTs_uMFQ8_idPCaV90pV3cTpEAkvbyhRz1DLaleVpbVu0ZK618G6uhArW43y1Mv76E36D17umr9nCw7dPZHo_kkLSqsUBshBtX39WdLSeiw9UWfKk15BvGgRLNw9SJXGxDTIJwo3rVtClfayT7NA5NHW9evF9e9ELsdq208BYfqQN2cJpiZedVohgqcsEE-LwwM-8e9etonwcBjTmDxLwCe_6ztM_SPBAnjJmfGIbwtq_ZkcCrqGmbjcM1EA_j-sgmCJa5_yUFyE7Y6ft5Xk6_GRB74SJlnGyNCYIN_cp0S5lP0dGrZzya6_THNJORL9cJrhXnPkjxxymj-1qWtQF3WQEMjQpoKSPRRY-V5CKpf_KDhQwHQXeH_cniphFouuKTuYz8BAJ3NuvoLSb2J3K2_6XKNWiwHwq8AffDTB3O7974-woW__aw_BigIW-_Najt3TSLK9_MndNYRVNyJ5PNpZgo4LaUHCWSiouSDcl3HZd1KmK7HqAsKu66IFU4lYbtsIY-KQDBiDIUuL4sc3Z10UBXHrRUGNHZdhcn2O3Mzh8covZLCV_Sqo8soyyGybhauB7H014xeJ3EHgzRc5gFuLQzf9MZdrwRbWSxHAskPr3pqv43dqgqW6PBffVXfddNaXtPRSpC-EwQ=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3604
+          }
+        ],
+        "cachedContentTokenCount": 3604,
+        "candidatesTokenCount": 150,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 150
+          }
+        ],
+        "promptTokenCount": 4225,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4225
+          }
+        ],
+        "thoughtsTokenCount": 238,
+        "totalTokenCount": 4613,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -1.4774258422851563,
+      "invocationId": "e-3280dda6-5e7d-42b0-9635-9af816fb95a4",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "e65ac02f-f500-43d7-b67c-604ded3b12ae",
+      "timestamp": 1788684733.004387
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Confirmo los conceptos 21506108. Por favor genera la consulta SQL SELECT para BigQuery consultando las tablas del vocabulario y modelo OMOP (concept, concept_ancestor, vocabulary) para obtener los conceptos o registros relacionados."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-83486253-6f82-413f-9465-38e00b80b423",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "86ec4aa1-c12c-4e53-aae4-2c3303e87022",
+      "timestamp": 1788684736.6461952
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-a4dc2632-ace7-4106-95d6-ec7d0f43039c",
+              "args": {
+                "sql_query": "\nSELECT\n    c.concept_id AS standard_concept_id,\n    c.concept_name AS standard_concept_name,\n    c.vocabulary_id AS standard_vocabulary_id,\n    c.concept_code AS standard_concept_code,\n    cr.relationship_id,\n    c2.concept_id AS mapped_concept_id,\n    c2.concept_name AS mapped_concept_name,\n    c2.vocabulary_id AS mapped_vocabulary_id,\n    c2.concept_code AS mapped_concept_code,\n    v.vocabulary_name AS mapped_vocabulary_name\nFROM\n    `concept` AS c\nJOIN\n    `concept_relationship` AS cr\nON\n    c.concept_id = cr.concept_id_1\nJOIN\n    `concept` AS c2\nON\n    cr.concept_id_2 = c2.concept_id\nJOIN\n    `vocabulary` AS v\nON\n    c2.vocabulary_id = v.vocabulary_id\nWHERE\n    c.concept_id = 21506108\n    AND cr.relationship_id = 'Maps to'\n    AND c2.vocabulary_id = 'NDC'\n    AND c2.invalid_reason IS NULL\n    AND c2.standard_concept IS NULL\n;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "CpQzAY89a1-wabkz5q96ZywCYzXlrzEalkIaaYW1hufrLSa5UsZtFB1G3J629uPuK3JR7egfHdwi-LbDr5oZ6ZwFh5dpj4lw57YsJhxcx14eeTtlBs7ZIhusFTpKyJytuXLS50jGiu2G0Oc3GYgVkrsuL3yx5wW5_8LfjxYYP6tYh_uQwuppMMPPzWw5GX2Z0kOy1J7wC2fxmPQmMQEqIJZdrbi3-m7dVOUbG-w8F6xsdFRf3gSuejTwRQSVA5VTGzfcq9rGcmjwzVLavW8CwjarYYJxG4cKhgAdkpZb4m0q0Xusy-eJMy1tw-ETRJZvd-g0ihteNa3bVgu0e3pmFcrvXhDNhu8CohtRQj3dNDB5HzS1RAFI_XwdQ6qEMYK66-FWokJowiKm3NhQCd1l4rGitSx2WGNUftDOJ7P-hZklm95xMEP1IxAaJSbTpsoTdW_7vXAZyTzo8aXkMYaNOCJSrc8RKdMLFKHODC8WM5ppTPIR3-JTPgu7kvlbsgvknyxpfD2hVywoqbIIEFj2lg-MYZrTXWfmrJh_R0Sl8YcdAc82P1HX6qAASaJY_bIbczWH1Ym0CtF_HTmYWzGdLilcE830JNgEZpOIJK6vkUr0LgX4CkeGXBfsh6QeJlcqfqDmq9Ds1DNmpokPguQsJRSEXlfBJdbRkUzUBX5Ffd5ztg-6HVX4Nz_VQJmJO1JjfA_VicBqF3b26NEywXn5LVE-s1ApfvKlGnXgNbIuUwXpA7MxKWnMDUaRc2qbxbEQfvY48UFB4H_HLuNjMQplherDQaj1BI1s5D5C1cdHIa46_28tuK4Tt1pXPi_wYj5N-H2ijfzWq_qj0T3BkgZPQ8J0g9rCe8JXmgbvR8g3PRIxbKwgGW73T2uPmGd-_1m55R5ssB4KPY8SP9hHNyb-ftptOsTJHkPMsZRZ66JaybcBrW6u_rni0xyz9Gu8_l-M3QSPVqMIT7OfeZx8i10T_HT9jT2eu-eAfbW6dcUS0LJz8ws4hQYFquzO--i9wJr8qqqOehLCogrp4ijtm6h92USDQKwpiwftiwD-lp7x7vH5Nk2BipGIpip641Q5Dvj9nfkKHQLPInj6phhcJTzZ9g16T3DYOXvAmLPiVKBtwgcbPDnCMM_qjQ0bfKmvKp0wUWhO9Ev_Rq0T5g9SWL3_S-x9AIp-nVtNcSFVOTYuLK_GTFbAyiYtc1bCaoH_Y7njr2xGqiG6s4pGKyzTutubyZLpYupChB3yZKt5c3LG1-xzEp5ie1opCP5oD8h-lQkx6A7CcLcF2Y-ZhpZolcGmUyQR1eCph_MJwjT2zNXYOtqxeceXMPgoiGNOmK0ta333IvrjvNFnqD1P4SMq4N8rC4wGaG_Z1YP0NyB-k8qZ1MmNdTYi7vZltWqxbuILk1Op1XjFeG531pJCxDT7wb3Juu8KDjeZm0V-y-Z8FSdKMS0wlLPVibm4a2yvLp2xaitYQVBCc-ptE5ZcYZ4wEokl5NB8EvDHm1A66vo4hgPSBfcXkkPeDsIAEkUDLDAlMS9ltk45buIqfl_LRA2Yq4A6U1o2uKBhiVBJFiIHH7xrwKx7Cuh7k-2PI7NY_drvvwPodFW0FWnpMfNqE21amFCYCCnnrYn-ZC3bXKzLDBI4RIF9D4tOwYvX23ervUtdbK87wByTsKw7iRInv9EDj6zafTCj4v2Kk0kDEe10Pnez2MUktU2tVOVi7OFyMxpfJcWN9KoChiye_C9mg1Y2QyoBJTLONFa5ZrvCPytIXuaAF2DRSIVEQl-73JG0Og0ifF9xWBppnQCuAgYhUYd5Vg9aJS1muQUFXczIbuALphiC_0Mwcox_J14xz9CqahfL1AuJKKZNYEsCB4xgxrGlWVysT-PMzFX6-anj3jRmn7UoNAVmLXhOG2EmmiaXpMZ9JRWjmsRohYlYzNE0wvtP3RcNsyE7k9U9rytXd1nLEQiFTieXVVzbX8EWhPtfo0aMip0YqYQ-otiHXYw78zW-S_wmv_rrNZVDJH1FvBvbZEu-FZhlsUh_WshrsfUMC4jb1VpHavFT7Q3_yJTjtwOZPr0zNXZdlm-LAHfgwt0nfgZhTmUHTQpBA9Ht1S8vFX9KnCrarbONTL1eN0qQeiv_puX3Q6RnKg18ahAIR5auXEdWwi4sFn9yOQpZyikDUG6SFj20rs5X3sL25HQOmR-XbLK-lvBg7f6wzk_5zwRZLE92gEtbpyyi-aCIH7O7hdGybENd8JmQy3F211B5P-uI_BHsJ8DgJIaDdYGRfyOufeanCLHxRcCsCcyvifh66xP2qJJ1skf0mJ2GDZEmAh_bwcyDT2K2CAztN28_h6aGqxD-Qg6NMcVD7Q804dbZhcOXBPifko6_5THVMv0yGgPz-KOuJtVqe8L6uM0IIGHrqKHYuFKqGxKazB82XnOZqNuHM7NDIDBgU6gYTyzUfpWzBv_nPIXQjRgRxn084QjAjeUnqCaQIQvep9y8JsVCC8mxqShqj1jN4QTzefamUGqnypuNGqZ8-x7Hk08UibJWs_ofHZeT9wKElYz0vVJdGHNyW0HWJ7mi-K1uDQD6o79Kdzl3chr73yT4fTC8nGlEz2tWR4f49pYxJT88z9wcQglAgy9yzsrmZxacZL8-d6tUFHpmlR_W2saZyWYTZG_-6Z1NoZnfGRXyCHEXt90QoPYgJ_Z2RURT-kD66Qqf0k34oYPc6WlpNYZXtg-AwL_Q485XJbJUZawhsnWSQUvlF5Hy_pNlOehHLYRUbyDYVxrQieswwN3lacyBR5vLn4KUrHlkwE0QyTsEftIHWXVZ3ingvflDwa_SCuzURsitm2nI_W5ZjQ4zG6XIcjygjlWBXFl2woSId6JiqbOsIt8lyB-sU6-ktD0iEH4UjY0FE0qZpMLrDQng2CJGd3xw31yc079cKeFRiHlIkIv8pGHhbr6G03fcRJrY1X9K3CmgPQJoyMufc_kANi1GZxgBreup3UccJNm2aXcoe4HWQHojWmXkSBud4KOTUuttvOsJSYl_X9J3aCRw2BHne5APqzXb6HuD8ry4m_V1fT2xF5k6fz510r_idTtMQDTfOB-VPNFy7fXQORRPD2yzO-7EFzh_5jPgoYenvmBaz5Ua-jInbFp-aoSd-AbD4tMM3opVGgsMA-bIfGR01YcHFXoK0DfDWOpsk-MP78XtDe5hRuBnv1wdeY6Pgr_JX3-LmcLQtCTDB6eJvBpk_ttLuYRuIIRQXSPMa2R7Z-PzzcX9eVsMJCBPQ_yKaZc-_nnMHEgabioLspEJTHGB6oGAf8OHZpDEjAI_4Sypedh8OtlM7GwngEJYsHPEa5FRkEwnsp2mLnTK_UmEnT3E0szWBxjQL9LW3U_XYlDF7Qs1kkutXVA87m2wH_tfePf0wqePELXWjrfudbYLNZhigQuymoOlCKiETKBtwfh860V48rdo-1-QxVVKYKbPR9h5ZvbMXgsj0w1d4uN7aZbyWlfaTjnCGy82c_hGmG_wku2-DKk4QKWlXqcY0NN0n4BmwHqFMMep9FZviAsoK9oe0dQv1uuCj5Rakr1OhwaEU42jzQKPsesaWou_i8qbelNsdOWDZ4ZjI-sbIwou9V54vzAN8WkTR95jDp5EV4KJxSxYCi1Ye1bGWKjKBfZBfYteuaQR5DQPHBwgqIGGKllTnFjNISSi8UUkr_ObQwClytLmQkl-p_27KNhs8En_sy1fDtdNd-LusL7C_702TIK0YS4pWTl5p9xOkJ8FQFlCZwSPsDNso0dLsZDfbUc5xL1vI7sxUwkm4x3uFDVSrdvkI2IeNJnpQ9bX0vs8m-eecPH4J6j3s71Y0Q4ckhNx-RhgK5sRmNULVBYmN4Gqxy_47_0nuV8NJh_jMi2I7MGrYuvuMCvfGYKrEaa9a4j7jNUWMTdWvII_gSA77uZP3hT0O5dKeIuVG0lEAW70aYptUjYeCXEdxA0iZwyek80XeypVp4p_f3hNTI3mFTEMY7Thk4xY9B7fWjx15b0EbqBN0gRmI13c6dQl0OJgjkdfqi7vXGCAvoll5szrMK4k7jbDnwgM0Dt2vPyHuFGKIrNFcihGnXE-iHLOwkn8SrlB-cD33QD6wu4cR08-9hZ1IPIZGY_qWKz_XG26DLo13NpYXTotAVKr3M02oJ9ywvqMsSR-yBunnaG9xT1mz8S3M_mct-ftO0Ph0tVXzaiVXf6UyankcC7XtgBGKZS554sXsqheiHfMCUgYoAy3HZp71huiNUe9ZvFPPQ_tHCON1KkNaSLUVRn_93NB8z3O4mjABAfP-3cx8lE8NLQnNrm-sud-I6g9qZk75qzgJO_NLOTbUp9eCsO9Yjjs_uPpDp40UeS4-go1ZHhpJ9W5lhiSJ8vaF0gWs4_eHVGteHjkVm7XRvg722W0-xntAfAOdgc3jyopsoeRfbmhTL-a0GdstIZhokLtmF815yJ4-aGJxAOQHiorr8uYIE3p1MPClvVQ_N_evfBPK2v1iWKuTEwUmc0S8CY40hObfsLFe7IEadEw1oXesUXx95TUWsEqY6Lnr7q67cCi458LeoDye6pQZim0RFifF2i1ZAKAbeOeEThRH1KfBSpoDYWUOM8xgE-WtsxxfugyG5tl9m7oiJJHOh_YVD0t5hS46kdo2Z3DcHol8yseGH2RZTkXhxi6MD5gU6TxtEmOXF9Zepe0Qd-UjqvbljCq-IPLXHC7pdDfaqpvPh0Rusx-DXA_nM8Y7ZbOl2jtF9OFkH5CDujyYB2y9iGFKiIJe0K27JiDG7i2_60IrADgt4OIyouMTpxrspeO-F3xMP-6lpJJ7MLCMvt7bTNqNbQ1ShTDjBzQndMksteHciDoxmlURUYfWP2nFDFiwsezj8fvImAGmoZk4VgxAbHxYHQMRKWfZZ0v-ST7uCcFH_wzVe5kEuJTG06hiP3ESHXXYNEMZx56JIkgEJNFGK0GpbF84AW1XZNJ23UrmhEPO8ES3KL8UyF-GfH9lxYfi_Q-IOx8a_9ojYfqh6zQV92bQxth-5Y23-IxRt9bCZqk3EKpHUN6SLiIOsr56oYMTdv71RCp-edDdVbJ7AbSpeZCGee-EjfhyiH8HESn4BMbqSGWH_ESyRvXXn2xuzpwFqAqzqZZQcbLmKm10i93ohQ-CtCl9klHG_pqJFva9oHhv25YZUShdds_m2MKYkKWQinkD8O2D8nw5dwk0lGKjuQtlu8lbr5ZxqiXorDSi9vQVkTYdZdK2MdKeDtsnS1QQUT57Ezs4mwT9HgMyg_Ni2VptCQoRcho1mihlUxu0xVr7dpnfCTIpbEd4AMc0r-eVtqtdRd2UCVuaSTqMgFmWyM5egxwrbgVQTwoki3cewJZmnyzZnK2bq36CiiXSN0kgEX_tRuPfTU_kIClRJw01mA32LXmmIhqUU6xQVzX5hapCC-lw04DYp8b3VfGfD0NZd_LKI9X9V0HT0fsFqhX3ggwl4I7ALW7ExN_6JTrH7It9klF4GTkWzltX6HX-yRMev-llQlt8ElvBL2s-fwE608YPMbCYmEfCJBZ0l5Cs9kxafN4jG0_gxzlJm-1D-jWFW1HbK9aiw8NYONl2eHE1rTlw9RWTMrv60w6X4YUi81mrF4xTh4sRSmNZAoOJx3mXxK9kbblH82SDE8DxkV2uoQ333c_yAdha6Uo1p4ku-J1EA_h6fXjvQZ-NQRHmwJ-a0bk7n1fT325NGwze1_4VhUNOnQbBy0DwfDgpeGhjs3AiPs6dAvDd2uITJBBM6-G11fnHwsVl_dWqZ_vWY7dGuIzGdwYEjdX3lhKV9xx9quy4hD3j0GM1I-5JKBbNeZyMBL2VBHl9a0oMEJX6Z6ow422EWCppc6XJo_eD_FdUloM577qLc1wwvBstXqzvLusQszVJUD1hi2_0Kign2f8JADEKaYsuYt50BQxf1tzEm4BMmeGQ9X8g8Ur3Az0rBIMRgXmPB7cXBOJtZZwephgzbnzkiUPhyy5NLffRibClvY6MIYrCbjBHLap1YJKQn8cqorGitqRfwBgyUTTT1Gzi7JzZjC7pRFrnekmlqZF8T5DV-Vfsbs_yEP8YS6nJRxhS8mBOsm98g5lGZAazfVmNl2Iypx0vGdjqz7e1hpZG3oeVyG2-wiQWMjM84__wZXyUpBqyjtPwj7G7qK7WaDYM7Y5vxp2kpnSt8BYPOsG21lVINB4X21D528LOXBG9Zyve_F-wZB8t3pNcw-5g4CCcOG3q8bN4YuI3wEstSP-NNU6Gav9bka20XIr3FmSBtWrQ8en3Rnmbds3ymBrLH08ozSXkBEwUVkEOoFJ-8UUqvpqEb4rXW7pj9wj5PLe2vYknQ5PmxSA2Pzjyzi_U05LhUAau419RZLxeZL2BRqAxaSOHESId7ZU1dLI9V8a0G9BP1lxjJjkyTowlf29EMWvkVpQEYj-SzILgg-uWsCdrgOwVWXj7f3x-A8G9ji3Y7NJZqg1wzOgsBB6m8pqF2zsJLEqbYJBS7F0_OVJLB_70HjR4BC4C7Ppuva3fwPjStR4eGLx0kzsJAaE1IzULJjAojlq1gX7wUbg4HLV2tWJyZeczFVSH1VvvT2-YoHfpJ8GkyY8Lljo0yOioaLn7zNpXh8-maxaNUWJUixvus9AiZHAabs08RxMxOeh_73RDfU8VgUGeuWik2qyPftZdaF3cCdagI9U7PKsUPaem2qXUKuBF5tgONb2er06lwLXLLN9wf3CPiHy99o-BvDbb7QAPS-SfuUJVVPECM7fx-IXJectIn6L8wrndTIxr0htpKVz0_Vdp2CHMrr_CwbowsSmAbxMzC8i6c0tCm26_EI-No4QrpY6RuKTUDEm_jZdBzHxOo1lYZ3UZX1gY2CcGAuy0FO-7nOu9IOfmNzSJa9P4fQFv63NbYhZccJsWWWXWmT93A60Ekl7eM3J89y4gmX3lIBK17tjpc3DgiWvONvnI1nIM17UjU0yWNWL8mUJM3NWQ3ttwFVfeZ16IGhk6Fqs4MfUSreZ6p1wS5qJ95HFoq0ruzUGRAwhVZLUPvII0uD9zujqtbeXwL_9ilopVrJMhiiqiwi6_Gd8r9TbJ36XymWyYWW579GImar6Py441-xPtBvpHTmtqzTTDg4QJegUO_fIWRmjntoRfwRF-U0qYNijxkexL_VnQ2DuU38RkKZROd1g-ZjUFeT58kbi6vXg_VMxZJcjTSCWKSazegsPlB14uAbLMGQS50O_fk3TYsg_O9btLkDT_CaS7iYgegzQHc-p6KXlNliicvOEnAFfRawHR04FdvIM69ZQ4tRYsLMzhNETVDxhi0dE78P9a747juhskXOmQRGYj-vvkHH0QXSSaYeJYKm1ArTw9EMgq_0Anoh33iSWT6p-cGYIKC70N6txjRZ9tdhkRR-_JcQD8qBA2dQEZUrqWySOeEa0SzhY1GXKEPNj5DRgMfC69m1hCodqFFzD7XG9lRB1h-PztlOXqdC5VZmlv3tVxEIZws7MfwViH43V0C-d4qaaAwC2aZxgpVnDKRwNpaOVzszfcHBYkOYqDgyZFxpRG1TxavlbSKRqgemubiF2cHu208GqhW92MyEM3mpZp4FHP_dvjZrxlxdV_s3EujWU0nKPwYP2_EVtEBWfN1VWZCgO18Z-bW6UP6FaWtLDMRitTq_LXZX3SoTsoVXfrUZlkduOJMww5dA-Uk5AqNh5DM2ZNc6__950z-synnOmuwk2qY_KAYyoYa_rz6Nk1wIgk9QgwOsPmwFBE14vU_mazetuvJTvD0kpAoTI06J6AOn5GL8zJGvW98Es7XpmHgF_QXhoi8TxZO_E7S3BIFZ0cIvGTM9D_8rC-f7WCziujMRlK-gkFSnaL5xYVighLO5dSik9V4ExLiGEMx23DxvgvQFUlknX48jBOYm5fsHn2i3cmf_QO3Snp5eLp-kULfukCR_PHatEYVOqbJ-Vd07t9qCm5gyOwn8df3hr0jwiiE-zFnAKZFY-QscseqNec69fr0zvmIWShlSzLxMVtqi4o6znJnrlb0Bk7wS65mmPNXK3UxvaEBnAWfxltO6ptv49KFOktLjTkWJkLPW1ErY5_7bB2qzoVvf2o_Nixvx3Tm2N-x_IRqBMtuLpJQx4ZpA23Y8rGwmjHaLduNVTfnBSnYdjnGAzNyc9BF9ZI47NNBVEKnSpSzrNZvVG03xrc62itDfjzi2YwEPghPqGu_R5yK2unEYpPajfz9dzs39Zz6Rj12yCumnoyVTLnyqs_sgj5RwgfnQDWc8lDUub8t6YCj93FhnJGz5hIMv2gqPgv1JdkbiIo94zcZ-pMU7oNBQg37UyKILHEPuy276ZQ7eVWq6m-qHie-ZnrOAT8f_NP4ElQfImVaO-M56xJhoX_CMwDsWp0lSi979tOzwwSvARYH36CnEqjfqbGDzgQuDJN1YPUWIfGvtNF8qhpXATjSGhzKEwyZi4bs0Ml-iYgvUJY_y4qlZuJZbCTu5Motgm9gx6DonwBadXLzAJiAqg-1Ae1xhscjpYaD-1YfNoZATsU05yNA1DA11eAFY4xiL2eV6tT-gAm9zG_3Hk5thU0WwU1Ds6Gj6P75T3PPbzTawcmBU4HtEDqeNn7ViENhAxjJk70HGdxCM_amhu5q__Llj-p12dk5Aqu3mKXYxtqXFmAmrWRoEhaY1OqAt7IvXOuluUsuiTSI9D5bhpfR91Pb4Pm9EeScU02VgOPlliAueIC0GEsRot_-h2FzyYOzw="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3700
+          }
+        ],
+        "cachedContentTokenCount": 3700,
+        "candidatesTokenCount": 308,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 308
+          }
+        ],
+        "promptTokenCount": 4667,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4667
+          }
+        ],
+        "thoughtsTokenCount": 1812,
+        "totalTokenCount": 6787,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -2.301352562842431,
+      "invocationId": "e-83486253-6f82-413f-9465-38e00b80b423",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "149a826e-53d5-49ba-b2ab-9fd07f718365",
+      "timestamp": 1788684736.649638
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-a4dc2632-ace7-4106-95d6-ec7d0f43039c",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept_relationship",
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.vocabulary"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-83486253-6f82-413f-9465-38e00b80b423",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "45bbd25d-5164-4600-b4f7-36c3b6698b00",
+      "timestamp": 1788684748.9740312
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "¡Excelente! La consulta SQL ha sido validada. Aquí tienes la consulta SELECT para BigQuery que te proporcionará los códigos de medicamentos fuente (NDC en este caso) asociados al Concept ID 21506108, utilizando las tablas `concept`, `concept_relationship` y `vocabulary`:\n\n```sql\nSELECT\n    c.concept_id AS standard_concept_id,\n    c.concept_name AS standard_concept_name,\n    c.vocabulary_id AS standard_vocabulary_id,\n    c.concept_code AS standard_concept_code,\n    cr.relationship_id,\n    c2.concept_id AS mapped_concept_id,\n    c2.concept_name AS mapped_concept_name,\n    c2.vocabulary_id AS mapped_vocabulary_id,\n    c2.concept_code AS mapped_concept_code,\n    v.vocabulary_name AS mapped_vocabulary_name\nFROM\n    `concept` AS c\nJOIN\n    `concept_relationship` AS cr\nON\n    c.concept_id = cr.concept_id_1\nJOIN\n    `concept` AS c2\nON\n    cr.concept_id_2 = c2.concept_id\nJOIN\n    `vocabulary` AS v\nON\n    c2.vocabulary_id = v.vocabulary_id\nWHERE\n    c.concept_id = 21506108\n    AND cr.relationship_id = 'Maps to'\n    AND c2.vocabulary_id = 'NDC'\n    AND c2.invalid_reason IS NULL\n    AND c2.standard_concept IS NULL\n;\n```",
+            "thoughtSignature": "CqwBAY89a1_EYDDo7pWoL9kuUf7HWzhHaH970lAIDRuHy4XHelvFs27ammLV5RvwtJhPuNYOF8XpPBKsHDm3YTiBSQtc0frElovp8SkdpRJJXVHLDd5vXuAzGOZH4oLyJGiNb05Ac7PC4L6fJzfICIgb56km35cdAFLYH8K5Rkf6_jjBd8_KtdNf53D7WVZcbIc9DqRU2dDULvFv7KXjzVCo08HzbGVBLaaxBm1dPQ=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4832
+          }
+        ],
+        "cachedContentTokenCount": 4832,
+        "candidatesTokenCount": 366,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 366
+          }
+        ],
+        "promptTokenCount": 6895,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6895
+          }
+        ],
+        "thoughtsTokenCount": 29,
+        "totalTokenCount": 7290,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.07649264830709156,
+      "invocationId": "e-83486253-6f82-413f-9465-38e00b80b423",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "8b85d3fc-0d61-42fb-9faa-a5936e345b7a",
+      "timestamp": 1788684748.9774015
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Por favor, revisa y mejora la consulta SQL para BigQuery OMOP CDM 5.4 teniendo en cuenta las siguientes observaciones del evaluador clínico/técnico:\n\nLa consulta generada por el agente utiliza la tabla `concept_relationship` con `relationship_id = 'Maps to'`, lo cual es inadecuado para identificar los fármacos incluidos en una clase terapéutica jerárquica. La pregunta clínica requiere encontrar conceptos descendientes (fármacos) de una clase ancestral, lo cual se logra mediante la tabla `concept_ancestor`. La lógica principal del agente no satisface la intención clínica.\n\nGenera directamente la consulta SQL SELECT corregida y ejecutable."
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3d04b3c0-c05a-4909-a9df-deefa685a8fd",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "7f44f0a3-a4cf-4504-b6c1-99707abb5493",
+      "timestamp": 1788684764.2538946
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-c4d58988-71e9-4ce3-867e-ba022c5b9a78",
+              "args": {
+                "sql_query": "\nSELECT\n    -- Ancestor concept details (the class itself)\n    anc.concept_id AS ancestor_concept_id,\n    anc.concept_name AS ancestor_concept_name,\n    anc.vocabulary_id AS ancestor_vocabulary_id,\n    anc.concept_code AS ancestor_concept_code,\n    \n    -- Descendant concept details (the individual drug)\n    d.concept_id AS descendant_concept_id,\n    d.concept_name AS descendant_concept_name,\n    d.vocabulary_id AS descendant_vocabulary_id,\n    d.concept_code AS descendant_concept_code,\n    \n    -- Source concept details (the NDC code for the descendant drug)\n    src_rel.relationship_id AS source_relationship_id,\n    src.concept_id AS source_concept_id,\n    src.concept_name AS source_concept_name,\n    src.vocabulary_id AS source_vocabulary_id,\n    src.concept_code AS source_concept_code,\n    src_vocab.vocabulary_name AS source_vocabulary_name\nFROM\n    `concept` AS anc -- The ancestor concept (21506108)\nJOIN\n    `concept_ancestor` AS ca\nON\n    anc.concept_id = ca.ancestor_concept_id\nJOIN\n    `concept` AS d -- The descendant concept (individual drug)\nON\n    ca.descendant_concept_id = d.concept_id\nLEFT JOIN\n    `concept_relationship` AS src_rel -- To find source codes for the descendant drug\nON\n    d.concept_id = src_rel.concept_id_1\nLEFT JOIN\n    `concept` AS src -- The actual source concept (e.g., NDC)\nON\n    src_rel.concept_id_2 = src.concept_id\nLEFT JOIN\n    `vocabulary` AS src_vocab -- Vocabulary details for the source concept\nON\n    src.vocabulary_id = src_vocab.vocabulary_id\nWHERE\n    anc.concept_id = 21506108 -- Filter by the provided ancestor concept ID\n    AND d.domain_id = 'Drug' -- Ensure descendants are drugs\n    AND src_rel.relationship_id = 'Maps to' -- To link to source codes\n    AND src.vocabulary_id = 'NDC' -- Specifically looking for NDC codes\n    AND d.invalid_reason IS NULL -- Only active descendant concepts\n    AND src.invalid_reason IS NULL -- Only active source concepts\n    AND src.standard_concept IS NULL -- Source concepts are typically not standard\nORDER BY\n    descendant_concept_name, source_concept_code\n;\n"
+              },
+              "name": "validate_omop_sql"
+            },
+            "thoughtSignature": "Ct0hAY89a1-uKcxQNZEK7QZFxXU3eX02ZCoxDFhtWaT3EZGU7QrcPN9tImGwf3rwwcUwkgfzFkJn7NMxZBfWGlNGIDm2JU5Bzsy76jZ74icMGBumvEKJQvJ_c8njcmpEyShes13s8yKrLEO9PnZPch8fPVG6cNX6pDiH_XQ2BJMZ2iafj_3zel4doZ_Kpd_zuT5StuBM-mZFnmsjygOpNWCdZH_HB9kj1C8uuLiVCLh6zfljq9zWYD_84PEOMt7aV8nmVEmnQOLZfLZN6AgycUS5yth4fWRnaQ_fYE7ezaxDWzw7MhBGp7p9mldqzFQFMUZabA8yKwjHMg7DPq4UZ5KYkibxfnCJY18k791COVTPc7v_CCEZSJIW1EQbL7SUz1973yw3wG7Uck9aTRBZgqfZ1GEO2m4SOc6mzE7uCsenyFDyJNdYhK2zPYPpalO2mLlANgqOpK5TrCGecg2q8Y0gyDsSLfRDoefcedfmtIaUjf9sm6NByQJ7ZdYk69qdeXGv2xXfZaMHVX_YciGxA4Fp-QdPHAx7_vIOpM7c3eEMcZ1Gqx_xdxb1zM9WntpJAUxkv73kKChTARTL1vUAqYqMTc9zO2dtXjIFewfycKboK_ebX-ZzfYwgZTObDUp1gXEU_s-vqlRAiC_fVlzS3t8Ev94twJOi4U6WpbGqNPW5HkaR2u2xKrN9uBW3knZzr1dP-ndv8L6VCjkSHDzG-nCI91fkYzSCQO9gnmsC8qWseF5TRd3zltyn3WZmyFkLSS_6hRA55x4rZRBChWXjHwxejQfFehm0JOMttmploFjPJZOmrCDWctEhaPk1WzVVa3_E0-ssDHsdE25D2g9qgzbRQPu7Cutm7Yt4BJ7vYf1o86JgRbHcjl-G75VggU5wJGEaNUWzm2hyJIrUretHe5HV3Jw8ghnW7OhTa06yL7uWQR5IH1RP4pY__VinFtA97Cy7_O9fpyobvaqNTUpwEy8eFAWwk5Qx3JQ9ac76CBmZRaPxWyoXICHGGWYOhQVRmqtxpl7fzKgpaHU9_yQPiPPNKDIo6kMHKz0nMlmCr0Ab7ZmgaRVN97kIGzsPHLlaanygyb_D1BSMvyACftaScdymktf6HXxF82Q5LukhTFllN3gUVdZtT8TOzPppic8oaK-L0vIC_OxC30GppRNZl0GSMlCFo4zN7btL9vkKbNL9PNb2PNvE7ccPMPYSeZ9ddMucnwnz52j6V4Fl6jI41IqlXtxJfwbG3JM2zY7_hbwf31JC2uqXLUer67qxwWxsri93NxnkiXREkI10X8SSasiYLxzNyKUb45MsgngxZRPMlPIunyKL5ANcaiLVx16A0PLoJVsksYIUsq8mxiRXSwWOs33mvqSkGvwaAAmyIAzEJGhcvFnl60p6Rx0T32u0GmAJAI7_Ah7VIvH2WkfyXN9c99P2CfrfnUuoO5cm4uBEGq5iu-dcc1rqpGHiBiO8utEVNIsWQ9qe6F8A-3qF0DMJZGxKTbsMueh0Xaj0h41Zz-mlJgkxtIl1lZfQlHaZ8ky0XMlyb_oAGx7OqW8iKQ4Gv8n8mAlWxdWFX8rG4QQB5A3cb4cyJlxgk6KWGk23umyCAfrVP9h-sI5hT78yPaTkRsI5WXkgcTmvkpDzuVD8vc-XR8KGx7sLTz470VbJW6pusJVRQvvcxfikqK1b1J151_-hRwOfyyjK14dyS-qvbIrgjdPIFm5SryG7Bnu-AP09eYTmWlnnN6yWnUwJM686yeT1t1Z0NlIKnt_VGlFRXPAPk7JWNq5-G1Kxo_N1559gr42yhw0CCRm6oEUZ_VQe2IVNy33mN_gvnTRc4IPr3Nmvv_lKCrlvWoodLzwWygOOUeuP7mKnuXdMFew3Jp6BAr8Dg6_U_7NzqPQB9HlsTVhk5o6-oLh7rCW_etRvyC49paKW7zvWU_gI2d3Jm1sH7NHzR-FA5p9nBDcCpzO7HLa4fi0HkvF4nIuB_Nget9WA0bnydFPwi64tZD21DUPYvMOm7PUSEczCvzxppn1lkd_NgxOGOf-sc6TLb0twp02N4puk9OdDwDR0zLqUKfSimFwTIxGF_C2QA9Zlp2UJVEDFvWDtOQd-UY22HHbFdBWDpHcsY_a2KDwqA3Ida7muNmMbKRGeIHaKNof8E5HF3KOqY6Oe4MqTmuxsfeC1vHIgX25T6926FuUyQkYGrYkmXD7C8BD268Y-zBMWjqWAsCFOmME0AjgG7VQnuFwZdBpk2D_EFn9N04NigDUksB56hoLZZHPCMP8-Ty4qeXubQ6qJIS1w2uw-YaNN0vYeEj39aUfOGcfUW3QlbzRIcbTKIufcVoSzwrv3xiwnP1zgxwcvt2GgT4UJudygacpqC7lQYB9dP-gv1TQ_I5dRRi4_JOX_nymwgaoilL3fzrq-hUd5eYe7YQI_9VIDpdRw7hIwi8kT12MVriG8EbPX6Oy8mtTVg9RHJWURiTCAYrZO8HJdnbI30VlxnFmaot7ReuxZPxRJjTnTcMT32nJ8Z86tsJzDdzg5lndab2uJWTTK50xUPVCfsKpKbl08N5NdmQLKqYWsn6CdfjvFMavsK7N6uzmUQ_4T2Jq3ZNM04_MdnW17ek_617PLZ_S1UIeMZpvr7TmYjalbgqMw-WgImK7WM803mSY575a2GS3nsTlfGbnKIhelamY_pozS-N5Hl_X3vqNdR4L-srRwKuxlqepjkcrou0RM8W-4jd1CMAfX66gqxB1iJT2IjsYtBCBjMjURsGJ818OEM6HIKhkKzhSDhQ-gHl2s50QZFuL5D5GeC-pGAvr5mKLBYE7eW2Q42SFyMMe1MtW9ShbejuCWoAt-VNudEzTNYgIrSGpHSj5qRndRmrIoeFBEC6Z7EGZHh7dHOUyZkdw6nGDzkV_NeXTgq5oDDOuj2J9qIpGkcYz2AnyVy3fV1-ngaBmsfUlXQENFwUQwMgtUfFY7WXMvqAqzTIIDTTENa_NveSocjIVQCOX37OtBQ4tAPUh2Pr_AQ2Vx3NIgchMi4vh45RPSdpVES8wFEovpWcPx8pYG_G_5wSUqBaE-0dO70OkmDZqQygFMtV4GCeuZydn8dDasWpu85Sdmj7X1SKNyoINHq3qc8lHPxDNaw-ojBQCebWFgtPaM9enseQZzQ7AMSW1shmSO3zwuxuI5Z5PMKp7uGaLvaVRvL9AwILABwjm90Tl0eCHcI5_hptCVAF92RZwyOCMsqDbTuPbJlKL5qRn7VTR6BlcZGwqxdCryHvQGrOy1bPIxubhzXCHv7N_Q1p8r6DLiWS6ofyM-TwN8qL7BN4ZaCDD9n_mEOa98cQsY4sUE9bsQczUVBSCUadKVSfpjAreVuZuHIk2_nfwl03-ES2DzRPXzuvIGiT8ceN9mTaNB2yNmuVzYFpUG0UsYdElWFThKGm4WhznwtXmPZom8j3wdd3ArsaBzcfEGQOBVum87PJ_blQeciMhkJJkTSeVmeEzWbezt6tUMRtwL_H6BQyZGMaIJksKnh7zT0pKW5LwivAhnDHKQ9gPi_1WjZ4ytZ13UZpet_vWECgnt78p6tAFQ2BDs7Fas3uPO7rjrysAwHyAcwzLaE0NgYxYwXs1dEk0Un8O_CL6Rm7m1Kwtw3VWm4UpfZG0irGxxQlXv2bDR6-vSk1RGQAxF9-7pfiWmubf0dS2UpLV8S5VDSWNU3SfuRNpeiNR-EgfhZBTxyY8TWnZVlxvPZYh4UhFdnpr0tOdpqtrk6GnNrlgfZXgfynXfJkqSLhl6935nqJBp74Nn18r5BfSIPWe-24EbpdyOOMFIjnzqeKXW3j2Z6UCJxq25sfqhw31BYN7G5wAViPifhv20jrvcr-K10p3r8ALdKlyIfuPM6cV6L_vNyjZadfhGWI3-gAg4AxHRuEU4R0NCEby23ZTUOUGPCDyVHIQTfQ1iGRebXXjZhiEznNcnEzxoTk__qznUlPIlfrq7GPj4kldV1K0nQftR59k7zUqZmBDSywkMtS84AzVI6SN4bpP6cKsrpdeY7zBh6ffyqVi2wINHg3qY_d4l8CMav6lP7soSJxyySEZhuGilSLz2yjL20zKMM4lEvk3qzqqGkKwf9PwI1EWekaAIdirG0N-RVWplFz3Ih3U3f_DjTutHDGKh1iP_U5lK6WpkA7GuydAFGMPB8KzRtapTE71CqoquIGLKC1NX8OtVnnhIJrCK9tvyQdLmukrT-OTNo7obbPARkY6bOxajG6t9HPsBNERJRU2Zx1_g4N61mRPSsioMFyo9N-zDDl7aBujCPKMpmby5Ao02By0kouwnfHaaktHxd1_sdLv2lz7C-3e_UoSEUocVHhHQzRXKTY9bw09iLMgd46mAOCHDinjKl2jlFUOOfDcWjGQ6CyZ4Gg2rofP4a9WL8CyG8qwuP7hyHRxyGCAbqxncJ5LDps3oYs1aAzOzn21CuAIXsfL-7FxRah7xXbKygqiXZWgML8ZEE-gN5oWbhthxWOry0m8hgy9xdToQw9qd4JFdydwTu61FD5uWOoEFEmQC3l3P38sWsVuN3anUcSRggEoHR7SDxENfQkMqfAeF23xNqN7FREPXSRlVHX3MX8__zLIYstXmssvRWkI29zgIsjy8juK1dJUMI-0ggdE1kGHmGKIheOxKbe3ctQaaPkpMQ5ERDSjz6VI4x8__261o0D2L4x27Vk20ohlLN2gReQFQwlprU1gTFOUD8HX1N_Ot3blVb0JB3087GTiMV_OImVxEO9aU86ZuJygMkMYol6tXEoVVMtEUWH9fzYP7HTHT8Xg70AZAs5Z7373OgiRvPmf75_iKBxSwTzmShqwV5hZG4tfsXZ3_Q7-5h5O0U6e56tAaV5xdRUwADaVz1X2q9poBPYwlJDvVZIwdMSfWZxl7FoEOIjMxRHLtxmig3xhmGhC-NE3BVQawMQ5hkN8r8XR1ouab0ocQ8y5eNeG9htE1pvzTappnzffn4433DsQSEy6flpVk-_VZwjEN5kgQH2dEsDyFE_hi-0WQMGmw8Q0TVhLChbEHstdW7OKHdE2LSt0u1aplSrdCMkN9OQz59QTK9h3oWU21IVwUd2lT_VX_N6XsEmU3AoKiGQ2xhJPUHRADRLxJCjUPuICNfqTEg28NNufzIs_h05ALLMyTShKT5DQw4OWr_8dHwVqbtJyIfULTB2qCoti9cG2tH1TE7Xwjk7HICqmAD2iYMakJwTtDXvKUMsnSNW7fM3ZsLcQS0b800MXDtOLazFoKf4pmdVas7pU_06zXUNQWYi7v1WssdV7AcsH6Q0IKzDdbebJ1dSbVT_bLCZJ-eaYM1dHcpeahVg-1lyvNJ7yE9NWulyovdbBYkHCNc3U-Dp3yHxtwqiqsCHPBpeSVpSOrv7S2WEFzfEYOivZ4J__9YO_eoAwuAtXsvrVuU8c8-6ScK1yFdF65x26VvOMgqJXhN5JLeig6QSHLcCkxDk7GX4Idxamfmy-8nHY7v1qz8uiyUtt_pkxELVPKogfVHn1kfraacjcSGDd0XIQdc0sYYgEZdoC4UcoUzBmx-862G_t0rkt-_VwxfviBl2BElYcWuPxW3B8dJq-j5Thf4q_tVyyDqfdgA3A2tW_mmOSvoiFUtwcne5APHO3rTXd36-nMuIxBx-B3-vCo6-EFmpF-d6IhrDJXeHuK046xR6tNyYln0KKQCtb0WxUEW6G2XUX8BQWSjFeHVFjYV5-I2h3JqgeykFByEme1GxvZUsAURKXO8sfw1PNSUO5a7r6z2PUt"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6533
+          }
+        ],
+        "cachedContentTokenCount": 6533,
+        "candidatesTokenCount": 610,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 610
+          }
+        ],
+        "promptTokenCount": 7429,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7429
+          }
+        ],
+        "thoughtsTokenCount": 1150,
+        "totalTokenCount": 9189,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.44211585873463116,
+      "invocationId": "e-3d04b3c0-c05a-4909-a9df-deefa685a8fd",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "10253de4-1867-4c61-99d8-3bec9f835a73",
+      "timestamp": 1788684764.2579956
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-c4d58988-71e9-4ce3-867e-ba022c5b9a78",
+              "name": "validate_omop_sql",
+              "response": {
+                "status": "success",
+                "is_valid": true,
+                "estimated_bytes": 0,
+                "estimated_cost_mb": 0.0,
+                "referenced_tables": [
+                  "bio-med-480108.OMOP_54_A.concept_ancestor",
+                  "bio-med-480108.OMOP_54_A.concept_relationship",
+                  "bio-med-480108.OMOP_54_A.concept",
+                  "bio-med-480108.OMOP_54_A.vocabulary"
+                ],
+                "verified_against": "bio-med-480108.OMOP_54_A"
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-3d04b3c0-c05a-4909-a9df-deefa685a8fd",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "af986837-2091-4149-a977-f8f46e73a493",
+      "timestamp": 1788684773.8647096
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Gracias por la importante aclaración del evaluador clínico/técnico. Tienen toda la razón; para identificar los fármacos incluidos en una clase terapéutica jerárquica y luego obtener sus códigos fuente, la tabla `concept_ancestor` es la adecuada. Mi enfoque anterior usando `Maps to` para la clase terapéutica no era el correcto.\n\nHe revisado y corregido la consulta SQL para BigQuery, y ya ha sido validada. Esta consulta ahora:\n1.  Identifica el concepto `21506108` como el concepto ancestro (la clase terapéutica).\n2.  Utiliza `concept_ancestor` para encontrar todos los conceptos descendientes (los fármacos individuales) de esa clase.\n3.  Para cada fármaco descendiente, busca sus códigos fuente `NDC` utilizando `concept_relationship`.\n\nAquí tienes la consulta SQL SELECT corregida y ejecutable:\n\n```sql\nSELECT\n    -- Detalles del concepto ancestro (la clase terapéutica)\n    anc.concept_id AS ancestor_concept_id,\n    anc.concept_name AS ancestor_concept_name,\n    anc.vocabulary_id AS ancestor_vocabulary_id,\n    anc.concept_code AS ancestor_concept_code,\n    \n    -- Detalles del concepto descendiente (el fármaco individual)\n    d.concept_id AS descendant_concept_id,\n    d.concept_name AS descendant_concept_name,\n    d.vocabulary_id AS descendant_vocabulary_id,\n    d.concept_code AS descendant_concept_code,\n    \n    -- Detalles del concepto fuente (el código NDC para el fármaco descendiente)\n    src_rel.relationship_id AS source_relationship_id,\n    src.concept_id AS source_concept_id,\n    src.concept_name AS source_concept_name,\n    src.vocabulary_id AS source_vocabulary_id,\n    src.concept_code AS source_concept_code,\n    src_vocab.vocabulary_name AS source_vocabulary_name\nFROM\n    `concept` AS anc -- El concepto ancestro (21506108)\nJOIN\n    `concept_ancestor` AS ca\nON\n    anc.concept_id = ca.ancestor_concept_id\nJOIN\n    `concept` AS d -- El concepto descendiente (fármaco individual)\nON\n    ca.descendant_concept_id = d.concept_id\nLEFT JOIN\n    `concept_relationship` AS src_rel -- Para encontrar códigos fuente del fármaco descendiente\nON\n    d.concept_id = src_rel.concept_id_1\nLEFT JOIN\n    `concept` AS src -- El concepto fuente real (ej. NDC)\nON\n    src_rel.concept_id_2 = src.concept_id\nLEFT JOIN\n    `vocabulary` AS src_vocab -- Detalles del vocabulario para el concepto fuente\nON\n    src.vocabulary_id = src_vocab.vocabulary_id\nWHERE\n    anc.concept_id = 21506108 -- Filtra por el Concept ID ancestro proporcionado\n    AND d.domain_id = 'Drug' -- Asegura que los descendientes sean fármacos\n    AND src_rel.relationship_id = 'Maps to' -- Para enlazar a códigos fuente\n    AND src.vocabulary_id = 'NDC' -- Busca específicamente códigos NDC\n    AND d.invalid_reason IS NULL -- Solo conceptos descendientes activos\n    AND src.invalid_reason IS NULL -- Solo conceptos fuente activos\n    AND src.standard_concept IS NULL -- Los conceptos fuente típicamente no son estándar\nORDER BY\n    descendant_concept_name, source_concept_code\n;\n```",
+            "thoughtSignature": "CtUCAY89a18f6ZleW_UnMuO16Ohr79yTU-hQNTfYNKMvvckY70j5s1XOECmv_qay1FkqdaIsXYdgZ6BR4ws-fWVKKtLwVM23fX6cUYwGUvCfIXrcckA1-TzHZJu0u5RcmPjmKpRnoi7kIIYsElszmWyu79ZmrfmD6Ty8INEvvVHnBDsUcdeyMLWn6Gp3ovOCnlN25r8NsRBZI--6wpCTL51xAwq4BT1Up6I0Kk8pu-QOfVJ4IKqKmVBevhVJoEM23AYTuDEVCzbWdI2xdZVgfOe54iKuO11Ti_FMtHBGZHzDgHlZC4pOwkDeMfdvvX3LwlHed1Tz14fxjJcLvBZB7hJiPbqiMtQnaciUrRTWTtaQCcY1ukFWdsneBNmb7cLz6-_5jzOB5oeiFWLOehc6Q2_tBFcW4NpXMiENQSaaFFRLlMrjKtNBq2NO26rNobMbN3aNLwoxx8c="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7601
+          }
+        ],
+        "cachedContentTokenCount": 7601,
+        "candidatesTokenCount": 821,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 821
+          }
+        ],
+        "promptTokenCount": 9320,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 9320
+          }
+        ],
+        "thoughtsTokenCount": 68,
+        "totalTokenCount": 10209,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.09022198582973318,
+      "invocationId": "e-3d04b3c0-c05a-4909-a9df-deefa685a8fd",
+      "author": "omop_03_concepts_and_sql",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "576f5b5a-8120-4f13-b505-05cd9550f0e9",
+      "timestamp": 1788684773.8685832
+    }
+  ],
+  "lastUpdateTime": 1788684773.8685832
+}

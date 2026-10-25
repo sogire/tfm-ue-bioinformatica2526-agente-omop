@@ -1,0 +1,24 @@
+id_evaluacion: "querylibrary_DER15"
+nivel_complejidad: "compleja"
+domain_main: "drug_era"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular la distribución estadística (media, desviación estándar, percentiles 25, 50 y 75) del recuento de episodios farmacológicos por paciente.
+sql_base_gold_standard: |
+  WITH tt AS
+  (
+    SELECT COUNT(1) AS stat_value
+    ,      ROW_NUMBER() OVER (ORDER BY COUNT(1)) order_nr
+    ,      (SELECT COUNT(DISTINCT person_id) FROM `bio-med-480108.OMOP_54_A.drug_era`) AS population_size
+    FROM `bio-med-480108.OMOP_54_A.drug_era` t
+    GROUP BY t.person_id
+  )
+  SELECT MIN(tt.stat_value) AS min_value
+  ,      MAX(tt.stat_value) AS max_value
+  ,      AVG(tt.stat_value) AS avg_value
+  ,      ROUND(STDEV(tt.stat_value), 0) AS STDEV_value
+  ,      MIN(CASE WHEN order_nr < .25 * population_size THEN 9999 ELSE stat_value END) AS percentile_25
+  ,      MIN(CASE WHEN order_nr < .50 * population_size THEN 9999 ELSE stat_value END) AS median_value
+  ,      MIN(CASE WHEN order_nr < .75 * population_size THEN 9999 ELSE stat_value END) AS percentile_75
+  FROM tt;
+concept_ids_gold_standard: ""

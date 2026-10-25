@@ -1,0 +1,27 @@
+id_evaluacion: "querylibrary_D15"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_ancestor, concept_relationship"
+pregunta_lenguaje_natural: >-
+  Localizar los medicamentos indicados terapéuticamente para tuberculosis pulmonar a partir de su concepto estándar de condición.
+sql_base_gold_standard: |
+  SELECT DISTINCT
+    drug.concept_id as drug_concept_id,
+    drug.concept_name as drug_concept_name,
+    drug.concept_code as drug_concept_code
+  FROM
+    `bio-med-480108.OMOP_54_A.concept` drug,
+    `bio-med-480108.OMOP_54_A.concept_ancestor` snomed,
+    `bio-med-480108.OMOP_54_A.concept_ancestor` ind,
+    `bio-med-480108.OMOP_54_A.concept_relationship` r
+  WHERE
+    snomed.ancestor_concept_id = 253954 AND
+    snomed.descendant_concept_id = r.concept_id_1 AND
+    concept_id_2 = ind.ancestor_concept_id AND
+    -- r.relationship_id in (247, 248) AND
+    --r.relationship_id in ('Ind/CI - SNOMED', 'SNOMED - ind/CI') AND
+    ind.descendant_concept_id = drug.concept_id AND
+    --drug.concept_level = 1 AND
+    --drug.vocabulary_id = 'RxNorm' AND
+    (getdate() >= drug.valid_start_date) AND (getdate() <= drug.valid_end_date);
+concept_ids_gold_standard: "253954"

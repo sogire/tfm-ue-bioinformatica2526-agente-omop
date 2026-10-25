@@ -1,0 +1,28 @@
+id_evaluacion: "querylibrary_OP13"
+nivel_complejidad: "compleja"
+domain_main: "observation_period"
+domain_others: ""
+pregunta_lenguaje_natural: >-
+  Calcular los parámetros estadísticos descriptivos (fecha promedio, dispersión y cuartiles) de las fechas de inicio de los períodos de observación médica.
+sql_base_gold_standard: |
+  WITH op AS
+    (SELECT
+        DATEDIFF(day,DATEFROMPARTS(1900,1,1),observation_period_start_date) diffs,
+        ROW_NUMBER() over (order by observation_period_start_date) AS order_nr,
+        CAST(CONVERT(VARCHAR, observation_period_start_date, 112) AS INTEGER) AS start_date,
+        observation_period_start_date AS org_start_date,
+        COUNT(*)OVER() AS population_size
+     FROM `bio-med-480108.OMOP_54_A.observation_period`
+    )
+
+  SELECT
+    MIN(org_start_date) AS min_start_date,
+    MAX(org_start_date) AS max_start_date,
+    DATEADD(day, ROUND(AVG(CAST(diffs AS BIGINT)),1), DATEFROMPARTS(1900,1,1)) AS avg_start_date,
+    ROUND(STDEV(start_date), 1)                                             AS STDEV_days,
+    MIN(CASE WHEN order_nr < .25 * population_size THEN DATEFROMPARTS(9999,12,31) ELSE org_start_date END) AS percentile_25,
+    MIN(CASE WHEN order_nr < .50 * population_size THEN DATEFROMPARTS(9999,12,31) ELSE org_start_date END) AS median,
+    MIN(CASE WHEN order_nr < .75 * population_size THEN DATEFROMPARTS(9999,12,31) ELSE org_start_date END) AS percentile_75
+  FROM op
+  ;
+concept_ids_gold_standard: ""

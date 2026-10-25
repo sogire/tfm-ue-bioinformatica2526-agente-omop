@@ -1,0 +1,28 @@
+id_evaluacion: "querylibrary_D07"
+nivel_complejidad: "compleja"
+domain_main: "concept"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Identificar los medicamentos monocomponentes (que contienen un único principio activo) formulados a base del ingrediente ondansetrón.
+sql_base_gold_standard: |
+  SELECT
+        c.concept_id       AS drug_concept_id,
+        c.concept_name     AS drug_concept_name,
+        c.concept_class_id AS drug_concept_class_id
+  FROM `bio-med-480108.OMOP_54_A.concept` c
+  INNER JOIN (
+    SELECT drug.cid FROM (
+      SELECT a.descendant_concept_id cid, count(*) cnt FROM `bio-med-480108.OMOP_54_A.concept_ancestor` a
+      INNER JOIN (
+        SELECT c.concept_id FROM `bio-med-480108.OMOP_54_A.concept` c, `bio-med-480108.OMOP_54_A.concept_ancestor` a
+        WHERE a.ancestor_concept_id = 1000560
+        AND a.descendant_concept_id = c.concept_id AND c.domain_id = 'Drug'
+      ) cd ON cd.concept_id = a.descendant_concept_id
+      INNER JOIN `bio-med-480108.OMOP_54_A.concept` c ON c.concept_id=a.ancestor_concept_id
+          WHERE c.concept_class_id = 'Ingredient'
+      GROUP BY a.descendant_concept_id
+    ) drug WHERE drug.cnt = 1  -- contains only 1 ingredient
+  ) onesie ON onesie.cid = c.concept_id
+  WHERE (getdate() >= valid_start_date) AND (getdate() <= valid_end_date)
+  ;
+concept_ids_gold_standard: "1000560"

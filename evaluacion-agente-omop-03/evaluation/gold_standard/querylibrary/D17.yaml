@@ -1,0 +1,21 @@
+id_evaluacion: "querylibrary_D17"
+nivel_complejidad: "intermedia"
+domain_main: "concept"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Obtener todos los principios activos o ingredientes farmacológicos que tienen indicación terapéutica para vómitos.
+sql_base_gold_standard: |
+  SELECT
+    ingredient.concept_id   AS ingredient_concept_id,
+    ingredient.concept_name AS ingredient_concept_name,
+    ingredient.concept_code AS ingredient_concept_code
+  FROM `bio-med-480108.OMOP_54_A.concept` AS ingredient
+    JOIN `bio-med-480108.OMOP_54_A.concept_ancestor` AS a
+      on a.descendant_concept_id = ingredient.concept_id
+  WHERE
+    a.ancestor_concept_id = 4345991 AND
+    ingredient.domain_id = 'Drug' AND
+    ingredient.standard_concept = 'S' AND
+    (getdate() >= ingredient.valid_start_date) AND (getdate() <= ingredient.valid_end_date)
+  ;
+concept_ids_gold_standard: "4345991"

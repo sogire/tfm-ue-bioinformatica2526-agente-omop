@@ -1,0 +1,23 @@
+id_evaluacion: "querylibrary_CO14"
+nivel_complejidad: "compleja"
+domain_main: "condition_occurrence"
+domain_others: "concept"
+pregunta_lenguaje_natural: >-
+  Obtener el recuento de ocurrencias de la condición clínica seleccionada (como náuseas) desglosadas según el tipo de procedencia del diagnóstico (condition_type_concept_id).
+sql_base_gold_standard: |
+  SELECT condition_type_freq, condition_type_concept_id, concept_name
+  FROM (
+      SELECT condition_type_concept_id, 
+             count(*) AS condition_type_freq
+      FROM `bio-med-480108.OMOP_54_A.condition_occurrence`
+      WHERE condition_concept_id = 372409
+      GROUP BY condition_type_concept_id
+      ) AS condition_type_count
+  LEFT JOIN (
+      SELECT concept_id, 
+             concept_name
+      FROM `bio-med-480108.OMOP_54_A.concept`
+      ) AS type_concept 
+      ON condition_type_count.condition_type_concept_id=type_concept.concept_id
+  ORDER BY condition_type_freq;
+concept_ids_gold_standard: "372409"

@@ -1,0 +1,14 @@
+id_evaluacion: "querylibrary_DEX22"
+nivel_complejidad: "intermedia"
+domain_main: "drug_exposure"
+domain_others: "concept_ancestor"
+pregunta_lenguaje_natural: >-
+  Contar los pacientes únicos que reciben medicamentos pertenecientes a la clase terapéutica de antitrombinas.
+sql_base_gold_standard: |
+  SELECT COUNT(DISTINCT d.person_id) AS person_count
+    FROM `bio-med-480108.OMOP_54_A.concept_ancestor` ca
+    JOIN `bio-med-480108.OMOP_54_A.drug_exposure` d
+      ON d.drug_concept_id = ca.descendant_concept_id
+   WHERE ca.ancestor_concept_id = 4324992
+   GROUP BY ca.ancestor_concept_id;
+concept_ids_gold_standard: "4324992"
